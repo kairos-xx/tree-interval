@@ -194,7 +194,7 @@ class Leaf(tuple, Generic[T]):
 
     @classmethod
     def from_position(cls, 
-                     position: dis.Position, 
+                     position: dis.Positions, 
                      code: str, 
                      start_lineno: int = 0,
                      indent_size: int = 0,
