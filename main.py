@@ -137,9 +137,12 @@ def demonstrate_frame_analyzer():
         c = a + b
         return c
     
+    # Call the function to analyze it
+    sample_code()
+    
     import sys
     
-    # Get current frame
+    # Get frame from the function
     frame = sys._getframe()
     
     # Create analyzer
