@@ -1,3 +1,4 @@
+
 """
 Example usage of the tree structure implementation.
 
@@ -101,30 +102,6 @@ def example_all_methods():
     json_str = tree.to_json()
     print("JSON string:", dumps(loads(json_str), indent=2))
 
-    print("\n8. JSON deserialization")
-    loaded_tree = Tree.from_json(json_str)
-    print("Loaded tree:")
-    loaded_tree.visualize()
-
-
-def example_ast_tree():
-    """Example of using AstTreeBuilder"""
-    # Get current frame
-    frame = currentframe()
-
-    # Build AST tree
-    builder = AstTreeBuilder(frame)
-    ast_tree = builder.build()
-
-    print("\nAST Tree visualization:")
-    ast_tree.visualize()
-
-    # Print flattened nodes
-    print("\nFlattened AST nodes:")
-    for leaf in ast_tree.flatten():
-        print(f"{leaf.info}: [{leaf.start}, {leaf.end}]")
-
 
 if __name__ == "__main__":
     example_all_methods()
-    example_ast_tree()
