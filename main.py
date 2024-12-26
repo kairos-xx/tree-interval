@@ -1,12 +1,29 @@
 """
 Tree and Leaf implementation for interval-based hierarchical structures.
+
 This module provides classes for creating and managing tree structures where nodes
-represent intervals with typed information.
+represent intervals with typed information. It includes classes for handling positions,
+tree nodes (leaves), and the main tree structure.
+
+Classes:
+    Position: Represents a position in source code with line/column information
+    Leaf: A node in the tree structure with position and hierarchy information
+    Tree: The main tree structure for managing hierarchical data
 """
 
-from typing import TypeVar, Optional, List, Generic, NamedTuple, Union, Dict, Any
+# Standard library imports
 from dataclasses import dataclass, field
 from json import dumps, loads
+from typing import (
+    Any,
+    Dict,
+    Generic,
+    List,
+    NamedTuple,
+    Optional,
+    TypeVar,
+    Union,
+)
 
 T = TypeVar('T')
 L = TypeVar('L', bound='Leaf')

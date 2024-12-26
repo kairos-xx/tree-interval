@@ -1,10 +1,29 @@
 
+"""
+Tree Visualizer module.
+
+This module provides utilities for visualizing tree structures with various
+configuration options for display format and content.
+"""
+
+# Standard library imports
 from dataclasses import dataclass
 from typing import List, Optional
-from main import Tree, Leaf, Position
+
+# Local imports
+from main import Leaf, Position, Tree
+
 
 @dataclass
 class VisualizationConfig:
+    """Configuration for tree visualization.
+    
+    Attributes:
+        show_info: Whether to display node information
+        show_size: Whether to display node sizes
+        show_children_count: Whether to display number of children
+        position_format: Format for position display ('range', 'position', or 'tuple')
+    """
     show_info: bool = True
     show_size: bool = True
     show_children_count: bool = False
