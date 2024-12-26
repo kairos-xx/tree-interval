@@ -52,8 +52,8 @@ class Leaf(Generic[T]):
             'info': self.info,
             'start': self._start,
             'end': self._end,
-            'children': [child.__repr__() for child in self.children]
-        })
+            'children': [json.loads(child.__repr__()) for child in self.children]
+        }, indent=2)
 
     def __init__(self,
                  start_or_pos: Union[int, Position, tuple],
