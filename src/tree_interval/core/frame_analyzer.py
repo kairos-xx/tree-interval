@@ -101,10 +101,17 @@ class FrameAnalyzer:
         root_pos = Position(0, len(self.source), "Module")
         tree.root = Leaf(root_pos)
 
+        # First pass - collect all nodes with their positions
+        nodes_with_positions = []
         for node in ast.walk(self.ast_tree):
             position = self._get_node_position(node)
             if position:
-                tree.add_leaf(Leaf(position))
+                leaf = Leaf(position)
+                nodes_with_positions.append((node, leaf))
+
+        # Second pass - build hierarchy
+        for node, leaf in nodes_with_positions:
+            tree.add_leaf(leaf)
 
         return tree
 
