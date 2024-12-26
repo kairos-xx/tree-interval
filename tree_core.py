@@ -104,6 +104,10 @@ class Leaf(Generic[T]):
                 raise ValueError("Either absolute positions or line/column positions must be provided")
 
             self.info = pos.info
+            self.lineno = pos.lineno
+            self.end_lineno = pos.end_lineno
+            self.col_offset = pos.col_offset
+            self.end_col_offset = pos.end_col_offset
         else:
             self._start = start_or_pos
             self._end = end if end is not None else start_or_pos
