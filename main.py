@@ -410,5 +410,12 @@ if __name__ == "__main__":
         print(f"Number of children: {len(multi_child_ancestor.children)}")
 
     # JSON serialization example
+    # Save tree to JSON
+    json_str = tree.to_json()
     print("\nJSON representation of the tree:")
-    print(json.dumps(root.to_dict(), indent=2))
+    print(json.dumps(json.loads(json_str), indent=2))
+    
+    # Load tree from JSON
+    loaded_tree = Tree.from_json(json_str)
+    print("\nVisualization of loaded tree:")
+    loaded_tree.visualize()
