@@ -234,7 +234,7 @@ class Tree(Generic[T]):
             node.add_child(child)
         return node
 
-    def visualize(self, config: Optional[VisualizationConfig] = None) -> None:
+    def visualize(self, config: Optional["VisualizationConfig"] = None) -> None:
         """Visualize the tree structure."""
         from tree_visualizer import TreeVisualizer
         TreeVisualizer.visualize(self, config)
