@@ -178,6 +178,12 @@ class Tree(Generic[T]):
         }
         return json.dumps(data)
 
+    def flatten(self) -> List['Leaf[T]']:
+        """Flatten the tree into a list of leaves."""
+        if not self.root:
+            return []
+        return self.root.flatten()
+
     def visualize(self) -> None:
         """Print a visual representation of the tree structure."""
         if not self.root:
@@ -311,6 +317,13 @@ class Leaf(Generic[T]):
         if self.parent == other.parent:
             return self.parent
         return self.parent.find_common_ancestor(other.parent)
+
+    def flatten(self) -> List['Leaf[T]']:
+        """Return a flattened list of all leaves in the subtree."""
+        result = [self]
+        for child in self.children:
+            result.extend(child.flatten())
+        return result
 
     def find_first_multi_child_ancestor(self) -> Optional['Leaf[T]']:
         """
