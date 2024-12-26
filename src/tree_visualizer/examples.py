@@ -1,7 +1,7 @@
-
 """Examples demonstrating tree visualizer functionality."""
 
 from tree_visualizer import Tree, Leaf, TreeVisualizer, VisualizationConfig
+
 
 def example_basic_tree():
     """Basic tree creation and visualization."""
@@ -19,13 +19,14 @@ def example_basic_tree():
     print("Basic Tree:")
     tree.visualize()
 
+
 def example_custom_visualization():
     """Demonstrate different visualization options."""
     tree = Tree("Visualization Example")
     root = Leaf(0, 100, "Root")
     child1 = Leaf(10, 40, "Child 1")
     child2 = Leaf(50, 90, "Child 2")
-    
+
     tree.root = root
     tree.add_leaf(child1)
     tree.add_leaf(child2)
@@ -34,20 +35,16 @@ def example_custom_visualization():
     tree.visualize()
 
     print("\nWith position objects:")
-    TreeVisualizer.visualize(
-        tree,
-        VisualizationConfig(position_format='position')
-    )
+    TreeVisualizer.visualize(tree,
+                             VisualizationConfig(position_format='position'))
 
     print("\nWith tuples and children count:")
     TreeVisualizer.visualize(
         tree,
-        VisualizationConfig(
-            position_format='tuple',
-            show_children_count=True,
-            show_size=False
-        )
-    )
+        VisualizationConfig(position_format='tuple',
+                            show_children_count=True,
+                            show_size=False))
+
 
 def example_json_serialization():
     """Demonstrate JSON serialization."""
@@ -67,12 +64,13 @@ def example_json_serialization():
     print("\nDeserialized tree:")
     loaded_tree.visualize()
 
+
 if __name__ == "__main__":
     print("=== Basic Tree Example ===")
     example_basic_tree()
-    
+
     print("\n=== Visualization Options Example ===")
     example_custom_visualization()
-    
+
     print("\n=== JSON Serialization Example ===")
     example_json_serialization()
