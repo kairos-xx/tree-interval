@@ -6,12 +6,18 @@ This module provides classes for creating and managing tree structures where nod
 represent intervals with typed information.
 """
 
-from typing import TypeVar, Optional, List, Generic, Iterator
+from typing import TypeVar, Optional, List, Generic, Iterator, NamedTuple
 import dis
+from dataclasses import dataclass
 
 # Type variables for generic type hints
 T = TypeVar('T')  # Type variable for leaf information
 L = TypeVar('L', bound='Leaf')  # Type variable for leaf instances
+
+class Position(NamedTuple):
+    start: int
+    end: int
+    info: Optional[any] = None
 
 
 class Tree(Generic[T]):
@@ -128,22 +134,30 @@ class Tree(Generic[T]):
         _print_node(self.root)
 
 
-class Leaf(tuple, Generic[T]):
+class Leaf(Position, Generic[T]):
     """
     A leaf node representing an interval with typed information.
-
-    Inherits from tuple to make it immutable and hashable.
+    Can be initialized from either a tuple/Position or individual values.
     """
-
-    def __new__(cls, start: int, end: int,
+    
+    def __new__(cls, start_or_pos: Union[int, Position, tuple], 
+                end: Optional[int] = None,
                 info: Optional[T] = None) -> 'Leaf[T]':
-        """Create a new Leaf instance."""
+        """Create a new Leaf instance from either Position/tuple or individual values."""
+        if isinstance(start_or_pos, (Position, tuple)):
+            pos = start_or_pos if isinstance(start_or_pos, Position) else Position(*start_or_pos)
+            start, end, info = pos.start, pos.end, pos.info
+        else:
+            start = start_or_pos
+            
         if start > end:
             raise ValueError("Start must be less than or equal to end")
-        instance = super().__new__(cls, (start, end))
-        return instance
-
-    def __init__(self, start: int, end: int, info: Optional[T] = None) -> None:
+            
+        return super().__new__(cls, start, end, info)
+        
+    def __init__(self, start_or_pos: Union[int, Position, tuple],
+                 end: Optional[int] = None,
+                 info: Optional[T] = None) -> None:
         """
         Initialize a Leaf instance.
 
@@ -276,12 +290,12 @@ if __name__ == "__main__":
     # Calculate total code length for proper intervals
     total_length = len(code)
     
-    # Create leaves using positions
-    root: Leaf[str] = Leaf(0, total_length, "Root")  # Full code span
-    pos1 = Position(1, 1, 0, 12)  # 'def example()' line
-    leaf1: Leaf[str] = tree.create_leaf(pos1, "Function def")
-    leaf2: Leaf[str] = Leaf(13, 25, "Second")  # Print statement
-    leaf3: Leaf[str] = Leaf(26, total_length, "Third")  # Return statement
+    # Create leaves using different representations
+    root: Leaf[str] = Leaf(0, total_length, "Root")  # Using individual values
+    pos1 = Position(1, 12, "Function def")  # Using Position
+    leaf1: Leaf[str] = Leaf(pos1)  # Create from Position
+    leaf2: Leaf[str] = Leaf((13, 25, "Second"))  # Create from tuple
+    leaf3: Leaf[str] = Leaf(26, total_length, "Third")  # Using individual values
 
     # Create and populate tree
     tree.add_leaves([root, leaf1, leaf2, leaf3])
