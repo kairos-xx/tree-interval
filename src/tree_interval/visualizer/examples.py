@@ -1,6 +1,6 @@
 """Examples demonstrating tree visualizer functionality."""
 
-from tree_visualizer import Tree, Leaf, TreeVisualizer, VisualizationConfig
+from visualizer import Tree, Leaf, TreeVisualizer, VisualizationConfig
 
 
 def example_basic_tree():

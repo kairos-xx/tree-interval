@@ -1,22 +1,19 @@
+"""
+Tree Visualizer package.
 
-"""Tree visualization module."""
+A Python package for building and visualizing tree structures with support for AST analysis.
+"""
 
-from dataclasses import dataclass
-from typing import Optional
+from .config import VisualizationConfig
 
-@dataclass
-class VisualizationConfig:
-    """Configuration for tree visualization."""
-    show_info: bool = True
-    show_size: bool = True
-    show_children_count: bool = False
-    position_format: str = 'range'  # 'range', 'position', or 'tuple'
+DEFAULT_CONFIG = VisualizationConfig()
 
 class TreeVisualizer:
     @staticmethod
-    def visualize(tree, config: Optional[VisualizationConfig] = None):
+    def visualize(tree, config: VisualizationConfig = None):
+        """Visualize a tree structure with customizable formatting options."""
         if config is None:
-            config = VisualizationConfig()
+            config = DEFAULT_CONFIG
 
         if not tree.root:
             print("Empty tree")
@@ -48,3 +45,9 @@ class TreeVisualizer:
             for i, child in enumerate(node.children):
                 is_last = i == len(node.children) - 1
                 _print_node(child, level + 1, "└── " if is_last else "├── ")
+
+        print(f"Source: {tree.source}")
+        _print_node(tree.root)
+
+__version__ = "0.1.0"
+__all__ = ['TreeVisualizer', 'VisualizationConfig']
