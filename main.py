@@ -138,13 +138,8 @@ def demonstrate_frame_analyzer():
         c = a + b
         return c
     
-    # Call sample_code
-    sys.settrace(lambda *args: None)  # Reset trace function
-    sample_code()
-    
-    # Get frame and create analyzer
-    frame = sys._getframe()
-    analyzer = FrameAnalyzer(frame)
+    # Create analyzer from the sample_code function
+    analyzer = FrameAnalyzer(sample_code.__code__.co_frame)
     
     # Show current node
     current_node = analyzer.find_current_node()
