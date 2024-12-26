@@ -6,7 +6,8 @@ It includes utilities for source code analysis and tree construction.
 """
 
 # Standard library imports
-from ast import AST, parse, unparse, walk
+import ast
+from ast import AST
 from inspect import getsource
 from typing import Optional
 
