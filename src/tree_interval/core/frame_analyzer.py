@@ -19,11 +19,10 @@ class FrameAnalyzer:
     def _extract_source(self) -> Optional[str]:
         """Extract source code from frame."""
         try:
-            return """def sample_code():
-    a = 1
-    b = 2
-    c = a + b
-    return c"""
+            # Get source from frame's code object
+            if self.frame and self.frame.f_code:
+                return getsource(self.frame.f_code)
+            return None
         except (OSError, TypeError):
             return None
 

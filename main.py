@@ -140,11 +140,8 @@ def demonstrate_frame_analyzer():
         c = a + b
         return c
     
-    # Call the function to create frame
-    sample_code()
-    
-    # Create analyzer with current frame
-    frame = currentframe()
+    # Create analyzer with sample_code's frame
+    frame = sample_code.__code__.co_frame
     analyzer = FrameAnalyzer(frame)
     
     # Show current node
