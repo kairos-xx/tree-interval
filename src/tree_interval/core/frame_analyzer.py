@@ -74,22 +74,29 @@ class FrameAnalyzer:
     def find_current_node(self) -> Optional[Leaf]:
         """Find the AST node corresponding to current frame position."""
         if not self.source or not self.ast_tree:
+            print("No source or AST tree available")
             return None
 
         # Build tree first
         tree = self.build_tree()
         if not tree or not tree.root:
+            print("No tree built")
             return None
             
         # Get current line interval
         frame_first_line = self.frame.f_code.co_firstlineno
         current_line = self.frame.f_lineno - frame_first_line + 1
+        print(f"Looking for line {current_line} (frame line: {self.frame.f_lineno}, first line: {frame_first_line})")
         
         # Find in line positions
         if 0 <= current_line - 1 < len(self.line_positions):
             start, end = self.line_positions[current_line - 1]
-            return tree.find_best_match(start, end)
-                        
+            print(f"Searching interval: [{start}, {end}]")
+            match = tree.find_best_match(start, end)
+            print(f"Found match: {match}")
+            return match
+            
+        print(f"Line {current_line-1} out of range (0-{len(self.line_positions)-1})")
         return None
 
     def build_tree(self) -> Optional[Tree]:
