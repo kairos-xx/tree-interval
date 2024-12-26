@@ -25,12 +25,11 @@ class VisualizationConfig:
     """
     show_info: bool = True
     show_size: bool = True
+    show_children_count: bool = False
+    position_format: str = 'range'  # 'range', 'position', or 'tuple'
 
 
 DEFAULT_CONFIG = VisualizationConfig()
-
-show_children_count: bool = False
-position_format: str = 'range'  # 'range', 'position', or 'tuple'
 
 
 class TreeVisualizer:
