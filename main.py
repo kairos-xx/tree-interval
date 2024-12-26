@@ -134,14 +134,15 @@ from src.tree_interval import FrameAnalyzer
 def demonstrate_frame_analyzer():
     print("\n=== Frame Analyzer Demo ===")
     
-    def sample_code():
-        a = 1
-        b = 2
-        c = a + b
-        return c
-    
-    # Get the frame by executing the function
-    frame = sys._getframe()
+    def analyze_me():
+        x = 1 + 2  # This line will be analyzed
+        return x
+
+    def get_frame():
+        return sys._getframe(0)  # Get frame of this function
+        
+    analyze_me()  # Execute first to ensure code exists
+    frame = get_frame()  # Get frame
     analyzer = FrameAnalyzer(frame)
     
     # Show current node
