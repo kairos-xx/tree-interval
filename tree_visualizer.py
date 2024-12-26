@@ -1,4 +1,3 @@
-
 """
 Tree Visualizer module.
 
@@ -53,18 +52,15 @@ class TreeVisualizer:
         def format_position(node: Leaf) -> str:
             if config.position_format == 'position':
                 return (f"Position(lineno={node.lineno}, " +
-                       f"end_lineno={node.end_lineno}, " +
-                       f"col_offset={node.col_offset}, " +
-                       f"end_col_offset={node.end_col_offset}) " +
-                       f"size={node.size} " +
-                       f"info='{node.info}'")
+                        f"end_lineno={node.end_lineno}, " +
+                        f"col_offset={node.col_offset}, " +
+                        f"end_col_offset={node.end_col_offset}) " +
+                        f"size={node.size} " + f"info='{node.info}'")
             elif config.position_format == 'tuple':
                 return f"({node.start}, {node.end})"
             return f"[{node.start}, {node.end}]"
 
-        def _print_node(node: Leaf,
-                        level: int = 0,
-                        prefix: str = "") -> None:
+        def _print_node(node: Leaf, level: int = 0, prefix: str = "") -> None:
             indent = "    " * level
             parts = [f"{indent}{prefix}{format_position(node)}"]
 

@@ -1,19 +1,19 @@
-
 """
 Core tree data structures.
 
 This module contains the core Tree and Leaf classes used across the project.
 """
 
-from dataclasses import dataclass, field
 from json import dumps, loads
-from typing import Any, Dict, Generic, List, NamedTuple, Optional, TypeVar, Union
+from typing import Any, Dict, Generic, List, Optional, TypeVar, Union
 
 T = TypeVar('T')
 L = TypeVar('L', bound='Leaf')
 
+
 class Position:
-    def __init__(self, 
+
+    def __init__(self,
                  start: Optional[int] = None,
                  end: Optional[int] = None,
                  info: Optional[Any] = None):
@@ -65,9 +65,11 @@ class Position:
     def absolute_end(self) -> Optional[int]:
         return self.end if self.end is not None else None
 
+
 class Leaf:
     """A node in the tree structure containing position and information data."""
-    def __init__(self, 
+
+    def __init__(self,
                  position: Union[Position, tuple[int, int, Any], int],
                  end: Optional[int] = None,
                  info: Optional[Any] = None) -> None:
@@ -77,7 +79,7 @@ class Leaf:
             self.position = Position(*position)
         else:
             self.position = Position(position, end, info)
-            
+
         self.parent: Optional[Leaf] = None
         self.children: List[Leaf] = []
 
@@ -88,7 +90,7 @@ class Leaf:
     @property
     def end(self) -> Optional[int]:
         return self.position.end
-        
+
     @property
     def info(self) -> Optional[Any]:
         return self.position.info
@@ -98,19 +100,19 @@ class Leaf:
         if self.start is None or self.end is None:
             return None
         return self.end - self.start
-        
+
     @property
     def lineno(self) -> Optional[int]:
         return self.position._lineno
-        
+
     @property
     def end_lineno(self) -> Optional[int]:
         return self.position._end_lineno
-        
+
     @property
     def col_offset(self) -> Optional[int]:
         return self.position._col_offset
-        
+
     @property
     def end_col_offset(self) -> Optional[int]:
         return self.position._end_col_offset
@@ -124,14 +126,13 @@ class Leaf:
         """Find the leaf that best matches the given range."""
         if self.start is None or self.end is None:
             return None
-            
+
         if start >= self.start and end <= self.end:
             best_match = self
             for child in self.children:
                 child_match = child.find_best_match(start, end)
-                if child_match and child_match.size and best_match.size:
-                    if child_match.size < best_match.size:
-                        best_match = child_match
+                if child_match and child_match.size and best_match.size and child_match.size < best_match.size:
+                    best_match = child_match
             return best_match
         return None
 
@@ -139,7 +140,7 @@ class Leaf:
         """Find the first common ancestor between this leaf and another."""
         if not other:
             return None
-            
+
         this_ancestors = set()
         current = self
         while current:
@@ -162,9 +163,11 @@ class Leaf:
             current = current.parent
         return None
 
+
 class Tree(Generic[T]):
     """A tree structure containing nodes with position information."""
-    def __init__(self, 
+
+    def __init__(self,
                  source: T,
                  start_lineno: Optional[int] = None,
                  indent_size: int = 4) -> None:
@@ -250,7 +253,8 @@ class Tree(Generic[T]):
             node.add_child(child)
         return node
 
-    def visualize(self, config: Optional["VisualizationConfig"] = None) -> None:
+    def visualize(self,
+                  config: Optional["VisualizationConfig"] = None) -> None:
         """Visualize the tree structure."""
         from tree_visualizer import TreeVisualizer
         TreeVisualizer.visualize(self, config)
