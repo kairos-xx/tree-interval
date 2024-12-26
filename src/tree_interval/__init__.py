@@ -7,7 +7,7 @@ with interval-based positions.
 """
 
 from .core.interval_core import Tree, Leaf, Position
-from .core.visualizer import TreeVisualizer, VisualizationConfig
+from src.tree_visualizer import TreeVisualizer, VisualizationConfig
 from .core.ast_builder import AstTreeBuilder
 
 __version__ = "0.1.0"
