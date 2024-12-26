@@ -1,4 +1,3 @@
-
 """
 Tree and Leaf implementation for interval-based hierarchical structures.
 
@@ -14,6 +13,7 @@ from dataclasses import dataclass, field
 T = TypeVar('T')  # Type variable for leaf information
 L = TypeVar('L', bound='Leaf')  # Type variable for leaf instances
 
+
 class Position(NamedTuple):
     start: int
     end: int
@@ -23,7 +23,10 @@ class Position(NamedTuple):
 class Tree(Generic[T]):
     """A tree structure that manages interval-based Leaf nodes."""
 
-    def __init__(self, code: str, start_lineno: int = 0, indent_size: int = 0) -> None:
+    def __init__(self,
+                 code: str,
+                 start_lineno: int = 0,
+                 indent_size: int = 0) -> None:
         """
         Initialize an empty tree with code parameters.
         
@@ -37,7 +40,9 @@ class Tree(Generic[T]):
         self.start_lineno = start_lineno
         self.indent_size = indent_size
 
-    def create_leaf(self, position: dis.Positions, info: Optional[T] = None) -> 'Leaf[T]':
+    def create_leaf(self,
+                    position: dis.Positions,
+                    info: Optional[T] = None) -> 'Leaf[T]':
         """
         Create a new leaf using tree's code parameters.
         
@@ -48,13 +53,11 @@ class Tree(Generic[T]):
         Returns:
             A new Leaf instance
         """
-        return Leaf.from_position(
-            position=position,
-            code=self.code,
-            start_lineno=self.start_lineno,
-            indent_size=self.indent_size,
-            info=info
-        )
+        return Leaf.from_position(position=position,
+                                  code=self.code,
+                                  start_lineno=self.start_lineno,
+                                  indent_size=self.indent_size,
+                                  info=info)
 
     def add_leaf(self, new_leaf: 'Leaf[T]') -> None:
         """
@@ -81,7 +84,7 @@ class Tree(Generic[T]):
             raise ValueError("Cannot find suitable parent for the new leaf")
 
     def find_best_match(self, target_start: int,
-                       target_end: int) -> Optional['Leaf[T]']:
+                        target_end: int) -> Optional['Leaf[T]']:
         """
         Find the leaf that best matches the target interval.
 
@@ -108,7 +111,7 @@ class Tree(Generic[T]):
 
         # Sort leaves by size (descending) and start position
         sorted_leaves = sorted(leaves,
-                             key=lambda x: (-(x.end - x.start), x.start))
+                               key=lambda x: (-(x.end - x.start), x.start))
         self.root = sorted_leaves[0]
         for leaf in sorted_leaves[1:]:
             self.add_leaf(leaf)
@@ -119,14 +122,17 @@ class Tree(Generic[T]):
             print("Empty tree")
             return
 
-        def _print_node(node: Leaf[T], level: int = 0, prefix: str = "") -> None:
+        def _print_node(node: Leaf[T],
+                        level: int = 0,
+                        prefix: str = "") -> None:
             """Helper function to recursively print tree nodes."""
             indent = "    " * level
             branch = "└── " if prefix == "└── " else "├── "
-            
-            print(f"{indent}{prefix}[{node.start}, {node.end}] (size={node.size})" + 
-                  (f" info='{node.info}'" if node.info else ""))
-            
+
+            print(
+                f"{indent}{prefix}[{node.start}, {node.end}] (size={node.size})"
+                + (f" info='{node.info}'" if node.info else ""))
+
             for i, child in enumerate(node.children):
                 is_last = i == len(node.children) - 1
                 _print_node(child, level + 1, "└── " if is_last else "├── ")
@@ -140,57 +146,47 @@ class Leaf(Generic[T]):
     A leaf node representing an interval with typed information.
     Can be initialized from either a tuple/Position or individual values.
     """
-    start: int
-    end: int
+    _start: int
+    _end: int
     info: Optional[T] = None
     children: List['Leaf[T]'] = field(default_factory=list)
     parent: Optional['Leaf[T]'] = None
     siblings: List['Leaf[T]'] = field(default_factory=list)
 
-    def __init__(self, start_or_pos: Union[int, Position, tuple],
+    def __init__(self,
+                 start_or_pos: Union[int, Position, tuple],
                  end: Optional[int] = None,
                  info: Optional[T] = None) -> None:
         if isinstance(start_or_pos, (Position, tuple)):
-            pos = start_or_pos if isinstance(start_or_pos, Position) else Position(*start_or_pos)
-            self.start, self.end, self.info = pos.start, pos.end, pos.info
+            pos = start_or_pos if isinstance(
+                start_or_pos, Position) else Position(*start_or_pos)
+            self._start, self._end, self.info = pos.start, pos.end, pos.info
         else:
-            self.start = start_or_pos
-            self.end = end
+            self._start = start_or_pos
+            self._end = end
             self.info = info
             
-        if self.start > self.end:
+        if self._start > self._end:
             raise ValueError("Start must be less than or equal to end")
             
         self.children = []
         self.parent = None
         self.siblings = []
-        """
-        Initialize a Leaf instance.
-
-        Args:
-            start: Start of interval.
-            end: End of interval.
-            info: Optional information associated with the leaf.
-        """
-        self.info: Optional[T] = info
-        self.children: List[Leaf[T]] = []
-        self.parent: Optional[Leaf[T]] = None
-        self.siblings: List[Leaf[T]] = []
 
     @property
     def start(self) -> int:
         """Get the start position of the interval."""
-        return self[0]
+        return self._start
 
     @property
     def end(self) -> int:
         """Get the end position of the interval."""
-        return self[1]
+        return self._end
 
     @property
     def size(self) -> int:
         """Get the size of the interval."""
-        return self.end - self.start + 1
+        return self._end - self._start + 1
 
     def add_child(self, child: 'Leaf[T]') -> None:
         """Add a child to this leaf."""
@@ -199,7 +195,7 @@ class Leaf(Generic[T]):
 
     def find_best_parent(self, root: 'Leaf[T]') -> Optional['Leaf[T]']:
         """Find the best parent for this leaf in the tree."""
-        if self.start >= root.start and self.end <= root.end:
+        if self._start >= root.start and self._end <= root.end:
             for child in root.children:
                 result = self.find_best_parent(child)
                 if result:
@@ -208,9 +204,9 @@ class Leaf(Generic[T]):
         return None
 
     def find_best_match(self, target_start: int,
-                       target_end: int) -> Optional['Leaf[T]']:
+                        target_end: int) -> Optional['Leaf[T]']:
         """Find the best matching leaf for the given interval."""
-        if target_start >= self.start and target_end <= self.end:
+        if target_start >= self._start and target_end <= self._end:
             for child in self.children:
                 match = child.find_best_match(target_start, target_end)
                 if match:
@@ -242,12 +238,12 @@ class Leaf(Generic[T]):
         return None
 
     @classmethod
-    def from_position(cls, 
-                     position: dis.Positions, 
-                     code: str, 
-                     start_lineno: int = 0,
-                     indent_size: int = 0,
-                     info: Optional[T] = None) -> 'Leaf[T]':
+    def from_position(cls,
+                      position: dis.Positions,
+                      code: str,
+                      start_lineno: int = 0,
+                      indent_size: int = 0,
+                      info: Optional[T] = None) -> 'Leaf[T]':
         """
         Create a Leaf from a dis.Position object.
 
@@ -271,8 +267,11 @@ class Leaf(Generic[T]):
 
         # Convert to absolute character position
         lines = code.splitlines()
-        start_pos = sum(len(line) + 1 for line in lines[:abs_lineno - 1]) + abs_col_offset
-        end_pos = sum(len(line) + 1 for line in lines[:abs_end_lineno - 1]) + abs_end_col_offset
+        start_pos = sum(len(line) + 1
+                        for line in lines[:abs_lineno - 1]) + abs_col_offset
+        end_pos = sum(
+            len(line) + 1
+            for line in lines[:abs_end_lineno - 1]) + abs_end_col_offset
 
         return cls(start_pos, end_pos, info)
 
@@ -282,26 +281,28 @@ if __name__ == "__main__":
     code = """def example():
     print("hello")
     return 42"""
-    
+
     tree: Tree[str] = Tree(code, start_lineno=1, indent_size=4)
-    
+
     # Create a position (simulated dis.Positions)
     class Position:
+
         def __init__(self, lineno, end_lineno, col_offset, end_col_offset):
             self.lineno = lineno
             self.end_lineno = end_lineno
             self.col_offset = col_offset
             self.end_col_offset = end_col_offset
-    
+
     # Calculate total code length for proper intervals
     total_length = len(code)
-    
+
     # Create leaves using different representations
     root: Leaf[str] = Leaf(0, total_length, "Root")  # Using individual values
     pos1 = Position(1, 12, "Function def")  # Using Position
     leaf1: Leaf[str] = Leaf(pos1)  # Create from Position
     leaf2: Leaf[str] = Leaf((13, 25, "Second"))  # Create from tuple
-    leaf3: Leaf[str] = Leaf(26, total_length, "Third")  # Using individual values
+    leaf3: Leaf[str] = Leaf(26, total_length,
+                            "Third")  # Using individual values
 
     # Create and populate tree
     tree.add_leaves([root, leaf1, leaf2, leaf3])
@@ -321,6 +322,8 @@ if __name__ == "__main__":
 
     # Test the new method
     multi_child_ancestor = leaf2.find_first_multi_child_ancestor()
-    print(f"\nFirst ancestor with multiple children for leaf2: {multi_child_ancestor}")
+    print(
+        f"\nFirst ancestor with multiple children for leaf2: {multi_child_ancestor}"
+    )
     if multi_child_ancestor:
         print(f"Number of children: {len(multi_child_ancestor.children)}")
