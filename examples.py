@@ -92,6 +92,42 @@ def main():
     print("\nJSON operations:")
     json_str = tree.to_json()
     print("JSON:", json_str)
+
+
+def demonstrate_line_positions():
+    print("\n=== Line Position Examples ===")
+    
+    # Create a tree with line numbers
+    tree = Tree("Line Number Example")
+    
+    # Create root with line numbers
+    root = Leaf(Position(0, 100, "Function"))
+    root.position.lineno = 1
+    root.position.end_lineno = 10
+    root.position.col_offset = 0
+    root.position.end_col_offset = 4
+    tree.root = root
+    
+    # Create a child node (if statement)
+    if_node = Leaf(Position(20, 60, "If Block"))
+    if_node.position.lineno = 3
+    if_node.position.end_lineno = 5
+    if_node.position.col_offset = 4
+    if_node.position.end_col_offset = 8
+    tree.add_leaf(if_node)
+    
+    # Visualize with different configs
+    print("\nDefault view:")
+    tree.visualize()
+    
+    print("\nDetailed position view:")
+    TreeVisualizer.visualize(tree, 
+        VisualizationConfig(position_format='position'))
+
+if __name__ == "__main__":
+    main()
+    demonstrate_line_positions()
+
     
     new_tree = Tree.from_json(json_str)
     print("\nReconstructed tree:")
