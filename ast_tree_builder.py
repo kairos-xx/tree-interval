@@ -55,13 +55,13 @@ class AstTreeBuilder:
 
         for node in ast.walk(tree):
             # Check all required position attributes
-            if all(
-                    hasattr(node, attr) for attr in
-                ['lineno', 'end_lineno', 'col_offset', 'end_col_offset']):
-                lineno = node.lineno
-                end_lineno = node.end_lineno
-                col_offset = node.col_offset
-                end_col_offset = node.end_col_offset
+            # Get position info if available, otherwise skip
+            lineno = getattr(node, 'lineno', None)
+            end_lineno = getattr(node, 'end_lineno', None)
+            col_offset = getattr(node, 'col_offset', None)
+            end_col_offset = getattr(node, 'end_col_offset', None)
+            
+            if all(x is not None for x in [lineno, col_offset]):
 
                 # Convert line numbers to absolute positions in source
                 start = self._line_col_to_pos(lineno, col_offset)

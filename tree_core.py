@@ -122,7 +122,7 @@ class Leaf:
         child.parent = self
         self.children.append(child)
 
-    def find_best_match(self, start: int, end: int) -> Optional[L]:
+    def find_best_match(self, start: int, end: int) -> Optional['Leaf']:
         """Find the leaf that best matches the given range."""
         if self.start is None or self.end is None:
             return None
@@ -136,7 +136,7 @@ class Leaf:
             return best_match
         return None
 
-    def find_common_ancestor(self, other: L) -> Optional[L]:
+    def find_common_ancestor(self, other: 'Leaf') -> Optional['Leaf']:
         """Find the first common ancestor between this leaf and another."""
         if not other:
             return None
@@ -154,7 +154,7 @@ class Leaf:
             current = current.parent
         return None
 
-    def find_first_multi_child_ancestor(self) -> Optional[L]:
+    def find_first_multi_child_ancestor(self) -> Optional['Leaf']:
         """Find the first ancestor that has multiple children."""
         current = self.parent
         while current:
