@@ -78,13 +78,19 @@ class FrameAnalyzer:
 
         
         current_line = self.frame.f_lineno
+        best_match = None
+        min_indent = float('inf')
+        
+        # First pass - find nodes on current line
         for node in ast.walk(self.ast_tree):
-            if hasattr(node, 'lineno'):
-                print(current_line,node.lineno)
-                if node.lineno == current_line:
-                    position = self._get_node_position(node)
-                    if position:
-                        return Leaf(position)
+            if hasattr(node, 'lineno') and node.lineno == current_line:
+                position = self._get_node_position(node)
+                if position and position.col_offset < min_indent:
+                    min_indent = position.col_offset
+                    best_match = position
+        
+        if best_match:
+            return Leaf(best_match)
                         
         return None
 
