@@ -92,8 +92,6 @@ class Leaf(tuple):
                     raise ValueError(f"Interval {leaf} cannot be placed in the tree")
                     
         return root
-
-    def __init__(self, start: int, end: int, info=None):
         self.info = info
         self.children = []
         self.parent = None
