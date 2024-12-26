@@ -84,6 +84,9 @@ class FrameAnalyzer:
             lineno = getattr(node, 'lineno', None)
             if lineno is not None:
                 # Check if node spans current line
+                            
+                print(current_line,getattr(node,"lineno",None))
+
                 end_lineno = getattr(node, 'end_lineno', lineno)
                 if lineno <= current_line <= end_lineno:
                     position = self._get_node_position(node)
