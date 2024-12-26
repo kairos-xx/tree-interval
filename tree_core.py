@@ -7,7 +7,7 @@ This module contains the core Tree and Leaf classes used across the project.
 from json import dumps, loads
 from typing import Any, Dict, Generic, List, Optional, TypeVar, Union
 
-from tree_visualizer import VisualizationConfig
+from src.tree_visualizer.config import VisualizationConfig
 
 T = TypeVar('T')
 
