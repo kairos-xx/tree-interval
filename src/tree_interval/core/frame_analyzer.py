@@ -1,4 +1,3 @@
-
 """
 Frame analyzer module for locating current frame nodes in AST.
 """
@@ -94,3 +93,33 @@ class FrameAnalyzer:
                 tree.add_leaf(Leaf(position))
 
         return tree
+
+def demonstrate_frame_analyzer():
+    print("\n=== Frame Analyzer Demo ===")
+    import sys
+    
+    def sample_code():
+        a = 1
+        b = 2
+        c = a + b
+        return c
+    
+    # Get current frame
+    frame = sys._getframe()
+    analyzer = FrameAnalyzer(frame)
+    node = analyzer.find_current_node()
+    
+    if node:
+        print(f"Found node: {node.position}")
+    else:
+        print("No node found.")
+
+    tree = analyzer.build_tree()
+    if tree:
+        print(f"Tree built: {tree.source}")
+    else:
+        print("Tree not built.")
+
+
+if __name__ == "__main__":
+    demonstrate_frame_analyzer()

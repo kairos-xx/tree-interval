@@ -1,18 +1,11 @@
 
-"""Tree Interval Package.
-
-A Python package for managing and visualizing interval tree structures.
-Provides tools for creating, manipulating and visualizing tree structures
-with interval-based positions.
-"""
-
-from .core.interval_core import Tree, Leaf, Position
-from src.tree_visualizer import TreeVisualizer, VisualizationConfig
+from .core.tree_core import Tree, Leaf, Position
+from .core.frame_analyzer import FrameAnalyzer
 from .core.ast_builder import AstTreeBuilder
+from .visualizer.visualizer import TreeVisualizer, VisualizationConfig
 
-__version__ = "0.1.0"
 __all__ = [
     'Tree', 'Leaf', 'Position',
-    'TreeVisualizer', 'VisualizationConfig',
-    'AstTreeBuilder'
+    'FrameAnalyzer', 'AstTreeBuilder',
+    'TreeVisualizer', 'VisualizationConfig'
 ]
