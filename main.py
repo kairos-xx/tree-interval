@@ -30,6 +30,17 @@ L = TypeVar('L', bound='Leaf')
 
 
 class Position(NamedTuple):
+    """Represents a position in source code.
+    
+    Attributes:
+        start: Starting absolute position
+        end: Ending absolute position
+        info: Additional information about the position
+        lineno: Starting line number
+        end_lineno: Ending line number
+        col_offset: Starting column offset
+        end_col_offset: Ending column offset
+    """
     start: Optional[int] = None
     end: Optional[int] = None
     info: Optional[Any] = None

@@ -36,6 +36,14 @@ class AstTreeBuilder:
                 self.source = inspect.getsource(self.frame.f_code)
 
     def build(self) -> Tree[str]:
+        """Build a tree structure from the Python source code.
+        
+        Returns:
+            A Tree object representing the AST structure
+            
+        Raises:
+            ValueError: If no source code is available
+        """
         if not self.source:
             raise ValueError("No source code available")
 

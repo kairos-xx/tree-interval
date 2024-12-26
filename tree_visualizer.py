@@ -30,8 +30,16 @@ class VisualizationConfig:
     position_format: str = 'range'  # 'range', 'position', or 'tuple'
 
 class TreeVisualizer:
+    """Utility class for tree visualization with configurable display options."""
+    
     @staticmethod
     def visualize(tree: Tree, config: VisualizationConfig = VisualizationConfig()) -> None:
+        """Visualize a tree structure with customizable formatting options.
+        
+        Args:
+            tree: The tree structure to visualize
+            config: Configuration options for visualization
+        """
         if not tree.root:
             print("Empty tree")
             return
