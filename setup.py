@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="tree-visualizer",
-    version="0.1.0", 
+    version="0.1.0",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     description="A Python package for building and visualizing tree structures",
