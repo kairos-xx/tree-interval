@@ -16,18 +16,14 @@ class Position:
     def __init__(self, 
                  start: Optional[int] = None,
                  end: Optional[int] = None,
-                 info: Optional[Any] = None,
-                 lineno: Optional[int] = None,
-                 end_lineno: Optional[int] = None,
-                 col_offset: Optional[int] = None,
-                 end_col_offset: Optional[int] = None):
+                 info: Optional[Any] = None):
         self.start = start
         self.end = end
         self.info = info
-        self.lineno = lineno
-        self.end_lineno = end_lineno
-        self.col_offset = col_offset
-        self.end_col_offset = end_col_offset
+        self.lineno = None
+        self.end_lineno = None
+        self.col_offset = None
+        self.end_col_offset = None
 
     @property
     def absolute_start(self) -> Optional[int]:

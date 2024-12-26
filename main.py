@@ -21,7 +21,12 @@ def example_all_methods():
 
     # Create leaves with different methods
     root = Leaf(0, 100, "root")
-    child1 = Leaf(Position(10, 40, "child1"))
+    pos = Position(10, 40, "child1")
+    pos.lineno = 1
+    pos.end_lineno = 2
+    pos.col_offset = 10
+    pos.end_col_offset = 40
+    child1 = Leaf(pos)
     child2 = Leaf((50, 90, "child2"))  # Using tuple
 
     print("\n2. Building tree structure")
