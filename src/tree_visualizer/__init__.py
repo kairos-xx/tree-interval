@@ -12,6 +12,7 @@ DEFAULT_CONFIG = VisualizationConfig()
 class TreeVisualizer:
     @staticmethod
     def visualize(tree, config: VisualizationConfig = None):
+        print(9)
         """Visualize a tree structure with customizable formatting options."""
         if config is None:
             config = DEFAULT_CONFIG
@@ -47,6 +48,7 @@ class TreeVisualizer:
                 is_last = i == len(node.children) - 1
                 _print_node(child, level + 1, "└── " if is_last else "├── ")
 
+        print(f"Source: {tree.source}")
         _print_node(tree.root)
 
 __version__ = "0.1.0"

@@ -74,29 +74,22 @@ class FrameAnalyzer:
     def find_current_node(self) -> Optional[Leaf]:
         """Find the AST node corresponding to current frame position."""
         if not self.source or not self.ast_tree:
-            print("No source or AST tree available")
             return None
 
-        # Get current line number relative to function start
+        # Build tree first
+        tree = self.build_tree()
+        if not tree or not tree.root:
+            return None
+            
+        # Get current line interval
         frame_first_line = self.frame.f_code.co_firstlineno
-        current_line = self.frame.f_lineno
-
-        # Find closest AST node for current line
-        best_node = None
-        min_distance = float('inf')
+        current_line = self.frame.f_lineno - frame_first_line + 1
         
-        for node in ast.walk(self.ast_tree):
-            if hasattr(node, 'lineno'):
-                distance = abs(node.lineno - current_line)
-                if distance < min_distance:
-                    min_distance = distance
-                    best_node = node
-
-        if best_node:
-            position = self._get_node_position(best_node)
-            if position:
-                return Leaf(position)
-                
+        # Find in line positions
+        if 0 <= current_line - 1 < len(self.line_positions):
+            start, end = self.line_positions[current_line - 1]
+            return tree.find_best_match(start, end)
+                        
         return None
 
     def build_tree(self) -> Optional[Tree]:
@@ -105,25 +98,21 @@ class FrameAnalyzer:
             return None
 
         tree = Tree(self.source)
-        
-        def process_node(node: ast.AST) -> Optional[Leaf]:
+        root_pos = Position(0, len(self.source), "Module")
+        tree.root = Leaf(root_pos)
+
+        # First pass - collect all nodes with their positions
+        nodes_with_positions = []
+        for node in ast.walk(self.ast_tree):
             position = self._get_node_position(node)
-            if not position:
-                return None
-                
-            leaf = Leaf(position)
-            
-            for child in ast.iter_child_nodes(node):
-                child_leaf = process_node(child)
-                if child_leaf:
-                    leaf.add_child(child_leaf)
-                    
-            return leaf
-            
-        root_leaf = process_node(self.ast_tree)
-        if root_leaf:
-            tree.root = root_leaf
-            
+            if position:
+                leaf = Leaf(position)
+                nodes_with_positions.append((node, leaf))
+
+        # Second pass - build hierarchy
+        for node, leaf in nodes_with_positions:
+            tree.add_leaf(leaf)
+
         return tree
 
 def demonstrate_frame_analyzer():
