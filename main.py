@@ -66,6 +66,10 @@ class Leaf(Generic[T]):
     children: List['Leaf[T]'] = field(default_factory=list)
     parent: Optional['Leaf[T]'] = None
     siblings: List['Leaf[T]'] = field(default_factory=list)
+    lineno: Optional[int] = None
+    end_lineno: Optional[int] = None
+    col_offset: Optional[int] = None
+    end_col_offset: Optional[int] = None
 
     def to_dict(self) -> Dict[str, Any]:
         return {

@@ -77,6 +77,8 @@ class AstTreeBuilder:
 
     def _line_col_to_pos(self, line: int, col: int) -> Optional[int]:
         """Convert line and column numbers to absolute position in source."""
+        if not self.source:
+            return None
         try:
             lines = self.source.splitlines(True)  # Keep line endings
             pos = 0
