@@ -4,10 +4,9 @@ This module provides classes for creating and managing tree structures where nod
 represent intervals with typed information.
 """
 
-from typing import TypeVar, Optional, List, Generic, Iterator, NamedTuple, Union, Dict, Any
-import dis
+from typing import TypeVar, Optional, List, Generic, NamedTuple, Union, Dict, Any
 from dataclasses import dataclass, field
-import json
+from json import dumps, loads
 
 T = TypeVar('T')
 L = TypeVar('L', bound='Leaf')
@@ -60,7 +59,7 @@ class Leaf(Generic[T]):
         return leaf
 
     def __repr__(self) -> str:
-        return json.dumps(
+        return dumps(
             {
                 'info':
                 self.info,
@@ -69,7 +68,7 @@ class Leaf(Generic[T]):
                 'end':
                 self._end,
                 'children':
-                [json.loads(child.__repr__()) for child in self.children]
+                [loads(child.__repr__()) for child in self.children]
             },
             indent=2)
 
@@ -217,11 +216,11 @@ class Tree(Generic[T]):
             'root': self.root.to_dict() if self.root else None,
             'complete': True
         }
-        return json.dumps(data)
+        return dumps(data)
 
     @classmethod
     def from_json(cls, json_str: str) -> 'Tree[T]':
-        data = json.loads(json_str)
+        data = loads(json_str)
         if not data.get('complete', False):
             raise ValueError("JSON data is not a complete tree serialization")
 
@@ -317,7 +316,7 @@ def example_all_methods():
 
     print("\n7. JSON serialization")
     json_str = tree.to_json()
-    print("JSON string:", json.dumps(json.loads(json_str), indent=2))
+    print("JSON string:", dumps(loads(json_str), indent=2))
 
     print("\n8. JSON deserialization")
     loaded_tree = Tree.from_json(json_str)
