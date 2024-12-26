@@ -8,10 +8,9 @@ configuration options for display format and content.
 
 # Standard library imports
 from dataclasses import dataclass
-from typing import List, Optional
 
 # Local imports
-from main import Leaf, Position, Tree
+from main import Leaf, Tree
 
 
 @dataclass

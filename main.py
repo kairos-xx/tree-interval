@@ -14,16 +14,7 @@ Classes:
 # Standard library imports
 from dataclasses import dataclass, field
 from json import dumps, loads
-from typing import (
-    Any,
-    Dict,
-    Generic,
-    List,
-    NamedTuple,
-    Optional,
-    TypeVar,
-    Union,
-)
+from typing import TypeVar, Generic, List, Optional, NamedTuple, Any, Dict, Union
 
 T = TypeVar('T')
 L = TypeVar('L', bound='Leaf')

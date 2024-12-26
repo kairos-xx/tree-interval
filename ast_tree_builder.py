@@ -7,7 +7,6 @@ It includes utilities for source code analysis and tree construction.
 
 # Standard library imports
 import ast
-from ast import AST
 from inspect import getsource
 from typing import Optional
 
