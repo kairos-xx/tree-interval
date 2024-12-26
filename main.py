@@ -281,7 +281,6 @@ if __name__ == "__main__":
     root: Leaf[str] = Leaf(1, 10, "Root")
 
     # Create and populate tree
-    tree: Tree[str] = Tree()
     tree.add_leaves([root, leaf1, leaf2, leaf3])
 
     # Visualize the tree structure
