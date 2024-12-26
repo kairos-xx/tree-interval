@@ -88,8 +88,8 @@ class Tree(Generic[T]):
             indent = "    " * level
             branch = "└── " if prefix == "└── " else "├── "
             
-            print(f"{indent}{prefix}[{node.start}, {node.end}]" + 
-                  (f" ({node.info})" if node.info else ""))
+            print(f"{indent}{prefix}[{node.start}, {node.end}] (size={node.size})" + 
+                  (f" info='{node.info}'" if node.info else ""))
             
             for i, child in enumerate(node.children):
                 is_last = i == len(node.children) - 1
@@ -136,6 +136,11 @@ class Leaf(tuple, Generic[T]):
     def end(self) -> int:
         """Get the end position of the interval."""
         return self[1]
+
+    @property
+    def size(self) -> int:
+        """Get the size of the interval."""
+        return self.end - self.start + 1
 
     def add_child(self, child: 'Leaf[T]') -> None:
         """Add a child to this leaf."""
