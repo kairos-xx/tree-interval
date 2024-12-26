@@ -54,7 +54,7 @@ class TreeVisualizer:
             if config.position_format == 'position':
                 if hasattr(node, 'lineno'):
                     return (f"Position(lineno={node.lineno}, " +
-                            f"end_lineno={node.end_lineno}" +
+                            f"end_lineno={node.end_lineno}, " +
                             f"col_offset={node.col_offset}, " +
                             f"end_col_offset={node.end_col_offset})")
                 return f"Position(start={node.start}, end={node.end})"
