@@ -134,30 +134,28 @@ from src.tree_interval import FrameAnalyzer
 def demonstrate_frame_analyzer():
     print("\n=== Frame Analyzer Demo ===")
     
-    def analyze_me():
+    def analyze_this():
         x = 1 + 2  # This line will be analyzed
+        frame = sys._getframe()  # Get frame inside the function
+        analyzer = FrameAnalyzer(frame)
+        
+        # Show current node
+        current_node = analyzer.find_current_node()
+        print("Current Node Information:")
+        print(f"Node: {current_node}")
+        
+        # Build and show tree
+        tree = analyzer.build_tree()
+        if tree:
+            print("\nFull AST Tree:")
+            TreeVisualizer.visualize(tree, VisualizationConfig(
+                position_format='position',
+                show_children_count=True
+            ))
         return x
 
-    def get_frame():
-        return sys._getframe(0)  # Get frame of this function
-        
-    analyze_me()  # Execute first to ensure code exists
-    frame = get_frame()  # Get frame
-    analyzer = FrameAnalyzer(frame)
-    
-    # Show current node
-    current_node = analyzer.find_current_node()
-    print("Current Node Information:")
-    print(f"Node: {current_node}")
-    
-    # Build and show tree
-    tree = analyzer.build_tree()
-    if tree:
-        print("\nFull AST Tree:")
-        TreeVisualizer.visualize(tree, VisualizationConfig(
-            position_format='position',
-            show_children_count=True
-        ))
+    # Execute the function to perform analysis
+    analyze_this()
     
     
    
