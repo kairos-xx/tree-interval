@@ -336,7 +336,7 @@ if __name__ == "__main__":
     # Create leaves using different representations
     root: Leaf[str] = Leaf(0, total_length, "Root")  # Using individual values
     leaf1: Leaf[str] = tree.create_leaf_from_lines(1, 1, "Function def")  # Create from line numbers
-    leaf2: Leaf[str] = Leaf((13, 25, "Second"))  # Create from tuple
+    leaf2: Leaf[str] = Leaf((13, 13, 0, 25, "Second"))  # Create from tuple (lineno, end_lineno, col_offset, end_col_offset, info)
     leaf3: Leaf[str] = Leaf(26, total_length,
                             "Third")  # Using individual values
 
