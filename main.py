@@ -1,4 +1,39 @@
 
+class Tree:
+    def __init__(self):
+        self.root = None
+    
+    def add_leaf(self, new_leaf):
+        if not isinstance(new_leaf, Leaf):
+            raise TypeError("Must be a Leaf instance")
+            
+        if not self.root:
+            self.root = new_leaf
+            return
+            
+        best_parent = new_leaf.find_best_parent(self.root)
+        if best_parent:
+            best_parent.add_child(new_leaf)
+        else:
+            raise ValueError("Cannot find suitable parent for the new leaf")
+            
+    def find_best_match(self, target_start: int, target_end: int) -> 'Leaf':
+        if not self.root:
+            return None
+        return self.root.find_best_match(target_start, target_end)
+        
+    def add_leaves(self, leaves):
+        if not leaves:
+            return
+            
+        # Sort leaves by interval size (largest first) and start position
+        sorted_leaves = sorted(leaves, key=lambda x: (-(x.end - x.start), x.start))
+        
+        self.root = sorted_leaves[0]
+        for leaf in sorted_leaves[1:]:
+            self.add_leaf(leaf)
+
+
 class Leaf:
     @classmethod
     def from_list(cls, leaves):
@@ -170,8 +205,9 @@ if __name__ == "__main__":
     leaf3 = Leaf(5, 8)
     root = Leaf(1, 10)
     
-    leaves = [root, leaf1, leaf2, leaf3]
-    root = Leaf.from_list(leaves)
+    # Create tree and add leaves
+    tree = Tree()
+    tree.add_leaves([root, leaf1, leaf2, leaf3])
     
     # Find best match for interval (2,3)
     best_match = root.find_best_match(2, 3)
