@@ -7,9 +7,12 @@ configuration options for display format and content.
 
 # Standard library imports
 from dataclasses import dataclass
+from typing import Optional
 
 # Local imports
 from main import Leaf, Tree
+
+DEFAULT_CONFIG = VisualizationConfig()
 
 
 @dataclass
@@ -32,15 +35,17 @@ class TreeVisualizer:
     """Utility class for tree visualization with configurable display options."""
 
     @staticmethod
-    def visualize(
-        tree: Tree,
-        config: VisualizationConfig = VisualizationConfig()) -> None:
+    def visualize(tree: Tree,
+                  config: Optional[VisualizationConfig] = None) -> None:
         """Visualize a tree structure with customizable formatting options.
         
         Args:
             tree: The tree structure to visualize
             config: Configuration options for visualization
         """
+        if config is None:
+            config = DEFAULT_CONFIG
+
         if not tree.root:
             print("Empty tree")
             return
@@ -56,8 +61,6 @@ class TreeVisualizer:
 
         def _print_node(node: Leaf, level: int = 0, prefix: str = "") -> None:
             indent = "    " * level
-            branch = "└── " if prefix == "└── " else "├── "
-
             parts = [f"{indent}{prefix}{format_position(node)}"]
 
             if config.show_size:

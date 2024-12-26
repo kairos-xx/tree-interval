@@ -29,11 +29,10 @@ class AstTreeBuilder:
     def _get_source(self) -> None:
         try:
             self.source = ast.unparse(ast.parse(self.frame.f_code.co_code))
-        except:
+        except (SyntaxError, TypeError, ValueError) as e:
             # Fallback to frame source if available
             if self.frame.f_code.co_firstlineno:
-                import inspect
-                self.source = inspect.getsource(self.frame.f_code)
+                self.source = getsource(self.frame.f_code)
 
     def build(self) -> Tree[str]:
         """Build a tree structure from the Python source code.
@@ -59,10 +58,10 @@ class AstTreeBuilder:
             if all(
                     hasattr(node, attr) for attr in
                 ['lineno', 'end_lineno', 'col_offset', 'end_col_offset']):
-                lineno = getattr(node, 'lineno')
-                end_lineno = getattr(node, 'end_lineno')
-                col_offset = getattr(node, 'col_offset')
-                end_col_offset = getattr(node, 'end_col_offset')
+                lineno = node.lineno
+                end_lineno = node.end_lineno
+                col_offset = node.col_offset
+                end_col_offset = node.end_col_offset
 
                 # Convert line numbers to absolute positions in source
                 start = self._line_col_to_pos(lineno, col_offset)
