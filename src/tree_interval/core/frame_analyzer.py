@@ -19,9 +19,14 @@ class FrameAnalyzer:
     def _extract_source(self) -> Optional[str]:
         """Extract source code from frame."""
         try:
-            # Get source from frame's code object
             if self.frame and self.frame.f_code:
-                return getsource(self.frame.f_code)
+                source = getsource(self.frame.f_code)
+                # Remove common leading whitespace
+                lines = source.splitlines()
+                common_indent = min(len(line) - len(line.lstrip()) 
+                                 for line in lines if line.strip())
+                return '\n'.join(line[common_indent:] if line.strip() else line 
+                               for line in lines)
             return None
         except (OSError, TypeError):
             return None
