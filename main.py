@@ -26,7 +26,7 @@ class Position(NamedTuple):
     def absolute_start(self) -> Optional[int]:
         return self.start if self.start is not None else None
 
-    @property 
+    @property
     def absolute_end(self) -> Optional[int]:
         return self.end if self.end is not None else None
 
@@ -60,12 +60,18 @@ class Leaf(Generic[T]):
         return leaf
 
     def __repr__(self) -> str:
-        return json.dumps({
-            'info': self.info,
-            'start': self._start,
-            'end': self._end,
-            'children': [json.loads(child.__repr__()) for child in self.children]
-        }, indent=2)
+        return json.dumps(
+            {
+                'info':
+                self.info,
+                'start':
+                self._start,
+                'end':
+                self._end,
+                'children':
+                [json.loads(child.__repr__()) for child in self.children]
+            },
+            indent=2)
 
     def __init__(self,
                  start_or_pos: Union[int, Position, tuple],
@@ -74,16 +80,21 @@ class Leaf(Generic[T]):
         if isinstance(start_or_pos, (Position, tuple)):
             pos = start_or_pos if isinstance(
                 start_or_pos, Position) else Position(*start_or_pos)
-            
+
             if pos.start is not None and pos.end is not None:
                 self._start, self._end = pos.start, pos.end
-            elif all(x is not None for x in [pos.lineno, pos.end_lineno, pos.col_offset, pos.end_col_offset]):
+            elif all(x is not None for x in [
+                    pos.lineno, pos.end_lineno, pos.col_offset,
+                    pos.end_col_offset
+            ]):
                 # Convert line/col to absolute positions
                 self._start = pos.col_offset
                 self._end = pos.end_col_offset
             else:
-                raise ValueError("Either absolute positions or line/column positions must be provided")
-            
+                raise ValueError(
+                    "Either absolute positions or line/column positions must be provided"
+                )
+
             self.info = pos.info
         else:
             self._start = start_or_pos
@@ -265,21 +276,22 @@ def example_all_methods():
 
     print("\n3. Tree visualization")
     from tree_visualizer import TreeVisualizer, VisualizationConfig
-    
+
     # Default visualization
     print("Default:")
     tree.visualize()
-    
+
     # Custom visualizations
     print("\nWith Position objects:")
-    TreeVisualizer.visualize(tree, VisualizationConfig(position_format='position'))
-    
+    TreeVisualizer.visualize(tree,
+                             VisualizationConfig(position_format='position'))
+
     print("\nWith tuples and children count:")
-    TreeVisualizer.visualize(tree, VisualizationConfig(
-        position_format='tuple',
-        show_children_count=True,
-        show_size=False
-    ))
+    TreeVisualizer.visualize(
+        tree,
+        VisualizationConfig(position_format='tuple',
+                            show_children_count=True,
+                            show_size=False))
 
     print("\n4. Accessing properties")
     print(f"Root size: {root.size}")
@@ -313,26 +325,26 @@ if __name__ == "__main__":
     example_all_methods()
 
 
-
 def example_ast_tree():
     """Example of using AstTreeBuilder"""
     import inspect
     from ast_tree_builder import AstTreeBuilder
-    
+
     # Get current frame
     frame = inspect.currentframe()
-    
+
     # Build AST tree
     builder = AstTreeBuilder(frame)
     ast_tree = builder.build()
-    
+
     print("\nAST Tree visualization:")
     ast_tree.visualize()
-    
+
     # Print flattened nodes
     print("\nFlattened AST nodes:")
     for leaf in ast_tree.flatten():
         print(f"{leaf.info}: [{leaf.start}, {leaf.end}]")
+
 
 if __name__ == "__main__":
     example_all_methods()
