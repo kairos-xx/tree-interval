@@ -30,10 +30,16 @@ class AstTreeBuilder:
         result_tree.root = root
         
         for node in ast.walk(tree):
-            if hasattr(node, 'lineno') and hasattr(node, 'end_lineno'):
+            # Check all required position attributes
+            if all(hasattr(node, attr) for attr in ['lineno', 'end_lineno', 'col_offset', 'end_col_offset']):
+                lineno = getattr(node, 'lineno')
+                end_lineno = getattr(node, 'end_lineno')
+                col_offset = getattr(node, 'col_offset')
+                end_col_offset = getattr(node, 'end_col_offset')
+                
                 # Convert line numbers to absolute positions in source
-                start = self._line_col_to_pos(node.lineno, node.col_offset)
-                end = self._line_col_to_pos(node.end_lineno, node.end_col_offset)
+                start = self._line_col_to_pos(lineno, col_offset)
+                end = self._line_col_to_pos(end_lineno, end_col_offset)
                 
                 if start is not None and end is not None:
                     leaf = Leaf(start, end, node.__class__.__name__)

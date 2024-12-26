@@ -77,10 +77,16 @@ class Leaf(Generic[T]):
                  start_or_pos: Union[int, Position, tuple],
                  end: Optional[int] = None,
                  info: Optional[T] = None) -> None:
+        self.children: List['Leaf[T]'] = []
+        self.parent: Optional['Leaf[T]'] = None
+        self.siblings: List['Leaf[T]'] = []
+        self._start: int = 0
+        self._end: int = 0
+        
         if isinstance(start_or_pos, (Position, tuple)):
             pos = start_or_pos if isinstance(
                 start_or_pos, Position) else Position(*start_or_pos)
-
+            
             if pos.start is not None and pos.end is not None:
                 self._start, self._end = pos.start, pos.end
             elif all(x is not None for x in [
@@ -88,13 +94,15 @@ class Leaf(Generic[T]):
                     pos.end_col_offset
             ]):
                 # Convert line/col to absolute positions
+                assert pos.col_offset is not None
+                assert pos.end_col_offset is not None
                 self._start = pos.col_offset
                 self._end = pos.end_col_offset
             else:
                 raise ValueError(
                     "Either absolute positions or line/column positions must be provided"
                 )
-
+            
             self.info = pos.info
         else:
             self._start = start_or_pos
@@ -103,10 +111,6 @@ class Leaf(Generic[T]):
 
         if self._start > self._end:
             raise ValueError("Start must be less than or equal to end")
-
-        self.children = []
-        self.parent = None
-        self.siblings = []
 
     @property
     def start(self) -> int:
@@ -151,9 +155,9 @@ class Leaf(Generic[T]):
         return self.parent.find_common_ancestor(other.parent)
 
     def flatten(self) -> List['Leaf[T]']:
-        result = [self]
+        result: List['Leaf[T]'] = [self]
         for child in self.children:
-            result.extend(child.flatten())
+            result.extend(list(child.flatten()))
         return result
 
     def find_first_multi_child_ancestor(self) -> Optional['Leaf[T]']:
