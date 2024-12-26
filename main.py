@@ -187,6 +187,10 @@ class Leaf(Generic[T]):
     children: List['Leaf[T]'] = field(default_factory=list)
     parent: Optional['Leaf[T]'] = None
     siblings: List['Leaf[T]'] = field(default_factory=list)
+    
+    def __repr__(self) -> str:
+        """Concise string representation of the leaf."""
+        return f'Leaf(info="{self.info}", children=[{", ".join(repr(c) for c in self.children)}])'
 
     def __init__(self,
                  start_or_pos: Union[int, Position, tuple],
