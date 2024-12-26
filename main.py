@@ -2,7 +2,9 @@
 """
 Comprehensive demonstration of all features of the tree interval package.
 """
+from inspect import currentframe
 from src.tree_interval import Tree, Leaf, Position, TreeVisualizer, VisualizationConfig
+
 
 def demonstrate_positions():
     print("\n=== Position Examples ===")
@@ -136,27 +138,29 @@ def demonstrate_frame_analyzer():
         a = 1
         b = 2
         c = a + b
-        return c
-    
-    # Create analyzer from the sample_code function
-    analyzer = FrameAnalyzer(sample_code.__code__.co_frame)
-    
-    # Show current node
-    current_node = analyzer.find_current_node()
-    print("Current Node Information:")
-    print(f"Node: {current_node}")
-    
-    # Build and show full tree
-    tree = analyzer.build_tree()
-    if tree:
-        print("\nFull AST Tree:")
-        TreeVisualizer.visualize(
-            tree,
-            VisualizationConfig(
-                position_format='position',
-                show_children_count=True
+        analyzer = FrameAnalyzer(currentframe())
+         # Show current node
+        current_node = analyzer.find_current_node()
+        print("Current Node Information:")
+        print(f"Node: {current_node}")
+        
+        # Build and show full tree
+        tree = analyzer.build_tree()
+        if tree:
+            print("\nFull AST Tree:")
+            TreeVisualizer.visualize(
+                tree,
+                VisualizationConfig(
+                    position_format='position',
+                    show_children_count=True
+                )
             )
-        )
+        return c
+    sample_code()
+    # Create analyzer from the sample_code function
+    
+    
+   
 
 if __name__ == "__main__":
     print("=== Tree Interval Package Demo ===")
