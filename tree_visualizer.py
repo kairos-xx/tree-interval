@@ -1,3 +1,4 @@
+
 """
 Tree Visualizer module.
 
@@ -8,7 +9,7 @@ configuration options for display format and content.
 from dataclasses import dataclass
 from typing import Optional
 
-from main import Leaf, Tree
+from tree_core import Leaf, Tree
 
 
 @dataclass
@@ -61,7 +62,9 @@ class TreeVisualizer:
                 return f"({node.start}, {node.end})"
             return f"[{node.start}, {node.end}]"
 
-        def _print_node(node: Leaf, level: int = 0, prefix: str = "") -> None:
+        def _print_node(node: Leaf,
+                        level: int = 0,
+                        prefix: str = "") -> None:
             indent = "    " * level
             parts = [f"{indent}{prefix}{format_position(node)}"]
 

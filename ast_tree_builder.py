@@ -1,3 +1,4 @@
+
 """
 AST Tree Builder module.
 
@@ -10,7 +11,7 @@ import ast
 from inspect import getsource
 from typing import Optional
 
-from main import Leaf, Tree
+from tree_core import Leaf, Tree
 
 
 class AstTreeBuilder:
