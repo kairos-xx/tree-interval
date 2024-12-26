@@ -298,7 +298,7 @@ if __name__ == "__main__":
 
     # Create leaves using different representations
     root: Leaf[str] = Leaf(0, total_length, "Root")  # Using individual values
-    pos1 = Position(1, 12, "Function def")  # Using Position
+    pos1 = Position(1, 1, 0, 12)  # Using Position (lineno, end_lineno, col_offset, end_col_offset)
     leaf1: Leaf[str] = Leaf(pos1)  # Create from Position
     leaf2: Leaf[str] = Leaf((13, 25, "Second"))  # Create from tuple
     leaf3: Leaf[str] = Leaf(26, total_length,
