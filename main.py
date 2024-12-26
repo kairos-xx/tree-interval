@@ -8,9 +8,7 @@ including visualization, serialization, and tree traversal.
 from inspect import currentframe
 from json import dumps, loads
 
-from ast_tree_builder import AstTreeBuilder
-from tree_core import Leaf, Position, Tree
-from tree_visualizer import TreeVisualizer, VisualizationConfig
+from src.tree_interval import Tree, Leaf, Position, TreeVisualizer, VisualizationConfig, AstIntervalBuilder
 
 
 def example_all_methods():
