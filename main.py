@@ -175,6 +175,9 @@ class Tree(Generic[T]):
         _print_node(self.root)
 
 
+import json
+from typing import Dict, Any
+
 @dataclass
 class Leaf(Generic[T]):
     """
@@ -187,6 +190,16 @@ class Leaf(Generic[T]):
     children: List['Leaf[T]'] = field(default_factory=list)
     parent: Optional['Leaf[T]'] = None
     siblings: List['Leaf[T]'] = field(default_factory=list)
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert leaf to dictionary for JSON serialization."""
+        return {
+            'start': self._start,
+            'end': self._end,
+            'info': self.info,
+            'size': self.size,
+            'children': [child.to_dict() for child in self.children]
+        }
     
     def __repr__(self) -> str:
         """Concise string representation of the leaf."""
@@ -367,3 +380,7 @@ if __name__ == "__main__":
     )
     if multi_child_ancestor:
         print(f"Number of children: {len(multi_child_ancestor.children)}")
+
+    # JSON serialization example
+    print("\nJSON representation of the tree:")
+    print(json.dumps(root.to_dict(), indent=2))
