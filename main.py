@@ -138,25 +138,13 @@ def demonstrate_frame_analyzer():
         c = a + b
         return c
     
-    def analyze_frame():
-        frame = sys._getframe(1)  # Get the caller's frame
-        analyzer = FrameAnalyzer(frame)
-        node = analyzer.find_current_node()
-        print("Current Node Information:")
-        print(f"Node: {node}")
-        
-        tree = analyzer.build_tree()
-        if tree:
-            print("\nFull AST Tree:")
-            tree.visualize(VisualizationConfig(
-                position_format='position',
-                show_children_count=True
-            ))
-    
-    # Call sample_code and analyze its frame
+    # Call sample_code
     sys.settrace(lambda *args: None)  # Reset trace function
     sample_code()
-    analyze_frame()
+    
+    # Get frame and create analyzer
+    frame = sys._getframe()
+    analyzer = FrameAnalyzer(frame)
     
     # Show current node
     current_node = analyzer.find_current_node()
