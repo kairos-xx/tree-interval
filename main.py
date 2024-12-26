@@ -1,11 +1,10 @@
-
 """
 Tree and Leaf implementation for interval-based hierarchical structures.
 This module provides classes for creating and managing tree structures where nodes
 represent intervals with typed information.
 """
 
-from typing import TypeVar, Optional, List, Generic, Iterator, NamedTuple, Union
+from typing import TypeVar, Optional, List, Generic, Iterator, NamedTuple, Union, Dict, Any
 import dis
 from dataclasses import dataclass, field
 import json
@@ -13,10 +12,12 @@ import json
 T = TypeVar('T')
 L = TypeVar('L', bound='Leaf')
 
+
 class Position(NamedTuple):
     start: int
     end: int
     info: Optional[any] = None
+
 
 @dataclass
 class Leaf(Generic[T]):
@@ -45,7 +46,7 @@ class Leaf(Generic[T]):
                 child = cls.from_dict(child_data)
                 leaf.add_child(child)
         return leaf
-    
+
     def __repr__(self) -> str:
         return f'Leaf(info="{self.info}", children=[{", ".join(repr(c) for c in self.children)}])'
 
@@ -54,16 +55,17 @@ class Leaf(Generic[T]):
                  end: Optional[int] = None,
                  info: Optional[T] = None) -> None:
         if isinstance(start_or_pos, (Position, tuple)):
-            pos = start_or_pos if isinstance(start_or_pos, Position) else Position(*start_or_pos)
+            pos = start_or_pos if isinstance(
+                start_or_pos, Position) else Position(*start_or_pos)
             self._start, self._end, self.info = pos.start, pos.end, pos.info
         else:
             self._start = start_or_pos
             self._end = end
             self.info = info
-            
+
         if self._start > self._end:
             raise ValueError("Start must be less than or equal to end")
-            
+
         self.children = []
         self.parent = None
         self.siblings = []
@@ -93,7 +95,8 @@ class Leaf(Generic[T]):
             return root
         return None
 
-    def find_best_match(self, target_start: int, target_end: int) -> Optional['Leaf[T]']:
+    def find_best_match(self, target_start: int,
+                        target_end: int) -> Optional['Leaf[T]']:
         if target_start >= self._start and target_end <= self._end:
             for child in self.children:
                 match = child.find_best_match(target_start, target_end)
@@ -123,8 +126,13 @@ class Leaf(Generic[T]):
             current = current.parent
         return None
 
+
 class Tree(Generic[T]):
-    def __init__(self, code: str, start_lineno: int = 0, indent_size: int = 0) -> None:
+
+    def __init__(self,
+                 code: str,
+                 start_lineno: int = 0,
+                 indent_size: int = 0) -> None:
         self.root: Optional[Leaf[T]] = None
         self.code = code
         self.start_lineno = start_lineno
@@ -144,7 +152,8 @@ class Tree(Generic[T]):
         else:
             raise ValueError("Cannot find suitable parent for the new leaf")
 
-    def find_best_match(self, target_start: int, target_end: int) -> Optional['Leaf[T]']:
+    def find_best_match(self, target_start: int,
+                        target_end: int) -> Optional['Leaf[T]']:
         if not self.root:
             return None
         return self.root.find_best_match(target_start, target_end)
@@ -152,7 +161,8 @@ class Tree(Generic[T]):
     def add_leaves(self, leaves: List['Leaf[T]']) -> None:
         if not leaves:
             return
-        sorted_leaves = sorted(leaves, key=lambda x: (-(x.end - x.start), x.start))
+        sorted_leaves = sorted(leaves,
+                               key=lambda x: (-(x.end - x.start), x.start))
         self.root = sorted_leaves[0]
         for leaf in sorted_leaves[1:]:
             self.add_leaf(leaf)
@@ -172,12 +182,10 @@ class Tree(Generic[T]):
         data = json.loads(json_str)
         if not data.get('complete', False):
             raise ValueError("JSON data is not a complete tree serialization")
-        
-        tree = cls(
-            code=data.get('code', ''),
-            start_lineno=data.get('start_lineno', 0),
-            indent_size=data.get('indent_size', 0)
-        )
+
+        tree = cls(code=data.get('code', ''),
+                   start_lineno=data.get('start_lineno', 0),
+                   indent_size=data.get('indent_size', 0))
         if data.get('root'):
             tree.root = Leaf.from_dict(data['root'])
         return tree
@@ -192,67 +200,72 @@ class Tree(Generic[T]):
             print("Empty tree")
             return
 
-        def _print_node(node: Leaf[T], level: int = 0, prefix: str = "") -> None:
+        def _print_node(node: Leaf[T],
+                        level: int = 0,
+                        prefix: str = "") -> None:
             indent = "    " * level
             branch = "└── " if prefix == "└── " else "├── "
-            print(f"{indent}{prefix}[{node.start}, {node.end}] (size={node.size})" 
-                  + (f" info='{node.info}'" if node.info else ""))
+            print(
+                f"{indent}{prefix}[{node.start}, {node.end}] (size={node.size})"
+                + (f" info='{node.info}'" if node.info else ""))
             for i, child in enumerate(node.children):
                 is_last = i == len(node.children) - 1
                 _print_node(child, level + 1, "└── " if is_last else "├── ")
 
         _print_node(self.root)
 
+
 def example_all_methods():
     """Demonstrate all available methods in Tree and Leaf classes."""
     print("1. Creating a tree and leaves")
     tree = Tree[str]("Example code", start_lineno=1, indent_size=4)
-    
+
     # Create leaves with different methods
     root = Leaf(0, 100, "root")
     child1 = Leaf(Position(10, 40, "child1"))
     child2 = Leaf((50, 90, "child2"))  # Using tuple
-    
+
     print("\n2. Building tree structure")
     tree.root = root
     tree.add_leaf(child1)
     tree.add_leaf(child2)
-    
+
     # Create and add grandchildren
     grandchild1 = Leaf(15, 25, "grandchild1")
     grandchild2 = Leaf(60, 80, "grandchild2")
     child1.add_child(grandchild1)
     child2.add_child(grandchild2)
-    
+
     print("\n3. Tree visualization")
     tree.visualize()
-    
+
     print("\n4. Accessing properties")
     print(f"Root size: {root.size}")
     print(f"Child1 start: {child1.start}, end: {child1.end}")
-    
+
     print("\n5. Finding nodes")
     best_match = tree.find_best_match(20, 30)
     print(f"Best match for (20, 30): {best_match}")
-    
+
     common_ancestor = grandchild1.find_common_ancestor(grandchild2)
     print(f"Common ancestor of grandchildren: {common_ancestor}")
-    
+
     multi_child = grandchild1.find_first_multi_child_ancestor()
     print(f"First multi-child ancestor: {multi_child}")
-    
+
     print("\n6. Flattening tree")
     flat_list = tree.flatten()
     print("Flattened tree:", [leaf.info for leaf in flat_list])
-    
+
     print("\n7. JSON serialization")
     json_str = tree.to_json()
     print("JSON string:", json.dumps(json.loads(json_str), indent=2))
-    
+
     print("\n8. JSON deserialization")
     loaded_tree = Tree.from_json(json_str)
     print("Loaded tree:")
     loaded_tree.visualize()
+
 
 if __name__ == "__main__":
     example_all_methods()
