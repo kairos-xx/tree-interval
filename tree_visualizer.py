@@ -19,6 +19,8 @@ class TreeVisualizer:
 
         def format_position(node: Leaf) -> str:
             if config.position_format == 'position':
+                if hasattr(node, 'lineno'):
+                    return f"Position(lineno={node.lineno}, end_lineno={node.end_lineno}, col_offset={node.col_offset}, end_col_offset={node.end_col_offset})"
                 return f"Position(start={node.start}, end={node.end})"
             elif config.position_format == 'tuple':
                 return f"({node.start}, {node.end})"
