@@ -149,7 +149,7 @@ def demonstrate_frame_analyzer():
         if tree:
             print("\nFull AST Tree:",TreeVisualizer.visualize)
             TreeVisualizer.visualize(tree, VisualizationConfig(
-                position_format='position',
+                position_format='tuple',
                 show_children_count=True
             ))
         return x
