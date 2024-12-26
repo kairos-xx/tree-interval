@@ -145,3 +145,96 @@ class Leaf:
                 return current
             current = current.parent
         return None
+
+class Tree(Generic[T]):
+    """A tree structure containing nodes with position information."""
+    def __init__(self, 
+                 source: T,
+                 start_lineno: Optional[int] = None,
+                 indent_size: int = 4) -> None:
+        self.source = source
+        self.start_lineno = start_lineno
+        self.indent_size = indent_size
+        self.root: Optional[Leaf] = None
+
+    def add_leaf(self, leaf: Leaf) -> None:
+        """Add a leaf to the tree by finding its best matching parent."""
+        if not self.root:
+            self.root = leaf
+            return
+
+        if leaf.start is None or leaf.end is None:
+            return
+
+        best_match = self.root.find_best_match(leaf.start, leaf.end)
+        if best_match:
+            best_match.add_child(leaf)
+
+    def find_best_match(self, start: int, end: int) -> Optional[Leaf]:
+        """Find the leaf that best matches the given range."""
+        if self.root:
+            return self.root.find_best_match(start, end)
+        return None
+
+    def flatten(self) -> List[Leaf]:
+        """Return a flattened list of all leaves in the tree."""
+        result: List[Leaf] = []
+        if self.root:
+            result.append(self.root)
+            for child in self.root.children:
+                result.extend(self._flatten_helper(child))
+        return result
+
+    def _flatten_helper(self, leaf: Leaf) -> List[Leaf]:
+        """Helper method for flatten()."""
+        result = [leaf]
+        for child in leaf.children:
+            result.extend(self._flatten_helper(child))
+        return result
+
+    def to_json(self) -> str:
+        """Convert the tree to a JSON string."""
+        return dumps(self._to_dict())
+
+    def _to_dict(self) -> Dict:
+        """Convert the tree to a dictionary."""
+        return {
+            'source': self.source,
+            'start_lineno': self.start_lineno,
+            'indent_size': self.indent_size,
+            'root': self._node_to_dict(self.root) if self.root else None
+        }
+
+    def _node_to_dict(self, node: Optional[Leaf]) -> Optional[Dict]:
+        """Convert a node to a dictionary."""
+        if not node:
+            return None
+        return {
+            'start': node.start,
+            'end': node.end,
+            'info': node.info,
+            'children': [self._node_to_dict(child) for child in node.children]
+        }
+
+    @classmethod
+    def from_json(cls, json_str: str) -> 'Tree[T]':
+        """Create a tree from a JSON string."""
+        data = loads(json_str)
+        tree = cls(data['source'], data['start_lineno'], data['indent_size'])
+        if data['root']:
+            tree.root = cls._dict_to_node(data['root'])
+        return tree
+
+    @staticmethod
+    def _dict_to_node(data: Dict) -> Leaf:
+        """Create a node from a dictionary."""
+        node = Leaf(data['start'], data['end'], data['info'])
+        for child_data in data['children']:
+            child = Tree._dict_to_node(child_data)
+            node.add_child(child)
+        return node
+
+    def visualize(self, config: Optional[VisualizationConfig] = None) -> None:
+        """Visualize the tree structure."""
+        from tree_visualizer import TreeVisualizer
+        TreeVisualizer.visualize(self, config)
