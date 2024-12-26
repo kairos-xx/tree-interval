@@ -1,90 +1,52 @@
 
 """
-Example usage of the tree structure implementation.
-
-This module demonstrates various features of the tree structure implementation
-including visualization, serialization, and tree traversal.
+Comprehensive example demonstrating all features of the tree structure.
 """
 
-from inspect import currentframe
-from json import dumps, loads
+from src.tree_interval import Tree, Leaf, Position, TreeVisualizer, VisualizationConfig
 
-from src.tree_interval import Tree, Leaf, Position, TreeVisualizer, VisualizationConfig, AstTreeBuilder
-
-
-def example_all_methods():
-    """Demonstrate all available methods in Tree and Leaf classes."""
-    print("1. Creating a tree and leaves")
+def demonstrate_all_features():
+    # 1. Create a tree
+    print("\n1. Tree Creation")
     tree = Tree[str]("Example code", start_lineno=1, indent_size=4)
-
-    # Create leaves with different methods
-    pos_root = Position(0, 100, "root")
-    pos_root.lineno = 1
-    pos_root.end_lineno = 5
-    pos_root.col_offset = 0
-    pos_root.end_col_offset = 100
-    root = Leaf(pos_root)
-
-    pos_child1 = Position(10, 40, "child1")
-    pos_child1.lineno = 1
-    pos_child1.end_lineno = 2
-    pos_child1.col_offset = 10
-    pos_child1.end_col_offset = 40
-    child1 = Leaf(pos_child1)
-
-    pos_child2 = Position(50, 90, "child2")
-    pos_child2.lineno = 2
-    pos_child2.end_lineno = 3
-    pos_child2.col_offset = 50
-    pos_child2.end_col_offset = 90
-    child2 = Leaf(pos_child2)
-
-    # Create and add grandchildren
-    pos_grandchild1 = Position(15, 25, "grandchild1")
-    pos_grandchild1.lineno = 2
-    pos_grandchild1.end_lineno = 2
-    pos_grandchild1.col_offset = 15
-    pos_grandchild1.end_col_offset = 25
-    grandchild1 = Leaf(pos_grandchild1)
-
-    pos_grandchild2 = Position(60, 80, "grandchild2")
-    pos_grandchild2.lineno = 3
-    pos_grandchild2.end_lineno = 3
-    pos_grandchild2.col_offset = 60
-    pos_grandchild2.end_col_offset = 80
-    grandchild2 = Leaf(pos_grandchild2)
-
-    print("\n2. Building tree structure")
+    root = Leaf(Position(0, 100, "root"))
     tree.root = root
+
+    # 2. Add children
+    print("\n2. Adding Children")
+    child1 = Leaf(Position(10, 40, "child1"))
+    child2 = Leaf(Position(50, 90, "child2"))
+    grandchild1 = Leaf(Position(15, 25, "grandchild1"))
+    grandchild2 = Leaf(Position(60, 80, "grandchild2"))
+
     tree.add_leaf(child1)
     tree.add_leaf(child2)
-
-    # Create and add grandchildren
     child1.add_child(grandchild1)
     child2.add_child(grandchild2)
 
-    print("\n3. Tree visualization")
-    # Default visualization
-    print("Default:")
+    # 3. Tree Visualization Methods
+    print("\n3. Different Visualization Methods:")
+    print("\nDefault visualization:")
     tree.visualize()
 
-    # Custom visualizations
-    print("\nWith Position objects:")
-    TreeVisualizer.visualize(tree,
-                             VisualizationConfig(position_format='position'))
+    print("\nWith Position format:")
+    TreeVisualizer.visualize(tree, VisualizationConfig(position_format='position'))
 
     print("\nWith tuples and children count:")
-    TreeVisualizer.visualize(
-        tree,
-        VisualizationConfig(position_format='tuple',
-                            show_children_count=True,
-                            show_size=False))
+    TreeVisualizer.visualize(tree, VisualizationConfig(
+        position_format='tuple',
+        show_children_count=True,
+        show_size=False
+    ))
 
-    print("\n4. Accessing properties")
+    # 4. Tree Operations
+    print("\n4. Tree Operations:")
     print(f"Root size: {root.size}")
-    print(f"Child1 start: {child1.start}, end: {child1.end}")
+    print(f"Child1 position: ({child1.start}, {child1.end})")
+    print(f"Number of root's children: {len(root.children)}")
 
-    print("\n5. Finding nodes")
+    # 5. Finding Nodes
+    print("\n5. Node Finding:")
     best_match = tree.find_best_match(20, 30)
     print(f"Best match for (20, 30): {best_match}")
 
@@ -94,14 +56,20 @@ def example_all_methods():
     multi_child = grandchild1.find_first_multi_child_ancestor()
     print(f"First multi-child ancestor: {multi_child}")
 
-    print("\n6. Flattening tree")
+    # 6. Tree Traversal
+    print("\n6. Tree Traversal:")
     flat_list = tree.flatten()
     print("Flattened tree:", [leaf.info for leaf in flat_list])
 
-    print("\n7. JSON serialization")
+    # 7. JSON Serialization
+    print("\n7. JSON Operations:")
     json_str = tree.to_json()
-    print("JSON string:", dumps(loads(json_str), indent=2))
-
+    print("JSON string:", json_str)
+    
+    # Recreate tree from JSON
+    new_tree = Tree.from_json(json_str)
+    print("\nReconstructed tree visualization:")
+    new_tree.visualize()
 
 if __name__ == "__main__":
-    example_all_methods()
+    demonstrate_all_features()
