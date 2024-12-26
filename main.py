@@ -1,9 +1,14 @@
 
-class Tree:
-    def __init__(self):
-        self.root = None
+from typing import TypeVar, Optional, List, Generic, Iterator
+
+T = TypeVar('T')  # Type variable for leaf information
+L = TypeVar('L', bound='Leaf')  # Type variable for leaf instances
+
+class Tree(Generic[T]):
+    def __init__(self) -> None:
+        self.root: Optional[Leaf[T]] = None
     
-    def add_leaf(self, new_leaf):
+    def add_leaf(self, new_leaf: 'Leaf[T]') -> None:
         if not isinstance(new_leaf, Leaf):
             raise TypeError("Must be a Leaf instance")
             
@@ -17,67 +22,61 @@ class Tree:
         else:
             raise ValueError("Cannot find suitable parent for the new leaf")
             
-    def find_best_match(self, target_start: int, target_end: int) -> 'Leaf':
+    def find_best_match(self, target_start: int, target_end: int) -> Optional['Leaf[T]']:
         if not self.root:
             return None
         return self.root.find_best_match(target_start, target_end)
         
-    def add_leaves(self, leaves):
+    def add_leaves(self, leaves: List['Leaf[T]']) -> None:
         if not leaves:
             return
             
-        # Sort leaves by interval size (largest first) and start position
         sorted_leaves = sorted(leaves, key=lambda x: (-(x.end - x.start), x.start))
-        
         self.root = sorted_leaves[0]
         for leaf in sorted_leaves[1:]:
             self.add_leaf(leaf)
 
 
-class Leaf(tuple):
-    def __new__(cls, start: int, end: int, info=None):
+class Leaf(tuple, Generic[T]):
+    def __new__(cls, start: int, end: int, info: Optional[T] = None) -> 'Leaf[T]':
         if start > end:
             raise ValueError("Start must be less than or equal to end")
         instance = super().__new__(cls, (start, end))
         return instance
         
-    def __init__(self, start: int, end: int, info=None):
-        self.info = info
-        self.children = []
-        self.parent = None
-        self.siblings = []
+    def __init__(self, start: int, end: int, info: Optional[T] = None) -> None:
+        self.info: Optional[T] = info
+        self.children: List[Leaf[T]] = []
+        self.parent: Optional[Leaf[T]] = None
+        self.siblings: List[Leaf[T]] = []
         
     @property
-    def start(self):
+    def start(self) -> int:
         return self[0]
         
     @property
-    def end(self):
+    def end(self) -> int:
         return self[1]
         
     @classmethod
-    def from_list(cls, leaves):
+    def from_list(cls, leaves: List['Leaf[T]']) -> Optional['Leaf[T]']:
         if not leaves:
             return None
             
-        # Sort leaves by interval size (largest first) and start position
         sorted_leaves = sorted(leaves, key=lambda x: (-(x.end - x.start), x.start))
-        
         root = sorted_leaves[0]
+        
         for leaf in sorted_leaves[1:]:
             current = root
             placed = False
             
             while not placed:
-                # Check if it's a sibling
                 if leaf.start == current.start and leaf.end == current.end:
                     current.add_sibling(leaf)
                     placed = True
                     continue
                 
-                # Find appropriate child position
                 if current.start <= leaf.start and leaf.end <= current.end:
-                    # Check existing children first
                     child_placed = False
                     for child in current.children:
                         if child.start <= leaf.start and leaf.end <= child.end:
@@ -92,32 +91,23 @@ class Leaf(tuple):
                     raise ValueError(f"Interval {leaf} cannot be placed in the tree")
                     
         return root
-        self.info = info
-        self.children = []
-        self.parent = None
-        self.siblings = []
 
-    def add_child(self, child):
+    def add_child(self, child: 'Leaf[T]') -> None:
         if not isinstance(child, Leaf):
             raise TypeError("Child must be a Leaf instance")
-        
-        # Check if it's actually a sibling
+            
         if child.start == self.start and child.end == self.end:
             self.add_sibling(child)
             return
             
-        # Validate interval containment
         if not (self.start <= child.start and child.end <= self.end):
             raise ValueError("Child interval must be contained within parent interval")
             
-        # Check if any existing children should become children of the new leaf
-        children_to_move = []
-        for existing_child in self.children:
-            if (child.start <= existing_child.start and 
-                existing_child.end <= child.end):
-                children_to_move.append(existing_child)
+        children_to_move = [
+            existing_child for existing_child in self.children
+            if child.start <= existing_child.start and existing_child.end <= child.end
+        ]
         
-        # Remove children that will be moved
         for move_child in children_to_move:
             self.children.remove(move_child)
             child.children.append(move_child)
@@ -126,7 +116,7 @@ class Leaf(tuple):
         child.parent = self
         self.children.append(child)
         
-    def add_sibling(self, sibling):
+    def add_sibling(self, sibling: 'Leaf[T]') -> None:
         if not isinstance(sibling, Leaf):
             raise TypeError("Sibling must be a Leaf instance")
         if sibling.start != self.start or sibling.end != self.end:
@@ -135,8 +125,8 @@ class Leaf(tuple):
             self.siblings.append(sibling)
             sibling.siblings.append(self)
 
-    def find_best_match(self, target_start: int, target_end: int) -> 'Leaf':
-        def calculate_distance(leaf):
+    def find_best_match(self, target_start: int, target_end: int) -> 'Leaf[T]':
+        def calculate_distance(leaf: 'Leaf[T]') -> int:
             start_diff = abs(leaf.start - target_start)
             end_diff = abs(leaf.end - target_end)
             return start_diff + end_diff
@@ -144,9 +134,8 @@ class Leaf(tuple):
         best_leaf = self
         min_distance = calculate_distance(self)
 
-        # Check current node's children
         for child in self.children:
-            if (child.start <= target_start and child.end >= target_end):
+            if child.start <= target_start and child.end >= target_end:
                 child_best = child.find_best_match(target_start, target_end)
                 child_distance = calculate_distance(child_best)
                 if child_distance < min_distance:
@@ -155,33 +144,31 @@ class Leaf(tuple):
 
         return best_leaf
 
-    def find_common_ancestor(self, other: 'Leaf') -> 'Leaf':
+    def find_common_ancestor(self, other: 'Leaf[T]') -> Optional['Leaf[T]']:
         if not isinstance(other, Leaf):
             raise TypeError("Argument must be a Leaf instance")
             
-        # Get path to root for both leaves
         path1 = self._path_to_root()
         path2 = other._path_to_root()
         
-        # Find first common ancestor
         for node in path1:
             if node in path2:
                 return node
                 
         return None
 
-    def _path_to_root(self):
-        path = [self]
-        current = self
-        while current.parent is not None:
+    def _path_to_root(self) -> List['Leaf[T]']:
+        path: List[Leaf[T]] = [self]
+        current: Optional[Leaf[T]] = self
+        while current and current.parent is not None:
             path.append(current.parent)
             current = current.parent
         return path
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"Leaf{super().__repr__()}, info={self.info})"
         
-    def find_best_parent(self, root):
+    def find_best_parent(self, root: Optional['Leaf[T]']) -> Optional['Leaf[T]']:
         if not root:
             return None
             
@@ -190,47 +177,28 @@ class Leaf(tuple):
             
         best_parent = root
         for child in root.children:
-            if (child.start <= self.start and self.end <= child.end):
+            if child.start <= self.start and self.end <= child.end:
                 potential_parent = self.find_best_parent(child)
                 if potential_parent:
                     best_parent = potential_parent
                     
         return best_parent
-        
-    @classmethod
-    def add_to_tree(cls, root, new_leaf):
-        if not root:
-            return new_leaf
-            
-        best_parent = new_leaf.find_best_parent(root)
-        if best_parent:
-            best_parent.add_child(new_leaf)
-        else:
-            raise ValueError("Cannot find suitable parent for the new leaf")
-            
-        return root
 
 
-# Example usage:
 if __name__ == "__main__":
-    # Create leaves
-    leaf1 = Leaf(1, 4)
-    leaf2 = Leaf(2, 4)
-    leaf3 = Leaf(5, 8)
-    root = Leaf(1, 10)
+    # Example with string info
+    leaf1: Leaf[str] = Leaf(1, 4, "First")
+    leaf2: Leaf[str] = Leaf(2, 4, "Second")
+    leaf3: Leaf[str] = Leaf(5, 8, "Third")
+    root: Leaf[str] = Leaf(1, 10, "Root")
     
-    # Create tree and add leaves
-    tree = Tree()
+    tree: Tree[str] = Tree()
     tree.add_leaves([root, leaf1, leaf2, leaf3])
     
-    # Find best match for interval (2,3)
     best_match = root.find_best_match(2, 3)
     print(f"Best match for interval (2,3): {best_match}")
-    
-    # Test parent-child relationships
     print(f"Parent of best match: {best_match.parent}")
     print(f"Root's children: {root.children}")
     
-    # Test common ancestor
     common = leaf1.find_common_ancestor(leaf2)
     print(f"Common ancestor of {leaf1} and {leaf2}: {common}")
