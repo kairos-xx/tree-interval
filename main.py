@@ -242,7 +242,22 @@ def example_all_methods():
     child2.add_child(grandchild2)
 
     print("\n3. Tree visualization")
+    from tree_visualizer import TreeVisualizer, VisualizationConfig
+    
+    # Default visualization
+    print("Default:")
     tree.visualize()
+    
+    # Custom visualizations
+    print("\nWith Position objects:")
+    TreeVisualizer.visualize(tree, VisualizationConfig(position_format='position'))
+    
+    print("\nWith tuples and children count:")
+    TreeVisualizer.visualize(tree, VisualizationConfig(
+        position_format='tuple',
+        show_children_count=True,
+        show_size=False
+    ))
 
     print("\n4. Accessing properties")
     print(f"Root size: {root.size}")
