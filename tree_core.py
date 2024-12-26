@@ -12,14 +12,22 @@ from typing import Any, Dict, Generic, List, NamedTuple, Optional, TypeVar, Unio
 T = TypeVar('T')
 L = TypeVar('L', bound='Leaf')
 
-class Position(NamedTuple):
-    start: Optional[int] = None
-    end: Optional[int] = None
-    info: Optional[Any] = None
-    lineno: Optional[int] = None
-    end_lineno: Optional[int] = None
-    col_offset: Optional[int] = None
-    end_col_offset: Optional[int] = None
+class Position:
+    def __init__(self, 
+                 start: Optional[int] = None,
+                 end: Optional[int] = None,
+                 info: Optional[Any] = None,
+                 lineno: Optional[int] = None,
+                 end_lineno: Optional[int] = None,
+                 col_offset: Optional[int] = None,
+                 end_col_offset: Optional[int] = None):
+        self.start = start
+        self.end = end
+        self.info = info
+        self.lineno = lineno
+        self.end_lineno = end_lineno
+        self.col_offset = col_offset
+        self.end_col_offset = end_col_offset
 
     @property
     def absolute_start(self) -> Optional[int]:
