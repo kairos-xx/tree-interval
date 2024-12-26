@@ -427,5 +427,6 @@ if __name__ == "__main__":
     
     # Load tree from JSON
     loaded_tree = Tree.from_json(json_str)
+    
     print("\nVisualization of loaded tree:")
     loaded_tree.visualize()
