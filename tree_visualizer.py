@@ -1,4 +1,3 @@
-
 """
 Tree Visualizer module.
 
@@ -28,11 +27,14 @@ class VisualizationConfig:
     show_children_count: bool = False
     position_format: str = 'range'  # 'range', 'position', or 'tuple'
 
+
 class TreeVisualizer:
     """Utility class for tree visualization with configurable display options."""
-    
+
     @staticmethod
-    def visualize(tree: Tree, config: VisualizationConfig = VisualizationConfig()) -> None:
+    def visualize(
+        tree: Tree,
+        config: VisualizationConfig = VisualizationConfig()) -> None:
         """Visualize a tree structure with customizable formatting options.
         
         Args:
@@ -55,18 +57,18 @@ class TreeVisualizer:
         def _print_node(node: Leaf, level: int = 0, prefix: str = "") -> None:
             indent = "    " * level
             branch = "└── " if prefix == "└── " else "├── "
-            
+
             parts = [f"{indent}{prefix}{format_position(node)}"]
-            
+
             if config.show_size:
                 parts.append(f"size={node.size}")
             if config.show_info and node.info:
                 parts.append(f"info='{node.info}'")
             if config.show_children_count:
                 parts.append(f"children={len(node.children)}")
-                
+
             print(" ".join(parts))
-            
+
             for i, child in enumerate(node.children):
                 is_last = i == len(node.children) - 1
                 _print_node(child, level + 1, "└── " if is_last else "├── ")

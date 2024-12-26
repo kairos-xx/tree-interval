@@ -84,12 +84,9 @@ class Leaf(Generic[T]):
     def __repr__(self) -> str:
         return dumps(
             {
-                'info':
-                self.info,
-                'start':
-                self._start,
-                'end':
-                self._end,
+                'info': self.info,
+                'start': self._start,
+                'end': self._end,
                 'children':
                 [loads(child.__repr__()) for child in self.children]
             },
