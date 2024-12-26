@@ -118,9 +118,8 @@ class Leaf(Generic[T]):
                 self._start = pos.col_offset
                 self._end = pos.end_col_offset
             else:
-                raise ValueError(
-                    "Either absolute positions or line/column positions must be provided"
-                )
+                raise ValueError("Either absolute positions or line/column",
+                                 "positions must be provided")
 
             self.info = pos.info
         else:
@@ -265,7 +264,6 @@ class Tree(Generic[T]):
                         level: int = 0,
                         prefix: str = "") -> None:
             indent = "    " * level
-            branch = "└── " if prefix == "└── " else "├── "
             print(
                 f"{indent}{prefix}[{node.start}, {node.end}] (size={node.size})"
                 + (f" info='{node.info}'" if node.info else ""))
