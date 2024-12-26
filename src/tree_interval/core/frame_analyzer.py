@@ -105,21 +105,25 @@ class FrameAnalyzer:
             return None
 
         tree = Tree(self.source)
-        root_pos = Position(0, len(self.source), "Module")
-        tree.root = Leaf(root_pos)
-
-        # First pass - collect all nodes with their positions
-        nodes_with_positions = []
-        for node in ast.walk(self.ast_tree):
+        
+        def process_node(node: ast.AST) -> Optional[Leaf]:
             position = self._get_node_position(node)
-            if position:
-                leaf = Leaf(position)
-                nodes_with_positions.append((node, leaf))
-
-        # Second pass - build hierarchy
-        for node, leaf in nodes_with_positions:
-            tree.add_leaf(leaf)
-
+            if not position:
+                return None
+                
+            leaf = Leaf(position)
+            
+            for child in ast.iter_child_nodes(node):
+                child_leaf = process_node(child)
+                if child_leaf:
+                    leaf.add_child(child_leaf)
+                    
+            return leaf
+            
+        root_leaf = process_node(self.ast_tree)
+        if root_leaf:
+            tree.root = root_leaf
+            
         return tree
 
 def demonstrate_frame_analyzer():
