@@ -98,6 +98,22 @@ class Leaf:
         if self.start is None or self.end is None:
             return None
         return self.end - self.start
+        
+    @property
+    def lineno(self) -> Optional[int]:
+        return self.position._lineno
+        
+    @property
+    def end_lineno(self) -> Optional[int]:
+        return self.position._end_lineno
+        
+    @property
+    def col_offset(self) -> Optional[int]:
+        return self.position._col_offset
+        
+    @property
+    def end_col_offset(self) -> Optional[int]:
+        return self.position._end_col_offset
 
     def add_child(self, child: L) -> None:
         """Add a child node to this leaf."""
