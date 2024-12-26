@@ -165,6 +165,10 @@ class Leaf:
             current = current.parent
         return None
 
+    def __repr__(self) -> str:
+        """Return a string representation of the leaf."""
+        return f"Leaf(start={self.start}, end={self.end}, info='{self.info}')"
+
 
 class Tree(Generic[T]):
     """A tree structure containing nodes with position information."""
