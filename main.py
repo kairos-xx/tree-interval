@@ -126,8 +126,41 @@ def demonstrate_tree_operations():
     
     return tree
 
+def demonstrate_frame_analyzer():
+    print("\n=== Frame Analyzer Demo ===")
+    
+    def sample_code():
+        a = 1
+        b = 2
+        c = a + b
+        return c
+    
+    # Get current frame
+    frame = sample_code.__code__.co_frame
+    
+    # Create analyzer
+    analyzer = FrameAnalyzer(frame)
+    
+    # Show current node
+    current_node = analyzer.find_current_node()
+    print("Current Node Information:")
+    print(f"Node: {current_node}")
+    
+    # Build and show full tree
+    tree = analyzer.build_tree()
+    if tree:
+        print("\nFull AST Tree:")
+        TreeVisualizer.visualize(
+            tree,
+            VisualizationConfig(
+                position_format='position',
+                show_children_count=True
+            )
+        )
+
 if __name__ == "__main__":
     print("=== Tree Interval Package Demo ===")
     demonstrate_positions()
     demonstrate_leaves()
     demonstrate_tree_operations()
+    demonstrate_frame_analyzer()

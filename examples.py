@@ -99,3 +99,33 @@ def main():
 
 if __name__ == "__main__":
     main()
+def example_frame_analyzer():
+    """Demonstrate frame analyzer functionality."""
+    def sample_function():
+        x = 1
+        y = 2
+        return x + y
+
+    # Get current frame
+    frame = sample_function.__code__.co_frame
+    
+    # Create analyzer
+    analyzer = FrameAnalyzer(frame)
+    
+    # Find current node
+    current_node = analyzer.find_current_node()
+    print("\nCurrent Node:", current_node)
+    
+    # Build and show complete tree
+    tree = analyzer.build_tree()
+    if tree:
+        print("\nComplete AST Tree:")
+        tree.visualize()
+
+if __name__ == "__main__":
+    print("=== Basic Tree Example ===")
+    example_basic_tree()
+    print("\n=== Visualization Options Example ===")
+    example_custom_visualization()
+    print("\n=== Frame Analyzer Example ===")
+    example_frame_analyzer()
