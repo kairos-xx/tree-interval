@@ -14,9 +14,21 @@ L = TypeVar('L', bound='Leaf')
 
 
 class Position(NamedTuple):
-    start: int
-    end: int
-    info: Optional[any] = None
+    start: Optional[int] = None
+    end: Optional[int] = None
+    info: Optional[Any] = None
+    lineno: Optional[int] = None
+    end_lineno: Optional[int] = None
+    col_offset: Optional[int] = None
+    end_col_offset: Optional[int] = None
+
+    @property
+    def absolute_start(self) -> Optional[int]:
+        return self.start if self.start is not None else None
+
+    @property 
+    def absolute_end(self) -> Optional[int]:
+        return self.end if self.end is not None else None
 
 
 @dataclass
@@ -62,10 +74,20 @@ class Leaf(Generic[T]):
         if isinstance(start_or_pos, (Position, tuple)):
             pos = start_or_pos if isinstance(
                 start_or_pos, Position) else Position(*start_or_pos)
-            self._start, self._end, self.info = pos.start, pos.end, pos.info
+            
+            if pos.start is not None and pos.end is not None:
+                self._start, self._end = pos.start, pos.end
+            elif all(x is not None for x in [pos.lineno, pos.end_lineno, pos.col_offset, pos.end_col_offset]):
+                # Convert line/col to absolute positions
+                self._start = pos.col_offset
+                self._end = pos.end_col_offset
+            else:
+                raise ValueError("Either absolute positions or line/column positions must be provided")
+            
+            self.info = pos.info
         else:
             self._start = start_or_pos
-            self._end = end
+            self._end = end if end is not None else start_or_pos
             self.info = info
 
         if self._start > self._end:
