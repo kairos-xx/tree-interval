@@ -274,3 +274,29 @@ def example_all_methods():
 
 if __name__ == "__main__":
     example_all_methods()
+
+
+
+def example_ast_tree():
+    """Example of using AstTreeBuilder"""
+    import inspect
+    from ast_tree_builder import AstTreeBuilder
+    
+    # Get current frame
+    frame = inspect.currentframe()
+    
+    # Build AST tree
+    builder = AstTreeBuilder(frame)
+    ast_tree = builder.build()
+    
+    print("\nAST Tree visualization:")
+    ast_tree.visualize()
+    
+    # Print flattened nodes
+    print("\nFlattened AST nodes:")
+    for leaf in ast_tree.flatten():
+        print(f"{leaf.info}: [{leaf.start}, {leaf.end}]")
+
+if __name__ == "__main__":
+    example_all_methods()
+    example_ast_tree()
