@@ -7,8 +7,9 @@ This module contains the core Tree and Leaf classes used across the project.
 from json import dumps, loads
 from typing import Any, Dict, Generic, List, Optional, TypeVar, Union
 
+from tree_visualizer import VisualizationConfig
+
 T = TypeVar('T')
-L = TypeVar('L', bound='Leaf')
 
 
 class Position:
@@ -117,7 +118,7 @@ class Leaf:
     def end_col_offset(self) -> Optional[int]:
         return self.position._end_col_offset
 
-    def add_child(self, child: L) -> None:
+    def add_child(self, child: 'Leaf') -> None:
         """Add a child node to this leaf."""
         child.parent = self
         self.children.append(child)
