@@ -176,6 +176,21 @@ class Leaf(tuple, Generic[T]):
             return self.parent
         return self.parent.find_common_ancestor(other.parent)
 
+    def find_first_multi_child_ancestor(self) -> Optional['Leaf[T]']:
+        """
+        Find the first ancestor that has more than one child.
+
+        Returns:
+            Optional[Leaf[T]]: The first ancestor with multiple children,
+            or None if no such ancestor exists.
+        """
+        current = self.parent
+        while current:
+            if len(current.children) > 1:
+                return current
+            current = current.parent
+        return None
+
 
 if __name__ == "__main__":
     # Example usage with string information
@@ -200,3 +215,9 @@ if __name__ == "__main__":
 
     common = leaf1.find_common_ancestor(leaf2)
     print(f"Common ancestor of {leaf1} and {leaf2}: {common}")
+
+    # Test the new method
+    multi_child_ancestor = leaf2.find_first_multi_child_ancestor()
+    print(f"\nFirst ancestor with multiple children for leaf2: {multi_child_ancestor}")
+    if multi_child_ancestor:
+        print(f"Number of children: {len(multi_child_ancestor.children)}")
