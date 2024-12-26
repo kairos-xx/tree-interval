@@ -94,10 +94,6 @@ class Leaf(tuple):
         return root
 
     def __init__(self, start: int, end: int, info=None):
-        if start > end:
-            raise ValueError("Start must be less than or equal to end")
-        self.start = start
-        self.end = end
         self.info = info
         self.children = []
         self.parent = None
