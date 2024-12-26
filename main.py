@@ -126,6 +126,8 @@ def demonstrate_tree_operations():
     
     return tree
 
+from src.tree_interval import FrameAnalyzer
+
 def demonstrate_frame_analyzer():
     print("\n=== Frame Analyzer Demo ===")
     
