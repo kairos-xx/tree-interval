@@ -1,0 +1,22 @@
+run = ["python", "main.py"]
+
+entrypoint = "main.py"
+modules = ["python-3.11:v30-20240222-aba8eb6"]
+
+hidden = [".pythonlibs"]
+
+disableGuessImports = true
+disableInstallBeforeRun = true
+
+[nix]
+channel = "stable-23_11"
+
+[unitTest]
+language = "python3"
+
+[deployment]
+run = ["python3", "main.py"]
+deploymentTarget = "cloudrun"
+
+[env]
+PYTHONPATH = "$PYTHONPATH:$REPL_HOME/.pythonlibs/lib/python3.11/site-packages"
