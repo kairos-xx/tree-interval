@@ -153,20 +153,30 @@ class Tree(Generic[T]):
 
     @classmethod
     def from_json(cls, json_str: str) -> 'Tree[T]':
-        """Create a Tree from a JSON string."""
+        """Create a Tree from a JSON string with full context."""
         data = json.loads(json_str)
         if not data.get('complete', False):
             raise ValueError("JSON data is not a complete tree serialization")
         
-        tree = cls("", 0, 0)  # Create empty tree
-        tree.root = Leaf.from_dict(data)
+        tree = cls(
+            code=data.get('code', ''),
+            start_lineno=data.get('start_lineno', 0),
+            indent_size=data.get('indent_size', 0)
+        )
+        if data.get('root'):
+            tree.root = Leaf.from_dict(data['root'])
         return tree
 
     def to_json(self) -> str:
-        """Convert tree to JSON string."""
-        if not self.root:
-            return "{}"
-        return json.dumps(self.root.to_dict())
+        """Convert tree to JSON string with full context."""
+        data = {
+            'code': self.code,
+            'start_lineno': self.start_lineno,
+            'indent_size': self.indent_size,
+            'root': self.root.to_dict() if self.root else None,
+            'complete': True
+        }
+        return json.dumps(data)
 
     def visualize(self) -> None:
         """Print a visual representation of the tree structure."""
