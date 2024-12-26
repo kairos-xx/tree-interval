@@ -380,66 +380,38 @@ class Leaf(Generic[T]):
 
 
 if __name__ == "__main__":
-    # Example usage with code positions
-    code = """def example():
-    print("hello")
-    return 42"""
-
-    tree: Tree[str] = Tree(code, start_lineno=1, indent_size=4)
-
-    # Create a position (simulated dis.Positions)
-    class Position:
-        def __init__(self, lineno, end_lineno, col_offset, end_col_offset, info=None):
-            self.lineno = lineno
-            self.end_lineno = end_lineno
-            self.col_offset = col_offset
-            self.end_col_offset = end_col_offset
-            self.start = col_offset
-            self.end = end_col_offset
-            self.info = info
-
-    # Calculate total code length for proper intervals
-    total_length = len(code)
-
-    # Create leaves using different representations
-    root: Leaf[str] = Leaf(0, total_length, "Root")  # Using individual values
-    leaf1: Leaf[str] = tree.create_leaf_from_lines(1, 1, "Function def")  # Create from line numbers
-    leaf2: Leaf[str] = Leaf((13, 13, 0, 25, "Second"))  # Create from tuple (lineno, end_lineno, col_offset, end_col_offset, info)
-    leaf3: Leaf[str] = Leaf(26, total_length,
-                            "Third")  # Using individual values
-
-    # Create and populate tree
-    tree.add_leaves([root, leaf1, leaf2, leaf3])
-
-    # Visualize the tree structure
-    print("Tree visualization:")
+    # Create a tree
+    tree = Tree[str]("", 0, 0)
+    
+    # Create some leaves
+    root = Leaf(0, 100, "root")
+    child1 = Leaf(10, 40, "child1")
+    child2 = Leaf(50, 90, "child2")
+    grandchild1 = Leaf(15, 25, "grandchild1")
+    grandchild2 = Leaf(60, 80, "grandchild2")
+    
+    # Build the tree structure
+    tree.root = root
+    root.add_child(child1)
+    root.add_child(child2)
+    child1.add_child(grandchild1)
+    child2.add_child(grandchild2)
+    
+    # Visualize original tree
+    print("Original tree:")
     tree.visualize()
-
-    # Demonstrate tree operations
-    best_match = root.find_best_match(2, 3)
-    print(f"\nBest match for interval (2,3): {best_match}")
-    print(f"Parent of best match: {best_match.parent}")
-    print(f"Root's children: {root.children}")
-
-    common = leaf1.find_common_ancestor(leaf2)
-    print(f"Common ancestor of {leaf1} and {leaf2}: {common}")
-
-    # Test the new method
-    multi_child_ancestor = leaf2.find_first_multi_child_ancestor()
-    print(
-        f"\nFirst ancestor with multiple children for leaf2: {multi_child_ancestor}"
-    )
-    if multi_child_ancestor:
-        print(f"Number of children: {len(multi_child_ancestor.children)}")
-
-    # JSON serialization example
-    # Save tree to JSON
+    
+    # Flatten the tree
+    flat_list = tree.flatten()
+    print("\nFlattened tree:")
+    for leaf in flat_list:
+        print(f"Leaf(start={leaf.start}, end={leaf.end}, info='{leaf.info}')")
+    
+    # Save and load tree
     json_str = tree.to_json()
-    print("\nJSON representation of the tree:")
+    print("\nJSON representation:")
     print(json.dumps(json.loads(json_str), indent=2))
     
-    # Load tree from JSON
     loaded_tree = Tree.from_json(json_str)
-    
-    print("\nVisualization of loaded tree:")
+    print("\nLoaded tree visualization:")
     loaded_tree.visualize()
