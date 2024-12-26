@@ -151,6 +151,23 @@ class Tree(Generic[T]):
         
         return Leaf(pos)
 
+    @classmethod
+    def from_json(cls, json_str: str) -> 'Tree[T]':
+        """Create a Tree from a JSON string."""
+        data = json.loads(json_str)
+        if not data.get('complete', False):
+            raise ValueError("JSON data is not a complete tree serialization")
+        
+        tree = cls("", 0, 0)  # Create empty tree
+        tree.root = Leaf.from_dict(data)
+        return tree
+
+    def to_json(self) -> str:
+        """Convert tree to JSON string."""
+        if not self.root:
+            return "{}"
+        return json.dumps(self.root.to_dict())
+
     def visualize(self) -> None:
         """Print a visual representation of the tree structure."""
         if not self.root:
@@ -198,8 +215,19 @@ class Leaf(Generic[T]):
             'end': self._end,
             'info': self.info,
             'size': self.size,
-            'children': [child.to_dict() for child in self.children]
+            'children': [child.to_dict() for child in self.children],
+            'complete': True
         }
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'Leaf[T]':
+        """Create a Leaf instance from a dictionary."""
+        leaf = cls(data['start'], data['end'], data['info'])
+        if 'children' in data:
+            for child_data in data['children']:
+                child = cls.from_dict(child_data)
+                leaf.add_child(child)
+        return leaf
     
     def __repr__(self) -> str:
         """Concise string representation of the leaf."""
