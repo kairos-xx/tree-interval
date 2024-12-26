@@ -8,7 +8,7 @@ represent intervals with typed information.
 
 from typing import TypeVar, Optional, List, Generic, Iterator, NamedTuple, Union
 import dis
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 # Type variables for generic type hints
 T = TypeVar('T')  # Type variable for leaf information
@@ -134,30 +134,36 @@ class Tree(Generic[T]):
         _print_node(self.root)
 
 
-class Leaf(Position, Generic[T]):
+@dataclass
+class Leaf(Generic[T]):
     """
     A leaf node representing an interval with typed information.
     Can be initialized from either a tuple/Position or individual values.
     """
-    
-    def __new__(cls, start_or_pos: Union[int, Position, tuple], 
-                end: Optional[int] = None,
-                info: Optional[T] = None) -> 'Leaf[T]':
-        """Create a new Leaf instance from either Position/tuple or individual values."""
-        if isinstance(start_or_pos, (Position, tuple)):
-            pos = start_or_pos if isinstance(start_or_pos, Position) else Position(*start_or_pos)
-            start, end, info = pos.start, pos.end, pos.info
-        else:
-            start = start_or_pos
-            
-        if start > end:
-            raise ValueError("Start must be less than or equal to end")
-            
-        return super().__new__(cls, start, end, info)
-        
+    start: int
+    end: int
+    info: Optional[T] = None
+    children: List['Leaf[T]'] = field(default_factory=list)
+    parent: Optional['Leaf[T]'] = None
+    siblings: List['Leaf[T]'] = field(default_factory=list)
+
     def __init__(self, start_or_pos: Union[int, Position, tuple],
                  end: Optional[int] = None,
                  info: Optional[T] = None) -> None:
+        if isinstance(start_or_pos, (Position, tuple)):
+            pos = start_or_pos if isinstance(start_or_pos, Position) else Position(*start_or_pos)
+            self.start, self.end, self.info = pos.start, pos.end, pos.info
+        else:
+            self.start = start_or_pos
+            self.end = end
+            self.info = info
+            
+        if self.start > self.end:
+            raise ValueError("Start must be less than or equal to end")
+            
+        self.children = []
+        self.parent = None
+        self.siblings = []
         """
         Initialize a Leaf instance.
 
