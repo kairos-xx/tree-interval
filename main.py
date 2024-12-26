@@ -7,6 +7,7 @@ represent intervals with typed information.
 """
 
 from typing import TypeVar, Optional, List, Generic, Iterator
+import dis
 
 # Type variables for generic type hints
 T = TypeVar('T')  # Type variable for leaf information
@@ -190,6 +191,41 @@ class Leaf(tuple, Generic[T]):
                 return current
             current = current.parent
         return None
+
+    @classmethod
+    def from_position(cls, 
+                     position: dis.Position, 
+                     code: str, 
+                     start_lineno: int = 0,
+                     indent_size: int = 0,
+                     info: Optional[T] = None) -> 'Leaf[T]':
+        """
+        Create a Leaf from a dis.Position object.
+
+        Args:
+            position: The dis.Position object containing line and column information
+            code: The multiline string of code
+            start_lineno: Line number offset to be added to position's line numbers
+            indent_size: Number of columns to add to position's column offsets
+            info: Optional information to associate with the leaf
+
+        Returns:
+            A new Leaf instance representing the position in the code
+        """
+        # Calculate absolute line numbers
+        abs_lineno = position.lineno + start_lineno
+        abs_end_lineno = position.end_lineno + start_lineno if position.end_lineno else abs_lineno
+
+        # Calculate absolute column positions
+        abs_col_offset = position.col_offset + indent_size
+        abs_end_col_offset = position.end_col_offset + indent_size if position.end_col_offset else abs_col_offset
+
+        # Convert to absolute character position
+        lines = code.splitlines()
+        start_pos = sum(len(line) + 1 for line in lines[:abs_lineno - 1]) + abs_col_offset
+        end_pos = sum(len(line) + 1 for line in lines[:abs_end_lineno - 1]) + abs_end_col_offset
+
+        return cls(start_pos, end_pos, info)
 
 
 if __name__ == "__main__":
