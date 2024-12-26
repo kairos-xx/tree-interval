@@ -77,26 +77,26 @@ class FrameAnalyzer:
             print("No source or AST tree available")
             return None
 
-        # Build tree first
-        tree = self.build_tree()
-        if not tree or not tree.root:
-            print("No tree built")
-            return None
-            
-        # Get current line interval
+        # Get current line number relative to function start
         frame_first_line = self.frame.f_code.co_firstlineno
-        current_line = self.frame.f_lineno - frame_first_line + 1
-        print(f"Looking for line {current_line} (frame line: {self.frame.f_lineno}, first line: {frame_first_line})")
+        current_line = self.frame.f_lineno
+
+        # Find closest AST node for current line
+        best_node = None
+        min_distance = float('inf')
         
-        # Find in line positions
-        if 0 <= current_line - 1 < len(self.line_positions):
-            start, end = self.line_positions[current_line - 1]
-            print(f"Searching interval: [{start}, {end}]")
-            match = tree.find_best_match(start, end)
-            print(f"Found match: {match}")
-            return match
-            
-        print(f"Line {current_line-1} out of range (0-{len(self.line_positions)-1})")
+        for node in ast.walk(self.ast_tree):
+            if hasattr(node, 'lineno'):
+                distance = abs(node.lineno - current_line)
+                if distance < min_distance:
+                    min_distance = distance
+                    best_node = node
+
+        if best_node:
+            position = self._get_node_position(best_node)
+            if position:
+                return Leaf(position)
+                
         return None
 
     def build_tree(self) -> Optional[Tree]:
