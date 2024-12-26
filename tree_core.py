@@ -86,14 +86,14 @@ class Leaf(Generic[T]):
             pos = start_or_pos if isinstance(
                 start_or_pos, Position) else Position(*start_or_pos)
 
+            self.lineno = pos.lineno
+            self.end_lineno = pos.end_lineno
+            self.col_offset = pos.col_offset
+            self.end_col_offset = pos.end_col_offset
+            
             if pos.start is not None and pos.end is not None:
                 self._start, self._end = pos.start, pos.end
-            elif all(x is not None for x in [
-                    pos.lineno, pos.end_lineno, pos.col_offset,
-                    pos.end_col_offset
-            ]):
-                assert pos.col_offset is not None
-                assert pos.end_col_offset is not None
+            elif all(x is not None for x in [pos.lineno, pos.end_lineno, pos.col_offset, pos.end_col_offset]):
                 self._start = pos.col_offset
                 self._end = pos.end_col_offset
             else:
