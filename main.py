@@ -82,11 +82,11 @@ class Leaf(Generic[T]):
         self.siblings: List['Leaf[T]'] = []
         self._start: int = 0
         self._end: int = 0
-        
+
         if isinstance(start_or_pos, (Position, tuple)):
             pos = start_or_pos if isinstance(
                 start_or_pos, Position) else Position(*start_or_pos)
-            
+
             if pos.start is not None and pos.end is not None:
                 self._start, self._end = pos.start, pos.end
             elif all(x is not None for x in [
@@ -102,7 +102,7 @@ class Leaf(Generic[T]):
                 raise ValueError(
                     "Either absolute positions or line/column positions must be provided"
                 )
-            
+
             self.info = pos.info
         else:
             self._start = start_or_pos

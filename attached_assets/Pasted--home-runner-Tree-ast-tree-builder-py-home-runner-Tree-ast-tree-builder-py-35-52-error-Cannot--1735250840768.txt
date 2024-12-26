@@ -1,0 +1,362 @@
+/home/runner/Tree/ast_tree_builder.py
+  /home/runner/Tree/ast_tree_builder.py:35:52 - error: Cannot access attribute "lineno" for class "AST"
+    Attribute "lineno" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/ast_tree_builder.py:35:65 - error: Cannot access attribute "col_offset" for class "AST"
+    Attribute "col_offset" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/ast_tree_builder.py:36:50 - error: Cannot access attribute "end_lineno" for class "AST"
+    Attribute "end_lineno" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/ast_tree_builder.py:36:67 - error: Cannot access attribute "end_col_offset" for class "AST"
+    Attribute "end_col_offset" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/ast_tree_builder.py:47:33 - error: "splitlines" is not a known attribute of "None" (reportOptionalMemberAccess)
+/home/runner/Tree/main.py
+  /home/runner/Tree/main.py:91:31 - error: Cannot assign to attribute "_start" for class "Leaf[T@Leaf]*"
+    Type "int | None" is not assignable to type "int"
+      "None" is not assignable to "int" (reportAttributeAccessIssue)
+  /home/runner/Tree/main.py:92:29 - error: Cannot assign to attribute "_end" for class "Leaf[T@Leaf]*"
+    Type "int | None" is not assignable to type "int"
+      "None" is not assignable to "int" (reportAttributeAccessIssue)
+  /home/runner/Tree/main.py:156:27 - error: Argument of type "List[Leaf[T@Leaf]]" cannot be assigned to parameter "iterable" of type "Iterable[Self@Leaf[T@Leaf]]" in function "extend"
+    "List[Leaf[T@Leaf]]" is not assignable to "Iterable[Self@Leaf[T@Leaf]]"
+      Type parameter "_T_co@Iterable" is covariant, but "Leaf[T@Leaf]" is not a subtype of "Self@Leaf[T@Leaf]"
+        Type "Leaf[T@Leaf]" is not assignable to type "Self@Leaf[T@Leaf]" (reportArgumentType)
+  /home/runner/Tree/main.py:157:16 - error: Type "list[Self@Leaf[T@Leaf]]" is not assignable to return type "List[Leaf[T@Leaf]]"
+    "list[Self@Leaf[T@Leaf]]" is not assignable to "List[Leaf[T@Leaf]]"
+      Type parameter "_T@list" is invariant, but "Self@Leaf[T@Leaf]" is not the same as "Leaf[T@Leaf]"
+      Consider switching from "list" to "Sequence" which is covariant (reportReturnType)
+/home/runner/Tree/tree_visualizer.py
+  /home/runner/Tree/tree_visualizer.py:23:52 - error: Cannot access attribute "lineno" for class "Leaf[Unknown]"
+    Attribute "lineno" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/tree_visualizer.py:23:78 - error: Cannot access attribute "end_lineno" for class "Leaf[Unknown]"
+    Attribute "end_lineno" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/tree_visualizer.py:23:108 - error: Cannot access attribute "col_offset" for class "Leaf[Unknown]"
+    Attribute "col_offset" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/tree_visualizer.py:23:142 - error: Cannot access attribute "end_col_offset" for class "Leaf[Unknown]"
+    Attribute "end_col_offset" is unknown (reportAttributeAccessIssue)
+/home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/nodeenv.py
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/nodeenv.py:37:10 - error: Import "ConfigParser" could not be resolved (reportMissingImports)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/nodeenv.py:39:12 - error: Import "urllib2" could not be resolved (reportMissingImports)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/nodeenv.py:41:12 - error: Import "httplib" could not be resolved (reportMissingImports)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/nodeenv.py:49:27 - error: "client" is not a known attribute of module "http" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/nodeenv.py:154:8 - error: Cannot assign to attribute "_default" for class "type[Config]"
+    Attribute "_default" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/nodeenv.py:579:12 - error: Operator "+" not supported for "None" (reportOptionalOperand)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/nodeenv.py:622:15 - error: No overloads for "__init__" match the provided arguments (reportCallIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/nodeenv.py:622:31 - error: Argument of type "BytesIO | None" cannot be assigned to parameter "file" of type "StrPath | _ZipReadableTellable" in function "__init__"
+    Type "BytesIO | None" is not assignable to type "StrPath | _ZipReadableTellable"
+      Type "None" is not assignable to type "StrPath | _ZipReadableTellable"
+        "None" is not assignable to "str"
+        "None" is incompatible with protocol "PathLike[str]"
+          "__fspath__" is not present
+        "None" is incompatible with protocol "_ZipReadableTellable"
+          "seek" is not present
+          "read" is not present
+    ... (reportArgumentType)
+/home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:156:24 - error: "_GenericAlias" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:210:7 - error: Incorrect keyword arguments for __init_subclass__ method (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:210:30 - error: Base class "_SpecialForm" is marked final and cannot be subclassed (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:210:51 - error: No parameter named "_root" (reportCallIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:212:44 - error: Cannot access attribute "_name" for class "_ExtensionsSpecialForm*"
+    Attribute "_name" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:256:27 - error: Expected name of TypeVar as first argument (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:333:26 - error: "_overload_dummy" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:338:21 - error: Type "(func: (...) -> object) -> Sequence[(...) -> object]" is not assignable to declared type "(func: Unknown) -> list[Unknown]"
+    Type "(func: (...) -> object) -> Sequence[(...) -> object]" is not assignable to type "(func: Unknown) -> list[Unknown]"
+      Function return type "Sequence[(...) -> object]" is incompatible with type "list[Unknown]"
+        "Sequence[(...) -> object]" is not assignable to "list[Unknown]" (reportAssignmentType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:512:36 - error: "EXCLUDED_ATTRIBUTES" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:887:17 - error: Type "type[TypedDict]" is not assignable to declared type "(typename: Unknown, fields: _Sentinel | Unknown = _marker, /, *, total: bool = True, closed: bool = False, **kwargs: Unknown) -> type[__class__TypedDictMeta]"
+    Type "type[TypedDict]" is not assignable to type "(typename: Unknown, fields: _Sentinel | Unknown = _marker, /, *, total: bool = True, closed: bool = False, **kwargs: Unknown) -> type[__class__TypedDictMeta]"
+      Function accepts too many positional parameters; expected 0 but received 2
+        Missing keyword parameter "total"
+        Missing keyword parameter "closed"
+        Parameter "**kwargs" has no corresponding parameter
+        Function return type "TypedDict" is incompatible with type "type[__class__TypedDictMeta]"
+          Type "TypedDict" is not assignable to type "type[__class__TypedDictMeta]" (reportAssignmentType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:888:29 - error: "_TypedDictMeta" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:892:58 - error: "_type_check" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:905:17 - error: Expression with type "tuple[Unknown, *tuple[Unknown, ...]] | tuple[()] | tuple[list[Unknown], Unknown] | Unknown" cannot be assigned to target tuple
+    Type "tuple[Unknown, *tuple[Unknown, ...]]" is incompatible with target tuple
+      Tuple size mismatch; expected 1 but received 2
+    Type "tuple[()]" is incompatible with target tuple
+      Tuple size mismatch; expected 1 but received 0
+    Type "tuple[list[Unknown], Unknown]" is incompatible with target tuple
+      Tuple size mismatch; expected 1 but received 2 (reportAssignmentType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:908:17 - error: Expression with type "tuple[Unknown, *tuple[Unknown, ...]] | tuple[()] | tuple[list[Unknown], Unknown] | Unknown" cannot be assigned to target tuple
+    Type "tuple[Unknown, *tuple[Unknown, ...]]" is incompatible with target tuple
+      Tuple size mismatch; expected 1 but received 2
+    Type "tuple[()]" is incompatible with target tuple
+      Tuple size mismatch; expected 1 but received 0
+    Type "tuple[list[Unknown], Unknown]" is incompatible with target tuple
+      Tuple size mismatch; expected 1 but received 2 (reportAssignmentType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:911:17 - error: Expression with type "tuple[Unknown, *tuple[Unknown, ...]] | tuple[()] | tuple[list[Unknown], Unknown] | Unknown" cannot be assigned to target tuple
+    Type "tuple[Unknown, *tuple[Unknown, ...]]" is incompatible with target tuple
+      Tuple size mismatch; expected 1 but received 2
+    Type "tuple[()]" is incompatible with target tuple
+      Tuple size mismatch; expected 1 but received 0
+    Type "tuple[list[Unknown], Unknown]" is incompatible with target tuple
+      Tuple size mismatch; expected 1 but received 2 (reportAssignmentType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:936:65 - error: Argument of type "tuple[*tuple[type[Generic], ...], type[dict[_KT@dict, _VT@dict]]]" cannot be assigned to parameter "bases" of type "tuple[type, ...]" in function "__new__" (reportArgumentType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:942:25 - error: Cannot assign to attribute "__orig_bases__" for class "_TypedDictMeta"
+    Attribute "__orig_bases__" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:955:31 - error: "_type_check" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:960:31 - error: "_type_check" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1018:21 - error: Cannot assign to attribute "__required_keys__" for class "_TypedDictMeta"
+    Attribute "__required_keys__" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1019:21 - error: Cannot assign to attribute "__optional_keys__" for class "_TypedDictMeta"
+    Attribute "__optional_keys__" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1020:21 - error: Cannot assign to attribute "__readonly_keys__" for class "_TypedDictMeta"
+    Attribute "__readonly_keys__" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1021:21 - error: Cannot assign to attribute "__mutable_keys__" for class "_TypedDictMeta"
+    Attribute "__mutable_keys__" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1023:25 - error: Cannot assign to attribute "__total__" for class "_TypedDictMeta"
+    Attribute "__total__" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1024:21 - error: Cannot assign to attribute "__closed__" for class "_TypedDictMeta"
+    Attribute "__closed__" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1025:21 - error: Cannot assign to attribute "__extra_items__" for class "_TypedDictMeta"
+    Attribute "__extra_items__" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1028:20 - error: Type "__call__" is not assignable to declared type "(self: Self@type, ...) -> Any"
+    No overloaded function matches type "(self: Self@type, ...) -> Any" (reportAssignmentType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1117:34 - error: No overloads for "__init__" match the provided arguments (reportCallIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1117:39 - error: Argument of type "dict[str, Unknown] | _Sentinel | Unknown" cannot be assigned to parameter "iterable" of type "Iterable[list[bytes]]" in function "__init__"
+    Type "dict[str, Unknown] | _Sentinel | Unknown" is not assignable to type "Iterable[list[bytes]]"
+      "_Sentinel" is incompatible with protocol "Iterable[list[bytes]]"
+        "__iter__" is not present (reportArgumentType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1124:12 - error: Cannot assign to attribute "__orig_bases__" for class "type[__class__TypedDictMeta]"
+    Attribute "__orig_bases__" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1128:36 - error: "_TypedDictMeta" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1179:33 - error: "_GenericAlias" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1242:17 - error: Type "type[typing.Annotated]" is not assignable to declared type "type[typing_extensions.Annotated]"
+    Type "type[typing.Annotated]" is not assignable to type "type[typing_extensions.Annotated]" (reportAssignmentType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1245:30 - error: "_AnnotatedAlias" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1248:11 - error: Incorrect keyword arguments for __init_subclass__ method (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1248:34 - error: "_GenericAlias" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1248:49 - error: No parameter named "_root" (reportCallIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1325:17 - error: "_tp_cache" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1336:33 - error: "_type_check" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1355:28 - error: "_BaseGenericAlias" is unknown import symbol (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1357:36 - error: "_GenericAlias" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1360:28 - error: "GenericAlias" is unknown import symbol (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1362:39 - error: "_GenericAlias" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1381:35 - error: "_GenericAlias" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1401:35 - error: "_GenericAlias" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1413:17 - error: Type "type[TypeAlias]" is not assignable to declared type "_ExtensionsSpecialForm"
+    Type "type[TypeAlias]" is not assignable to type "_ExtensionsSpecialForm" (reportAssignmentType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1416:6 - error: Expected 0 positional arguments (reportCallIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1432:9 - error: Expected 0 positional arguments (reportCallIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1490:16 - error: Type "(type_param: Unknown, default: Unknown) -> None" is not assignable to declared type "(self: Self@object) -> None"
+    Type "(type_param: Unknown, default: Unknown) -> None" is not assignable to type "(self: Self@object) -> None"
+      Parameter name mismatch: "self" versus "type_param"
+      Extra parameter "default" (reportAssignmentType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1496:43 - error: Cannot access attribute "_backported_typevarlike" for class "_TypeVarLikeMeta*"
+    Attribute "_backported_typevarlike" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1500:24 - error: Type "type[typing.TypeVar]" is not assignable to declared type "type[typing_extensions.TypeVar]"
+    "typing.TypeVar" is not assignable to "typing_extensions.TypeVar"
+    Type "type[typing.TypeVar]" is not assignable to type "type[typing_extensions.TypeVar]" (reportAssignmentType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1513:17 - error: TypeVar must be assigned to a variable named "" (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1513:42 - error: Expected name of TypeVar as first argument (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1513:49 - error: Variable not allowed in type expression (reportInvalidTypeForm)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1513:49 - error: TypeVar must have at least two constrained types (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1513:68 - error: TypeVar cannot be both bound and constrained (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1514:52 - error: Expected True or False (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1514:77 - error: Expected True or False (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1515:57 - error: Expected True or False (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1517:17 - error: TypeVar must be assigned to a variable named "" (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1517:42 - error: Expected name of TypeVar as first argument (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1517:49 - error: Variable not allowed in type expression (reportInvalidTypeForm)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1517:49 - error: TypeVar must have at least two constrained types (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1517:68 - error: TypeVar cannot be both bound and constrained (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1518:52 - error: Expected True or False (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1518:77 - error: Expected True or False (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1521:46 - error: Cannot assign to attribute "__infer_variance__" for class "TypeVar"
+    "bool" is not assignable to "property" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1543:21 - error: Type "type[typing.ParamSpecArgs]" is not assignable to declared type "type[typing_extensions.ParamSpecArgs]"
+    "typing.ParamSpecArgs" is not assignable to "typing_extensions.ParamSpecArgs"
+    Type "type[typing.ParamSpecArgs]" is not assignable to type "type[typing_extensions.ParamSpecArgs]" (reportAssignmentType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1544:23 - error: Type "type[typing.ParamSpecKwargs]" is not assignable to declared type "type[typing_extensions.ParamSpecKwargs]"
+    "typing.ParamSpecKwargs" is not assignable to "typing_extensions.ParamSpecKwargs"
+    Type "type[typing.ParamSpecKwargs]" is not assignable to type "type[typing_extensions.ParamSpecKwargs]" (reportAssignmentType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1605:24 - error: Type "type[typing.ParamSpec]" is not assignable to declared type "type[typing_extensions.ParamSpec]"
+    "typing.ParamSpec" is not assignable to "typing_extensions.ParamSpec"
+    Type "type[typing.ParamSpec]" is not assignable to type "type[typing_extensions.ParamSpec]" (reportAssignmentType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1611:11 - error: Class declaration "ParamSpec" is obscured by a declaration of the same name (reportRedeclaration)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1621:17 - error: ParamSpec must be assigned to a variable named "" (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1621:46 - error: Expected name of ParamSpec as first argument (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1621:52 - error: "bound" is unknown parameter to ParamSpec (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1622:46 - error: "covariant" is unknown parameter to ParamSpec (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1623:46 - error: "contravariant" is unknown parameter to ParamSpec (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1624:46 - error: "infer_variance" is unknown parameter to ParamSpec (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1626:17 - error: ParamSpec must be assigned to a variable named "" (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1626:46 - error: Expected name of ParamSpec as first argument (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1626:52 - error: "bound" is unknown parameter to ParamSpec (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1627:46 - error: "covariant" is unknown parameter to ParamSpec (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1628:46 - error: "contravariant" is unknown parameter to ParamSpec (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1629:48 - error: Cannot assign to attribute "__infer_variance__" for class "ParamSpec"
+    "bool" is not assignable to "property" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1642:52 - error: "_is_param_expr" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1650:50 - error: Cannot assign to attribute "__typing_prepare_subst__" for class "ParamSpec"
+    Type "(alias: Unknown, args: Unknown) -> (tuple[list[Unknown] | Unknown] | tuple[Unknown | tuple[Unknown, ...], ...] | list[Unknown] | Unknown)" is not assignable to type "(alias: Any, args: Any) -> tuple[Any, ...]"
+      Function return type "tuple[list[Unknown] | Unknown] | tuple[Unknown | tuple[Unknown, ...], ...] | list[Unknown] | Unknown" is incompatible with type "tuple[Any, ...]"
+        Type "tuple[list[Unknown] | Unknown] | tuple[Unknown | tuple[Unknown, ...], ...] | list[Unknown] | Unknown" is not assignable to type "tuple[Any, ...]"
+          "list[Unknown]" is not assignable to "tuple[Any, ...]" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1708:9 - error: "__class__" incorrectly overrides property of same name in class "object" (reportIncompatibleMethodOverride)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1708:21 - error: Type "__class__" is not assignable to declared type "property"
+    Type "type[TypeVar]" is not assignable to type "property" (reportAssignmentType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1726:41 - error: "_type_check" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1729:42 - error: Expected 1 positional argument (reportCallIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1734:35 - error: Cannot assign to attribute "__module__" for class "ParamSpec*"
+    Type "Any | None" is not assignable to type "str"
+      "None" is not assignable to "str" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1747:13 - error: "__hash__" overrides symbol of same name in class "list"
+    "function" is not assignable to "None" (reportIncompatibleVariableOverride)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1747:13 - error: Instance variable "__hash__" overrides class variable of same name in class "list" (reportIncompatibleVariableOverride)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1767:9 - error: "__class__" incorrectly overrides property of same name in class "object" (reportIncompatibleMethodOverride)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1767:28 - error: "_GenericAlias" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1782:13 - error: "__hash__" overrides symbol of same name in class "list"
+    "function" is not assignable to "None" (reportIncompatibleVariableOverride)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1782:13 - error: Instance variable "__hash__" overrides class variable of same name in class "list" (reportIncompatibleVariableOverride)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1797:9 - error: "_tp_cache" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1807:31 - error: "_type_check" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1813:19 - error: Type "type[Concatenate]" is not assignable to declared type "_ExtensionsSpecialForm"
+    Type "type[Concatenate]" is not assignable to type "_ExtensionsSpecialForm" (reportAssignmentType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1814:39 - error: "_ConcatenateGenericAlias" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1817:6 - error: Expected 0 positional arguments (reportCallIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1832:11 - error: Incorrect keyword arguments for __init_subclass__ method (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1832:52 - error: No parameter named "_root" (reportCallIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1837:9 - error: Expected 0 positional arguments (reportCallIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1851:17 - error: Type "type[TypeGuard[T@TypeGuard]]" is not assignable to declared type "_ExtensionsSpecialForm"
+    Type "type[TypeGuard[T@TypeGuard]]" is not assignable to type "_ExtensionsSpecialForm" (reportAssignmentType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1854:6 - error: Expected 0 positional arguments (reportCallIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1898:23 - error: "_type_check" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1899:23 - error: "_GenericAlias" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1902:11 - error: Incorrect keyword arguments for __init_subclass__ method (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1902:50 - error: No parameter named "_root" (reportCallIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1904:27 - error: "_type_check" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1905:47 - error: Cannot access attribute "_name" for class "_TypeGuardForm*"
+    Attribute "_name" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1906:27 - error: "_GenericAlias" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1909:9 - error: Expected 0 positional arguments (reportCallIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1955:14 - error: Type "type[TypeIs[T@TypeIs]]" is not assignable to declared type "_ExtensionsSpecialForm"
+    Type "type[TypeIs[T@TypeIs]]" is not assignable to type "_ExtensionsSpecialForm" (reportAssignmentType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1958:6 - error: Expected 0 positional arguments (reportCallIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1996:23 - error: "_type_check" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:1997:23 - error: "_GenericAlias" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2000:11 - error: Incorrect keyword arguments for __init_subclass__ method (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2000:47 - error: No parameter named "_root" (reportCallIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2002:27 - error: "_type_check" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2003:47 - error: Cannot access attribute "_name" for class "_TypeIsForm*"
+    Attribute "_name" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2004:27 - error: "_GenericAlias" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2007:9 - error: Expected 0 positional arguments (reportCallIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2047:7 - error: Incorrect keyword arguments for __init_subclass__ method (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2047:35 - error: No parameter named "_root" (reportCallIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2085:13 - error: "_tp_cache" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2091:21 - error: Type "type[LiteralString]" is not assignable to declared type "_SpecialForm"
+    Type "type[LiteralString]" is not assignable to type "_SpecialForm" (reportAssignmentType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2114:12 - error: Type "type[Self]" is not assignable to declared type "_SpecialForm"
+    Type "type[Self]" is not assignable to type "_SpecialForm" (reportAssignmentType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2135:13 - error: Type "type[Never]" is not assignable to declared type "_SpecialForm"
+    Type "type[Never]" is not assignable to type "_SpecialForm" (reportAssignmentType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2165:16 - error: Type "type[Required]" is not assignable to declared type "_ExtensionsSpecialForm"
+    Type "type[Required]" is not assignable to type "_ExtensionsSpecialForm" (reportAssignmentType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2166:19 - error: Type "type[NotRequired]" is not assignable to declared type "_ExtensionsSpecialForm"
+    Type "type[NotRequired]" is not assignable to type "_ExtensionsSpecialForm" (reportAssignmentType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2168:6 - error: Expected 0 positional arguments (reportCallIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2185:23 - error: "_type_check" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2186:23 - error: "_GenericAlias" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2188:6 - error: Expected 0 positional arguments (reportCallIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2202:23 - error: "_type_check" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2203:23 - error: "_GenericAlias" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2206:11 - error: Incorrect keyword arguments for __init_subclass__ method (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2206:49 - error: No parameter named "_root" (reportCallIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2208:27 - error: "_type_check" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2209:47 - error: Cannot access attribute "_name" for class "_RequiredForm*"
+    Attribute "_name" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2210:27 - error: "_GenericAlias" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2213:9 - error: Expected 0 positional arguments (reportCallIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2230:9 - error: Expected 0 positional arguments (reportCallIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2246:16 - error: Type "type[ReadOnly]" is not assignable to declared type "_ExtensionsSpecialForm"
+    Type "type[ReadOnly]" is not assignable to type "_ExtensionsSpecialForm" (reportAssignmentType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2248:6 - error: Expected 0 positional arguments (reportCallIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2264:23 - error: "_type_check" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2265:23 - error: "_GenericAlias" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2268:11 - error: Incorrect keyword arguments for __init_subclass__ method (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2268:49 - error: No parameter named "_root" (reportCallIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2270:27 - error: "_type_check" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2271:47 - error: Cannot access attribute "_name" for class "_ReadOnlyForm*"
+    Attribute "_name" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2272:27 - error: "_GenericAlias" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2275:9 - error: Expected 0 positional arguments (reportCallIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2385:24 - error: Type "type[typing.TypeVarTuple]" is not assignable to declared type "type[typing_extensions.TypeVarTuple]"
+    "typing.TypeVarTuple" is not assignable to "typing_extensions.TypeVarTuple"
+    Type "type[typing.TypeVarTuple]" is not assignable to type "type[typing_extensions.TypeVarTuple]" (reportAssignmentType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2400:11 - error: Class declaration "TypeVarTuple" is obscured by a declaration of the same name (reportRedeclaration)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2406:13 - error: TypeVar must be assigned to a variable named "" (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2406:39 - error: Expected name of TypeVar as first argument (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2458:31 - warning: Class methods should take a "cls" parameter (reportSelfClsParameterName)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2507:9 - error: "__class__" incorrectly overrides property of same name in class "object" (reportIncompatibleMethodOverride)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2507:21 - error: Type "__class__" is not assignable to declared type "property"
+    Type "type[TypeVar]" is not assignable to type "property" (reportAssignmentType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2514:42 - error: Expected 1 positional argument (reportCallIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2519:35 - error: Cannot assign to attribute "__module__" for class "TypeVarTuple*"
+    Type "Any | None" is not assignable to type "str"
+      "None" is not assignable to "str" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2535:31 - warning: Class methods should take a "cls" parameter (reportSelfClsParameterName)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2564:44 - error: "_ASSERT_NEVER_REPR_MAX_LENGTH" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2572:27 - error: Expected class but received "_SpecialForm" (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2572:40 - error: Expected class but received "_SpecialForm" (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2720:17 - error: Cannot assign to attribute "__override__" for class "function"
+    Attribute "__override__" is unknown (reportFunctionMemberAccess)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2730:18 - error: Type "type[warnings.deprecated]" is not assignable to declared type "type[typing_extensions.deprecated]"
+    "warnings.deprecated" is not assignable to "typing_extensions.deprecated"
+    Type "type[warnings.deprecated]" is not assignable to type "type[typing_extensions.deprecated]" (reportAssignmentType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2800:21 - error: Cannot assign to attribute "__deprecated__" for class "object*"
+    Attribute "__deprecated__" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2818:32 - error: No overloads for "__new__" match the provided arguments
+    Argument types: (Unknown) (reportCallIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2829:25 - error: Function declaration "__init_subclass__" is obscured by a declaration of the same name (reportRedeclaration)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2833:45 - error: Cannot assign to attribute "__init_subclass__" for class "type*"
+    Type "classmethod[Unknown, (), Any]" is not assignable to type "() -> None" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2844:46 - error: Cannot assign to attribute "__deprecated__" for class "_Wrapped[(cls: type[Self@type], o: object, /), type, (cls: Unknown, ...), type | Unknown]"
+    Attribute "__deprecated__" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2845:35 - error: Cannot assign to attribute "__deprecated__" for class "_Wrapped[..., Any, ..., Any]"
+    Attribute "__deprecated__" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2845:35 - error: Cannot assign to attribute "__deprecated__" for class "_Wrapped[(), None, ..., None]"
+    Attribute "__deprecated__" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2855:21 - error: Cannot assign to attribute "__deprecated__" for class "function"
+    Attribute "__deprecated__" is unknown (reportFunctionMemberAccess)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2855:46 - error: Cannot assign to attribute "__deprecated__" for class "_Wrapped[..., object, ..., object]"
+    Attribute "__deprecated__" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2856:24 - error: Type "_Wrapped[..., object, ..., object]" is not assignable to return type "_T@__call__"
+    Type "_Wrapped[..., object, ..., object]" is not assignable to type "_T@__call__" (reportReturnType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2872:9 - error: Function declaration "_check_generic" is obscured by a declaration of the same name (reportRedeclaration)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2889:53 - error: Operator "-" not supported for types "int | _Sentinel | Unknown" and "int"
+    Operator "-" not supported for types "_Sentinel" and "int" (reportOperatorIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2894:20 - error: Operator "<" not supported for types "int" and "int | _Sentinel | Unknown"
+    Operator "<" not supported for types "int" and "_Sentinel" (reportOperatorIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2906:21 - error: Operator "-=" not supported for types "int | _Sentinel | Unknown" and "int"
+    Operator "-" not supported for types "_Sentinel" and "int" (reportOperatorIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2911:46 - error: Operator ">" not supported for types "int" and "int | Unknown | _Sentinel"
+    Operator ">" not supported for types "int" and "_Sentinel" (reportOperatorIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:2951:12 - error: "_check_generic" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:3027:12 - error: "_collect_type_vars" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:3086:16 - error: "_collect_parameters" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:3256:14 - error: Type "type[_collections_abc.Buffer]" is not assignable to declared type "type[typing_extensions.Buffer]"
+    "_collections_abc.Buffer" is not assignable to "typing_extensions.Buffer"
+    Type "type[_collections_abc.Buffer]" is not assignable to type "type[typing_extensions.Buffer]" (reportAssignmentType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:3383:21 - error: Type "type[typing.TypeAliasType]" is not assignable to declared type "type[typing_extensions.TypeAliasType]"
+    "typing.TypeAliasType" is not assignable to "typing_extensions.TypeAliasType"
+    Type "type[typing.TypeAliasType]" is not assignable to type "type[typing_extensions.TypeAliasType]" (reportAssignmentType)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:3437:35 - error: Cannot assign to attribute "__module__" for class "TypeAliasType*"
+    Type "Any | None" is not assignable to type "str"
+      "None" is not assignable to "str" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:3446:48 - error: Expected class but received "_SpecialForm" (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:3449:56 - error: Expected class but received "_SpecialForm" (reportGeneralTypeIssues)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:3470:24 - error: "_type_check" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:3475:27 - error: "_GenericAlias" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/typing_extensions.py:3551:18 - error: "Doc" is not a known attribute of module "typing" (reportAttributeAccessIssue)
+/home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/pyright/_mureq.py
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/pyright/_mureq.py:131:52 - error: Argument of type "HTTPMessage" cannot be assigned to parameter "headers" of type "Mapping[str, _HeaderValue]" in function "request"
+    "HTTPMessage" is not assignable to "Mapping[str, _HeaderValue]" (reportArgumentType)
+/home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/pyright/node.py
+  /home/runner/Tree/.pythonlibs/lib/python3.11/site-packages/pyright/node.py:147:16 - error: Import "nodejs_wheel" could not be resolved (reportMissingImports)
