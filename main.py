@@ -273,12 +273,15 @@ if __name__ == "__main__":
             self.col_offset = col_offset
             self.end_col_offset = end_col_offset
     
+    # Calculate total code length for proper intervals
+    total_length = len(code)
+    
     # Create leaves using positions
-    root: Leaf[str] = Leaf(0, 20, "Root")  # Encompasses all other leaves
+    root: Leaf[str] = Leaf(0, total_length, "Root")  # Full code span
     pos1 = Position(1, 1, 0, 12)  # 'def example()' line
     leaf1: Leaf[str] = tree.create_leaf(pos1, "Function def")
-    leaf2: Leaf[str] = Leaf(2, 4, "Second")  # Inside root's interval
-    leaf3: Leaf[str] = Leaf(5, 8, "Third")   # Inside root's interval
+    leaf2: Leaf[str] = Leaf(13, 25, "Second")  # Print statement
+    leaf3: Leaf[str] = Leaf(26, total_length, "Third")  # Return statement
 
     # Create and populate tree
     tree.add_leaves([root, leaf1, leaf2, leaf3])
