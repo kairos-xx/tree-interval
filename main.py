@@ -126,6 +126,7 @@ def demonstrate_tree_operations():
     
     return tree
 
+import sys
 from src.tree_interval import FrameAnalyzer
 
 def demonstrate_frame_analyzer():
