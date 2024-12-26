@@ -53,7 +53,23 @@ class AstTreeBuilder:
                     end = None
 
                 if start is not None and end is not None:
-                    leaf = Leaf(start, end, node.__class__.__name__)
+                    # Collect all fields and their values
+                    fields_info = {}
+                    for field in node._fields:
+                        value = getattr(node, field, None)
+                        if isinstance(value, (str, int, float, bool)):
+                            fields_info[field] = value
+                        elif isinstance(value, ast.AST):
+                            fields_info[field] = value.__class__.__name__
+                        elif isinstance(value, list):
+                            fields_info[field] = f"List[{len(value)}]"
+                    
+                    node_info = {
+                        'type': node.__class__.__name__,
+                        'fields': fields_info
+                    }
+                    
+                    leaf = Leaf(start, end, node_info)
                     result_tree.add_leaf(leaf)
 
         return result_tree
