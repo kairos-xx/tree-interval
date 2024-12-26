@@ -64,7 +64,10 @@ class AstTreeBuilder:
 
                 # Convert line numbers to absolute positions in source
                 start = self._line_col_to_pos(lineno, col_offset)
-                end = self._line_col_to_pos(end_lineno, end_col_offset)
+                if isinstance(end_lineno, int) and isinstance(end_col_offset, int):
+                    end = self._line_col_to_pos(end_lineno, end_col_offset)
+                else:
+                    end = None
 
                 if start is not None and end is not None:
                     leaf = Leaf(start, end, node.__class__.__name__)
