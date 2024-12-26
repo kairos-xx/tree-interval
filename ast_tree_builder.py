@@ -1,16 +1,15 @@
 """
 AST Tree Builder module.
 
-This module provides functionality to build tree structures from Python Abstract Syntax Trees.
+This module provides functionality to build tree structures from Python
+Abstract Syntax Trees.
 It includes utilities for source code analysis and tree construction.
 """
 
-# Standard library imports
 import ast
 from inspect import getsource
 from typing import Optional
 
-# Local imports
 from main import Leaf, Tree
 
 
@@ -83,5 +82,5 @@ class AstTreeBuilder:
             for i in range(line - 1):
                 pos += len(lines[i])
             return pos + col
-        except:
+        except Exception:
             return None

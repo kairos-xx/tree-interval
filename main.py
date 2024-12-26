@@ -11,10 +11,9 @@ Classes:
     Tree: The main tree structure for managing hierarchical data
 """
 
-# Standard library imports
 from dataclasses import dataclass, field
 from json import dumps, loads
-from typing import TypeVar, Generic, List, Optional, NamedTuple, Any, Dict, Union
+from typing import Any, Dict, Generic, List, NamedTuple, Optional, TypeVar, Union
 
 T = TypeVar('T')
 L = TypeVar('L', bound='Leaf')

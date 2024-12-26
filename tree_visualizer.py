@@ -5,11 +5,9 @@ This module provides utilities for visualizing tree structures with various
 configuration options for display format and content.
 """
 
-# Standard library imports
 from dataclasses import dataclass
 from typing import Optional
 
-# Local imports
 from main import Leaf, Tree
 
 
