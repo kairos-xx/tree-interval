@@ -6,7 +6,7 @@ This module provides classes for creating and managing tree structures where nod
 represent intervals with typed information.
 """
 
-from typing import TypeVar, Optional, List, Generic, Iterator, NamedTuple
+from typing import TypeVar, Optional, List, Generic, Iterator, NamedTuple, Union
 import dis
 from dataclasses import dataclass
 
