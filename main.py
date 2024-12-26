@@ -274,11 +274,11 @@ if __name__ == "__main__":
             self.end_col_offset = end_col_offset
     
     # Create leaves using positions
+    root: Leaf[str] = Leaf(0, 20, "Root")  # Encompasses all other leaves
     pos1 = Position(1, 1, 0, 12)  # 'def example()' line
     leaf1: Leaf[str] = tree.create_leaf(pos1, "Function def")
-    leaf2: Leaf[str] = Leaf(2, 4, "Second")
-    leaf3: Leaf[str] = Leaf(5, 8, "Third")
-    root: Leaf[str] = Leaf(1, 10, "Root")
+    leaf2: Leaf[str] = Leaf(2, 4, "Second")  # Inside root's interval
+    leaf3: Leaf[str] = Leaf(5, 8, "Third")   # Inside root's interval
 
     # Create and populate tree
     tree.add_leaves([root, leaf1, leaf2, leaf3])
