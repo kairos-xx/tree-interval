@@ -116,6 +116,41 @@ class Tree(Generic[T]):
         for leaf in sorted_leaves[1:]:
             self.add_leaf(leaf)
 
+    def create_leaf_from_lines(self, start_line: int, end_line: int, info: Optional[T] = None) -> 'Leaf[T]':
+        """
+        Create a leaf from line numbers, automatically calculating positions and indentation.
+        
+        Args:
+            start_line: Starting line number (1-based)
+            end_line: Ending line number (1-based)
+            info: Optional information for the leaf
+            
+        Returns:
+            A new Leaf instance
+        """
+        lines = self.code.splitlines()
+        if start_line < 1 or end_line > len(lines):
+            raise ValueError("Line numbers out of range")
+            
+        # Get the block of code
+        block_lines = lines[start_line-1:end_line]
+        
+        # Calculate indentation
+        non_empty_lines = [l for l in block_lines if l.strip()]
+        if non_empty_lines:
+            indent_size = len(non_empty_lines[0]) - len(non_empty_lines[0].lstrip())
+        else:
+            indent_size = 0
+            
+        # Calculate start and end positions
+        start_pos = sum(len(line) + 1 for line in lines[:start_line-1])
+        end_pos = sum(len(line) + 1 for line in lines[:end_line-1]) + len(lines[end_line-1])
+        
+        # Create position object
+        pos = Position(start_line, end_line, indent_size, end_pos - start_pos, info)
+        
+        return Leaf(pos)
+
     def visualize(self) -> None:
         """Print a visual representation of the tree structure."""
         if not self.root:
@@ -286,20 +321,21 @@ if __name__ == "__main__":
 
     # Create a position (simulated dis.Positions)
     class Position:
-
-        def __init__(self, lineno, end_lineno, col_offset, end_col_offset):
+        def __init__(self, lineno, end_lineno, col_offset, end_col_offset, info=None):
             self.lineno = lineno
             self.end_lineno = end_lineno
             self.col_offset = col_offset
             self.end_col_offset = end_col_offset
+            self.start = col_offset
+            self.end = end_col_offset
+            self.info = info
 
     # Calculate total code length for proper intervals
     total_length = len(code)
 
     # Create leaves using different representations
     root: Leaf[str] = Leaf(0, total_length, "Root")  # Using individual values
-    pos1 = Position(1, 1, 0, 12)  # Using Position (lineno, end_lineno, col_offset, end_col_offset)
-    leaf1: Leaf[str] = Leaf(pos1)  # Create from Position
+    leaf1: Leaf[str] = tree.create_leaf_from_lines(1, 1, "Function def")  # Create from line numbers
     leaf2: Leaf[str] = Leaf((13, 25, "Second"))  # Create from tuple
     leaf3: Leaf[str] = Leaf(26, total_length,
                             "Third")  # Using individual values
