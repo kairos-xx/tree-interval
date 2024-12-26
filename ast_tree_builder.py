@@ -28,7 +28,7 @@ class AstTreeBuilder:
     def _get_source(self) -> None:
         try:
             self.source = ast.unparse(ast.parse(self.frame.f_code.co_code))
-        except (SyntaxError, TypeError, ValueError) as e:
+        except (SyntaxError, TypeError, ValueError):
             # Fallback to frame source if available
             if self.frame.f_code.co_firstlineno:
                 self.source = getsource(self.frame.f_code)
