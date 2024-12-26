@@ -1,4 +1,3 @@
-
 """
 Example usage of the tree structure implementation.
 
@@ -20,14 +19,41 @@ def example_all_methods():
     tree = Tree[str]("Example code", start_lineno=1, indent_size=4)
 
     # Create leaves with different methods
-    root = Leaf(0, 100, "root")
-    pos = Position(10, 40, "child1")
-    pos.lineno = 1
-    pos.end_lineno = 2
-    pos.col_offset = 10
-    pos.end_col_offset = 40
-    child1 = Leaf(pos)
-    child2 = Leaf((50, 90, "child2"))  # Using tuple
+    pos_root = Position(0, 100, "root")
+    pos_root.lineno = 1
+    pos_root.end_lineno = 5
+    pos_root.col_offset = 0
+    pos_root.end_col_offset = 100
+    root = Leaf(pos_root)
+
+    pos_child1 = Position(10, 40, "child1")
+    pos_child1.lineno = 1
+    pos_child1.end_lineno = 2
+    pos_child1.col_offset = 10
+    pos_child1.end_col_offset = 40
+    child1 = Leaf(pos_child1)
+
+    pos_child2 = Position(50, 90, "child2")
+    pos_child2.lineno = 2
+    pos_child2.end_lineno = 3
+    pos_child2.col_offset = 50
+    pos_child2.end_col_offset = 90
+    child2 = Leaf(pos_child2)
+
+    # Create and add grandchildren
+    pos_grandchild1 = Position(15, 25, "grandchild1")
+    pos_grandchild1.lineno = 2
+    pos_grandchild1.end_lineno = 2
+    pos_grandchild1.col_offset = 15
+    pos_grandchild1.end_col_offset = 25
+    grandchild1 = Leaf(pos_grandchild1)
+
+    pos_grandchild2 = Position(60, 80, "grandchild2")
+    pos_grandchild2.lineno = 3
+    pos_grandchild2.end_lineno = 3
+    pos_grandchild2.col_offset = 60
+    pos_grandchild2.end_col_offset = 80
+    grandchild2 = Leaf(pos_grandchild2)
 
     print("\n2. Building tree structure")
     tree.root = root
@@ -35,8 +61,6 @@ def example_all_methods():
     tree.add_leaf(child2)
 
     # Create and add grandchildren
-    grandchild1 = Leaf(15, 25, "grandchild1")
-    grandchild2 = Leaf(60, 80, "grandchild2")
     child1.add_child(grandchild1)
     child2.add_child(grandchild2)
 
