@@ -165,14 +165,12 @@ class Leaf:
 # Example usage:
 if __name__ == "__main__":
     # Create leaves
-    leaves = [
-        Leaf(1, 10),
-        Leaf(1, 4),
-        Leaf(2, 4),
-        Leaf(5, 8)
-    ]
+    leaf1 = Leaf(1, 4)
+    leaf2 = Leaf(2, 4)
+    leaf3 = Leaf(5, 8)
+    root = Leaf(1, 10)
     
-    # Automatically construct the tree
+    leaves = [root, leaf1, leaf2, leaf3]
     root = Leaf.from_list(leaves)
     
     # Find best match for interval (2,3)
@@ -184,5 +182,5 @@ if __name__ == "__main__":
     print(f"Root's children: {root.children}")
     
     # Test common ancestor
-    common = child1.find_common_ancestor(child2)
-    print(f"Common ancestor of {child1} and {child2}: {common}")
+    common = leaf1.find_common_ancestor(leaf2)
+    print(f"Common ancestor of {leaf1} and {leaf2}: {common}")
