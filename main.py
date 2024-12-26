@@ -61,6 +61,19 @@ class Leaf:
         if not (self.start <= child.start and child.end <= self.end):
             raise ValueError("Child interval must be contained within parent interval")
             
+        # Check if any existing children should become children of the new leaf
+        children_to_move = []
+        for existing_child in self.children:
+            if (child.start <= existing_child.start and 
+                existing_child.end <= child.end):
+                children_to_move.append(existing_child)
+        
+        # Remove children that will be moved
+        for move_child in children_to_move:
+            self.children.remove(move_child)
+            child.children.append(move_child)
+            move_child.parent = child
+            
         child.parent = self
         self.children.append(child)
         
@@ -118,6 +131,35 @@ class Leaf:
 
     def __repr__(self):
         return f"Leaf({self.start}, {self.end}, info={self.info})"
+        
+    def find_best_parent(self, root):
+        if not root:
+            return None
+            
+        if root.start > self.start or root.end < self.end:
+            return None
+            
+        best_parent = root
+        for child in root.children:
+            if (child.start <= self.start and self.end <= child.end):
+                potential_parent = self.find_best_parent(child)
+                if potential_parent:
+                    best_parent = potential_parent
+                    
+        return best_parent
+        
+    @classmethod
+    def add_to_tree(cls, root, new_leaf):
+        if not root:
+            return new_leaf
+            
+        best_parent = new_leaf.find_best_parent(root)
+        if best_parent:
+            best_parent.add_child(new_leaf)
+        else:
+            raise ValueError("Cannot find suitable parent for the new leaf")
+            
+        return root
 
 
 # Example usage:
