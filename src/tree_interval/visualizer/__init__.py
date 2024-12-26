@@ -1,7 +1,6 @@
 
 """Visualizer module for tree interval package."""
-from .visualizer import TreeVisualizer
-from .config import VisualizationConfig
+from .visualizer import TreeVisualizer, VisualizationConfig
 
 DEFAULT_CONFIG = VisualizationConfig()
 
