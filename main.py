@@ -12,8 +12,11 @@ Classes:
 """
 
 from dataclasses import dataclass, field
+from inspect import currentframe
 from json import dumps, loads
 from typing import Any, Dict, Generic, List, NamedTuple, Optional, TypeVar, Union
+
+from ast_tree_builder import AstTreeBuilder
 
 T = TypeVar('T')
 L = TypeVar('L', bound='Leaf')
@@ -347,11 +350,9 @@ if __name__ == "__main__":
 
 def example_ast_tree():
     """Example of using AstTreeBuilder"""
-    from inspect import currentframe
-    from ast_tree_builder import AstTreeBuilder
 
     # Get current frame
-    frame = inspect.currentframe()
+    frame = currentframe()
 
     # Build AST tree
     builder = AstTreeBuilder(frame)
