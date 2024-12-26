@@ -1,4 +1,3 @@
-
 """
 Tree Visualizer package.
 
