@@ -24,7 +24,8 @@ class TreeVisualizer:
             if config.position_format == 'position':
                 return (f"Position(start={node.start}, end={node.end}, "
                        f"lineno={node.lineno}, end_lineno={node.end_lineno}, "
-                       f"col_offset={node.col_offset}, end_col_offset={node.end_col_offset})")
+                       f"col_offset={node.col_offset}, end_col_offset={node.end_col_offset}, "
+                       f"size={node.size})")
             elif config.position_format == 'tuple':
                 return f"({node.start}, {node.end})"
             return f"[{node.start}, {node.end}]"

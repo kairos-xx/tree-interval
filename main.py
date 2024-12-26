@@ -46,14 +46,31 @@ def demonstrate_tree_operations():
     tree = Tree[str]("Example Code", start_lineno=1, indent_size=4)
     print("Tree created with source:", tree.source)
     
-    # Build hierarchy
+    # Build hierarchy with line numbers
     root = Leaf(Position(0, 100, "root"))
+    root.position.lineno = 1
+    root.position.end_lineno = 10
     tree.root = root
     
     child1 = Leaf(Position(10, 40, "child1"))
+    child1.position.lineno = 2
+    child1.position.end_lineno = 4
+    child1.position.col_offset = 4
+    
     child2 = Leaf(Position(50, 90, "child2"))
+    child2.position.lineno = 5
+    child2.position.end_lineno = 8
+    child2.position.col_offset = 4
+    
     grandchild1 = Leaf(Position(15, 25, "grandchild1"))
+    grandchild1.position.lineno = 3
+    grandchild1.position.end_lineno = 3
+    grandchild1.position.col_offset = 8
+    
     grandchild2 = Leaf(Position(60, 80, "grandchild2"))
+    grandchild2.position.lineno = 6
+    grandchild2.position.end_lineno = 7
+    grandchild2.position.col_offset = 8
     
     # Add nodes
     tree.add_leaf(child1)
