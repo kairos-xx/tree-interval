@@ -168,6 +168,22 @@ class Leaf:
             current = current.parent
         return None
 
+    def _as_dict(self) -> Dict[str, Any]:
+        """Return a dictionary containing all leaf information."""
+        return {
+            'start': self.start,
+            'end': self.end,
+            'info': self.info,
+            'size': self.size,
+            'position': {
+                'lineno': self.lineno,
+                'end_lineno': self.end_lineno,
+                'col_offset': self.col_offset,
+                'end_col_offset': self.end_col_offset
+            },
+            'children': [child._as_dict() for child in self.children]
+        }
+
     def __repr__(self) -> str:
         """Return a string representation of the leaf."""
         return f"Leaf(start={self.start}, end={self.end}, info='{self.info}')"
