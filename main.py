@@ -77,6 +77,26 @@ class Tree(Generic[T]):
         for leaf in sorted_leaves[1:]:
             self.add_leaf(leaf)
 
+    def visualize(self) -> None:
+        """Print a visual representation of the tree structure."""
+        if not self.root:
+            print("Empty tree")
+            return
+
+        def _print_node(node: Leaf[T], level: int = 0, prefix: str = "") -> None:
+            """Helper function to recursively print tree nodes."""
+            indent = "    " * level
+            branch = "└── " if prefix == "└── " else "├── "
+            
+            print(f"{indent}{prefix}[{node.start}, {node.end}]" + 
+                  (f" ({node.info})" if node.info else ""))
+            
+            for i, child in enumerate(node.children):
+                is_last = i == len(node.children) - 1
+                _print_node(child, level + 1, "└── " if is_last else "├── ")
+
+        _print_node(self.root)
+
 
 class Leaf(tuple, Generic[T]):
     """
@@ -117,7 +137,40 @@ class Leaf(tuple, Generic[T]):
         """Get the end position of the interval."""
         return self[1]
 
-[... remaining methods with similar docstring formatting ...]
+    def add_child(self, child: 'Leaf[T]') -> None:
+        """Add a child to this leaf."""
+        child.parent = self
+        self.children.append(child)
+
+    def find_best_parent(self, root: 'Leaf[T]') -> Optional['Leaf[T]']:
+        """Find the best parent for this leaf in the tree."""
+        if self.start >= root.start and self.end <= root.end:
+            for child in root.children:
+                result = self.find_best_parent(child)
+                if result:
+                    return result
+            return root
+        return None
+
+    def find_best_match(self, target_start: int,
+                       target_end: int) -> Optional['Leaf[T]']:
+        """Find the best matching leaf for the given interval."""
+        if target_start >= self.start and target_end <= self.end:
+            for child in self.children:
+                match = child.find_best_match(target_start, target_end)
+                if match:
+                    return match
+            return self
+        return None
+
+    def find_common_ancestor(self, other: 'Leaf[T]') -> Optional['Leaf[T]']:
+        """Find the common ancestor between this leaf and another."""
+        if not self.parent or not other.parent:
+            return None
+        if self.parent == other.parent:
+            return self.parent
+        return self.parent.find_common_ancestor(other.parent)
+
 
 if __name__ == "__main__":
     # Example usage with string information
@@ -130,9 +183,13 @@ if __name__ == "__main__":
     tree: Tree[str] = Tree()
     tree.add_leaves([root, leaf1, leaf2, leaf3])
 
+    # Visualize the tree structure
+    print("Tree visualization:")
+    tree.visualize()
+
     # Demonstrate tree operations
     best_match = root.find_best_match(2, 3)
-    print(f"Best match for interval (2,3): {best_match}")
+    print(f"\nBest match for interval (2,3): {best_match}")
     print(f"Parent of best match: {best_match.parent}")
     print(f"Root's children: {root.children}")
 
