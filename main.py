@@ -2,10 +2,44 @@
 """
 Comprehensive example demonstrating all features of the tree structure.
 """
-
 from src.tree_interval import Tree, Leaf, Position, TreeVisualizer, VisualizationConfig
 
+def demonstrate_positions():
+    print("\n=== Position Examples ===")
+    # Basic Position
+    pos1 = Position(0, 100, "Root")
+    
+    # Position with line numbers
+    pos2 = Position(10, 50, "With Lines")
+    pos2.lineno = 1
+    pos2.end_lineno = 5
+    
+    # Position with column offsets
+    pos3 = Position(60, 90, "With Columns")
+    pos3.col_offset = 4
+    pos3.end_col_offset = 8
+    
+    for pos in [pos1, pos2, pos3]:
+        print(f"Position: {pos.start}-{pos.end} ({pos.info})")
+
+def demonstrate_leaves():
+    print("\n=== Leaf Examples ===")
+    # Create leaf with Position object
+    leaf1 = Leaf(Position(0, 100, "Using Position"))
+    
+    # Create leaf with tuple
+    leaf2 = Leaf((10, 50, "Using Tuple"))
+    
+    # Create leaf with separate arguments
+    leaf3 = Leaf(60, 90, "Using Args")
+    
+    for leaf in [leaf1, leaf2, leaf3]:
+        print(f"Leaf: {leaf.start}-{leaf.end} ({leaf.info})")
+
 def demonstrate_all_features():
+    demonstrate_positions()
+    demonstrate_leaves()
+    
     # 1. Create a tree
     print("\n1. Tree Creation")
     tree = Tree[str]("Example code", start_lineno=1, indent_size=4)
