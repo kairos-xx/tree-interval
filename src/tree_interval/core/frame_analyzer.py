@@ -76,17 +76,16 @@ class FrameAnalyzer:
         if not self.source or not self.ast_tree:
             return None
 
-        current_line = self.frame.f_lineno
+        # Calculate relative line number based on frame's first line
+        frame_first_line = self.frame.f_code.co_firstlineno
+        current_line = self.frame.f_lineno - frame_first_line + 1
         best_match = None
         min_indent = float('inf')
         
         for node in ast.walk(self.ast_tree):
             lineno = getattr(node, 'lineno', None)
             if lineno is not None:
-                # Check if node spans current line
-                            
-                print(current_line,getattr(node,"lineno",None))
-
+                # Check if node spans current line                
                 end_lineno = getattr(node, 'end_lineno', lineno)
                 if lineno <= current_line <= end_lineno:
                     position = self._get_node_position(node)
