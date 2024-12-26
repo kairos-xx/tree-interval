@@ -76,9 +76,11 @@ class FrameAnalyzer:
         if not self.source or not self.ast_tree:
             return None
 
+        
         current_line = self.frame.f_lineno
         for node in ast.walk(self.ast_tree):
             if hasattr(node, 'lineno'):
+                print(current_line,node.lineno)
                 if node.lineno == current_line:
                     position = self._get_node_position(node)
                     if position:
