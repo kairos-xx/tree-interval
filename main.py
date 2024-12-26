@@ -347,7 +347,7 @@ if __name__ == "__main__":
 
 def example_ast_tree():
     """Example of using AstTreeBuilder"""
-    import inspect
+    from inspect import currentframe
     from ast_tree_builder import AstTreeBuilder
 
     # Get current frame
