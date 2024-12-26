@@ -1,5 +1,43 @@
 
 class Leaf:
+    @classmethod
+    def from_list(cls, leaves):
+        if not leaves:
+            return None
+            
+        # Sort leaves by interval size (largest first) and start position
+        sorted_leaves = sorted(leaves, key=lambda x: (-(x.end - x.start), x.start))
+        
+        root = sorted_leaves[0]
+        for leaf in sorted_leaves[1:]:
+            current = root
+            placed = False
+            
+            while not placed:
+                # Check if it's a sibling
+                if leaf.start == current.start and leaf.end == current.end:
+                    current.add_sibling(leaf)
+                    placed = True
+                    continue
+                
+                # Find appropriate child position
+                if current.start <= leaf.start and leaf.end <= current.end:
+                    # Check existing children first
+                    child_placed = False
+                    for child in current.children:
+                        if child.start <= leaf.start and leaf.end <= child.end:
+                            current = child
+                            child_placed = True
+                            break
+                    
+                    if not child_placed:
+                        current.add_child(leaf)
+                        placed = True
+                else:
+                    raise ValueError(f"Interval {leaf} cannot be placed in the tree")
+                    
+        return root
+
     def __init__(self, start: int, end: int, info=None):
         if start > end:
             raise ValueError("Start must be less than or equal to end")
@@ -84,15 +122,16 @@ class Leaf:
 
 # Example usage:
 if __name__ == "__main__":
-    # Create a sample tree
-    root = Leaf(1, 10)
-    child1 = Leaf(1, 4)
-    child2 = Leaf(2, 4)
-    child3 = Leaf(5, 8)
+    # Create leaves
+    leaves = [
+        Leaf(1, 10),
+        Leaf(1, 4),
+        Leaf(2, 4),
+        Leaf(5, 8)
+    ]
     
-    root.add_child(child1)
-    root.add_child(child2)
-    root.add_child(child3)
+    # Automatically construct the tree
+    root = Leaf.from_list(leaves)
     
     # Find best match for interval (2,3)
     best_match = root.find_best_match(2, 3)
