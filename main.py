@@ -17,9 +17,38 @@ L = TypeVar('L', bound='Leaf')  # Type variable for leaf instances
 class Tree(Generic[T]):
     """A tree structure that manages interval-based Leaf nodes."""
 
-    def __init__(self) -> None:
-        """Initialize an empty tree."""
+    def __init__(self, code: str, start_lineno: int = 0, indent_size: int = 0) -> None:
+        """
+        Initialize an empty tree with code parameters.
+        
+        Args:
+            code: The source code string
+            start_lineno: Base line number offset for all leaves
+            indent_size: Base indentation size for all leaves
+        """
         self.root: Optional[Leaf[T]] = None
+        self.code = code
+        self.start_lineno = start_lineno
+        self.indent_size = indent_size
+
+    def create_leaf(self, position: dis.Positions, info: Optional[T] = None) -> 'Leaf[T]':
+        """
+        Create a new leaf using tree's code parameters.
+        
+        Args:
+            position: The dis.Positions object with position information
+            info: Optional information for the leaf
+            
+        Returns:
+            A new Leaf instance
+        """
+        return Leaf.from_position(
+            position=position,
+            code=self.code,
+            start_lineno=self.start_lineno,
+            indent_size=self.indent_size,
+            info=info
+        )
 
     def add_leaf(self, new_leaf: 'Leaf[T]') -> None:
         """
@@ -229,8 +258,24 @@ class Leaf(tuple, Generic[T]):
 
 
 if __name__ == "__main__":
-    # Example usage with string information
-    leaf1: Leaf[str] = Leaf(1, 4, "First")
+    # Example usage with code positions
+    code = """def example():
+    print("hello")
+    return 42"""
+    
+    tree: Tree[str] = Tree(code, start_lineno=1, indent_size=4)
+    
+    # Create a position (simulated dis.Positions)
+    class Position:
+        def __init__(self, lineno, end_lineno, col_offset, end_col_offset):
+            self.lineno = lineno
+            self.end_lineno = end_lineno
+            self.col_offset = col_offset
+            self.end_col_offset = end_col_offset
+    
+    # Create leaves using positions
+    pos1 = Position(1, 1, 0, 12)  # 'def example()' line
+    leaf1: Leaf[str] = tree.create_leaf(pos1, "Function def")
     leaf2: Leaf[str] = Leaf(2, 4, "Second")
     leaf3: Leaf[str] = Leaf(5, 8, "Third")
     root: Leaf[str] = Leaf(1, 10, "Root")
