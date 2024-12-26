@@ -34,7 +34,27 @@ class Tree:
             self.add_leaf(leaf)
 
 
-class Leaf:
+class Leaf(tuple):
+    def __new__(cls, start: int, end: int, info=None):
+        if start > end:
+            raise ValueError("Start must be less than or equal to end")
+        instance = super().__new__(cls, (start, end))
+        return instance
+        
+    def __init__(self, start: int, end: int, info=None):
+        self.info = info
+        self.children = []
+        self.parent = None
+        self.siblings = []
+        
+    @property
+    def start(self):
+        return self[0]
+        
+    @property
+    def end(self):
+        return self[1]
+        
     @classmethod
     def from_list(cls, leaves):
         if not leaves:
@@ -165,7 +185,7 @@ class Leaf:
         return path
 
     def __repr__(self):
-        return f"Leaf({self.start}, {self.end}, info={self.info})"
+        return f"Leaf{super().__repr__()}, info={self.info})"
         
     def find_best_parent(self, root):
         if not root:
