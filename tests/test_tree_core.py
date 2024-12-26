@@ -1,6 +1,6 @@
 
 import unittest
-from tree_core import Tree, Leaf, Position
+from src.tree_interval import Tree, Leaf, Position
 
 class TestTreeCore(unittest.TestCase):
     def setUp(self):
