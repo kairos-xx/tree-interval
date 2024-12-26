@@ -89,6 +89,7 @@ class FrameAnalyzer:
                 end_lineno = getattr(node, 'end_lineno', lineno)
                 if lineno <= current_line <= end_lineno:
                     position = self._get_node_position(node)
+                    print(str(position))
                     if position and position.col_offset < min_indent:
                         min_indent = position.col_offset
                         best_match = position

@@ -66,6 +66,9 @@ class Position:
     def absolute_end(self) -> Optional[int]:
         return self.end if self.end is not None else None
 
+    def __str__(self) -> str:
+        return f"Position(start={self.start}, end={self.end}, info={self.info})"
+
 
 class Leaf:
     """A node in the tree structure containing position and information data."""
