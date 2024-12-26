@@ -52,12 +52,11 @@ class TreeVisualizer:
 
         def format_position(node: Leaf) -> str:
             if config.position_format == 'position':
-                if hasattr(node, 'lineno'):
-                    return (f"Position(lineno={node.lineno}, " +
-                            f"end_lineno={node.end_lineno}, " +
-                            f"col_offset={node.col_offset}, " +
-                            f"end_col_offset={node.end_col_offset})")
-                return f"Position(start={node.start or 'None'}, end={node.end or 'None'}, info='{node.info or 'None'}')"
+                return (f"Position(lineno={node.lineno}, " +
+                        f"end_lineno={node.end_lineno}, " +
+                        f"col_offset={node.col_offset}, " +
+                        f"end_col_offset={node.end_col_offset}, " +
+                        f"size={node.size})")
             elif config.position_format == 'tuple':
                 return f"({node.start}, {node.end})"
             return f"[{node.start}, {node.end}]"
