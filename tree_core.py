@@ -132,7 +132,8 @@ class Leaf:
             best_match = self
             for child in self.children:
                 child_match = child.find_best_match(start, end)
-                if child_match and child_match.size and best_match.size and child_match.size < best_match.size:
+                if (child_match and child_match.size and best_match.size
+                        and child_match.size < best_match.size):
                     best_match = child_match
             return best_match
         return None
