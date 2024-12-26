@@ -7,14 +7,11 @@ This module contains the core Tree and Leaf classes used across the project.
 
 from json import dumps, loads
 from typing import Any, Dict, Generic, List, Optional, TypeVar, Union
-
-from src.tree_visualizer.config import VisualizationConfig
+from ...tree_visualizer.config import VisualizationConfig
 
 T = TypeVar('T')
 
-
 class Position:
-
     def __init__(self,
                  start: Optional[int] = None,
                  end: Optional[int] = None,
@@ -259,5 +256,5 @@ class Tree(Generic[T]):
     def visualize(self,
                   config: Optional["VisualizationConfig"] = None) -> None:
         """Visualize the tree structure."""
-        from tree_visualizer import TreeVisualizer
+        from ...tree_visualizer import TreeVisualizer
         TreeVisualizer.visualize(self, config)
