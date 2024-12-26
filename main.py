@@ -1,6 +1,6 @@
+
 """
 Tree and Leaf implementation for interval-based hierarchical structures.
-
 This module provides classes for creating and managing tree structures where nodes
 represent intervals with typed information.
 """
@@ -8,215 +8,18 @@ represent intervals with typed information.
 from typing import TypeVar, Optional, List, Generic, Iterator, NamedTuple, Union
 import dis
 from dataclasses import dataclass, field
+import json
 
-# Type variables for generic type hints
-T = TypeVar('T')  # Type variable for leaf information
-L = TypeVar('L', bound='Leaf')  # Type variable for leaf instances
-
+T = TypeVar('T')
+L = TypeVar('L', bound='Leaf')
 
 class Position(NamedTuple):
     start: int
     end: int
     info: Optional[any] = None
 
-
-class Tree(Generic[T]):
-    """A tree structure that manages interval-based Leaf nodes."""
-
-    def __init__(self,
-                 code: str,
-                 start_lineno: int = 0,
-                 indent_size: int = 0) -> None:
-        """
-        Initialize an empty tree with code parameters.
-        
-        Args:
-            code: The source code string
-            start_lineno: Base line number offset for all leaves
-            indent_size: Base indentation size for all leaves
-        """
-        self.root: Optional[Leaf[T]] = None
-        self.code = code
-        self.start_lineno = start_lineno
-        self.indent_size = indent_size
-
-    def create_leaf(self,
-                    position: dis.Positions,
-                    info: Optional[T] = None) -> 'Leaf[T]':
-        """
-        Create a new leaf using tree's code parameters.
-        
-        Args:
-            position: The dis.Positions object with position information
-            info: Optional information for the leaf
-            
-        Returns:
-            A new Leaf instance
-        """
-        return Leaf.from_position(position=position,
-                                  code=self.code,
-                                  start_lineno=self.start_lineno,
-                                  indent_size=self.indent_size,
-                                  info=info)
-
-    def add_leaf(self, new_leaf: 'Leaf[T]') -> None:
-        """
-        Add a new leaf to the tree.
-
-        Args:
-            new_leaf: The leaf to be added to the tree.
-
-        Raises:
-            TypeError: If new_leaf is not a Leaf instance.
-            ValueError: If no suitable parent is found.
-        """
-        if not isinstance(new_leaf, Leaf):
-            raise TypeError("Must be a Leaf instance")
-
-        if not self.root:
-            self.root = new_leaf
-            return
-
-        best_parent = new_leaf.find_best_parent(self.root)
-        if best_parent:
-            best_parent.add_child(new_leaf)
-        else:
-            raise ValueError("Cannot find suitable parent for the new leaf")
-
-    def find_best_match(self, target_start: int,
-                        target_end: int) -> Optional['Leaf[T]']:
-        """
-        Find the leaf that best matches the target interval.
-
-        Args:
-            target_start: Start of target interval.
-            target_end: End of target interval.
-
-        Returns:
-            The best matching leaf or None if tree is empty.
-        """
-        if not self.root:
-            return None
-        return self.root.find_best_match(target_start, target_end)
-
-    def add_leaves(self, leaves: List['Leaf[T]']) -> None:
-        """
-        Add multiple leaves to the tree.
-
-        Args:
-            leaves: List of leaves to be added.
-        """
-        if not leaves:
-            return
-
-        # Sort leaves by size (descending) and start position
-        sorted_leaves = sorted(leaves,
-                               key=lambda x: (-(x.end - x.start), x.start))
-        self.root = sorted_leaves[0]
-        for leaf in sorted_leaves[1:]:
-            self.add_leaf(leaf)
-
-    def create_leaf_from_lines(self, start_line: int, end_line: int, info: Optional[T] = None) -> 'Leaf[T]':
-        """
-        Create a leaf from line numbers, automatically calculating positions and indentation.
-        
-        Args:
-            start_line: Starting line number (1-based)
-            end_line: Ending line number (1-based)
-            info: Optional information for the leaf
-            
-        Returns:
-            A new Leaf instance
-        """
-        lines = self.code.splitlines()
-        if start_line < 1 or end_line > len(lines):
-            raise ValueError("Line numbers out of range")
-            
-        # Get the block of code
-        block_lines = lines[start_line-1:end_line]
-        
-        # Calculate indentation
-        non_empty_lines = [l for l in block_lines if l.strip()]
-        if non_empty_lines:
-            indent_size = len(non_empty_lines[0]) - len(non_empty_lines[0].lstrip())
-        else:
-            indent_size = 0
-            
-        # Calculate start and end positions
-        start_pos = sum(len(line) + 1 for line in lines[:start_line-1])
-        end_pos = sum(len(line) + 1 for line in lines[:end_line-1]) + len(lines[end_line-1])
-        
-        # Create position object
-        pos = Position(start_line, end_line, indent_size, end_pos - start_pos, info)
-        
-        return Leaf(pos)
-
-    @classmethod
-    def from_json(cls, json_str: str) -> 'Tree[T]':
-        """Create a Tree from a JSON string with full context."""
-        data = json.loads(json_str)
-        if not data.get('complete', False):
-            raise ValueError("JSON data is not a complete tree serialization")
-        
-        tree = cls(
-            code=data.get('code', ''),
-            start_lineno=data.get('start_lineno', 0),
-            indent_size=data.get('indent_size', 0)
-        )
-        if data.get('root'):
-            tree.root = Leaf.from_dict(data['root'])
-        return tree
-
-    def to_json(self) -> str:
-        """Convert tree to JSON string with full context."""
-        data = {
-            'code': self.code,
-            'start_lineno': self.start_lineno,
-            'indent_size': self.indent_size,
-            'root': self.root.to_dict() if self.root else None,
-            'complete': True
-        }
-        return json.dumps(data)
-
-    def flatten(self) -> List['Leaf[T]']:
-        """Flatten the tree into a list of leaves."""
-        if not self.root:
-            return []
-        return self.root.flatten()
-
-    def visualize(self) -> None:
-        """Print a visual representation of the tree structure."""
-        if not self.root:
-            print("Empty tree")
-            return
-
-        def _print_node(node: Leaf[T],
-                        level: int = 0,
-                        prefix: str = "") -> None:
-            """Helper function to recursively print tree nodes."""
-            indent = "    " * level
-            branch = "└── " if prefix == "└── " else "├── "
-
-            print(
-                f"{indent}{prefix}[{node.start}, {node.end}] (size={node.size})"
-                + (f" info='{node.info}'" if node.info else ""))
-
-            for i, child in enumerate(node.children):
-                is_last = i == len(node.children) - 1
-                _print_node(child, level + 1, "└── " if is_last else "├── ")
-
-        _print_node(self.root)
-
-
-import json
-from typing import Dict, Any
-
 @dataclass
 class Leaf(Generic[T]):
-    """
-    A leaf node representing an interval with typed information.
-    Can be initialized from either a tuple/Position or individual values.
-    """
     _start: int
     _end: int
     info: Optional[T] = None
@@ -225,7 +28,6 @@ class Leaf(Generic[T]):
     siblings: List['Leaf[T]'] = field(default_factory=list)
 
     def to_dict(self) -> Dict[str, Any]:
-        """Convert leaf to dictionary for JSON serialization."""
         return {
             'start': self._start,
             'end': self._end,
@@ -237,7 +39,6 @@ class Leaf(Generic[T]):
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'Leaf[T]':
-        """Create a Leaf instance from a dictionary."""
         leaf = cls(data['start'], data['end'], data['info'])
         if 'children' in data:
             for child_data in data['children']:
@@ -246,7 +47,6 @@ class Leaf(Generic[T]):
         return leaf
     
     def __repr__(self) -> str:
-        """Concise string representation of the leaf."""
         return f'Leaf(info="{self.info}", children=[{", ".join(repr(c) for c in self.children)}])'
 
     def __init__(self,
@@ -254,8 +54,7 @@ class Leaf(Generic[T]):
                  end: Optional[int] = None,
                  info: Optional[T] = None) -> None:
         if isinstance(start_or_pos, (Position, tuple)):
-            pos = start_or_pos if isinstance(
-                start_or_pos, Position) else Position(*start_or_pos)
+            pos = start_or_pos if isinstance(start_or_pos, Position) else Position(*start_or_pos)
             self._start, self._end, self.info = pos.start, pos.end, pos.info
         else:
             self._start = start_or_pos
@@ -271,26 +70,21 @@ class Leaf(Generic[T]):
 
     @property
     def start(self) -> int:
-        """Get the start position of the interval."""
         return self._start
 
     @property
     def end(self) -> int:
-        """Get the end position of the interval."""
         return self._end
 
     @property
     def size(self) -> int:
-        """Get the size of the interval."""
         return self._end - self._start + 1
 
     def add_child(self, child: 'Leaf[T]') -> None:
-        """Add a child to this leaf."""
         child.parent = self
         self.children.append(child)
 
     def find_best_parent(self, root: 'Leaf[T]') -> Optional['Leaf[T]']:
-        """Find the best parent for this leaf in the tree."""
         if self._start >= root.start and self._end <= root.end:
             for child in root.children:
                 result = self.find_best_parent(child)
@@ -299,9 +93,7 @@ class Leaf(Generic[T]):
             return root
         return None
 
-    def find_best_match(self, target_start: int,
-                        target_end: int) -> Optional['Leaf[T]']:
-        """Find the best matching leaf for the given interval."""
+    def find_best_match(self, target_start: int, target_end: int) -> Optional['Leaf[T]']:
         if target_start >= self._start and target_end <= self._end:
             for child in self.children:
                 match = child.find_best_match(target_start, target_end)
@@ -311,7 +103,6 @@ class Leaf(Generic[T]):
         return None
 
     def find_common_ancestor(self, other: 'Leaf[T]') -> Optional['Leaf[T]']:
-        """Find the common ancestor between this leaf and another."""
         if not self.parent or not other.parent:
             return None
         if self.parent == other.parent:
@@ -319,20 +110,12 @@ class Leaf(Generic[T]):
         return self.parent.find_common_ancestor(other.parent)
 
     def flatten(self) -> List['Leaf[T]']:
-        """Return a flattened list of all leaves in the subtree."""
         result = [self]
         for child in self.children:
             result.extend(child.flatten())
         return result
 
     def find_first_multi_child_ancestor(self) -> Optional['Leaf[T]']:
-        """
-        Find the first ancestor that has more than one child.
-
-        Returns:
-            Optional[Leaf[T]]: The first ancestor with multiple children,
-            or None if no such ancestor exists.
-        """
         current = self.parent
         while current:
             if len(current.children) > 1:
@@ -340,78 +123,136 @@ class Leaf(Generic[T]):
             current = current.parent
         return None
 
+class Tree(Generic[T]):
+    def __init__(self, code: str, start_lineno: int = 0, indent_size: int = 0) -> None:
+        self.root: Optional[Leaf[T]] = None
+        self.code = code
+        self.start_lineno = start_lineno
+        self.indent_size = indent_size
+
+    def add_leaf(self, new_leaf: 'Leaf[T]') -> None:
+        if not isinstance(new_leaf, Leaf):
+            raise TypeError("Must be a Leaf instance")
+
+        if not self.root:
+            self.root = new_leaf
+            return
+
+        best_parent = new_leaf.find_best_parent(self.root)
+        if best_parent:
+            best_parent.add_child(new_leaf)
+        else:
+            raise ValueError("Cannot find suitable parent for the new leaf")
+
+    def find_best_match(self, target_start: int, target_end: int) -> Optional['Leaf[T]']:
+        if not self.root:
+            return None
+        return self.root.find_best_match(target_start, target_end)
+
+    def add_leaves(self, leaves: List['Leaf[T]']) -> None:
+        if not leaves:
+            return
+        sorted_leaves = sorted(leaves, key=lambda x: (-(x.end - x.start), x.start))
+        self.root = sorted_leaves[0]
+        for leaf in sorted_leaves[1:]:
+            self.add_leaf(leaf)
+
+    def to_json(self) -> str:
+        data = {
+            'code': self.code,
+            'start_lineno': self.start_lineno,
+            'indent_size': self.indent_size,
+            'root': self.root.to_dict() if self.root else None,
+            'complete': True
+        }
+        return json.dumps(data)
+
     @classmethod
-    def from_position(cls,
-                      position: dis.Positions,
-                      code: str,
-                      start_lineno: int = 0,
-                      indent_size: int = 0,
-                      info: Optional[T] = None) -> 'Leaf[T]':
-        """
-        Create a Leaf from a dis.Position object.
+    def from_json(cls, json_str: str) -> 'Tree[T]':
+        data = json.loads(json_str)
+        if not data.get('complete', False):
+            raise ValueError("JSON data is not a complete tree serialization")
+        
+        tree = cls(
+            code=data.get('code', ''),
+            start_lineno=data.get('start_lineno', 0),
+            indent_size=data.get('indent_size', 0)
+        )
+        if data.get('root'):
+            tree.root = Leaf.from_dict(data['root'])
+        return tree
 
-        Args:
-            position: The dis.Position object containing line and column information
-            code: The multiline string of code
-            start_lineno: Line number offset to be added to position's line numbers
-            indent_size: Number of columns to add to position's column offsets
-            info: Optional information to associate with the leaf
+    def flatten(self) -> List['Leaf[T]']:
+        if not self.root:
+            return []
+        return self.root.flatten()
 
-        Returns:
-            A new Leaf instance representing the position in the code
-        """
-        # Calculate absolute line numbers
-        abs_lineno = position.lineno + start_lineno
-        abs_end_lineno = position.end_lineno + start_lineno if position.end_lineno else abs_lineno
+    def visualize(self) -> None:
+        if not self.root:
+            print("Empty tree")
+            return
 
-        # Calculate absolute column positions
-        abs_col_offset = position.col_offset + indent_size
-        abs_end_col_offset = position.end_col_offset + indent_size if position.end_col_offset else abs_col_offset
+        def _print_node(node: Leaf[T], level: int = 0, prefix: str = "") -> None:
+            indent = "    " * level
+            branch = "└── " if prefix == "└── " else "├── "
+            print(f"{indent}{prefix}[{node.start}, {node.end}] (size={node.size})" 
+                  + (f" info='{node.info}'" if node.info else ""))
+            for i, child in enumerate(node.children):
+                is_last = i == len(node.children) - 1
+                _print_node(child, level + 1, "└── " if is_last else "├── ")
 
-        # Convert to absolute character position
-        lines = code.splitlines()
-        start_pos = sum(len(line) + 1
-                        for line in lines[:abs_lineno - 1]) + abs_col_offset
-        end_pos = sum(
-            len(line) + 1
-            for line in lines[:abs_end_lineno - 1]) + abs_end_col_offset
+        _print_node(self.root)
 
-        return cls(start_pos, end_pos, info)
-
-
-if __name__ == "__main__":
-    # Create a tree
-    tree = Tree[str]("", 0, 0)
+def example_all_methods():
+    """Demonstrate all available methods in Tree and Leaf classes."""
+    print("1. Creating a tree and leaves")
+    tree = Tree[str]("Example code", start_lineno=1, indent_size=4)
     
-    # Create some leaves
+    # Create leaves with different methods
     root = Leaf(0, 100, "root")
-    child1 = Leaf(10, 40, "child1")
-    child2 = Leaf(50, 90, "child2")
+    child1 = Leaf(Position(10, 40, "child1"))
+    child2 = Leaf((50, 90, "child2"))  # Using tuple
+    
+    print("\n2. Building tree structure")
+    tree.root = root
+    tree.add_leaf(child1)
+    tree.add_leaf(child2)
+    
+    # Create and add grandchildren
     grandchild1 = Leaf(15, 25, "grandchild1")
     grandchild2 = Leaf(60, 80, "grandchild2")
-    
-    # Build the tree structure
-    tree.root = root
-    root.add_child(child1)
-    root.add_child(child2)
     child1.add_child(grandchild1)
     child2.add_child(grandchild2)
     
-    # Visualize original tree
-    print("Original tree:")
+    print("\n3. Tree visualization")
     tree.visualize()
     
-    # Flatten the tree
+    print("\n4. Accessing properties")
+    print(f"Root size: {root.size}")
+    print(f"Child1 start: {child1.start}, end: {child1.end}")
+    
+    print("\n5. Finding nodes")
+    best_match = tree.find_best_match(20, 30)
+    print(f"Best match for (20, 30): {best_match}")
+    
+    common_ancestor = grandchild1.find_common_ancestor(grandchild2)
+    print(f"Common ancestor of grandchildren: {common_ancestor}")
+    
+    multi_child = grandchild1.find_first_multi_child_ancestor()
+    print(f"First multi-child ancestor: {multi_child}")
+    
+    print("\n6. Flattening tree")
     flat_list = tree.flatten()
-    print("\nFlattened tree:")
-    for leaf in flat_list:
-        print(f"Leaf(start={leaf.start}, end={leaf.end}, info='{leaf.info}')")
+    print("Flattened tree:", [leaf.info for leaf in flat_list])
     
-    # Save and load tree
+    print("\n7. JSON serialization")
     json_str = tree.to_json()
-    print("\nJSON representation:")
-    print(json.dumps(json.loads(json_str), indent=2))
+    print("JSON string:", json.dumps(json.loads(json_str), indent=2))
     
+    print("\n8. JSON deserialization")
     loaded_tree = Tree.from_json(json_str)
-    print("\nLoaded tree visualization:")
+    print("Loaded tree:")
     loaded_tree.visualize()
+
+if __name__ == "__main__":
+    example_all_methods()
