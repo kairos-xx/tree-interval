@@ -48,7 +48,12 @@ class Leaf(Generic[T]):
         return leaf
 
     def __repr__(self) -> str:
-        return f'Leaf(info="{self.info}", children=[{", ".join(repr(c) for c in self.children)}])'
+        return json.dumps({
+            'info': self.info,
+            'start': self._start,
+            'end': self._end,
+            'children': [child.__repr__() for child in self.children]
+        })
 
     def __init__(self,
                  start_or_pos: Union[int, Position, tuple],
