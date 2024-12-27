@@ -1,5 +1,5 @@
 """Unit tests for Tree Interval core functionality."""
-from pytest import main
+import pytest
 
 from src.tree_interval import AstTreeBuilder, FrameAnalyzer, Leaf, Position, Tree
 
@@ -86,6 +86,7 @@ def test_tree_serialization():
     loaded_tree = Tree.from_json(json_str)
 
     assert loaded_tree.source == tree.source
+    assert loaded_tree.root is not None and tree.root is not None
     assert loaded_tree.root.start == tree.root.start
     assert loaded_tree.root.end == tree.root.end
 
@@ -106,4 +107,4 @@ def test_leaf_hierarchy():
 
 
 if __name__ == "__main__":
-    main([__file__])
+    pytest.main([__file__])
