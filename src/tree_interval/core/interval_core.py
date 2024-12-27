@@ -98,6 +98,10 @@ class Leaf:
         else:
             self.position = Position(position, end, info)
 
+        # Initialize end_col_offset if not set
+        if self.position._end_col_offset is None and self.position._col_offset is not None:
+            self.position._end_col_offset = self.position._col_offset + 1
+
         self.parent: Optional[Leaf] = None
         self.children: List[Leaf] = []
 
