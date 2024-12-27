@@ -33,9 +33,9 @@ class Position:
         self.start = start
         self.end = end
         self.info = info
-        self._lineno: Optional[int] = 1
-        self._end_lineno: Optional[int] = 1
-        self._col_offset: Optional[int] = 0
+        self._lineno: Optional[int] = None
+        self._end_lineno: Optional[int] = None
+        self._col_offset: Optional[int] = None
         self._end_col_offset: Optional[int] = (
             end - start if start is not None and end is not None else 0
         )
@@ -85,16 +85,37 @@ class Position:
     def position_as(self, position_format: str = "default") -> str:
         """Display position with specific format."""
         if position_format == "position":
-            return f"Position(start={self.start}, end={self.end}, lineno={self.lineno}, end_lineno={self.end_lineno}, col_offset={self.col_offset}, end_col_offset={self.end_col_offset})"
+            return (
+                f"Position(start={self.start}, "
+                + f"end={self.end}, "
+                + f"lineno={self.lineno}, "
+                + f"end_lineno={self.end_lineno}, "
+                + f"col_offset={self.col_offset}, "
+                + f"end_col_offset={self.end_col_offset})"
+            )
         elif position_format == "tuple":
-            return f"({self.start}, {self.end}, {self.lineno}, {self.end_lineno}, {self.col_offset}, {self.end_col_offset})"
+            return (
+                "("
+                + ", ".join(
+                    str(v)
+                    for v in (
+                        self.start,
+                        self.end,
+                        self.lineno,
+                        self.end_lineno,
+                        self.col_offset,
+                        self.end_col_offset,
+                    )
+                )
+                + ")"
+            )
         else:
             return f"Position(start={self.start}, end={self.end})"
 
     def __str__(self) -> str:
         return f"Position(start={self.start}, end={self.end}, info={self.info})"
 
-    def find_parent(self, criteria: Callable[[Any], bool]) -> Optional["Leaf"]:
+    def find_parent(self, criteria: Callable[["Leaf"], bool]) -> Optional["Leaf"]:
         """Find first parent that matches the criteria."""
         if not self.parent:
             return None
@@ -102,7 +123,7 @@ class Position:
             return self.parent
         return self.parent.find_parent(criteria)
 
-    def find_child(self, criteria: Callable[[Any], bool]) -> Optional["Leaf"]:
+    def find_child(self, criteria: Callable[["Leaf"], bool]) -> Optional["Leaf"]:
         """Find first child that matches the criteria."""
         for child in self.children:
             if criteria(child):
@@ -112,7 +133,7 @@ class Position:
                 return result
         return None
 
-    def find_sibling(self, criteria: Callable[[Any], bool]) -> Optional["Leaf"]:
+    def find_sibling(self, criteria: Callable[["Leaf"], bool]) -> Optional["Leaf"]:
         """Find first sibling that matches the criteria."""
         if not self.parent:
             return None
@@ -147,6 +168,7 @@ class Leaf:
 
         self.parent: Optional[Leaf] = None
         self.children: List[Leaf] = []
+        self.attributes = NestedAttributes(self._as_dict())
 
     @property
     def start(self) -> Optional[int]:
@@ -283,9 +305,40 @@ class Leaf:
                 return sibling
         return None
 
+    def find(self, criteria: Callable[["Leaf"], bool]) -> Optional["Leaf"]:
+        """Find first node in the tree that matches the criteria.
+        Searches through the current node, parent nodes, child nodes, and siblings.
+
+        Args:
+            criteria: A function that takes a Leaf node and returns bool
+
+        Returns:
+            Matching node or None if not found
+        """
+        # Check current node
+        if criteria(self):
+            return self
+
+        # Check parent nodes
+        parent_match = self.find_parent(criteria)
+        if parent_match:
+            return parent_match
+
+        # Check child nodes
+        child_match = self.find_child(criteria)
+        if child_match:
+            return child_match
+
+        # Check sibling nodes
+        sibling_match = self.find_sibling(criteria)
+        if sibling_match:
+            return sibling_match
+
+        return None
+
     def _as_dict(self) -> Dict[str, Any]:
         """Return a dictionary containing all leaf information."""
-        return {
+        data = {
             "start": self.start,
             "end": self.end,
             "info": self.info,
@@ -298,13 +351,30 @@ class Leaf:
             },
             "children": [child._as_dict() for child in self.children],
         }
+        self.attributes = NestedAttributes(data)
+        return data
 
     def position_as(self, position_format: str = "default") -> str:
         """Display node with specific position format."""
         if position_format == "position":
-            return f"Position(start={self.start}, end={self.end}, lineno={self.lineno}, end_lineno={self.end_lineno}, col_offset={self.col_offset}, end_col_offset={self.end_col_offset}, size={self.size})"
+            return (
+                f"Position(start={self.start}, "
+                + f"end={self.end}, "
+                + f"lineno={self.lineno}, "
+                + f"end_lineno={self.end_lineno}, "
+                + f"col_offset={self.col_offset}, "
+                + f"end_col_offset={self.end_col_offset}, "
+                + f"size={self.size})"
+            )
         elif position_format == "tuple":
-            return f"({self.start}, {self.end}, {self.lineno}, {self.end_lineno}, {self.col_offset}, {self.end_col_offset})"
+            return (
+                f"({self.start}, "
+                + f"{self.end}, "
+                + f"{self.lineno}, "
+                + f"{self.end_lineno}, "
+                + f"{self.col_offset}, "
+                + f"{self.end_col_offset})"
+            )
         else:
             return f"Position(start={self.start}, end={self.end}, size={self.size})"
 
@@ -405,3 +475,30 @@ class Tree(Generic[T]):
         from ..visualizer import TreeVisualizer
 
         TreeVisualizer.visualize(self, config)
+
+
+class NestedAttributes:
+    position: "NestedAttributes"
+    start: Optional[int]
+    end: Optional[int]
+    info: Any
+    size: Optional[int]
+    children: List[Dict[str, Any]]
+
+    def __init__(self, data: Dict[str, Any]):
+        for key, value in data.items():
+            if isinstance(value, dict):
+                setattr(self, key, NestedAttributes(value))
+            else:
+                setattr(self, key, value)
+
+    def __getattr__(self, name: str) -> Any:
+        # Handle missing attributes gracefully
+        return None
+
+    def __repr__(self) -> str:
+        attrs = [f"{k}={repr(v)}" for k, v in self.__dict__.items()]
+        return f"NestedAttributes({', '.join(attrs)})"
+
+    def __str__(self) -> str:
+        return repr(self)

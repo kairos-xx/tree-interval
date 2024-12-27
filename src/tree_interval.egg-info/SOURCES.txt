@@ -11,7 +11,6 @@ src/tree_interval/core/__init__.py
 src/tree_interval/core/ast_builder.py
 src/tree_interval/core/frame_analyzer.py
 src/tree_interval/core/interval_core.py
-src/tree_interval/core/leaf.py
 src/tree_interval/rich_printer/__init__.py
 src/tree_interval/rich_printer/config.py
 src/tree_interval/rich_printer/printer.py
