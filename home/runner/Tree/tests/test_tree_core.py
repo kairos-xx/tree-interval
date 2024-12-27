@@ -1,7 +1,7 @@
 
 import unittest
 from src.tree_interval import Tree, Leaf, Position
-
+ 
 class TestTreeCore(unittest.TestCase):
     def test_find_parent(self):
         root = Leaf(Position(0, 100, {"type": "Module"}))
@@ -11,13 +11,13 @@ class TestTreeCore(unittest.TestCase):
         root.add_child(child1)
         child1.add_child(grandchild)
 
-        found = grandchild.find_parent(lambda n: n.info and n.info.get("type") == "FunctionDef")
+        found = grandchild.find_parent(lambda n: bool(n.info and n.info.get("type") == "FunctionDef"))
         self.assertEqual(found, child1)
 
-        found = grandchild.find_parent(lambda n: n.info and n.info.get("type") == "Module")
+        found = grandchild.find_parent(lambda n: bool(n.info and n.info.get("type") == "Module"))
         self.assertEqual(found, root)
 
-        found = root.find_parent(lambda n: n.info and n.info.get("type") == "Module")
+        found = root.find_parent(lambda n: bool(n.info and n.info.get("type") == "Module"))
         self.assertIsNone(found)
 
     def test_find_child(self):
@@ -28,13 +28,13 @@ class TestTreeCore(unittest.TestCase):
         root.add_child(child1)
         root.add_child(child2)
 
-        found = root.find_child(lambda n: n.info and n.info.get("type") == "Assign")
+        found = root.find_child(lambda n: bool(n.info and n.info.get("type") == "Assign"))
         self.assertEqual(found, child1)
 
-        found = root.find_child(lambda n: n.info and n.info.get("type") == "FunctionDef")
+        found = root.find_child(lambda n: bool(n.info and n.info.get("type") == "FunctionDef"))
         self.assertEqual(found, child2)
 
-        found = child1.find_child(lambda n: n.info and n.info.get("type") == "Assign")
+        found = child1.find_child(lambda n: bool(n.info and n.info.get("type") == "Assign"))
         self.assertIsNone(found)
 
     def test_find_sibling(self):
@@ -45,7 +45,7 @@ class TestTreeCore(unittest.TestCase):
         root.add_child(child1)
         root.add_child(child2)
 
-        found = child1.find_sibling(lambda n: n.info and n.info.get("type") == "FunctionDef")
+        found = child1.find_sibling(lambda n: bool(n.info and n.info.get("type") == "FunctionDef"))
         self.assertEqual(found, child2)
 
 if __name__ == "__main__":
