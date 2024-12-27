@@ -33,10 +33,10 @@ class Position:
         self.start = start
         self.end = end
         self.info = info
-        self._lineno: Optional[int] = None
-        self._end_lineno: Optional[int] = None
-        self._col_offset: Optional[int] = None
-        self._end_col_offset: Optional[int] = None
+        self._lineno: Optional[int] = 1
+        self._end_lineno: Optional[int] = 1
+        self._col_offset: Optional[int] = 0
+        self._end_col_offset: Optional[int] = end - start if start is not None and end is not None else 0
 
     @property
     def lineno(self) -> Optional[int]:
@@ -255,6 +255,15 @@ class Leaf:
             },
             "children": [child._as_dict() for child in self.children],
         }
+
+    def position_as(self, position_format: str = "default") -> str:
+        """Display node with specific position format."""
+        if position_format == "position":
+            return f"Position(start={self.start}, end={self.end}, lineno={self.lineno}, end_lineno={self.end_lineno}, col_offset={self.col_offset}, end_col_offset={self.end_col_offset}, size={self.size})"
+        elif position_format == "tuple":
+            return f"({self.start}, {self.end}, {self.lineno}, {self.end_lineno}, {self.col_offset}, {self.end_col_offset})"
+        else:
+            return f"Position(start={self.start}, end={self.end}, size={self.size})"
 
     def __repr__(self) -> str:
         return f"Leaf(start={self.start}, end={self.end}, info={self.info})"
