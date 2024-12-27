@@ -52,10 +52,14 @@ class TreeVisualizer:
             return " ".join(parts)
 
         def _print_node(node, prefix="", is_last=True, level=0):
-            node_info = format_position(node) + " " + format_node_info(node)
+            position_str = format_position(node)
+            info_str = format_node_info(node)
             prefix_spaces = "    " if level == 0 else prefix
             connector = "┌── " if level == 0 else ("└── " if is_last else "├── ")
-            print(prefix_spaces + connector + node_info)
+            
+            # Color the text content but not the tree lines
+            color = TreeVisualizer.BLUE if level == 0 else (TreeVisualizer.GREEN if node.children else TreeVisualizer.YELLOW)
+            print(f"{prefix_spaces}{connector}{color}{position_str} {info_str}{TreeVisualizer.RESET}")
 
             children = node.children
             for i, child in enumerate(children):
