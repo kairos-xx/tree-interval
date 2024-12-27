@@ -52,8 +52,8 @@ class FrameAnalyzer:
             return None
 
         try:
-            start_line = node.lineno - 1  # Convert to 0-based index
-            end_line = getattr(node, 'end_lineno', node.lineno) - 1
+            start_line = node.lineno - 1  # type: ignore # Convert to 0-based index
+            end_line = getattr(node, 'end_lineno', node.lineno) - 1  # type: ignore
             
             if 0 <= start_line < len(self.line_positions):
                 start_pos = self.line_positions[start_line][0]
