@@ -106,5 +106,46 @@ def test_leaf_hierarchy():
     assert grandchild.parent == child1
 
 
+def test_find_parent():
+    tree = Tree("Test")
+    root = Leaf(Position(0, 100, {"type": "Module"}))
+    child = Leaf(Position(10, 90, {"type": "FunctionDef"}))
+    grandchild = Leaf(Position(20, 80, {"type": "Assign"}))
+    
+    tree.root = root
+    tree.add_leaf(child)
+    child.add_child(grandchild)
+    
+    found = grandchild.find_parent(lambda n: n.info.get("type") == "FunctionDef")
+    assert found == child
+
+def test_find_child():
+    tree = Tree("Test")
+    root = Leaf(Position(0, 100, {"type": "Module"}))
+    child1 = Leaf(Position(10, 50, {"type": "FunctionDef"}))
+    child2 = Leaf(Position(60, 90, {"type": "ClassDef"}))
+    grandchild = Leaf(Position(20, 40, {"type": "Assign"}))
+    
+    tree.root = root
+    tree.add_leaf(child1)
+    tree.add_leaf(child2)
+    child1.add_child(grandchild)
+    
+    found = root.find_child(lambda n: n.info.get("type") == "Assign")
+    assert found == grandchild
+
+def test_find_sibling():
+    tree = Tree("Test")
+    root = Leaf(Position(0, 100, {"type": "Module"}))
+    child1 = Leaf(Position(10, 50, {"type": "Import"}))
+    child2 = Leaf(Position(60, 90, {"type": "FunctionDef"}))
+    
+    tree.root = root
+    tree.add_leaf(child1)
+    tree.add_leaf(child2)
+    
+    found = child1.find_sibling(lambda n: n.info.get("type") == "FunctionDef")
+    assert found == child2
+
 if __name__ == "__main__":
     pytest.main([__file__])

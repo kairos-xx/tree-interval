@@ -128,8 +128,37 @@ def demonstrate_serialization():
     loaded_tree.visualize()
 
 
+def demonstrate_node_search():
+    """Node search methods example."""
+    print("\n=== Node Search Example ===")
+    tree = Tree("Node Search Demo")
+    
+    # Create some nodes
+    root = Leaf(Position(0, 100, {"type": "Module"}))
+    func_def = Leaf(Position(10, 90, {"type": "FunctionDef", "fields": {"name": "example"}}))
+    if_stmt = Leaf(Position(20, 40, {"type": "If"}))
+    var_assign = Leaf(Position(25, 35, {"type": "Assign", "fields": {"name": "x"}}))
+    call_expr = Leaf(Position(50, 80, {"type": "Call"}))
+    
+    # Build tree structure
+    tree.root = root
+    tree.add_leaf(func_def)
+    func_def.add_child(if_stmt)
+    if_stmt.add_child(var_assign)
+    func_def.add_child(call_expr)
+    
+    # Find nodes using search methods
+    found_parent = var_assign.find_parent(lambda n: n.info.get("type") == "FunctionDef")
+    found_child = func_def.find_child(lambda n: n.info.get("type") == "Assign")
+    found_sibling = if_stmt.find_sibling(lambda n: n.info.get("type") == "Call")
+    
+    print("Found parent:", found_parent.info)
+    print("Found child:", found_child.info)
+    print("Found sibling:", found_sibling.info)
+
 if __name__ == "__main__":
     demonstrate_basic_tree()
     demonstrate_ast_analysis()
     demonstrate_frame_analysis()
     demonstrate_serialization()
+    demonstrate_node_search()
