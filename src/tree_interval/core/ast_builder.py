@@ -14,7 +14,6 @@ from .interval_core import Leaf, Position, Tree
 
 
 class AstTreeBuilder:
-
     def __init__(self, source: Union[FrameType, str]) -> None:
         self.source = None
         if isinstance(source, str):
@@ -53,11 +52,15 @@ class AstTreeBuilder:
             col_offset = getattr(node, "col_offset", None)
             end_col_offset = getattr(node, "end_col_offset", None)
 
-            if all(x is not None
-                   for x in [lineno, col_offset, end_lineno, end_col_offset]):
-                if (isinstance(lineno, int) and isinstance(col_offset, int)
-                        and isinstance(end_lineno, int)
-                        and isinstance(end_col_offset, int)):
+            if all(
+                x is not None for x in [lineno, col_offset, end_lineno, end_col_offset]
+            ):
+                if (
+                    isinstance(lineno, int)
+                    and isinstance(col_offset, int)
+                    and isinstance(end_lineno, int)
+                    and isinstance(end_col_offset, int)
+                ):
                     start = self._line_col_to_pos(lineno, col_offset)
                     end = self._line_col_to_pos(end_lineno, end_col_offset)
 
@@ -71,19 +74,21 @@ class AstTreeBuilder:
                             fields_info[field] = {
                                 "type": value.__class__.__name__,
                                 "fields": {
-                                    k: getattr(value, k, None)
-                                    for k in value._fields
+                                    k: getattr(value, k, None) for k in value._fields
                                 },
                             }
                         elif isinstance(value, list):
-                            fields_info[field] = [{
-                                "type": item.__class__.__name__,
-                                "fields": {
-                                    k: getattr(item, k, None)
-                                    for k in item._fields
-                                },
-                            } if isinstance(item, AST) else item
-                                                  for item in value]
+                            fields_info[field] = [
+                                {
+                                    "type": item.__class__.__name__,
+                                    "fields": {
+                                        k: getattr(item, k, None) for k in item._fields
+                                    },
+                                }
+                                if isinstance(item, AST)
+                                else item
+                                for item in value
+                            ]
 
                     node_info = {
                         "type": node.__class__.__name__,
@@ -92,8 +97,7 @@ class AstTreeBuilder:
                     }
 
                     leaf = Leaf(
-                        Position(start if start is not None else 0, end,
-                                 node_info),
+                        Position(start if start is not None else 0, end, node_info),
                         None,
                     )
                     leaf.position._col_offset = col_offset
@@ -104,8 +108,7 @@ class AstTreeBuilder:
             elif all(x is not None for x in [lineno, col_offset]):
                 if isinstance(lineno, int) and isinstance(col_offset, int):
                     start = self._line_col_to_pos(lineno, col_offset)
-                    if isinstance(end_lineno, int) and isinstance(
-                            end_col_offset, int):
+                    if isinstance(end_lineno, int) and isinstance(end_col_offset, int):
                         end = self._line_col_to_pos(end_lineno, end_col_offset)
                     else:
                         end = None
@@ -124,19 +127,21 @@ class AstTreeBuilder:
                             fields_info[field] = {
                                 "type": value.__class__.__name__,
                                 "fields": {
-                                    k: getattr(value, k, None)
-                                    for k in value._fields
+                                    k: getattr(value, k, None) for k in value._fields
                                 },
                             }
                         elif isinstance(value, list):
-                            fields_info[field] = [{
-                                "type": item.__class__.__name__,
-                                "fields": {
-                                    k: getattr(item, k, None)
-                                    for k in item._fields
-                                },
-                            } if isinstance(item, AST) else item
-                                                  for item in value]
+                            fields_info[field] = [
+                                {
+                                    "type": item.__class__.__name__,
+                                    "fields": {
+                                        k: getattr(item, k, None) for k in item._fields
+                                    },
+                                }
+                                if isinstance(item, AST)
+                                else item
+                                for item in value
+                            ]
 
                     node_info = {
                         "type": node.__class__.__name__,
@@ -145,14 +150,15 @@ class AstTreeBuilder:
                     }
 
                     leaf = Leaf(
-                        Position(start if start is not None else 0, end,
-                                 node_info),
+                        Position(start if start is not None else 0, end, node_info),
                         None,
                     )
                     leaf.position._col_offset = col_offset
                     leaf.position._end_col_offset = (
-                        end_col_offset if end_col_offset is not None else
-                        (col_offset + 1 if col_offset is not None else 1))
+                        end_col_offset
+                        if end_col_offset is not None
+                        else (col_offset + 1 if col_offset is not None else 1)
+                    )
                     result_tree.add_leaf(leaf)
 
         return result_tree

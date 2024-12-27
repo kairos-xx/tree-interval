@@ -7,8 +7,8 @@ setup(
     version="0.1.7",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
-    description="A Python package for managing and visualizing " +
-    "interval tree structures",
+    description="A Python package for managing and visualizing "
+    + "interval tree structures",
     long_description=readme,
     long_description_content_type="text/markdown",
     author="Joao Lopes",

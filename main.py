@@ -21,15 +21,13 @@ def demonstrate_positions():
     print("\n=== Position Examples ===")
     # Basic Position
     pos1 = Position(0, 100, "Root")
-    print("Basic position:",
-          f"start={pos1.start}, end={pos1.end}, info={pos1.info}")
+    print("Basic position:", f"start={pos1.start}, end={pos1.end}, info={pos1.info}")
 
     # Position with line numbers
     pos2 = Position(10, 50, "With Lines")
     pos2.lineno = 1
     pos2.end_lineno = 5
-    print("Position with lines:",
-          f"lineno={pos2.lineno}, end_lineno={pos2.end_lineno}")
+    print("Position with lines:", f"lineno={pos2.lineno}, end_lineno={pos2.end_lineno}")
 
     # Position with column offsets
     pos3 = Position(60, 90, "With Columns")
@@ -69,18 +67,21 @@ def demonstrate_find_nodes():
     child1.add_child(grandchild)
 
     # Find parent example
-    found_parent = grandchild.find_parent(lambda n: isinstance(
-        n.info, dict) and n.info.get("type") == "FunctionDef")
+    found_parent = grandchild.find_parent(
+        lambda n: isinstance(n.info, dict) and n.info.get("type") == "FunctionDef"
+    )
     print("Found parent:", found_parent.info if found_parent else None)
 
     # Find child example
-    found_child = root.find_child(lambda n: isinstance(n.info, dict) and n.info
-                                  .get("type") == "ClassDef")
+    found_child = root.find_child(
+        lambda n: isinstance(n.info, dict) and n.info.get("type") == "ClassDef"
+    )
     print("Found child:", found_child.info if found_child else None)
 
     # Find sibling example
-    found_sibling = child1.find_sibling(lambda n: isinstance(n.info, dict) and
-                                        n.info.get("type") == "ClassDef")
+    found_sibling = child1.find_sibling(
+        lambda n: isinstance(n.info, dict) and n.info.get("type") == "ClassDef"
+    )
     print("Found sibling:", found_sibling.info if found_sibling else None)
 
 
@@ -167,15 +168,14 @@ def demonstrate_tree_operations():
     tree.visualize()
 
     print("\n2. Position format:")
-    TreeVisualizer.visualize(tree,
-                             VisualizationConfig(position_format="position"))
+    TreeVisualizer.visualize(tree, VisualizationConfig(position_format="position"))
 
     print("\n3. Tuple format with children count:")
     TreeVisualizer.visualize(
         tree,
-        VisualizationConfig(position_format="tuple",
-                            show_children_count=True,
-                            show_size=False),
+        VisualizationConfig(
+            position_format="tuple", show_children_count=True, show_size=False
+        ),
     )
 
     # JSON operations
@@ -208,8 +208,7 @@ def demonstrate_frame_analyzer():
             print("\nFull AST Tree:")
             TreeVisualizer.visualize(
                 tree,
-                VisualizationConfig(position_format="tuple",
-                                    show_children_count=True),
+                VisualizationConfig(position_format="tuple", show_children_count=True),
             )
         return x
 
@@ -244,8 +243,7 @@ def demonstrate_line_positions():
     tree.visualize()
 
     print("\nDetailed position view:")
-    TreeVisualizer.visualize(tree,
-                             VisualizationConfig(position_format="position"))
+    TreeVisualizer.visualize(tree, VisualizationConfig(position_format="position"))
 
 
 def demonstrate_basic_rich_printing():
@@ -293,11 +291,7 @@ def demonstrate_ast_rich_printing():
     tree = Tree("AST Example")
 
     root = Leaf(Position(0, 100, {"type": "Module"}))
-    func_def = Leaf(
-        Position(10, 90, {
-            "type": "FunctionDef",
-            "name": "example"
-        }))
+    func_def = Leaf(Position(10, 90, {"type": "FunctionDef", "name": "example"}))
     args = Leaf(Position(20, 30, {"type": "Arguments"}))
     body = Leaf(Position(40, 80, {"type": "Body"}))
 
@@ -351,16 +345,22 @@ def demonstrate_find_method():
     child1.add_child(grandchild)
 
     # Use find method with dot notation
-    found = root.find(lambda n: hasattr(n.attributes.info, "name") and n.
-                      attributes.info.name == "hello")
+    found = root.find(
+        lambda n: hasattr(n.attributes.info, "name")
+        and n.attributes.info.name == "hello"
+    )
     print(f"Found function: {found.attributes.info if found else None}")
 
-    found = child1.find(lambda n: hasattr(n.attributes.info, "type") and n.
-                        attributes.info.type == "ClassDef")
+    found = child1.find(
+        lambda n: hasattr(n.attributes.info, "type")
+        and n.attributes.info.type == "ClassDef"
+    )
     print(f"Found class: {found.attributes.info if found else None}")
 
-    found = grandchild.find(lambda n: hasattr(n.attributes.info, "type") and n.
-                            attributes.info.type == "Module")
+    found = grandchild.find(
+        lambda n: hasattr(n.attributes.info, "type")
+        and n.attributes.info.type == "Module"
+    )
 
     print(f"Found module: {found.attributes.info if found else None}")
 

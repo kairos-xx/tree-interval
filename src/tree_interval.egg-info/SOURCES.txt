@@ -18,5 +18,6 @@ src/tree_interval/visualizer/__init__.py
 src/tree_interval/visualizer/config.py
 src/tree_interval/visualizer/examples.py
 src/tree_interval/visualizer/visualizer.py
+tests/test_ast_nodes.py
 tests/test_rich_printer.py
 tests/test_tree_core.py
