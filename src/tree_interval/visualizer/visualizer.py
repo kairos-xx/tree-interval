@@ -57,8 +57,6 @@ class TreeVisualizer:
                 new_prefix = prefix + ("    " if is_last else "│   ")
                 _print_node(child, new_prefix, i == len(children) - 1, level + 1)
 
-        print(f"\nTree: {tree.source}")
-        print("=" * (len(tree.source) + 6))
         _print_node(tree.root)
 
 __version__ = "0.1.0"

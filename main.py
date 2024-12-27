@@ -171,7 +171,7 @@ def demonstrate_frame_analyzer():
         # Build and show tree
         tree = analyzer.build_tree()
         if tree:
-            print("\nFull AST Tree:", TreeVisualizer.visualize)
+            print("\nFull AST Tree:",)
             TreeVisualizer.visualize(
                 tree,
                 VisualizationConfig(position_format="tuple", show_children_count=True),
