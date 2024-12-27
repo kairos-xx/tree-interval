@@ -1,6 +1,5 @@
 
-import sys
-from src.tree_interval import FrameAnalyzer, VisualizationConfig
+from src.tree_interval import Tree, Leaf, Position, FrameAnalyzer, VisualizationConfig
 
 def demonstrate_frame_analyzer():
     print("\n=== Frame Analyzer Demo ===")
@@ -30,3 +29,6 @@ def demonstrate_frame_analyzer():
 
     # Execute the function to perform analysis
     analyze_this()
+
+if __name__ == "__main__":
+    demonstrate_frame_analyzer()
