@@ -1,3 +1,4 @@
+
 """
 Core tree data structures.
 
@@ -33,17 +34,10 @@ class Position:
         self.start = start
         self.end = end
         self.info = info
-<<<<<<< HEAD
         self._lineno: Optional[int] = 1
         self._end_lineno: Optional[int] = 1
         self._col_offset: Optional[int] = 0
         self._end_col_offset: Optional[int] = end - start if start is not None and end is not None else 0
-=======
-        self._lineno: Optional[int] = None
-        self._end_lineno: Optional[int] = None
-        self._col_offset: Optional[int] = None
-        self._end_col_offset: Optional[int] = None
->>>>>>> 151f403bd09e889cfadedf4c57cd8af99003b1b7
 
     @property
     def lineno(self) -> Optional[int]:
@@ -85,7 +79,6 @@ class Position:
     def absolute_end(self) -> Optional[int]:
         return self.end if self.end is not None else None
 
-<<<<<<< HEAD
     def position_as(self, position_format: str = "default") -> str:
         """Display position with specific format."""
         if position_format == "position":
@@ -125,11 +118,6 @@ class Position:
                 return child
         return None
 
-=======
-    def __str__(self) -> str:
-        return f"Position(start={self.start}, end={self.end}, info={self.info})"
-
->>>>>>> 151f403bd09e889cfadedf4c57cd8af99003b1b7
 
 class Leaf:
     """A node in the tree structure containing position and information data."""
@@ -147,13 +135,10 @@ class Leaf:
         else:
             self.position = Position(position, end, info)
 
-<<<<<<< HEAD
         # Initialize end_col_offset if not set
         if self.position._end_col_offset is None and self.position._col_offset is not None:
             self.position._end_col_offset = self.position._col_offset + 20
 
-=======
->>>>>>> 151f403bd09e889cfadedf4c57cd8af99003b1b7
         self.parent: Optional[Leaf] = None
         self.children: List[Leaf] = []
 
@@ -308,7 +293,6 @@ class Leaf:
             "children": [child._as_dict() for child in self.children],
         }
 
-<<<<<<< HEAD
     def position_as(self, position_format: str = "default") -> str:
         """Display node with specific position format."""
         if position_format == "position":
@@ -318,8 +302,6 @@ class Leaf:
         else:
             return f"Position(start={self.start}, end={self.end}, size={self.size})"
 
-=======
->>>>>>> 151f403bd09e889cfadedf4c57cd8af99003b1b7
     def __repr__(self) -> str:
         return f"Leaf(start={self.start}, end={self.end}, info={self.info})"
 
