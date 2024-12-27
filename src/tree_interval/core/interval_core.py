@@ -38,10 +38,7 @@ class Position:
         self._col_offset: Optional[int] = None
         self._end_col_offset: Optional[int] = None
 
-        # Initialize end_col_offset if col_offset is set
-        def end_col_offset_setter(value: Optional[int]) -> None:
-            self._end_col_offset = value if value is not None else self._col_offset + 4 if self._col_offset is not None else None
-        self.end_col_offset = property(lambda self: self._end_col_offset, end_col_offset_setter)
+        self._end_col_offset = None
 
     @property
     def lineno(self) -> Optional[int]:
@@ -69,7 +66,9 @@ class Position:
 
     @property
     def end_col_offset(self) -> Optional[int]:
-        return self._end_col_offset
+        if self._end_col_offset is not None:
+            return self._end_col_offset
+        return self._col_offset + 4 if self._col_offset is not None else None
 
     @end_col_offset.setter
     def end_col_offset(self, value: Optional[int]) -> None:
