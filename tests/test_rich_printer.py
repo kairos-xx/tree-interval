@@ -43,7 +43,7 @@ def test_rich_printer_empty_tree(empty_tree, console):
 
 def test_rich_printer_basic_tree(basic_tree, console):
     """Test printing a basic tree structure."""
-    printer = RichTreePrinter()
+    printer = RichTreePrinter(console=console)
     
     with console.capture() as capture:
         printer.print_tree(basic_tree)
