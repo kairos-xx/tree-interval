@@ -202,3 +202,37 @@ if __name__ == "__main__":
     example_custom_visualization()
     example_json_serialization()
     demonstrate_line_positions()
+    demonstrate_dot_notation()
+def demonstrate_dot_notation():
+    print("\n=== Dot Notation Examples ===")
+    # Create a tree structure
+    root = Leaf(Position(0, 100, {"type": "Module"}))
+    child1 = Leaf(Position(10, 40, {"type": "FunctionDef", "name": "hello"}))
+    child2 = Leaf(Position(50, 90, {"type": "ClassDef", "name": "MyClass"}))
+    grandchild = Leaf(Position(20, 30, {"type": "Return"}))
+
+    # Build the tree
+    root.add_child(child1)
+    root.add_child(child2)
+    child1.add_child(grandchild)
+
+    # Initialize attributes by calling _as_dict()
+    root._as_dict()
+    child1._as_dict()
+    child2._as_dict()
+    grandchild._as_dict()
+
+    # Find parent using dot notation
+    found_parent = grandchild.find_parent(
+        lambda n: n._as_dict() and n.attributes.info.get("type") == "FunctionDef")
+    print("Parent:", found_parent.attributes.info if found_parent else None)
+
+    # Find child using dot notation
+    found_child = root.find_child(
+        lambda n: n._as_dict() and n.attributes.info.get("type") == "ClassDef")
+    print("Child:", found_child.attributes.info if found_child else None)
+
+    # Find sibling using dot notation
+    found_sibling = child1.find_sibling(
+        lambda n: n._as_dict() and n.attributes.info.get("name") == "MyClass")
+    print("Sibling:", found_sibling.attributes.info if found_sibling else None)
