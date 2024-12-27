@@ -54,7 +54,7 @@ class FrameAnalyzer:
             lineno = getattr(node, "lineno", None)
             if lineno is None:
                 return None
-                
+
             start_line = lineno - 1  # Convert to 0-based index
             end_lineno = getattr(node, "end_lineno", lineno)
             end_line = end_lineno - 1

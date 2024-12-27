@@ -1,4 +1,5 @@
 """Unit tests for Tree Interval core functionality."""
+
 import pytest
 
 from src.tree_interval import AstTreeBuilder, FrameAnalyzer, Leaf, Position, Tree
@@ -67,7 +68,6 @@ def test_ast_builder():
 
 
 def test_frame_analyzer():
-
     def sample_func():
         frame = sample_func.__code__
         analyzer = FrameAnalyzer(frame)
