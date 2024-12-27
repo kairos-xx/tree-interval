@@ -277,3 +277,19 @@ if __name__ == "__main__":
     demonstrate_line_positions()
     demonstrate_dot_notation()
     demonstrate_ast_parsing()
+def demonstrate_node_navigation():
+    print("\n=== Node Navigation Examples ===")
+    
+    # Create test nodes
+    root = Leaf(Position(0, 100, "Root"))
+    child1 = Leaf(Position(10, 40, "Child 1"))
+    child2 = Leaf(Position(50, 90, "Child 2"))
+    
+    # Build tree structure
+    root.add_child(child1)
+    root.add_child(child2)
+    
+    # Demonstrate navigation
+    print(f"Child 1's parent: {child1.parent.info}")
+    print(f"Child 1's next sibling: {child1.next.info}")
+    print(f"Child 2's previous sibling: {child2.previous.info}")
