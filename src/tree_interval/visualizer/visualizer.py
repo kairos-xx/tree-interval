@@ -55,8 +55,7 @@ class TreeVisualizer:
             node_info = format_position(node) + " " + format_node_info(node)
             prefix_spaces = "    " if level == 0 else prefix
             connector = "┌── " if level == 0 else ("└── " if is_last else "├── ")
-            color = TreeVisualizer.BLUE if level == 0 else (TreeVisualizer.GREEN if len(node.children) > 0 else TreeVisualizer.YELLOW)
-            print(prefix_spaces + color + connector + node_info + TreeVisualizer.RESET)
+            print(prefix_spaces + connector + node_info)
 
             children = node.children
             for i, child in enumerate(children):
