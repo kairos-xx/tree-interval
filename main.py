@@ -266,6 +266,9 @@ def demonstrate_ast_rich_printing():
     func_def.add_child(args)
     func_def.add_child(body)
 
+    printer = RichTreePrinter(RichPrintConfig(show_position=True))
+    printer.print_tree(tree)
+
 
 
 def demonstrate_find_nodes():
