@@ -479,10 +479,21 @@ class Tree(Generic[T]):
 
 
 class NestedAttributes:
+    position: 'NestedAttributes'
+    start: Optional[int]
+    end: Optional[int]
+    info: Any
+    size: Optional[int]
+    children: List[Dict[str, Any]]
+    
     def __init__(self, data: Dict[str, Any]):
         for key, value in data.items():
             if isinstance(value, dict):
                 setattr(self, key, NestedAttributes(value))
             else:
                 setattr(self, key, value)
+
+    def __getattr__(self, name: str) -> Any:
+        # Handle missing attributes gracefully
+        return None
 
