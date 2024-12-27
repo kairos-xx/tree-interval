@@ -1,5 +1,10 @@
 # Tree Interval API Reference
 
+## Related Documentation
+- [README](README.md): Overview and implementation details
+- [AST Reference](AST_REFERENCE.md): AST analysis documentation
+- [Rich Printer Guide](RICH_PRINTER.md): Advanced visualization options
+
 ## Core Modules
 
 ### 📦 `tree_interval.core.interval_core`
