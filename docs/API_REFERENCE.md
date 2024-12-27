@@ -55,6 +55,25 @@ Tree(source: T, start_lineno: Optional[int] = None, indent_size: int = 4)
 Represents a node in the tree structure.
 
 #### Constructor
+
+
+### NestedAttributes
+Provides dot notation access to leaf properties.
+
+#### Usage
+```python
+# Initialize nested attributes on a leaf
+leaf._as_dict()
+
+# Access properties
+leaf.attributes.start           # Start position
+leaf.attributes.end            # End position
+leaf.attributes.size           # Size
+leaf.attributes.position.lineno  # Line number
+leaf.attributes.position.col_offset  # Column offset
+```
+
+
 ```python
 Leaf(position: Union[Position, tuple[int, int, Any]])
 ```
