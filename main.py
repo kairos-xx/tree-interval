@@ -15,6 +15,7 @@ from src.tree_interval import (
     VisualizationConfig,
 )
 from src.tree_interval.rich_printer import RichPrintConfig, RichTreePrinter
+from src.tree_interval.core.publish_workflow import run_publish_workflow # Added import
 
 
 def demonstrate_positions():
@@ -364,7 +365,7 @@ def demonstrate_find_method():
     print(f"Found module: {found.attributes.info if found else None}")
 
 
-if __name__ == "__main__":
+def main():
     print("=== Tree Interval Package Demo ===")
     demonstrate_positions()
     demonstrate_find_nodes()
@@ -377,3 +378,8 @@ if __name__ == "__main__":
     demonstrate_ast_rich_printing()
     demonstrate_nested_attributes()
     demonstrate_find_method()
+
+if __name__ == "__main__":
+    main()
+    # Trigger workflow when needed
+    run_publish_workflow()
