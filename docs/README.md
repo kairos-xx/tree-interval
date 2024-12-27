@@ -1,25 +1,93 @@
 
-# Tree Visualizer Documentation
+# Tree Interval Technical Documentation
 
-## Overview
-Tree Visualizer is a Python package for building and visualizing tree structures with support for AST analysis.
+## Architecture Overview
 
-## Components
+### Core Components
+- `interval_core.py`: Core tree data structures
+- `ast_builder.py`: AST analysis functionality
+- `frame_analyzer.py`: Runtime frame analysis
 
-### Tree
-The main tree structure class that holds nodes and provides tree operations.
+### Visualization
+- `visualizer.py`: Tree rendering
+- `config.py`: Visualization configuration
 
-### Leaf
-A node in the tree containing position and information data.
+## Implementation Details
 
-### Position
-Represents position information for nodes in the tree.
+### Tree Structure
+The tree implementation uses a parent-child relationship model with position awareness. Each node tracks:
+- Start/end positions
+- Line numbers
+- Column offsets
+- Parent/child relationships
 
-### TreeVisualizer
-Handles the visualization of tree structures with configurable display options.
+### Position Tracking
+Position objects maintain both absolute positions and source-relative positions:
+```python
+Position(
+    start=10,          # Absolute start
+    end=50,           # Absolute end
+    info="Node",      # Node information
+    lineno=2,         # Source line number
+    end_lineno=3      # End line number
+)
+```
 
-### AstTreeBuilder
-Builds tree structures from Python AST nodes.
+### AST Integration
+The AST builder wraps Python's built-in `ast` module to:
+1. Parse source code
+2. Create position-aware nodes
+3. Build hierarchical relationships
 
-## Usage Examples
-See `examples.py` for detailed usage examples.
+### Frame Analysis
+Frame analysis provides runtime code inspection by:
+1. Extracting source from stack frames
+2. Mapping positions to AST nodes
+3. Building tree representations
+
+## Best Practices
+
+### Memory Management
+- Clear unused trees
+- Limit tree depth for large codebases
+- Use weak references for circular structures
+
+### Performance
+- Cache position calculations
+- Minimize tree reconstructions
+- Use appropriate visualization configs
+
+### Error Handling
+- Validate position ranges
+- Handle malformed AST gracefully
+- Check frame availability
+
+## Advanced Usage
+
+### Custom Visualization
+```python
+config = VisualizationConfig(
+    position_format="tuple",
+    show_children_count=True,
+    show_size=False
+)
+tree.visualize(config)
+```
+
+### AST Analysis
+```python
+builder = AstTreeBuilder(source_code)
+tree = builder.build()
+for node in tree.flatten():
+    if node.info == "FunctionDef":
+        print(f"Found function at {node.position}")
+```
+
+### Frame Inspection
+```python
+analyzer = FrameAnalyzer(frame)
+tree = analyzer.build_tree()
+current = analyzer.find_current_node()
+if current:
+    print(f"Executing: {current.info}")
+```
