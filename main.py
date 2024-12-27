@@ -45,6 +45,11 @@ def demonstrate_positions():
         f"absolute_start={pos4.absolute_start}, absolute_end={pos4.absolute_end}",
     )
 
+    # Different position formats
+    print("Position format:", pos4.position_as("position"))
+    print("Tuple format:", pos4.position_as("tuple"))
+    print("Default format:", pos4.position_as())
+
 
 def demonstrate_leaves():
     print("\n=== Leaf Examples ===")

@@ -73,6 +73,13 @@ Manages position information for tree nodes.
 Position(start: int, end: int, info: Any)
 ```
 
+#### Methods
+- **position_as(position_format: str = "default") -> str**
+  - Returns a string representation of the position in different formats
+  - Parameters:
+    - `position_format`: Format type ("position", "tuple", or "default")
+  - Returns: Formatted string of position information
+
 #### Properties
 - `lineno`: Starting line number
 - `end_lineno`: Ending line number
