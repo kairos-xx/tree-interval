@@ -199,8 +199,6 @@ def demonstrate_frame_analyzer():
 
         # Show current node
         current_node = analyzer.find_current_node()
-        print(current_node.attributes)
-        print(dir(current_node))
         print("Current Node Information:")
         print(f"Node: {current_node._as_dict() if current_node else None}")
 
