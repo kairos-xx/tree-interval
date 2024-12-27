@@ -1,4 +1,3 @@
-
 from setuptools import find_packages, setup
 
 setup(
@@ -20,7 +19,5 @@ setup(
         "Programming Language :: Python :: 3.11",
     ],
     python_requires=">=3.11",
-    install_requires=[
-        "rich>=10.0.0"
-    ],
+    install_requires=["rich>=10.0.0"],
 )
