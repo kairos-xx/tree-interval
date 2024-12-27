@@ -33,7 +33,7 @@ def console():
 
 def test_rich_printer_empty_tree(empty_tree, console):
     """Test printing an empty tree."""
-    printer = RichTreePrinter()
+    printer = RichTreePrinter(console=console)
     
     with console.capture() as capture:
         printer.print_tree(empty_tree)
