@@ -89,6 +89,16 @@ class AstTreeBuilder:
         tree = parse(self.source)
         return self._build_tree_from_ast(tree)
 
+    def find_current_node(self) -> Optional[Leaf]:
+        """Find the current executing node in the AST."""
+        if not hasattr(self, 'frame'):
+            return None
+        lineno = self.frame.f_lineno
+        tree = self.build()
+        if not tree.root:
+            return None
+        return tree.root.find(lambda n: n.lineno == lineno)
+
     def build_from_frame(self) -> Optional[Tree]:
         if not self.source:
             return None

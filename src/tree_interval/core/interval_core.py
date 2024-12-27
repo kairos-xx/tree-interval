@@ -26,10 +26,12 @@ T = TypeVar("T")
 class Position:
     def __init__(
         self,
-        start: Optional[int] = None,
-        end: Optional[int] = None,
+        start: int,
+        end: int,
         info: Optional[Any] = None,
     ):
+        if start is None or end is None:
+            raise ValueError("Position start and end must not be None")
         self.start = start
         self.end = end
         self.info = info
