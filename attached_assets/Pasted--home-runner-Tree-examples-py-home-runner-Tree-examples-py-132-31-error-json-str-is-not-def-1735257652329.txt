@@ -1,0 +1,34 @@
+
+/home/runner/Tree/examples.py
+  /home/runner/Tree/examples.py:132:31 - error: "json_str" is not defined (reportUndefinedVariable)
+  /home/runner/Tree/examples.py:146:38 - error: Cannot access attribute "co_frame" for class "CodeType"
+    Attribute "co_frame" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/examples.py:149:16 - error: "FrameAnalyzer" is not defined (reportUndefinedVariable)
+  /home/runner/Tree/examples.py:163:5 - error: "example_basic_tree" is not defined (reportUndefinedVariable)
+  /home/runner/Tree/examples.py:165:5 - error: "example_custom_visualization" is not defined (reportUndefinedVariable)
+/home/runner/Tree/main.py
+  /home/runner/Tree/main.py:145:37 - error: "_as_dict" is not a known attribute of "None" (reportOptionalMemberAccess)
+/home/runner/Tree/tree_core.py
+  /home/runner/Tree/tree_core.py:10:6 - error: Import "src.tree_visualizer.config" could not be resolved (reportMissingImports)
+/home/runner/Tree/src/tree_interval/core/frame_analyzer.py
+  /home/runner/Tree/src/tree_interval/core/frame_analyzer.py:55:31 - error: Cannot access attribute "lineno" for class "AST"
+    Attribute "lineno" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/src/tree_interval/core/frame_analyzer.py:56:57 - error: Cannot access attribute "lineno" for class "AST"
+    Attribute "lineno" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/src/tree_interval/core/frame_analyzer.py:63:40 - error: Cannot access attribute "lineno" for class "AST"
+    Attribute "lineno" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/src/tree_interval/core/frame_analyzer.py:64:72 - error: Cannot access attribute "lineno" for class "AST"
+    Attribute "lineno" is unknown (reportAttributeAccessIssue)
+/home/runner/Tree/src/tree_interval/core/interval_core.py
+  /home/runner/Tree/src/tree_interval/core/interval_core.py:12:10 - error: Import "...tree_visualizer.config" could not be resolved (reportMissingImports)
+  /home/runner/Tree/src/tree_interval/core/interval_core.py:285:40 - error: Argument of type "Unknown | None" cannot be assigned to parameter "config" of type "VisualizationConfig" in function "visualize"
+    Type "Unknown | None" is not assignable to type "VisualizationConfig"
+      "None" is not assignable to "VisualizationConfig" (reportArgumentType)
+/home/runner/Tree/src/tree_interval/visualizer/examples.py
+  /home/runner/Tree/src/tree_interval/visualizer/examples.py:3:24 - error: "Tree" is unknown import symbol (reportAttributeAccessIssue)
+  /home/runner/Tree/src/tree_interval/visualizer/examples.py:3:30 - error: "Leaf" is unknown import symbol (reportAttributeAccessIssue)
+/home/runner/Tree/src/tree_interval/visualizer/visualizer.py
+  /home/runner/Tree/src/tree_interval/visualizer/visualizer.py:13:55 - error: Expression of type "None" cannot be assigned to parameter of type "VisualizationConfig"
+    "None" is not assignable to "VisualizationConfig" (reportArgumentType)
+/home/runner/Tree/tests/test_tree_core.py
+  /home/runner/Tree/tests/test_tree_core.py:22:32 - error: "info" is not a known attribute of "None" (reportOptionalMemberAccess)

@@ -142,7 +142,7 @@ def demonstrate_frame_analyzer():
         # Show current node
         current_node = analyzer.find_current_node()
         print("Current Node Information:")
-        print(f"Node: {current_node}")
+        print(f"Node: {current_node._as_dict()}")
         
         # Build and show tree
         tree = analyzer.build_tree()
