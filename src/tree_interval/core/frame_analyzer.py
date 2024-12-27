@@ -50,20 +50,22 @@ class FrameAnalyzer:
 
     def _get_node_position(self, node: AST) -> Optional[Position]:
         """Get position information for an AST node."""
-        if not hasattr(node, "lineno"):
-            return None
-
         try:
-            start_line = node.lineno - 1  # type: ignore # Convert to 0-based index
-            end_line = getattr(node, "end_lineno", node.lineno) - 1  # type: ignore
+            lineno = getattr(node, "lineno", None)
+            if lineno is None:
+                return None
+                
+            start_line = lineno - 1  # Convert to 0-based index
+            end_lineno = getattr(node, "end_lineno", lineno)
+            end_line = end_lineno - 1
 
             if 0 <= start_line < len(self.line_positions):
                 start_pos = self.line_positions[start_line][0]
                 end_pos = self.line_positions[end_line][1]
 
                 position = Position(start_pos, end_pos, node.__class__.__name__)
-                position.lineno = node.lineno
-                position.end_lineno = getattr(node, "end_lineno", node.lineno)
+                position.lineno = lineno
+                position.end_lineno = end_lineno
                 position.col_offset = getattr(node, "col_offset", 0)
                 position.end_col_offset = getattr(node, "end_col_offset", None)
 
