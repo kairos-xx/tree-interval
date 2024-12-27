@@ -245,6 +245,9 @@ def demonstrate_ast_parsing():
 
     builder = AstTreeBuilder(code)
     tree = builder.build()
+    if not tree.root:
+        print("Tree root is None")
+        return
 
     # Find class definition node
     class_node = tree.root.find(
