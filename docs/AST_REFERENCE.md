@@ -26,8 +26,13 @@ AstTreeBuilder(source: Union[FrameType, str])
 Each AST node contains:
 - `type`: The AST node type (e.g., "Module", "FunctionDef", "If")
 - `fields`: Dictionary of node-specific attributes
-  - Common fields: name, args, body, test, etc.
-  - Values can be: primitives, nested AST nodes, or lists
+- `_fields`: Raw AST node fields data
+- `ast_node`: Direct access to underlying AST node
+Common fields include:
+  - `name`: For function and class definitions
+  - `args`: For function arguments
+  - `body`: For statement blocks
+  - `test`: For conditional statements
 
 ## AST Node Types
 Common node types and their fields:
