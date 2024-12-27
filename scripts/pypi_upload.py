@@ -1,7 +1,39 @@
+
 import os
 import subprocess
 import sys
 from pathlib import Path
+import json
+import urllib.request
+
+
+def get_latest_version():
+    try:
+        url = "https://pypi.org/pypi/tree-interval/json"
+        with urllib.request.urlopen(url) as response:
+            data = json.loads(response.read())
+            return data["info"]["version"]
+    except:
+        return "0.0.0"
+
+
+def increment_version(version):
+    major, minor, patch = map(int, version.split("."))
+    return f"{major}.{minor}.{patch + 1}"
+
+
+def update_version_in_files(new_version):
+    # Update pyproject.toml
+    with open("../pyproject.toml", "r") as f:
+        content = f.read()
+    with open("../pyproject.toml", "w") as f:
+        f.write(content.replace(f'version = "{get_latest_version()}"', f'version = "{new_version}"'))
+
+    # Update setup.py
+    with open("../setup.py", "r") as f:
+        content = f.read()
+    with open("../setup.py", "w") as f:
+        f.write(content.replace(f'version="{get_latest_version()}"', f'version="{new_version}"'))
 
 
 def check_token():
@@ -55,6 +87,14 @@ def build_and_upload(project_dir=None):
 def main():
     # Install required packages
     subprocess.run(["pip", "install", "wheel", "twine", "build"], check=True)
+
+    # Get current version and increment it
+    current_version = get_latest_version()
+    new_version = increment_version(current_version)
+    print(f"Incrementing version from {current_version} to {new_version}")
+
+    # Update version in files
+    update_version_in_files(new_version)
 
     # Check and setup PyPI token
     token = check_token()
