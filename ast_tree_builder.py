@@ -1,4 +1,3 @@
-
 """
 AST Tree Builder module.
 
@@ -16,7 +15,7 @@ from tree_core import Leaf, Tree
 
 class AstTreeBuilder:
     """AST Tree Builder for converting Python code into tree structures.
-    
+
     This class takes a frame object and constructs a tree representation
     of the Python code's abstract syntax tree.
     """
@@ -36,10 +35,10 @@ class AstTreeBuilder:
 
     def build(self) -> Tree[str]:
         """Build a tree structure from the Python source code.
-        
+
         Returns:
             A Tree object representing the AST structure
-            
+
         Raises:
             ValueError: If no source code is available
         """
@@ -56,17 +55,17 @@ class AstTreeBuilder:
         for node in ast.walk(tree):
             # Check all required position attributes
             # Get position info if available, otherwise skip
-            lineno = getattr(node, 'lineno', None)
-            end_lineno = getattr(node, 'end_lineno', None)
-            col_offset = getattr(node, 'col_offset', None)
-            end_col_offset = getattr(node, 'end_col_offset', None)
-            
-            if all(x is not None for x in [lineno, col_offset]):
+            lineno = getattr(node, "lineno", None)
+            end_lineno = getattr(node, "end_lineno", None)
+            col_offset = getattr(node, "col_offset", None)
+            end_col_offset = getattr(node, "end_col_offset", None)
 
+            if all(x is not None for x in [lineno, col_offset]):
                 # Convert line numbers to absolute positions in source
                 if isinstance(lineno, int) and isinstance(col_offset, int):
                     start = self._line_col_to_pos(lineno, col_offset)
-                    if isinstance(end_lineno, int) and isinstance(end_col_offset, int):
+                    if isinstance(end_lineno, int) and isinstance(
+                            end_col_offset, int):
                         end = self._line_col_to_pos(end_lineno, end_col_offset)
                     else:
                         end = None

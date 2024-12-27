@@ -14,17 +14,18 @@ from tree_core import Leaf, Tree
 @dataclass
 class VisualizationConfig:
     """Configuration for tree visualization.
-    
+
     Attributes:
         show_info: Whether to display node information
         show_size: Whether to display node sizes
         show_children_count: Whether to display number of children
         position_format: Format for position display ('range', 'position', or 'tuple')
     """
+
     show_info: bool = True
     show_size: bool = True
     show_children_count: bool = False
-    position_format: str = 'range'  # 'range', 'position', or 'tuple'
+    position_format: str = "range"  # 'range', 'position', or 'tuple'
 
 
 DEFAULT_CONFIG = VisualizationConfig()
@@ -37,7 +38,7 @@ class TreeVisualizer:
     def visualize(tree: Tree,
                   config: Optional[VisualizationConfig] = None) -> None:
         """Visualize a tree structure with customizable formatting options.
-        
+
         Args:
             tree: The tree structure to visualize
             config: Configuration options for visualization
@@ -50,13 +51,13 @@ class TreeVisualizer:
             return
 
         def format_position(node: Leaf) -> str:
-            if config.position_format == 'position':
+            if config.position_format == "position":
                 return (f"Position(lineno={node.lineno}, " +
                         f"end_lineno={node.end_lineno}, " +
                         f"col_offset={node.col_offset}, " +
                         f"end_col_offset={node.end_col_offset}) " +
                         f"size={node.size} " + f"info='{node.info}'")
-            elif config.position_format == 'tuple':
+            elif config.position_format == "tuple":
                 return f"({node.start}, {node.end})"
             return f"[{node.start}, {node.end}]"
 

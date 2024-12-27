@@ -1,4 +1,3 @@
-
 """
 AST Tree Builder module.
 
@@ -10,7 +9,7 @@ import ast
 from inspect import getsource
 from typing import Optional
 
-from ..core.interval_core import Tree, Leaf
+from ..core.interval_core import Leaf, Tree
 
 
 class AstTreeBuilder:
@@ -36,11 +35,11 @@ class AstTreeBuilder:
         result_tree.root = root
 
         for node in ast.walk(tree):
-            lineno = getattr(node, 'lineno', None)
-            end_lineno = getattr(node, 'end_lineno', None)
-            col_offset = getattr(node, 'col_offset', None)
-            end_col_offset = getattr(node, 'end_col_offset', None)
-            
+            lineno = getattr(node, "lineno", None)
+            end_lineno = getattr(node, "end_lineno", None)
+            col_offset = getattr(node, "col_offset", None)
+            end_col_offset = getattr(node, "end_col_offset", None)
+
             if all(x is not None for x in [lineno, col_offset]):
                 if isinstance(lineno, int) and isinstance(col_offset, int):
                     start = self._line_col_to_pos(lineno, col_offset)
@@ -63,12 +62,9 @@ class AstTreeBuilder:
                             fields_info[field] = value.__class__.__name__
                         elif isinstance(value, list):
                             fields_info[field] = f"List[{len(value)}]"
-                    
-                    node_info = {
-                        'type': node.__class__.__name__,
-                        'fields': fields_info
-                    }
-                    
+
+                    node_info = {"type": node.__class__.__name__, "fields": fields_info}
+
                     leaf = Leaf(start, end, node_info)
                     result_tree.add_leaf(leaf)
 

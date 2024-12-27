@@ -1,23 +1,30 @@
 """
 Comprehensive demonstration of all features of the tree interval package.
 """
+
 from inspect import currentframe
-from src.tree_interval import Tree, Leaf, Position, TreeVisualizer, VisualizationConfig
+
+from src.tree_interval import (
+    FrameAnalyzer,
+    Leaf,
+    Position,
+    Tree,
+    TreeVisualizer,
+    VisualizationConfig,
+)
 
 
 def demonstrate_positions():
     print("\n=== Position Examples ===")
     # Basic Position
     pos1 = Position(0, 100, "Root")
-    print("Basic position:",
-          f"start={pos1.start}, end={pos1.end}, info={pos1.info}")
+    print("Basic position:", f"start={pos1.start}, end={pos1.end}, info={pos1.info}")
 
     # Position with line numbers
     pos2 = Position(10, 50, "With Lines")
     pos2.lineno = 1
     pos2.end_lineno = 5
-    print("Position with lines:",
-          f"lineno={pos2.lineno}, end_lineno={pos2.end_lineno}")
+    print("Position with lines:", f"lineno={pos2.lineno}, end_lineno={pos2.end_lineno}")
 
     # Position with column offsets
     pos3 = Position(60, 90, "With Columns")
@@ -25,13 +32,14 @@ def demonstrate_positions():
     pos3.end_col_offset = 8
     print(
         "Position with columns:",
-        f"col_offset={pos3.col_offset}, end_col_offset={pos3.end_col_offset}")
+        f"col_offset={pos3.col_offset}, end_col_offset={pos3.end_col_offset}",
+    )
 
     # Position with absolute positions
     pos4 = Position(30, 70, "Absolute")
     print(
         "Absolute positions:",
-        f"absolute_start={pos4.absolute_start}, absolute_end={pos4.absolute_end}"
+        f"absolute_start={pos4.absolute_start}, absolute_end={pos4.absolute_end}",
     )
 
 
@@ -116,15 +124,15 @@ def demonstrate_tree_operations():
     tree.visualize()
 
     print("\n2. Position format:")
-    TreeVisualizer.visualize(tree,
-                             VisualizationConfig(position_format='position'))
+    TreeVisualizer.visualize(tree, VisualizationConfig(position_format="position"))
 
     print("\n3. Tuple format with children count:")
     TreeVisualizer.visualize(
         tree,
-        VisualizationConfig(position_format='tuple',
-                            show_children_count=True,
-                            show_size=False))
+        VisualizationConfig(
+            position_format="tuple", show_children_count=True, show_size=False
+        ),
+    )
 
     # JSON operations
     print("\nJSON Operations:")
@@ -138,17 +146,12 @@ def demonstrate_tree_operations():
     return tree
 
 
-import sys
-from src.tree_interval import FrameAnalyzer
-
-
 def demonstrate_frame_analyzer():
     print("\n=== Frame Analyzer Demo ===")
 
     def analyze_this():
         x = 1 + 2  # This line will be analyzed
-        frame = sys._getframe()  # Get frame inside the function
-        analyzer = FrameAnalyzer(frame)
+        analyzer = FrameAnalyzer(currentframe())
 
         # Show current node
         current_node = analyzer.find_current_node()
@@ -161,8 +164,8 @@ def demonstrate_frame_analyzer():
             print("\nFull AST Tree:", TreeVisualizer.visualize)
             TreeVisualizer.visualize(
                 tree,
-                VisualizationConfig(position_format='tuple',
-                                    show_children_count=True))
+                VisualizationConfig(position_format="tuple", show_children_count=True),
+            )
         return x
 
     # Execute the function to perform analysis
@@ -196,8 +199,7 @@ def demonstrate_line_positions():
     tree.visualize()
 
     print("\nDetailed position view:")
-    TreeVisualizer.visualize(tree,
-                             VisualizationConfig(position_format='position'))
+    TreeVisualizer.visualize(tree, VisualizationConfig(position_format="position"))
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 """Examples demonstrating tree visualizer functionality."""
 
-from visualizer import Tree, Leaf, TreeVisualizer, VisualizationConfig
+from visualizer import Leaf, Tree, TreeVisualizer, VisualizationConfig
 
 
 def example_basic_tree():
@@ -35,15 +35,15 @@ def example_custom_visualization():
     tree.visualize()
 
     print("\nWith position objects:")
-    TreeVisualizer.visualize(tree,
-                             VisualizationConfig(position_format='position'))
+    TreeVisualizer.visualize(tree, VisualizationConfig(position_format="position"))
 
     print("\nWith tuples and children count:")
     TreeVisualizer.visualize(
         tree,
-        VisualizationConfig(position_format='tuple',
-                            show_children_count=True,
-                            show_size=False))
+        VisualizationConfig(
+            position_format="tuple", show_children_count=True, show_size=False
+        ),
+    )
 
 
 def example_json_serialization():

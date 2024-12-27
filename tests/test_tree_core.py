@@ -1,5 +1,6 @@
 import unittest
-from src.tree_interval import Tree, Leaf, Position
+
+from src.tree_interval import Leaf, Tree
 
 
 class TestTreeCore(unittest.TestCase):
@@ -22,5 +23,5 @@ class TestTreeCore(unittest.TestCase):
         self.assertEqual(match.info, "child")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

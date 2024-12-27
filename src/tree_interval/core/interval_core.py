@@ -1,4 +1,3 @@
-
 """
 Core tree data structures.
 
@@ -6,18 +5,22 @@ This module contains the core Tree and Leaf classes used across the project.
 """
 
 from json import dumps, loads
-from typing import Any, Dict, Generic, List, Optional, TypeVar, Union
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Dict, Generic, List, Optional, TypeVar, Union
+
 if TYPE_CHECKING:
     from ..visualizer.config import VisualizationConfig
 
-T = TypeVar('T')
+T = TypeVar("T")
+
 
 class Position:
-    def __init__(self,
-                 start: Optional[int] = None,
-                 end: Optional[int] = None,
-                 info: Optional[Any] = None):
+
+    def __init__(
+        self,
+        start: Optional[int] = None,
+        end: Optional[int] = None,
+        info: Optional[Any] = None,
+    ):
         self.start = start
         self.end = end
         self.info = info
@@ -73,10 +76,12 @@ class Position:
 class Leaf:
     """A node in the tree structure containing position and information data."""
 
-    def __init__(self,
-                 position: Union[Position, tuple[int, int, Any], int],
-                 end: Optional[int] = None,
-                 info: Optional[Any] = None) -> None:
+    def __init__(
+        self,
+        position: Union[Position, tuple[int, int, Any], int],
+        end: Optional[int] = None,
+        info: Optional[Any] = None,
+    ) -> None:
         if isinstance(position, Position):
             self.position = position
         elif isinstance(position, tuple):
@@ -121,12 +126,12 @@ class Leaf:
     def end_col_offset(self) -> Optional[int]:
         return self.position._end_col_offset
 
-    def add_child(self, child: 'Leaf') -> None:
+    def add_child(self, child: "Leaf") -> None:
         """Add a child node to this leaf."""
         child.parent = self
         self.children.append(child)
 
-    def find_best_match(self, start: int, end: int) -> Optional['Leaf']:
+    def find_best_match(self, start: int, end: int) -> Optional["Leaf"]:
         """Find the leaf that best matches the given range."""
         if self.start is None or self.end is None:
             return None
@@ -141,7 +146,7 @@ class Leaf:
             return best_match
         return None
 
-    def find_common_ancestor(self, other: 'Leaf') -> Optional['Leaf']:
+    def find_common_ancestor(self, other: "Leaf") -> Optional["Leaf"]:
         """Find the first common ancestor between this leaf and another."""
         if not other:
             return None
@@ -159,7 +164,7 @@ class Leaf:
             current = current.parent
         return None
 
-    def find_first_multi_child_ancestor(self) -> Optional['Leaf']:
+    def find_first_multi_child_ancestor(self) -> Optional["Leaf"]:
         """Find the first ancestor that has multiple children."""
         current = self.parent
         while current:
@@ -171,17 +176,17 @@ class Leaf:
     def _as_dict(self) -> Dict[str, Any]:
         """Return a dictionary containing all leaf information."""
         return {
-            'start': self.start,
-            'end': self.end,
-            'info': self.info,
-            'size': self.size,
-            'position': {
-                'lineno': self.lineno,
-                'end_lineno': self.end_lineno,
-                'col_offset': self.col_offset,
-                'end_col_offset': self.end_col_offset
+            "start": self.start,
+            "end": self.end,
+            "info": self.info,
+            "size": self.size,
+            "position": {
+                "lineno": self.lineno,
+                "end_lineno": self.end_lineno,
+                "col_offset": self.col_offset,
+                "end_col_offset": self.end_col_offset,
             },
-            'children': [child._as_dict() for child in self.children]
+            "children": [child._as_dict() for child in self.children],
         }
 
     def __repr__(self) -> str:
@@ -243,10 +248,10 @@ class Tree(Generic[T]):
     def _to_dict(self) -> Dict:
         """Convert the tree to a dictionary."""
         return {
-            'source': self.source,
-            'start_lineno': self.start_lineno,
-            'indent_size': self.indent_size,
-            'root': self._node_to_dict(self.root) if self.root else None
+            "source": self.source,
+            "start_lineno": self.start_lineno,
+            "indent_size": self.indent_size,
+            "root": self._node_to_dict(self.root) if self.root else None,
         }
 
     def _node_to_dict(self, node: Optional[Leaf]) -> Optional[Dict]:
@@ -254,26 +259,26 @@ class Tree(Generic[T]):
         if not node:
             return None
         return {
-            'start': node.start,
-            'end': node.end,
-            'info': node.info,
-            'children': [self._node_to_dict(child) for child in node.children]
+            "start": node.start,
+            "end": node.end,
+            "info": node.info,
+            "children": [self._node_to_dict(child) for child in node.children],
         }
 
     @classmethod
-    def from_json(cls, json_str: str) -> 'Tree[T]':
+    def from_json(cls, json_str: str) -> "Tree[T]":
         """Create a tree from a JSON string."""
         data = loads(json_str)
-        tree = cls(data['source'], data['start_lineno'], data['indent_size'])
-        if data['root']:
-            tree.root = cls._dict_to_node(data['root'])
+        tree = cls(data["source"], data["start_lineno"], data["indent_size"])
+        if data["root"]:
+            tree.root = cls._dict_to_node(data["root"])
         return tree
 
     @staticmethod
     def _dict_to_node(data: Dict) -> Leaf:
         """Create a node from a dictionary."""
-        node = Leaf(data['start'], data['end'], data['info'])
-        for child_data in data['children']:
+        node = Leaf(data["start"], data["end"], data["info"])
+        for child_data in data["children"]:
             child = Tree._dict_to_node(child_data)
             node.add_child(child)
         return node
@@ -282,4 +287,5 @@ class Tree(Generic[T]):
                   config: Optional["VisualizationConfig"] = None) -> None:
         """Visualize the tree structure."""
         from ..visualizer import TreeVisualizer
+
         TreeVisualizer.visualize(self, config)

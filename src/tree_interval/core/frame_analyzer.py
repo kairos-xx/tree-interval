@@ -6,10 +6,11 @@ import ast
 from inspect import getsource
 from typing import Optional, Tuple
 
-from .interval_core import Tree, Leaf, Position
+from .interval_core import Leaf, Position, Tree
 
 
 class FrameAnalyzer:
+
     def __init__(self, frame) -> None:
         self.frame = frame
         self.source = self._extract_source()
@@ -23,10 +24,11 @@ class FrameAnalyzer:
                 source = getsource(self.frame.f_code)
                 # Remove common leading whitespace
                 lines = source.splitlines()
-                common_indent = min(len(line) - len(line.lstrip()) 
-                                 for line in lines if line.strip())
-                return '\n'.join(line[common_indent:] if line.strip() else line 
-                               for line in lines)
+                common_indent = min(
+                    len(line) - len(line.lstrip()) for line in lines
+                    if line.strip())
+                return "\n".join(line[common_indent:] if line.strip() else line
+                                 for line in lines)
             return None
         except (OSError, TypeError):
             return None
@@ -35,40 +37,42 @@ class FrameAnalyzer:
         """Calculate start and end positions for each line."""
         if not self.source:
             return []
-        
+
         positions = []
         start = 0
         lines = self.source.splitlines(keepends=True)
-        
+
         for line in lines:
             positions.append((start, start + len(line)))
             start += len(line)
-            
+
         return positions
 
     def _get_node_position(self, node: ast.AST) -> Optional[Position]:
         """Get position information for an AST node."""
-        if not hasattr(node, 'lineno'):
+        if not hasattr(node, "lineno"):
             return None
 
         try:
             start_line = node.lineno - 1  # type: ignore # Convert to 0-based index
-            end_line = getattr(node, 'end_lineno', node.lineno) - 1  # type: ignore
-            
+            end_line = getattr(node, "end_lineno",
+                               node.lineno) - 1  # type: ignore
+
             if 0 <= start_line < len(self.line_positions):
                 start_pos = self.line_positions[start_line][0]
                 end_pos = self.line_positions[end_line][1]
-                
-                position = Position(start_pos, end_pos, node.__class__.__name__)
+
+                position = Position(start_pos, end_pos,
+                                    node.__class__.__name__)
                 position.lineno = node.lineno
-                position.end_lineno = getattr(node, 'end_lineno', node.lineno)
-                position.col_offset = getattr(node, 'col_offset', 0)
-                position.end_col_offset = getattr(node, 'end_col_offset', None)
-                
+                position.end_lineno = getattr(node, "end_lineno", node.lineno)
+                position.col_offset = getattr(node, "col_offset", 0)
+                position.end_col_offset = getattr(node, "end_col_offset", None)
+
                 return position
         except (IndexError, AttributeError):
             pass
-            
+
         return None
 
     def find_current_node(self) -> Optional[Leaf]:
@@ -80,16 +84,16 @@ class FrameAnalyzer:
         tree = self.build_tree()
         if not tree or not tree.root:
             return None
-            
+
         # Get current line interval
         frame_first_line = self.frame.f_code.co_firstlineno
         current_line = self.frame.f_lineno - frame_first_line + 1
-        
+
         # Find in line positions
         if 0 <= current_line - 1 < len(self.line_positions):
             start, end = self.line_positions[current_line - 1]
             return tree.find_best_match(start, end)
-                        
+
         return None
 
     def build_tree(self) -> Optional[Tree]:
@@ -115,21 +119,22 @@ class FrameAnalyzer:
 
         return tree
 
+
 def demonstrate_frame_analyzer():
     print("\n=== Frame Analyzer Demo ===")
     import sys
-    
+
     def sample_code():
         a = 1
         b = 2
         c = a + b
         return c
-    
+
     # Get current frame
     frame = sys._getframe()
     analyzer = FrameAnalyzer(frame)
     node = analyzer.find_current_node()
-    
+
     if node:
         print(f"Found node: {node.position}")
     else:
