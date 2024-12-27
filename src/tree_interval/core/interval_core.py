@@ -1,4 +1,3 @@
-
 """
 Core tree data structures.
 
@@ -37,7 +36,9 @@ class Position:
         self._lineno: Optional[int] = 1
         self._end_lineno: Optional[int] = 1
         self._col_offset: Optional[int] = 0
-        self._end_col_offset: Optional[int] = end - start if start is not None and end is not None else 0
+        self._end_col_offset: Optional[int] = (
+            end - start if start is not None and end is not None else 0
+        )
 
     @property
     def lineno(self) -> Optional[int]:
@@ -91,7 +92,7 @@ class Position:
     def __str__(self) -> str:
         return f"Position(start={self.start}, end={self.end}, info={self.info})"
 
-    def find_parent(self, criteria: Callable[[Any], bool]) -> Optional['Leaf']:
+    def find_parent(self, criteria: Callable[[Any], bool]) -> Optional["Leaf"]:
         """Find first parent that matches the criteria."""
         if not self.parent:
             return None
@@ -99,7 +100,7 @@ class Position:
             return self.parent
         return self.parent.find_parent(criteria)
 
-    def find_child(self, criteria: Callable[[Any], bool]) -> Optional['Leaf']:
+    def find_child(self, criteria: Callable[[Any], bool]) -> Optional["Leaf"]:
         """Find first child that matches the criteria."""
         for child in self.children:
             if criteria(child):
@@ -109,7 +110,7 @@ class Position:
                 return result
         return None
 
-    def find_sibling(self, criteria: Callable[[Any], bool]) -> Optional['Leaf']:
+    def find_sibling(self, criteria: Callable[[Any], bool]) -> Optional["Leaf"]:
         """Find first sibling that matches the criteria."""
         if not self.parent:
             return None
@@ -136,7 +137,10 @@ class Leaf:
             self.position = Position(position, end, info)
 
         # Initialize end_col_offset if not set
-        if self.position._end_col_offset is None and self.position._col_offset is not None:
+        if (
+            self.position._end_col_offset is None
+            and self.position._col_offset is not None
+        ):
             self.position._end_col_offset = self.position._col_offset + 20
 
         self.parent: Optional[Leaf] = None

@@ -67,18 +67,15 @@ def test_find_parent():
     child1.add_child(grandchild)
 
     found = grandchild.find_parent(
-        lambda n: n.info is not None and n.info.get("type") == "FunctionDef"
-    )
+        lambda n: n.info is not None and n.info.get("type") == "FunctionDef")
     assert found == child1
 
     found = grandchild.find_parent(
-        lambda n: n.info is not None and n.info.get("type") == "Module"
-    )
+        lambda n: n.info is not None and n.info.get("type") == "Module")
     assert found == root
 
     found = root.find_parent(
-        lambda n: n.info is not None and n.info.get("type") == "Module"
-    )
+        lambda n: n.info is not None and n.info.get("type") == "Module")
     assert found is None
 
 
@@ -91,18 +88,15 @@ def test_find_child():
     root.add_child(child2)
 
     found = root.find_child(
-        lambda n: n.info is not None and n.info.get("type") == "Assign"
-    )
+        lambda n: n.info is not None and n.info.get("type") == "Assign")
     assert found == child1
 
     found = root.find_child(
-        lambda n: n.info is not None and n.info.get("type") == "FunctionDef"
-    )
+        lambda n: n.info is not None and n.info.get("type") == "FunctionDef")
     assert found == child2
 
     found = child1.find_child(
-        lambda n: n.info is not None and n.info.get("type") == "Assign"
-    )
+        lambda n: n.info is not None and n.info.get("type") == "Assign")
     assert found is None
 
 
@@ -115,8 +109,7 @@ def test_find_sibling():
     root.add_child(child2)
 
     found = child1.find_sibling(
-        lambda n: n.info is not None and n.info.get("type") == "FunctionDef"
-    )
+        lambda n: n.info is not None and n.info.get("type") == "FunctionDef")
     assert found == child2
 
 
@@ -149,9 +142,6 @@ def test_tree_serialization():
     assert loaded_tree.root.end == tree.root.end
 
 
-if __name__ == "__main__":
-    pytest.main([__file__])
-<<<<<<< HEAD
 def test_position_format():
     # Create root position
     root_pos = Position(0, 100, "root")
@@ -216,5 +206,7 @@ def test_position_format():
     assert len(root.children) == 2
     assert len(child1.children) == 1
     assert len(child2.children) == 1
-=======
->>>>>>> 151f403bd09e889cfadedf4c57cd8af99003b1b7
+
+
+if __name__ == "__main__":
+    pytest.main([__file__])

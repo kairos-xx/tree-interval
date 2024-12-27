@@ -1,4 +1,3 @@
-
 """
 Comprehensive demonstration of all features of the tree interval package.
 """
@@ -140,7 +139,9 @@ def demonstrate_tree_operations():
     print("\n3. Tuple format with children count:")
     TreeVisualizer.visualize(
         tree,
-        VisualizationConfig(position_format="tuple", show_children_count=True, show_size=False),
+        VisualizationConfig(
+            position_format="tuple", show_children_count=True, show_size=False
+        ),
     )
 
     # JSON operations

@@ -8,11 +8,7 @@ name = "tree-interval"
 version = "0.1.0"
 description = "A Python package for managing and visualizing interval tree structures"
 readme = "README.md"
-<<<<<<< HEAD
 authors = [{name = "Joao Lopes", email = "joaoslopes@gmail.com"}]
-=======
-authors = [{name = "Replit User", email = "user@example.com"}]
->>>>>>> 151f403bd09e889cfadedf4c57cd8af99003b1b7
 license = {file = "LICENSE"}
 requires-python = ">=3.11"
 classifiers = [
@@ -24,13 +20,8 @@ classifiers = [
 ]
 
 [project.urls]
-<<<<<<< HEAD
 Homepage = "https://github.com/kairos-xx/tree-interval"
 Repository = "https://github.com/kairos-xx/tree-interval.git"
-=======
-Homepage = "https://github.com/user/tree-interval"
-Repository = "https://github.com/user/tree-interval.git"
->>>>>>> 151f403bd09e889cfadedf4c57cd8af99003b1b7
 
 [tool.ruff]
 select = ['E', 'W', 'F', 'I', 'B', 'C4', 'ARG', 'SIM']

@@ -1,4 +1,3 @@
-
 """
 Tree Visualizer package.
 
@@ -10,6 +9,7 @@ from typing import Optional
 from .config import VisualizationConfig
 
 DEFAULT_CONFIG = VisualizationConfig()
+
 
 class TreeVisualizer:
     # ANSI color codes
@@ -56,10 +56,16 @@ class TreeVisualizer:
             info_str = format_node_info(node)
             prefix_spaces = "    " if level == 0 else prefix
             connector = "┌── " if level == 0 else ("└── " if is_last else "├── ")
-            
+
             # Color the text content but not the tree lines
-            color = TreeVisualizer.BLUE if level == 0 else (TreeVisualizer.GREEN if node.children else TreeVisualizer.YELLOW)
-            print(f"{prefix_spaces}{connector}{color}{position_str} {info_str}{TreeVisualizer.RESET}")
+            color = (
+                TreeVisualizer.BLUE
+                if level == 0
+                else (TreeVisualizer.GREEN if node.children else TreeVisualizer.YELLOW)
+            )
+            print(
+                f"{prefix_spaces}{connector}{color}{position_str} {info_str}{TreeVisualizer.RESET}"
+            )
 
             children = node.children
             for i, child in enumerate(children):
@@ -67,6 +73,7 @@ class TreeVisualizer:
                 _print_node(child, new_prefix, i == len(children) - 1, level + 1)
 
         _print_node(tree.root)
+
 
 __version__ = "0.1.0"
 __all__ = ["TreeVisualizer", "VisualizationConfig"]

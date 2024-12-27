@@ -1,4 +1,3 @@
-
 """
 AST Tree Builder module.
 
@@ -45,11 +44,18 @@ class AstTreeBuilder:
             col_offset = getattr(node, "col_offset", None)
             end_col_offset = getattr(node, "end_col_offset", None)
 
-            if all(x is not None for x in [lineno, col_offset, end_lineno, end_col_offset]):
-                if isinstance(lineno, int) and isinstance(col_offset, int) and isinstance(end_lineno, int) and isinstance(end_col_offset, int):
+            if all(
+                x is not None for x in [lineno, col_offset, end_lineno, end_col_offset]
+            ):
+                if (
+                    isinstance(lineno, int)
+                    and isinstance(col_offset, int)
+                    and isinstance(end_lineno, int)
+                    and isinstance(end_col_offset, int)
+                ):
                     start = self._line_col_to_pos(lineno, col_offset)
                     end = self._line_col_to_pos(end_lineno, end_col_offset)
-                    
+
                     # Collect all fields and their values
                     fields_info = {}
                     for field in node._fields:
@@ -96,7 +102,9 @@ class AstTreeBuilder:
 
                     leaf = Leaf(start, end, node_info)
                     leaf.position._col_offset = col_offset
-                    leaf.position._end_col_offset = end_col_offset if end_col_offset is not None else col_offset + 1
+                    leaf.position._end_col_offset = (
+                        end_col_offset if end_col_offset is not None else col_offset + 1
+                    )
                     result_tree.add_leaf(leaf)
 
         return result_tree
