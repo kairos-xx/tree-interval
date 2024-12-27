@@ -120,6 +120,32 @@ def test_find_sibling():
     )
     assert found == child2
 
+def test_find():
+    root = Leaf(Position(0, 100, {"type": "Module"}))
+    child1 = Leaf(Position(10, 40, {"type": "FunctionDef", "name": "hello"}))
+    child2 = Leaf(Position(50, 90, {"type": "ClassDef", "name": "MyClass"}))
+    grandchild = Leaf(Position(20, 30, {"type": "Return"}))
+
+    root.add_child(child1)
+    root.add_child(child2)
+    child1.add_child(grandchild)
+
+    # Find in current node
+    found = root.find(lambda n: n.info.get("type") == "Module")
+    assert found == root
+
+    # Find in parent
+    found = grandchild.find(lambda n: n.info.get("type") == "FunctionDef")
+    assert found == child1
+
+    # Find in children
+    found = root.find(lambda n: n.info.get("name") == "hello")
+    assert found == child1
+
+    # Find in siblings
+    found = child1.find(lambda n: n.info.get("name") == "MyClass")
+    assert found == child2
+
 
 def test_leaf_hierarchy():
     root = Leaf(Position(0, 100, "Root"))

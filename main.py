@@ -333,8 +333,34 @@ def demonstrate_nested_attributes():
     print(f"Line number: {root.attributes.position.lineno}")
     print(f"Column offset: {root.attributes.position.col_offset}")
 
+def demonstrate_find_method():
+    """Example showing the find method and dot notation"""
+    print("\n=== Find Method Example ===")
+    
+    # Create a tree structure
+    root = Leaf(Position(0, 100, {"type": "Module", "name": "main"}))
+    child1 = Leaf(Position(10, 40, {"type": "FunctionDef", "name": "hello"}))
+    child2 = Leaf(Position(50, 90, {"type": "ClassDef", "name": "MyClass"}))
+    grandchild = Leaf(Position(20, 30, {"type": "Return"}))
+
+    # Build tree
+    root.add_child(child1)
+    root.add_child(child2)
+    child1.add_child(grandchild)
+
+    # Use find method with dot notation
+    found = root.find(lambda n: n.attributes.info.get("name") == "hello")
+    print(f"Found function: {found.attributes.info}")
+
+    found = child1.find(lambda n: n.attributes.info.get("type") == "ClassDef")
+    print(f"Found class: {found.attributes.info}")
+
+    found = grandchild.find(lambda n: n.attributes.info.get("type") == "Module")
+    print(f"Found module: {found.attributes.info}")
+
 if __name__ == "__main__":
     demonstrate_nested_attributes()
+    demonstrate_find_method()
 
 
 if __name__ == "__main__":
