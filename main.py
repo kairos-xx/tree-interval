@@ -39,7 +39,13 @@ def demonstrate_basic_tree():
     child2_pos.col_offset = 4
     child2_pos.end_col_offset = 90
     child2 = Leaf(child2_pos)
-    grandchild = Leaf(15, 35, "Grandchild")
+    
+    grandchild_pos = Position(15, 35, "Grandchild")
+    grandchild_pos.lineno = 3
+    grandchild_pos.end_lineno = 3
+    grandchild_pos.col_offset = 8
+    grandchild_pos.end_col_offset = 35
+    grandchild = Leaf(grandchild_pos)
 
     tree.root = root
     tree.add_leaf(child1)
