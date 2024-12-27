@@ -15,13 +15,15 @@ def demonstrate_positions():
     print("\n=== Position Examples ===")
     # Basic Position
     pos1 = Position(0, 100, "Root")
-    print("Basic position:", f"start={pos1.start}, end={pos1.end}, info={pos1.info}")
+    print("Basic position:",
+          f"start={pos1.start}, end={pos1.end}, info={pos1.info}")
 
     # Position with line numbers
     pos2 = Position(10, 50, "With Lines")
     pos2.lineno = 1
     pos2.end_lineno = 5
-    print("Position with lines:", f"lineno={pos2.lineno}, end_lineno={pos2.end_lineno}")
+    print("Position with lines:",
+          f"lineno={pos2.lineno}, end_lineno={pos2.end_lineno}")
 
     # Position with column offsets
     pos3 = Position(60, 90, "With Columns")
@@ -133,14 +135,15 @@ def example_custom_visualization():
     tree.visualize()
 
     print("\nWith position objects:")
-    TreeVisualizer.visualize(tree, VisualizationConfig(position_format="position"))
+    TreeVisualizer.visualize(tree,
+                             VisualizationConfig(position_format="position"))
 
     print("\nWith tuples and children count:")
     TreeVisualizer.visualize(
         tree,
-        VisualizationConfig(
-            position_format="tuple", show_children_count=True, show_size=False
-        ),
+        VisualizationConfig(position_format="tuple",
+                            show_children_count=True,
+                            show_size=False),
     )
 
 
@@ -190,19 +193,10 @@ def demonstrate_line_positions():
     tree.visualize()
 
     print("\nDetailed position view:")
-    TreeVisualizer.visualize(tree, VisualizationConfig(position_format="position"))
+    TreeVisualizer.visualize(tree,
+                             VisualizationConfig(position_format="position"))
 
 
-if __name__ == "__main__":
-    print("=== Tree Interval Package Demo ===")
-    demonstrate_positions()
-    demonstrate_leaves()
-    demonstrate_tree_operations()
-    example_basic_tree()
-    example_custom_visualization()
-    example_json_serialization()
-    demonstrate_line_positions()
-    demonstrate_dot_notation()
 def demonstrate_dot_notation():
     print("\n=== Dot Notation Examples ===")
     # Create a tree structure
@@ -223,8 +217,8 @@ def demonstrate_dot_notation():
     grandchild._as_dict()
 
     # Find parent using dot notation
-    found_parent = grandchild.find_parent(
-        lambda n: n._as_dict() and n.attributes.info.get("type") == "FunctionDef")
+    found_parent = grandchild.find_parent(lambda n: n._as_dict(
+    ) and n.attributes.info.get("type") == "FunctionDef")
     print("Parent:", found_parent.attributes.info if found_parent else None)
 
     # Find child using dot notation
@@ -236,3 +230,15 @@ def demonstrate_dot_notation():
     found_sibling = child1.find_sibling(
         lambda n: n._as_dict() and n.attributes.info.get("name") == "MyClass")
     print("Sibling:", found_sibling.attributes.info if found_sibling else None)
+
+
+if __name__ == "__main__":
+    print("=== Tree Interval Package Demo ===")
+    demonstrate_positions()
+    demonstrate_leaves()
+    demonstrate_tree_operations()
+    example_basic_tree()
+    example_custom_visualization()
+    example_json_serialization()
+    demonstrate_line_positions()
+    demonstrate_dot_notation()

@@ -69,18 +69,18 @@ def demonstrate_find_nodes():
     child1.add_child(grandchild)
 
     # Find parent example
-    found_parent = grandchild.find_parent(
-        lambda n: isinstance(n.info, dict) and n.info.get("type") == "FunctionDef")
+    found_parent = grandchild.find_parent(lambda n: isinstance(
+        n.info, dict) and n.info.get("type") == "FunctionDef")
     print("Found parent:", found_parent.info if found_parent else None)
 
     # Find child example
-    found_child = root.find_child(
-        lambda n: isinstance(n.info, dict) and n.info.get("type") == "ClassDef")
+    found_child = root.find_child(lambda n: isinstance(n.info, dict) and n.info
+                                  .get("type") == "ClassDef")
     print("Found child:", found_child.info if found_child else None)
 
     # Find sibling example
-    found_sibling = child1.find_sibling(
-        lambda n: isinstance(n.info, dict) and n.info.get("type") == "ClassDef")
+    found_sibling = child1.find_sibling(lambda n: isinstance(n.info, dict) and
+                                        n.info.get("type") == "ClassDef")
     print("Found sibling:", found_sibling.info if found_sibling else None)
 
 
@@ -309,23 +309,24 @@ def demonstrate_ast_rich_printing():
     printer = RichTreePrinter(RichPrintConfig(show_position=True))
     printer.print_tree(tree)
 
+
 def demonstrate_nested_attributes():
     """Example showing nested attribute access"""
     tree = Tree("Nested Attributes Example")
     root = Leaf(Position(0, 100, "Root Node"))
     child = Leaf(Position(10, 50, "Child Node"))
-    
+
     root.position.lineno = 1
     root.position.end_lineno = 5
     root.position.col_offset = 0
     root.position.end_col_offset = 20
-    
+
     tree.root = root
     tree.add_leaf(child)
-    
+
     # Initialize nested attributes
     root._as_dict()
-    
+
     # Access nested attributes
     print("=== Nested Attributes Example ===")
     print(f"Start position: {root.attributes.start}")
@@ -333,10 +334,11 @@ def demonstrate_nested_attributes():
     print(f"Line number: {root.attributes.position.lineno}")
     print(f"Column offset: {root.attributes.position.col_offset}")
 
+
 def demonstrate_find_method():
     """Example showing the find method and dot notation"""
     print("\n=== Find Method Example ===")
-    
+
     # Create a tree structure
     root = Leaf(Position(0, 100, {"type": "Module", "name": "main"}))
     child1 = Leaf(Position(10, 40, {"type": "FunctionDef", "name": "hello"}))
@@ -349,18 +351,17 @@ def demonstrate_find_method():
     child1.add_child(grandchild)
 
     # Use find method with dot notation
-    found = root.find(lambda n: hasattr(n.attributes.info, "name") and n.attributes.info.name == "hello")
+    found = root.find(lambda n: hasattr(n.attributes.info, "name") and n.
+                      attributes.info.name == "hello")
     print(f"Found function: {found.attributes.info if found else None}")
 
-    found = child1.find(lambda n: hasattr(n.attributes.info, "type") and n.attributes.info.type == "ClassDef")
+    found = child1.find(lambda n: hasattr(n.attributes.info, "type") and n.
+                        attributes.info.type == "ClassDef")
     print(f"Found class: {found.attributes.info if found else None}")
 
-    found = grandchild.find(lambda n: hasattr(n.attributes.info, "type") and n.attributes.info.type == "Module")
+    found = grandchild.find(lambda n: hasattr(n.attributes.info, "type") and n.
+                            attributes.info.type == "Module")
     print(f"Found module: {found.attributes.info if found else None}")
-
-if __name__ == "__main__":
-    demonstrate_nested_attributes()
-    demonstrate_find_method()
 
 
 if __name__ == "__main__":
@@ -375,3 +376,4 @@ if __name__ == "__main__":
     demonstrate_custom_config()
     demonstrate_ast_rich_printing()
     demonstrate_nested_attributes()
+    demonstrate_find_method()
