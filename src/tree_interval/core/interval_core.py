@@ -43,16 +43,16 @@ class Position:
         self.children: List["Leaf"] = []
 
     @property
-    def lineno(self) -> Optional[int]:
-        return self._lineno
+    def lineno(self) -> int:
+        return self._lineno if self._lineno is not None else 1
 
     @lineno.setter
     def lineno(self, value: Optional[int]) -> None:
         self._lineno = value
 
     @property
-    def end_lineno(self) -> Optional[int]:
-        return self._end_lineno
+    def end_lineno(self) -> int:
+        return self._end_lineno if self._end_lineno is not None else 1
 
     @end_lineno.setter
     def end_lineno(self, value: Optional[int]) -> None:
@@ -85,30 +85,26 @@ class Position:
     def position_as(self, position_format: str = "default") -> str:
         """Display position with specific format."""
         if position_format == "position":
+            col_offset = self.col_offset if self.col_offset is not None else 0
+            end_col_offset = self.end_col_offset if self.end_col_offset is not None else 0
             return (
                 f"Position(start={self.start}, "
                 + f"end={self.end}, "
                 + f"lineno={self.lineno}, "
                 + f"end_lineno={self.end_lineno}, "
-                + f"col_offset={self.col_offset}, "
-                + f"end_col_offset={self.end_col_offset})"
+                + f"col_offset={col_offset}, "
+                + f"end_col_offset={end_col_offset})"
             )
         elif position_format == "tuple":
-            return (
-                "("
-                + ", ".join(
-                    str(v)
-                    for v in (
-                        self.start,
-                        self.end,
-                        self.lineno,
-                        self.end_lineno,
-                        self.col_offset,
-                        self.end_col_offset,
-                    )
-                )
-                + ")"
-            )
+            values = [
+                self.start,
+                self.end,
+                self.lineno,
+                self.end_lineno,
+                self.col_offset if self.col_offset is not None else 0,
+                self.end_col_offset if self.end_col_offset is not None else 0
+            ]
+            return "(" + ", ".join(str(v) for v in values) + ")"
         else:
             return f"Position(start={self.start}, end={self.end})"
 
