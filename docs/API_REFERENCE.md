@@ -107,17 +107,41 @@ VisualizationConfig(
 ## Analysis
 
 ### AstTreeBuilder
-Builds tree structures from Python AST. See [AST Reference](AST_REFERENCE.md) for detailed documentation.
+Converts Python source code or frame objects into Tree Interval's tree structure.
+
+#### Constructor
+```python
+AstTreeBuilder(source: Union[FrameType, str])
+```
+- Parameters:
+  - `source`: Either Python source code as string or a frame object
 
 #### Methods
-- **build() -> Tree**
-  - Builds and returns AST tree
+- **build() -> Tree[str]**
+  - Parses source code into AST and converts to tree structure
+  - Returns: Tree with nodes containing AST information
+  - Each node contains:
+    - Position information (start, end, line numbers)
+    - AST node type
+    - Node-specific fields (name, args, etc.)
 
 ### FrameAnalyzer
-Analyzes Python stack frames.
+Analyzes Python stack frames for runtime code inspection.
+
+#### Constructor
+```python
+FrameAnalyzer(frame: FrameType)
+```
+- Parameters:
+  - `frame`: Python stack frame to analyze
 
 #### Methods
 - **find_current_node() -> Optional[Leaf]**
-  - Finds current AST node
+  - Locates AST node for current execution point
+  - Returns: Leaf node at current line or None
+  - Useful for runtime code analysis
+
 - **build_tree() -> Optional[Tree]**
-  - Builds tree from frame
+  - Constructs complete tree from frame's source
+  - Returns: Full AST tree or None if source unavailable
+  - Includes all code in frame's scope
