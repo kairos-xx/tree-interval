@@ -56,9 +56,26 @@ def demonstrate_find_nodes():
     # Create a tree structure
     tree = Tree("Find Example")
     root = Leaf(Position(0, 100, {"type": "Module"}))
-    child1 = Leaf(Position(10, 40, {"type": "FunctionDef", "name": "hello"}))
-    child2 = Leaf(Position(50, 90, {"type": "ClassDef", "name": "MyClass"}))
-    grandchild = Leaf(Position(20, 30, {"type": "Return"}))
+    child1_pos = Position(10, 40, {"type": "FunctionDef", "name": "hello"})
+    child1_pos.lineno = 2
+    child1_pos.end_lineno = 4
+    child1_pos.col_offset = 4
+    child1_pos.end_col_offset = 40
+    child1 = Leaf(child1_pos)
+
+    child2_pos = Position(50, 90, {"type": "ClassDef", "name": "MyClass"})
+    child2_pos.lineno = 5
+    child2_pos.end_lineno = 8
+    child2_pos.col_offset = 4
+    child2_pos.end_col_offset = 90
+    child2 = Leaf(child2_pos)
+
+    grandchild_pos = Position(20, 30, {"type": "Return"})
+    grandchild_pos.lineno = 3
+    grandchild_pos.end_lineno = 3
+    grandchild_pos.col_offset = 8
+    grandchild_pos.end_col_offset = 30
+    grandchild = Leaf(grandchild_pos)
 
     # Build the tree
     tree.root = root
