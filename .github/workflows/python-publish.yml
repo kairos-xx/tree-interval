@@ -1,13 +1,25 @@
-
 name: Upload Python Package
 
 on:
   release:
-    types: [created]
+    types: [published]
 
-  push:
-    branches:
-      - main
+topics:
+  - python
+  - tree-structure
+  - interval-tree
+  - ast-analysis
+  - visualization
+  - code-analysis
+  - static-analysis
+  - debugging-tools
+  - development-tools
+  - python-library
+  - abstract-syntax-tree
+  - frame-analysis
+  - rich-printer
+  - json-serialization
+  - type-hints
 
 jobs:
   deploy:
