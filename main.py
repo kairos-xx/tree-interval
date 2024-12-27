@@ -1,4 +1,7 @@
 
+import sys
+from src.tree_interval import FrameAnalyzer, VisualizationConfig
+
 def demonstrate_frame_analyzer():
     print("\n=== Frame Analyzer Demo ===")
     

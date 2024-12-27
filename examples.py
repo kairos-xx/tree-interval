@@ -90,7 +90,8 @@ def main():
         print(f"Position: {pos.start}-{pos.end} ({pos.info})")
     
     print("\n=== Leaf Examples ===")
-    leaves = demonstrate_leaves()
+    tree = demonstrate_tree_operations()
+    leaves = tree.flatten()
     for leaf in leaves:
         print(f"Leaf: {leaf.start}-{leaf.end} ({leaf.info})")
     
