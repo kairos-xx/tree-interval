@@ -1,7 +1,5 @@
 
 """Tests for AST node information access"""
-from typing import Optional
-
 from tree_interval import AstTreeBuilder
 
 
