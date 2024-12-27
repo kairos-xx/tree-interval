@@ -1,4 +1,3 @@
-
 """
 Comprehensive demonstration of all features of the tree interval package.
 """

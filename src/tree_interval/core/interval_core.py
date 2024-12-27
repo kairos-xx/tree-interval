@@ -14,7 +14,6 @@ T = TypeVar("T")
 
 
 class Position:
-
     def __init__(
         self,
         start: Optional[int] = None,
@@ -140,8 +139,12 @@ class Leaf:
             best_match = self
             for child in self.children:
                 child_match = child.find_best_match(start, end)
-                if (child_match and child_match.size and best_match.size
-                        and child_match.size < best_match.size):
+                if (
+                    child_match
+                    and child_match.size
+                    and best_match.size
+                    and child_match.size < best_match.size
+                ):
                     best_match = child_match
             return best_match
         return None
@@ -197,10 +200,9 @@ class Leaf:
 class Tree(Generic[T]):
     """A tree structure containing nodes with position information."""
 
-    def __init__(self,
-                 source: T,
-                 start_lineno: Optional[int] = None,
-                 indent_size: int = 4) -> None:
+    def __init__(
+        self, source: T, start_lineno: Optional[int] = None, indent_size: int = 4
+    ) -> None:
         self.source = source
         self.start_lineno = start_lineno
         self.indent_size = indent_size
@@ -283,8 +285,7 @@ class Tree(Generic[T]):
             node.add_child(child)
         return node
 
-    def visualize(self,
-                  config: Optional["VisualizationConfig"] = None) -> None:
+    def visualize(self, config: Optional["VisualizationConfig"] = None) -> None:
         """Visualize the tree structure."""
         from ..visualizer import TreeVisualizer
 

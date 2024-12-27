@@ -35,15 +35,14 @@ def example_custom_visualization():
     tree.visualize()
 
     print("\nWith position objects:")
-    TreeVisualizer.visualize(tree,
-                             VisualizationConfig(position_format="position"))
+    TreeVisualizer.visualize(tree, VisualizationConfig(position_format="position"))
 
     print("\nWith tuples and children count:")
     TreeVisualizer.visualize(
         tree,
-        VisualizationConfig(position_format="tuple",
-                            show_children_count=True,
-                            show_size=False),
+        VisualizationConfig(
+            position_format="tuple", show_children_count=True, show_size=False
+        ),
     )
 
 
@@ -75,6 +74,3 @@ if __name__ == "__main__":
 
     print("\n=== JSON Serialization Example ===")
     example_json_serialization()
-
-
-

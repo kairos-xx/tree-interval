@@ -1,4 +1,3 @@
-
 """
 AST Tree Builder module.
 
@@ -6,10 +5,10 @@ This module provides functionality to build tree structures from Python
 Abstract Syntax Trees.
 """
 
-import ast
+from ast import AST, parse, unparse, walk
 from inspect import getsource
-from typing import Optional, Union
 from types import FrameType
+from typing import Optional, Union
 
 from .interval_core import Leaf, Tree
 
@@ -25,7 +24,7 @@ class AstTreeBuilder:
 
     def _get_source(self) -> None:
         try:
-            self.source = ast.unparse(ast.parse(self.frame.f_code.co_code))
+            self.source = unparse(parse(self.frame.f_code.co_code))
         except (SyntaxError, TypeError, ValueError):
             if self.frame.f_code.co_firstlineno:
                 self.source = getsource(self.frame.f_code)
@@ -34,12 +33,12 @@ class AstTreeBuilder:
         if not self.source:
             raise ValueError("No source code available")
 
-        tree = ast.parse(self.source)
+        tree = parse(self.source)
         result_tree = Tree[str](self.source)
         root = Leaf(0, len(self.source), "Module")
         result_tree.root = root
 
-        for node in ast.walk(tree):
+        for node in walk(tree):
             lineno = getattr(node, "lineno", None)
             end_lineno = getattr(node, "end_lineno", None)
             col_offset = getattr(node, "col_offset", None)
@@ -63,7 +62,7 @@ class AstTreeBuilder:
                         value = getattr(node, field, None)
                         if isinstance(value, (str, int, float, bool)):
                             fields_info[field] = value
-                        elif isinstance(value, ast.AST):
+                        elif isinstance(value, AST):
                             fields_info[field] = value.__class__.__name__
                         elif isinstance(value, list):
                             fields_info[field] = f"List[{len(value)}]"

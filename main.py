@@ -1,7 +1,9 @@
 """
 Tree Interval Package Demo - Comprehensive Examples
 """
+
 from inspect import currentframe
+
 from src.tree_interval import (
     AstTreeBuilder,
     FrameAnalyzer,
@@ -17,7 +19,7 @@ def demonstrate_basic_tree():
     """Basic tree creation and manipulation."""
     print("\n=== Basic Tree Example ===")
     tree = Tree("Basic Example")
-    
+
     # Create position with line and column information
     root_pos = Position(0, 100, "Root")
     root_pos.lineno = 1
@@ -25,21 +27,21 @@ def demonstrate_basic_tree():
     root_pos.col_offset = 0
     root_pos.end_col_offset = 100
     root = Leaf(root_pos)
-    
+
     child1_pos = Position(10, 40, "Child 1")
     child1_pos.lineno = 2
     child1_pos.end_lineno = 3
     child1_pos.col_offset = 4
     child1_pos.end_col_offset = 40
     child1 = Leaf(child1_pos)
-    
+
     child2_pos = Position(50, 90, "Child 2")
     child2_pos.lineno = 4
     child2_pos.end_lineno = 5
     child2_pos.col_offset = 4
     child2_pos.end_col_offset = 90
     child2 = Leaf(child2_pos)
-    
+
     grandchild_pos = Position(15, 35, "Grandchild")
     grandchild_pos.lineno = 3
     grandchild_pos.end_lineno = 3
@@ -56,15 +58,15 @@ def demonstrate_basic_tree():
     tree.visualize()
 
     print("\nWith position objects:")
-    TreeVisualizer.visualize(tree,
-                             VisualizationConfig(position_format="position"))
+    TreeVisualizer.visualize(tree, VisualizationConfig(position_format="position"))
 
     print("\nWith tuples and children count:")
     TreeVisualizer.visualize(
         tree,
-        VisualizationConfig(position_format="tuple",
-                            show_children_count=True,
-                            show_size=False))
+        VisualizationConfig(
+            position_format="tuple", show_children_count=True, show_size=False
+        ),
+    )
 
 
 def demonstrate_ast_analysis():
@@ -109,12 +111,12 @@ def demonstrate_serialization():
     root_pos.lineno = 1
     root_pos.end_lineno = 5
     root = Leaf(root_pos)
-    
+
     child_pos = Position(10, 50, "Child")
     child_pos.lineno = 2
     child_pos.end_lineno = 3
     child = Leaf(child_pos)
-    
+
     tree.root = root
     tree.add_leaf(child)
 

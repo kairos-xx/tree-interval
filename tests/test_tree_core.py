@@ -4,7 +4,6 @@ from src.tree_interval import Leaf, Tree
 
 
 class TestTreeCore(unittest.TestCase):
-
     def setUp(self):
         self.tree = Tree("Test")
         self.root = Leaf(0, 100, "root")
