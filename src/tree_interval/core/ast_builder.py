@@ -44,7 +44,31 @@ class AstTreeBuilder:
             col_offset = getattr(node, "col_offset", None)
             end_col_offset = getattr(node, "end_col_offset", None)
 
-            if all(x is not None for x in [lineno, col_offset]):
+            if all(x is not None for x in [lineno, col_offset, end_lineno, end_col_offset]):
+                    if isinstance(lineno, int) and isinstance(col_offset, int) and isinstance(end_lineno, int) and isinstance(end_col_offset, int):
+                        start = self._line_col_to_pos(lineno, col_offset)
+                        end = self._line_col_to_pos(end_lineno, end_col_offset)
+                        
+                        # Collect all fields and their values
+                        fields_info = {}
+                        for field in node._fields:
+                            value = getattr(node, field, None)
+                            if isinstance(value, (str, int, float, bool)):
+                                fields_info[field] = value
+                            elif isinstance(value, AST):
+                                fields_info[field] = value.__class__.__name__
+                            elif isinstance(value, list):
+                                fields_info[field] = f"List[{len(value)}]"
+
+                        node_info = {"type": node.__class__.__name__, "fields": fields_info}
+
+                        leaf = Leaf(start, end, node_info)
+                        leaf.position._col_offset = col_offset
+                        leaf.position._end_col_offset = end_col_offset
+                        result_tree.add_leaf(leaf)
+                    continue
+
+            elif all(x is not None for x in [lineno, col_offset]):
                 if isinstance(lineno, int) and isinstance(col_offset, int):
                     start = self._line_col_to_pos(lineno, col_offset)
                     if isinstance(end_lineno, int) and isinstance(end_col_offset, int):
@@ -71,6 +95,7 @@ class AstTreeBuilder:
 
                     leaf = Leaf(start, end, node_info)
                     result_tree.add_leaf(leaf)
+
 
         return result_tree
 
