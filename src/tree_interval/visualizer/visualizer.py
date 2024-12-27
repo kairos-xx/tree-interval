@@ -48,7 +48,7 @@ class TreeVisualizer:
         def _print_node(node, prefix="", is_last=True, level=0):
             node_info = format_position(node) + " " + format_node_info(node)
             prefix_spaces = "    " if level == 0 else prefix
-            connector = "┌─" if level == 0 else ("└── " if is_last else "├── ")
+            connector = "┌── " if level == 0 else ("└── " if is_last else "├── ")
             print(prefix_spaces + connector + node_info)
 
             children = node.children
