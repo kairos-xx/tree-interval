@@ -73,6 +73,8 @@ def demonstrate_tree_operations():
     root = Leaf(Position(0, 100, "root"))
     root.position.lineno = 1
     root.position.end_lineno = 10
+    root.position.col_offset = 0
+    root.position.end_col_offset = 80
     tree.root = root
 
     child1 = Leaf(Position(10, 40, "child1"))
