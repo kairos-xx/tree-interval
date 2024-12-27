@@ -349,14 +349,14 @@ def demonstrate_find_method():
     child1.add_child(grandchild)
 
     # Use find method with dot notation
-    found = root.find(lambda n: n.attributes.info.get("name") == "hello")
-    print(f"Found function: {found.attributes.info}")
+    found = root.find(lambda n: hasattr(n.attributes.info, "name") and n.attributes.info.name == "hello")
+    print(f"Found function: {found.attributes.info if found else None}")
 
-    found = child1.find(lambda n: n.attributes.info.get("type") == "ClassDef")
-    print(f"Found class: {found.attributes.info}")
+    found = child1.find(lambda n: hasattr(n.attributes.info, "type") and n.attributes.info.type == "ClassDef")
+    print(f"Found class: {found.attributes.info if found else None}")
 
-    found = grandchild.find(lambda n: n.attributes.info.get("type") == "Module")
-    print(f"Found module: {found.attributes.info}")
+    found = grandchild.find(lambda n: hasattr(n.attributes.info, "type") and n.attributes.info.type == "Module")
+    print(f"Found module: {found.attributes.info if found else None}")
 
 if __name__ == "__main__":
     demonstrate_nested_attributes()
