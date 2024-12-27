@@ -21,13 +21,23 @@ def demonstrate_positions():
     print("\n=== Position Examples ===")
     # Basic Position
     pos1 = Position(0, 100, "Root")
+<<<<<<< HEAD
     print("Basic position:", f"start={pos1.start}, end={pos1.end}, info={pos1.info}")
+=======
+    print("Basic position:",
+          f"start={pos1.start}, end={pos1.end}, info={pos1.info}")
+>>>>>>> 151f403bd09e889cfadedf4c57cd8af99003b1b7
 
     # Position with line numbers
     pos2 = Position(10, 50, "With Lines")
     pos2.lineno = 1
     pos2.end_lineno = 5
+<<<<<<< HEAD
     print("Position with lines:", f"lineno={pos2.lineno}, end_lineno={pos2.end_lineno}")
+=======
+    print("Position with lines:",
+          f"lineno={pos2.lineno}, end_lineno={pos2.end_lineno}")
+>>>>>>> 151f403bd09e889cfadedf4c57cd8af99003b1b7
 
     # Position with column offsets
     pos3 = Position(60, 90, "With Columns")
@@ -45,11 +55,14 @@ def demonstrate_positions():
         f"absolute_start={pos4.absolute_start}, absolute_end={pos4.absolute_end}",
     )
 
+<<<<<<< HEAD
     # Different position formats
     print("Position format:", pos4.position_as("position"))
     print("Tuple format:", pos4.position_as("tuple"))
     print("Default format:", pos4.position_as())
 
+=======
+>>>>>>> 151f403bd09e889cfadedf4c57cd8af99003b1b7
 
 def demonstrate_leaves():
     print("\n=== Leaf Examples ===")
@@ -134,14 +147,25 @@ def demonstrate_tree_operations():
     tree.visualize()
 
     print("\n2. Position format:")
+<<<<<<< HEAD
     TreeVisualizer.visualize(tree, VisualizationConfig(position_format="position"))
+=======
+    TreeVisualizer.visualize(tree,
+                             VisualizationConfig(position_format="position"))
+>>>>>>> 151f403bd09e889cfadedf4c57cd8af99003b1b7
 
     print("\n3. Tuple format with children count:")
     TreeVisualizer.visualize(
         tree,
+<<<<<<< HEAD
         VisualizationConfig(
             position_format="tuple", show_children_count=True, show_size=False
         ),
+=======
+        VisualizationConfig(position_format="tuple",
+                            show_children_count=True,
+                            show_size=False),
+>>>>>>> 151f403bd09e889cfadedf4c57cd8af99003b1b7
     )
 
     # JSON operations
@@ -171,10 +195,18 @@ def demonstrate_frame_analyzer():
         # Build and show tree
         tree = analyzer.build_tree()
         if tree:
+<<<<<<< HEAD
             print("\nFull AST Tree:",)
             TreeVisualizer.visualize(
                 tree,
                 VisualizationConfig(position_format="tuple", show_children_count=True),
+=======
+            print("\nFull AST Tree:", TreeVisualizer.visualize)
+            TreeVisualizer.visualize(
+                tree,
+                VisualizationConfig(position_format="tuple",
+                                    show_children_count=True),
+>>>>>>> 151f403bd09e889cfadedf4c57cd8af99003b1b7
             )
         return x
 
@@ -209,7 +241,12 @@ def demonstrate_line_positions():
     tree.visualize()
 
     print("\nDetailed position view:")
+<<<<<<< HEAD
     TreeVisualizer.visualize(tree, VisualizationConfig(position_format="position"))
+=======
+    TreeVisualizer.visualize(tree,
+                             VisualizationConfig(position_format="position"))
+>>>>>>> 151f403bd09e889cfadedf4c57cd8af99003b1b7
 
 
 def demonstrate_basic_rich_printing():
@@ -239,6 +276,7 @@ def demonstrate_custom_config():
     tree.root = root
     tree.add_leaf(child)
 
+<<<<<<< HEAD
     config = RichPrintConfig(
         show_size=True,
         show_info=True,
@@ -246,6 +284,13 @@ def demonstrate_custom_config():
         node_style=Style(color="yellow"),
         leaf_style=Style(color="green"),
     )
+=======
+    config = RichPrintConfig(show_size=True,
+                             show_info=True,
+                             root_style=Style(color="magenta", bold=True),
+                             node_style=Style(color="yellow"),
+                             leaf_style=Style(color="green"))
+>>>>>>> 151f403bd09e889cfadedf4c57cd8af99003b1b7
 
     printer = RichTreePrinter(config)
     printer.print_tree(tree)
@@ -257,7 +302,15 @@ def demonstrate_ast_rich_printing():
     tree = Tree("AST Example")
 
     root = Leaf(Position(0, 100, {"type": "Module"}))
+<<<<<<< HEAD
     func_def = Leaf(Position(10, 90, {"type": "FunctionDef", "name": "example"}))
+=======
+    func_def = Leaf(
+        Position(10, 90, {
+            "type": "FunctionDef",
+            "name": "example"
+        }))
+>>>>>>> 151f403bd09e889cfadedf4c57cd8af99003b1b7
     args = Leaf(Position(20, 30, {"type": "Arguments"}))
     body = Leaf(Position(40, 80, {"type": "Body"}))
 
@@ -266,6 +319,7 @@ def demonstrate_ast_rich_printing():
     func_def.add_child(args)
     func_def.add_child(body)
 
+<<<<<<< HEAD
     printer = RichTreePrinter(RichPrintConfig(show_position=True))
     printer.print_tree(tree)
 
@@ -305,6 +359,8 @@ def demonstrate_find_nodes():
     print("Found sibling:", found_sibling.info if found_sibling else None)
 
 
+=======
+>>>>>>> 151f403bd09e889cfadedf4c57cd8af99003b1b7
     printer = RichTreePrinter(RichPrintConfig(show_position=False))
     printer.print_tree(tree)
 
@@ -312,7 +368,10 @@ def demonstrate_find_nodes():
 if __name__ == "__main__":
     print("=== Tree Interval Package Demo ===")
     demonstrate_positions()
+<<<<<<< HEAD
     demonstrate_find_nodes()
+=======
+>>>>>>> 151f403bd09e889cfadedf4c57cd8af99003b1b7
     demonstrate_leaves()
     demonstrate_tree_operations()
     demonstrate_frame_analyzer()

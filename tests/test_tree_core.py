@@ -151,6 +151,7 @@ def test_tree_serialization():
 
 if __name__ == "__main__":
     pytest.main([__file__])
+<<<<<<< HEAD
 def test_position_format():
     # Create root position
     root_pos = Position(0, 100, "root")
@@ -215,3 +216,5 @@ def test_position_format():
     assert len(root.children) == 2
     assert len(child1.children) == 1
     assert len(child2.children) == 1
+=======
+>>>>>>> 151f403bd09e889cfadedf4c57cd8af99003b1b7

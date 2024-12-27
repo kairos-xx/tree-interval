@@ -44,6 +44,7 @@ class AstTreeBuilder:
             col_offset = getattr(node, "col_offset", None)
             end_col_offset = getattr(node, "end_col_offset", None)
 
+<<<<<<< HEAD
             if all(x is not None for x in [lineno, col_offset, end_lineno, end_col_offset]):
                     if isinstance(lineno, int) and isinstance(col_offset, int) and isinstance(end_lineno, int) and isinstance(end_col_offset, int):
                         start = self._line_col_to_pos(lineno, col_offset)
@@ -69,6 +70,9 @@ class AstTreeBuilder:
                     continue
 
             elif all(x is not None for x in [lineno, col_offset]):
+=======
+            if all(x is not None for x in [lineno, col_offset]):
+>>>>>>> 151f403bd09e889cfadedf4c57cd8af99003b1b7
                 if isinstance(lineno, int) and isinstance(col_offset, int):
                     start = self._line_col_to_pos(lineno, col_offset)
                     if isinstance(end_lineno, int) and isinstance(end_col_offset, int):
@@ -94,11 +98,16 @@ class AstTreeBuilder:
                     node_info = {"type": node.__class__.__name__, "fields": fields_info}
 
                     leaf = Leaf(start, end, node_info)
+<<<<<<< HEAD
                     leaf.position._col_offset = col_offset
                     leaf.position._end_col_offset = end_col_offset if end_col_offset is not None else col_offset + 1
                     result_tree.add_leaf(leaf)
 
 
+=======
+                    result_tree.add_leaf(leaf)
+
+>>>>>>> 151f403bd09e889cfadedf4c57cd8af99003b1b7
         return result_tree
 
     def _line_col_to_pos(self, line: int, col: int) -> Optional[int]:
@@ -111,4 +120,8 @@ class AstTreeBuilder:
                 pos += len(lines[i])
             return pos + col
         except Exception:
+<<<<<<< HEAD
             return None
+=======
+            return None
+>>>>>>> 151f403bd09e889cfadedf4c57cd8af99003b1b7
