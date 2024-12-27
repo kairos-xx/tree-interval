@@ -69,7 +69,10 @@ class AstTreeBuilder:
 
                     node_info = {"type": node.__class__.__name__, "fields": fields_info}
 
-                    leaf = Leaf(Position(start if start is not None else 0, end, node_info), None)
+                    leaf = Leaf(
+                        Position(start if start is not None else 0, end, node_info),
+                        None,
+                    )
                     leaf.position._col_offset = col_offset
                     leaf.position._end_col_offset = end_col_offset
                     result_tree.add_leaf(leaf)
@@ -100,9 +103,16 @@ class AstTreeBuilder:
 
                     node_info = {"type": node.__class__.__name__, "fields": fields_info}
 
-                    leaf = Leaf(Position(start if start is not None else 0, end, node_info), None)
+                    leaf = Leaf(
+                        Position(start if start is not None else 0, end, node_info),
+                        None,
+                    )
                     leaf.position._col_offset = col_offset
-                    leaf.position._end_col_offset = end_col_offset if end_col_offset is not None else (col_offset + 1 if col_offset is not None else 1)
+                    leaf.position._end_col_offset = (
+                        end_col_offset
+                        if end_col_offset is not None
+                        else (col_offset + 1 if col_offset is not None else 1)
+                    )
                     result_tree.add_leaf(leaf)
 
         return result_tree

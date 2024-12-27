@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union
+
 from .interval_core import Position
 
 

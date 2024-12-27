@@ -1,6 +1,7 @@
 """Unit tests for Tree Interval core functionality."""
 
 import pytest
+
 from src.tree_interval import AstTreeBuilder, FrameAnalyzer, Leaf, Position, Tree
 
 
@@ -67,15 +68,18 @@ def test_find_parent():
     child1.add_child(grandchild)
 
     found = grandchild.find_parent(
-        lambda n: n.info is not None and n.info.get("type") == "FunctionDef")
+        lambda n: n.info is not None and n.info.get("type") == "FunctionDef"
+    )
     assert found == child1
 
     found = grandchild.find_parent(
-        lambda n: n.info is not None and n.info.get("type") == "Module")
+        lambda n: n.info is not None and n.info.get("type") == "Module"
+    )
     assert found == root
 
     found = root.find_parent(
-        lambda n: n.info is not None and n.info.get("type") == "Module")
+        lambda n: n.info is not None and n.info.get("type") == "Module"
+    )
     assert found is None
 
 
@@ -88,15 +92,18 @@ def test_find_child():
     root.add_child(child2)
 
     found = root.find_child(
-        lambda n: n.info is not None and n.info.get("type") == "Assign")
+        lambda n: n.info is not None and n.info.get("type") == "Assign"
+    )
     assert found == child1
 
     found = root.find_child(
-        lambda n: n.info is not None and n.info.get("type") == "FunctionDef")
+        lambda n: n.info is not None and n.info.get("type") == "FunctionDef"
+    )
     assert found == child2
 
     found = child1.find_child(
-        lambda n: n.info is not None and n.info.get("type") == "Assign")
+        lambda n: n.info is not None and n.info.get("type") == "Assign"
+    )
     assert found is None
 
 
@@ -109,7 +116,8 @@ def test_find_sibling():
     root.add_child(child2)
 
     found = child1.find_sibling(
-        lambda n: n.info is not None and n.info.get("type") == "FunctionDef")
+        lambda n: n.info is not None and n.info.get("type") == "FunctionDef"
+    )
     assert found == child2
 
 

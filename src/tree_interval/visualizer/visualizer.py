@@ -6,6 +6,7 @@ with support for AST analysis.
 """
 
 from typing import Optional
+
 from .config import VisualizationConfig
 
 DEFAULT_CONFIG = VisualizationConfig()

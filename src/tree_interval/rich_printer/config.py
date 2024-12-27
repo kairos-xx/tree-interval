@@ -2,6 +2,7 @@
 
 from dataclasses import dataclass
 from typing import Optional
+
 from rich.style import Style
 
 

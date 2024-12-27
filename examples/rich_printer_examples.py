@@ -1,8 +1,9 @@
 """Rich printer examples demonstrating various features."""
 
-from src.tree_interval import Tree, Leaf, Position
-from src.tree_interval.rich_printer import RichTreePrinter, RichPrintConfig
 from rich.style import Style
+
+from src.tree_interval import Leaf, Position, Tree
+from src.tree_interval.rich_printer import RichPrintConfig, RichTreePrinter
 
 
 def example_basic():

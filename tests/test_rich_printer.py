@@ -2,8 +2,9 @@
 
 import pytest
 from rich.console import Console
-from src.tree_interval import Tree, Leaf, Position
-from src.tree_interval.rich_printer import RichTreePrinter, RichPrintConfig
+
+from src.tree_interval import Leaf, Position, Tree
+from src.tree_interval.rich_printer import RichPrintConfig, RichTreePrinter
 
 
 def test_rich_printer_empty_tree():
