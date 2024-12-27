@@ -9,7 +9,7 @@ setup(
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
     author="Joao Lopes",
-    author_email="joaslopes@gmail.com",
+    author_email="joaoslopes@gmail.com",
     url="https://github.com/kairos-xx/tree-interval",
     classifiers=[
         "Development Status :: 3 - Alpha",
