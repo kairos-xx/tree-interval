@@ -1,8 +1,11 @@
+
 """
 Comprehensive examples demonstrating all features of the tree interval package.
 """
-from src.tree_interval import Tree, Leaf, Position, FrameAnalyzer, VisualizationConfig
+from src.tree_interval import Tree, Leaf, Position, FrameAnalyzer, TreeVisualizer, VisualizationConfig
 from inspect import currentframe
+import sys
+import json
 
 def demonstrate_positions():
     # Basic Position
@@ -20,17 +23,43 @@ def demonstrate_positions():
     
     return [pos1, pos2, pos3]
 
-def demonstrate_leaves():
-    # Create leaf with Position object
-    leaf1 = Leaf(Position(0, 100, "Using Position"))
-    
-    # Create leaf with tuple
-    leaf2 = Leaf((10, 50, "Using Tuple"))
-    
-    # Create leaf with separate arguments
-    leaf3 = Leaf(60, 90, "Using Args")
-    
-    return [leaf1, leaf2, leaf3]
+def example_basic_tree():
+    """Basic tree creation and visualization."""
+    tree = Tree("Basic Example")
+    root = Leaf(0, 100, "Root")
+    child1 = Leaf(10, 40, "Child 1")
+    child2 = Leaf(50, 90, "Child 2")
+    grandchild = Leaf(15, 35, "Grandchild")
+
+    tree.root = root
+    tree.add_leaf(child1)
+    tree.add_leaf(child2)
+    child1.add_child(grandchild)
+
+    print("Basic Tree:")
+    tree.visualize()
+
+def example_custom_visualization():
+    """Demonstrate different visualization options."""
+    tree = Tree("Visualization Example")
+    root = Leaf(0, 100, "Root")
+    child1 = Leaf(10, 40, "Child 1")
+    child2 = Leaf(50, 90, "Child 2")
+
+    tree.root = root
+    tree.add_leaf(child1)
+    tree.add_leaf(child2)
+
+    print("\nDefault visualization:")
+    tree.visualize()
+
+    print("\nWith position objects:")
+    tree.visualize(VisualizationConfig(position_format='position'))
+
+    print("\nWith tuples and children count:")
+    tree.visualize(VisualizationConfig(position_format='tuple',
+                          show_children_count=True,
+                          show_size=False))
 
 def demonstrate_tree_operations():
     # Create tree
@@ -67,19 +96,18 @@ def main():
     
     print("\n=== Tree Operations ===")
     tree = demonstrate_tree_operations()
+    tree_json = tree.to_json()
     
     print("\nDefault visualization:")
     tree.visualize()
     
     print("\nWith Position format:")
-    TreeVisualizer.visualize(tree, 
-        VisualizationConfig(position_format='position'))
+    tree.visualize(VisualizationConfig(position_format='position'))
     
     print("\nWith tuples and children count:")
-    TreeVisualizer.visualize(tree, 
-        VisualizationConfig(position_format='tuple',
-                           show_children_count=True,
-                           show_size=False))
+    tree.visualize(VisualizationConfig(position_format='tuple',
+                          show_children_count=True,
+                          show_size=False))
     
     print("\nFinding nodes:")
     best_match = tree.find_best_match(20, 30)
@@ -90,78 +118,15 @@ def main():
     print("Flattened tree:", [leaf.info for leaf in flat_list])
     
     print("\nJSON operations:")
-    json_str = tree.to_json()
-    print("JSON:", json_str)
+    print("JSON:", tree_json)
 
-
-def demonstrate_line_positions():
-    print("\n=== Line Position Examples ===")
-    
-    # Create a tree with line numbers
-    tree = Tree("Line Number Example")
-    
-    # Create root with line numbers
-    root = Leaf(Position(0, 100, "Function"))
-    root.position.lineno = 1
-    root.position.end_lineno = 10
-    root.position.col_offset = 0
-    root.position.end_col_offset = 4
-    tree.root = root
-    
-    # Create a child node (if statement)
-    if_node = Leaf(Position(20, 60, "If Block"))
-    if_node.position.lineno = 3
-    if_node.position.end_lineno = 5
-    if_node.position.col_offset = 4
-    if_node.position.end_col_offset = 8
-    tree.add_leaf(if_node)
-    
-    # Visualize with different configs
-    print("\nDefault view:")
-    tree.visualize()
-    
-    print("\nDetailed position view:")
-    TreeVisualizer.visualize(tree, 
-        VisualizationConfig(position_format='position'))
-
-if __name__ == "__main__":
-    main()
-    demonstrate_line_positions()
-
-    
-    new_tree = Tree.from_json(json_str)
+    new_tree = Tree.from_json(tree_json)
     print("\nReconstructed tree:")
     new_tree.visualize()
-
-if __name__ == "__main__":
-    main()
-def example_frame_analyzer():
-    """Demonstrate frame analyzer functionality."""
-    def sample_function():
-        x = 1
-        y = 2
-        return x + y
-
-    # Get current frame
-    frame = currentframe()
-    
-    # Create analyzer
-    analyzer = FrameAnalyzer(frame)
-    
-    # Find current node
-    current_node = analyzer.find_current_node()
-    print("\nCurrent Node:", current_node)
-    
-    # Build and show complete tree
-    tree = analyzer.build_tree()
-    if tree:
-        print("\nComplete AST Tree:")
-        tree.visualize()
 
 if __name__ == "__main__":
     print("=== Basic Tree Example ===")
     example_basic_tree()
     print("\n=== Visualization Options Example ===")
     example_custom_visualization()
-    print("\n=== Frame Analyzer Example ===")
-    example_frame_analyzer()
+    main()
