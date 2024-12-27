@@ -24,10 +24,12 @@ class AstTreeBuilder:
             
     def _get_source(self) -> None:
         try:
-            self.source = unparse(parse(self.frame.f_code.co_code))
-        except (SyntaxError, TypeError, ValueError):
             if self.frame.f_code.co_firstlineno:
                 self.source = getsource(self.frame.f_code)
+            if not self.source:
+                self.source = unparse(parse(self.frame.f_code.co_code))
+        except (SyntaxError, TypeError, ValueError):
+            pass
 
     def _calculate_line_positions(self) -> list[Tuple[int, int]]:
         if not self.source:
