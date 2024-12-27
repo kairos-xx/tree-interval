@@ -43,16 +43,16 @@ class Position:
         self.children: List["Leaf"] = []
 
     @property
-    def lineno(self) -> Optional[int]:
-        return self._lineno
+    def lineno(self) -> int:
+        return self._lineno if self._lineno is not None else 1
 
     @lineno.setter
     def lineno(self, value: Optional[int]) -> None:
         self._lineno = value
 
     @property
-    def end_lineno(self) -> Optional[int]:
-        return self._end_lineno
+    def end_lineno(self) -> int:
+        return self._end_lineno if self._end_lineno is not None else 1
 
     @end_lineno.setter
     def end_lineno(self, value: Optional[int]) -> None:
@@ -85,30 +85,28 @@ class Position:
     def position_as(self, position_format: str = "default") -> str:
         """Display position with specific format."""
         if position_format == "position":
+            col_offset = self.col_offset if self.col_offset is not None else 0
+            end_col_offset = (
+                self.end_col_offset if self.end_col_offset is not None else 0
+            )
             return (
                 f"Position(start={self.start}, "
                 + f"end={self.end}, "
                 + f"lineno={self.lineno}, "
                 + f"end_lineno={self.end_lineno}, "
-                + f"col_offset={self.col_offset}, "
-                + f"end_col_offset={self.end_col_offset})"
+                + f"col_offset={col_offset}, "
+                + f"end_col_offset={end_col_offset})"
             )
         elif position_format == "tuple":
-            return (
-                "("
-                + ", ".join(
-                    str(v)
-                    for v in (
-                        self.start,
-                        self.end,
-                        self.lineno,
-                        self.end_lineno,
-                        self.col_offset,
-                        self.end_col_offset,
-                    )
-                )
-                + ")"
-            )
+            values = [
+                self.start,
+                self.end,
+                self.lineno,
+                self.end_lineno,
+                self.col_offset if self.col_offset is not None else 0,
+                self.end_col_offset if self.end_col_offset is not None else 0,
+            ]
+            return "(" + ", ".join(str(v) for v in values) + ")"
         else:
             return f"Position(start={self.start}, end={self.end})"
 
@@ -168,6 +166,7 @@ class Leaf:
 
         self.parent: Optional[Leaf] = None
         self.children: List[Leaf] = []
+        self.ast_node: Optional[Any] = None
         self.attributes = NestedAttributes(self._as_dict())
 
     @property
@@ -305,35 +304,19 @@ class Leaf:
                 return sibling
         return None
 
-    def find(self, criteria: Callable[["Leaf"], bool]) -> Optional["Leaf"]:
-        """Find first node in the tree that matches the criteria.
-        Searches through the current node, parent nodes, child nodes, and siblings.
-
-        Args:
-            criteria: A function that takes a Leaf node and returns bool
-
-        Returns:
-            Matching node or None if not found
-        """
-        # Check current node
-        if criteria(self):
+    def find(self, predicate: Callable[["Leaf"], bool]) -> Optional["Leaf"]:
+        """Find first node matching predicate."""
+        if predicate(self):
             return self
-
-        # Check parent nodes
-        parent_match = self.find_parent(criteria)
+        parent_match = self.find_parent(predicate)
         if parent_match:
             return parent_match
-
-        # Check child nodes
-        child_match = self.find_child(criteria)
+        child_match = self.find_child(predicate)
         if child_match:
             return child_match
-
-        # Check sibling nodes
-        sibling_match = self.find_sibling(criteria)
+        sibling_match = self.find_sibling(predicate)
         if sibling_match:
             return sibling_match
-
         return None
 
     def _as_dict(self) -> Dict[str, Any]:

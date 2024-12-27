@@ -9,6 +9,7 @@ from src.tree_interval import (
     TreeVisualizer,
     VisualizationConfig,
 )
+from tree_interval import AstTreeBuilder
 
 
 def demonstrate_positions():
@@ -233,6 +234,38 @@ def demonstrate_dot_notation():
     print("Sibling:", found_sibling.attributes.info if found_sibling else None)
 
 
+def demonstrate_ast_parsing():
+    print("\n=== AST Examples ===")
+
+    code = """
+    class MyClass:
+        def hello(self):
+            return "world"
+    """
+
+    builder = AstTreeBuilder(code)
+    tree = builder.build()
+    if not tree.root:
+        print("Tree root is None")
+        return
+
+    # Find class definition node
+    class_node = tree.root.find(
+        lambda n: n is not None
+        and hasattr(n, "info")
+        and n.info is not None
+        and isinstance(n.info, dict)
+        and n.info.get("type") == "ClassDef"
+    )
+    print("=== AST Node Info Example ===")
+    if class_node and hasattr(class_node, "ast_node") and class_node.ast_node:
+        print(f"Class name: {class_node.ast_node.name}")
+        print(f"Fields: {class_node.ast_node._fields}")
+        print(f"Info dict: {class_node.info}")
+    else:
+        print("Class definition not found")
+
+
 if __name__ == "__main__":
     print("=== Tree Interval Package Demo ===")
     demonstrate_positions()
@@ -243,3 +276,4 @@ if __name__ == "__main__":
     example_json_serialization()
     demonstrate_line_positions()
     demonstrate_dot_notation()
+    demonstrate_ast_parsing()

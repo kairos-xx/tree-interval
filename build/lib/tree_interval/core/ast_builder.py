@@ -34,9 +34,17 @@ class AstTreeBuilder:
             raise ValueError("No source code available")
 
         tree = parse(self.source)
+        if not tree:
+            raise ValueError("Failed to parse source code")
+
         result_tree = Tree[str](self.source)
+        if not result_tree:
+            raise ValueError("Failed to create result tree")
+
         root = Leaf(0, len(self.source), "Module")
         result_tree.root = root
+        if not result_tree.root:
+            raise ValueError("Failed to set root node")
 
         for node in walk(tree):
             lineno = getattr(node, "lineno", None)
@@ -63,11 +71,30 @@ class AstTreeBuilder:
                         if isinstance(value, (str, int, float, bool)):
                             fields_info[field] = value
                         elif isinstance(value, AST):
-                            fields_info[field] = value.__class__.__name__
+                            fields_info[field] = {
+                                "type": value.__class__.__name__,
+                                "fields": {
+                                    k: getattr(value, k, None) for k in value._fields
+                                },
+                            }
                         elif isinstance(value, list):
-                            fields_info[field] = f"List[{len(value)}]"
+                            fields_info[field] = [
+                                {
+                                    "type": item.__class__.__name__,
+                                    "fields": {
+                                        k: getattr(item, k, None) for k in item._fields
+                                    },
+                                }
+                                if isinstance(item, AST)
+                                else item
+                                for item in value
+                            ]
 
-                    node_info = {"type": node.__class__.__name__, "fields": fields_info}
+                    node_info = {
+                        "type": node.__class__.__name__,
+                        "fields": fields_info,
+                        "_fields": node._fields,
+                    }
 
                     leaf = Leaf(
                         Position(start if start is not None else 0, end, node_info),
@@ -97,11 +124,30 @@ class AstTreeBuilder:
                         if isinstance(value, (str, int, float, bool)):
                             fields_info[field] = value
                         elif isinstance(value, AST):
-                            fields_info[field] = value.__class__.__name__
+                            fields_info[field] = {
+                                "type": value.__class__.__name__,
+                                "fields": {
+                                    k: getattr(value, k, None) for k in value._fields
+                                },
+                            }
                         elif isinstance(value, list):
-                            fields_info[field] = f"List[{len(value)}]"
+                            fields_info[field] = [
+                                {
+                                    "type": item.__class__.__name__,
+                                    "fields": {
+                                        k: getattr(item, k, None) for k in item._fields
+                                    },
+                                }
+                                if isinstance(item, AST)
+                                else item
+                                for item in value
+                            ]
 
-                    node_info = {"type": node.__class__.__name__, "fields": fields_info}
+                    node_info = {
+                        "type": node.__class__.__name__,
+                        "fields": fields_info,
+                        "_fields": node._fields,
+                    }
 
                     leaf = Leaf(
                         Position(start if start is not None else 0, end, node_info),

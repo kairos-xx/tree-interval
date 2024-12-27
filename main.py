@@ -361,6 +361,7 @@ def demonstrate_find_method():
         lambda n: hasattr(n.attributes.info, "type")
         and n.attributes.info.type == "Module"
     )
+
     print(f"Found module: {found.attributes.info if found else None}")
 
 

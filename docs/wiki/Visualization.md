@@ -1,27 +1,58 @@
 
 # Visualization
 
-Tree Interval provides two visualization methods:
+Tree Interval provides multiple visualization options:
 
-## Basic Visualization
+## Basic ASCII Tree
+
+Simple tree visualization with ANSI colors:
+
 ```python
 tree.visualize()
 ```
 
-## Rich Printing
+Output:
+```
+┌── Position(0, 100) type=Module
+├── Position(10, 40) type=FunctionDef name=hello
+└── Position(50, 90) type=ClassDef name=Example
+```
+
+## Rich Pretty Printing
+
+Enhanced visualization using the Rich library:
+
 ```python
 from tree_interval.rich_printer import RichTreePrinter, RichPrintConfig
 
-printer = RichTreePrinter()
-printer.print_tree(tree)
-```
-
-### Custom Configuration
-```python
+# Custom configuration
 config = RichPrintConfig(
     show_info=True,
     show_size=True,
-    show_position=True
+    show_position=True,
+    indent_size=2
 )
+
+# Print tree
 printer = RichTreePrinter(config)
+printer.print_tree(tree)
 ```
+
+## Customization Options
+
+1. **Position Format**:
+   - Full position details
+   - Simple tuple format
+   - Custom formatting
+
+2. **Display Options**:
+   - Node sizes
+   - Type information  
+   - Children counts
+   - Custom node info
+
+3. **Styling**:
+   - Custom colors
+   - Bold/italic text
+   - Guide line styles
+   - Indentation control
