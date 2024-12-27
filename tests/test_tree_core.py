@@ -68,17 +68,17 @@ def test_find_parent():
     child1.add_child(grandchild)
 
     found = grandchild.find_parent(
-        lambda n: n.info is not None and n.info.get("type") == "FunctionDef"
+        lambda n: isinstance(n.info, dict) and n.info.get("type") == "FunctionDef"
     )
     assert found == child1
 
     found = grandchild.find_parent(
-        lambda n: n.info is not None and n.info.get("type") == "Module"
+        lambda n: isinstance(n.info, dict) and n.info.get("type") == "Module"
     )
     assert found == root
 
     found = root.find_parent(
-        lambda n: n.info is not None and n.info.get("type") == "Module"
+        lambda n: isinstance(n.info, dict) and n.info.get("type") == "Module"
     )
     assert found is None
 

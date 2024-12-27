@@ -70,17 +70,17 @@ def demonstrate_find_nodes():
 
     # Find parent example
     found_parent = grandchild.find_parent(
-        lambda n: n.info is not None and n.info.get("type") == "FunctionDef")
+        lambda n: isinstance(n.info, dict) and n.info.get("type") == "FunctionDef")
     print("Found parent:", found_parent.info if found_parent else None)
 
     # Find child example
     found_child = root.find_child(
-        lambda n: n.info is not None and n.info.get("type") == "ClassDef")
+        lambda n: isinstance(n.info, dict) and n.info.get("type") == "ClassDef")
     print("Found child:", found_child.info if found_child else None)
 
     # Find sibling example
     found_sibling = child1.find_sibling(
-        lambda n: n.info is not None and n.info.get("type") == "ClassDef")
+        lambda n: isinstance(n.info, dict) and n.info.get("type") == "ClassDef")
     print("Found sibling:", found_sibling.info if found_sibling else None)
 
 
