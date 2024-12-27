@@ -165,6 +165,7 @@ def test_position_format():
     child1_pos.lineno = 2
     child1_pos.end_lineno = 4
     child1_pos.col_offset = 4
+    child1_pos.end_col_offset = 24  # End col offset for child1
     child1 = Leaf(child1_pos)
 
     # Create grandchild1 position
@@ -172,6 +173,7 @@ def test_position_format():
     grandchild1_pos.lineno = 3
     grandchild1_pos.end_lineno = 3
     grandchild1_pos.col_offset = 8
+    grandchild1_pos.end_col_offset = 28  # End col offset for grandchild1
     grandchild1 = Leaf(grandchild1_pos)
 
     # Create child2 position
@@ -179,6 +181,7 @@ def test_position_format():
     child2_pos.lineno = 5
     child2_pos.end_lineno = 8
     child2_pos.col_offset = 4
+    child2_pos.end_col_offset = 24  # End col offset for child2
     child2 = Leaf(child2_pos)
 
     # Create grandchild2 position
@@ -186,6 +189,7 @@ def test_position_format():
     grandchild2_pos.lineno = 6
     grandchild2_pos.end_lineno = 7
     grandchild2_pos.col_offset = 8
+    grandchild2_pos.end_col_offset = 28  # End col offset for grandchild2
     grandchild2 = Leaf(grandchild2_pos)
 
     # Build tree structure
