@@ -17,9 +17,28 @@ def demonstrate_basic_tree():
     """Basic tree creation and manipulation."""
     print("\n=== Basic Tree Example ===")
     tree = Tree("Basic Example")
-    root = Leaf(0, 100, "Root")
-    child1 = Leaf(10, 40, "Child 1")
-    child2 = Leaf(50, 90, "Child 2")
+    
+    # Create position with line and column information
+    root_pos = Position(0, 100, "Root")
+    root_pos.lineno = 1
+    root_pos.end_lineno = 5
+    root_pos.col_offset = 0
+    root_pos.end_col_offset = 100
+    root = Leaf(root_pos)
+    
+    child1_pos = Position(10, 40, "Child 1")
+    child1_pos.lineno = 2
+    child1_pos.end_lineno = 3
+    child1_pos.col_offset = 4
+    child1_pos.end_col_offset = 40
+    child1 = Leaf(child1_pos)
+    
+    child2_pos = Position(50, 90, "Child 2")
+    child2_pos.lineno = 4
+    child2_pos.end_lineno = 5
+    child2_pos.col_offset = 4
+    child2_pos.end_col_offset = 90
+    child2 = Leaf(child2_pos)
     grandchild = Leaf(15, 35, "Grandchild")
 
     tree.root = root
