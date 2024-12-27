@@ -1,10 +1,9 @@
-
+import json
 import os
 import subprocess
 import sys
-from pathlib import Path
-import json
 import urllib.request
+from pathlib import Path
 
 
 def get_latest_version():
@@ -24,16 +23,24 @@ def increment_version(version):
 
 def update_version_in_files(new_version):
     # Update pyproject.toml
-    with open("../pyproject.toml", "r") as f:
+    with open("pyproject.toml", "r") as f:
         content = f.read()
-    with open("../pyproject.toml", "w") as f:
-        f.write(content.replace(f'version = "{get_latest_version()}"', f'version = "{new_version}"'))
+    with open("pyproject.toml", "w") as f:
+        f.write(
+            content.replace(
+                f'version = "{get_latest_version()}"', f'version = "{new_version}"'
+            )
+        )
 
     # Update setup.py
-    with open("../setup.py", "r") as f:
+    with open("setup.py", "r") as f:
         content = f.read()
-    with open("../setup.py", "w") as f:
-        f.write(content.replace(f'version="{get_latest_version()}"', f'version="{new_version}"'))
+    with open("setup.py", "w") as f:
+        f.write(
+            content.replace(
+                f'version="{get_latest_version()}"', f'version="{new_version}"'
+            )
+        )
 
 
 def check_token():
@@ -101,7 +108,7 @@ def main():
     create_pypirc(token)
 
     # Build and upload directly
-    build_and_upload("../")
+    build_and_upload("/home/runner/Tree")
     print("Tree Interval package built and uploaded successfully!")
 
 

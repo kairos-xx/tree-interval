@@ -20,3 +20,23 @@ deploymentTarget = "cloudrun"
 
 [env]
 PYTHONPATH = "$PYTHONPATH:$REPL_HOME/.pythonlibs/lib/python3.11/site-packages"
+
+[workflows]
+
+[[workflows.workflow]]
+name = "pypi upload"
+mode = "sequential"
+author = 299513
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python scripts/pypi_upload.py | tee scripts/pypi_upload.log 2>&1"
+
+[[workflows.workflow]]
+name = "Ruff"
+mode = "sequential"
+author = 299513
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "ruff format"
