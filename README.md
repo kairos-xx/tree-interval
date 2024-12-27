@@ -1,15 +1,23 @@
 
-# Tree Interval
+<div align="center">
+  <h1>🌳 Tree Interval</h1>
+  <p><em>A powerful Python package for managing, analyzing, and visualizing tree structures with rich interval-based node positioning</em></p>
+  
+  [![Build Status](https://github.com/kairos-xx/tree-interval/actions/workflows/python-publish.yml/badge.svg)](https://github.com/kairos-xx/tree-interval/actions)
+  [![Python Versions](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+</div>
 
-A Python package for managing and visualizing interval tree structures with AST analysis capabilities.
+## ✨ Features
 
-## Installation
+- 📍 **Position-Aware Nodes**: Track code positions with line numbers, column offsets and intervals
+- 🌲 **AST Analysis**: Built-in support for Python AST traversal and node location
+- 🔍 **Frame Analysis**: Runtime code inspection with frame position tracking
+- 🎨 **Rich Visualization**: Multiple visualization options including ASCII trees and Rich-based pretty printing
+- 💾 **JSON Serialization**: Full support for saving and loading tree structures
+- 🔎 **Flexible Node Search**: Parent, child and sibling search with custom predicates
 
-```bash
-pip install tree-interval
-```
-
-## Quick Start
+## 🚀 Quick Start
 
 ```python
 from tree_interval import Tree, Leaf, Position
@@ -26,17 +34,71 @@ tree.add_leaf(child)
 tree.visualize()
 ```
 
-## Repository Links
-- GitHub: [https://github.com/kairos-xx/tree-interval](https://github.com/kairos-xx/tree-interval)
-- PyPI: [https://pypi.org/project/tree-interval/](https://pypi.org/project/tree-interval/)
+## 📦 Installation
 
-## Features
-- Tree structure management with position tracking
-- AST (Abstract Syntax Tree) analysis
-- Frame analysis for runtime code inspection
-- Position-aware node tracking
-- Customizable tree visualization
-- JSON serialization/deserialization
+```bash
+pip install tree-interval
+```
 
-## License
-MIT License - See LICENSE file for details
+## 🎯 Core Components
+
+### Position Types
+```python
+# Basic Position
+pos = Position(0, 100, "Basic")
+
+# Line-Aware Position
+pos = Position(0, 100, "Lines")
+pos.lineno = 1
+pos.end_lineno = 5
+
+# Column-Aware Position
+pos = Position(0, 100, "Columns")
+pos.col_offset = 4
+pos.end_col_offset = 8
+```
+
+### Tree Visualization
+```python
+# Basic ASCII Tree
+tree.visualize()
+
+# Rich Pretty Printing
+from tree_interval.rich_printer import RichTreePrinter
+printer = RichTreePrinter()
+printer.print_tree(tree)
+```
+
+## 📚 Documentation
+
+- [Core Components](../tree/master/docs/wiki/Core-Components.md)
+- [Installation Guide](../tree/master/docs/wiki/Installation.md)
+- [Visualization Guide](../tree/master/docs/wiki/Visualization.md)
+- [API Reference](../tree/master/docs/API_REFERENCE.md)
+
+## 💡 Use Cases
+
+1. **Code Analysis**
+   - Track source positions in AST nodes
+   - Locate runtime code execution points
+   - Analyze code structure and relationships
+
+2. **Tree Visualization** 
+   - Debug tree structures
+   - Generate documentation
+   - Analyze hierarchical data
+
+3. **Position Tracking**
+   - Map source locations
+   - Track text positions
+   - Handle nested intervals
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+<div align="center">
+  <sub>Built with ❤️ by Kairos</sub>
+</div>
