@@ -1,78 +1,105 @@
+
 # Tree Interval API Reference
 
-## Core Modules
+## Table of Contents
+- [Core Package](#core-package)
+  - [Tree](#tree)
+  - [Leaf](#leaf)
+  - [Position](#position)
+- [Visualization](#visualization)
+  - [TreeVisualizer](#treevisualizer)
+  - [VisualizationConfig](#visualizationconfig)
+- [Analysis](#analysis)
+  - [AstTreeBuilder](#asttreebuilder)
+  - [FrameAnalyzer](#frameanalyzer)
 
-### 📦 `tree_interval.core.interval_core`
+## Core Package
 
-#### 📍 `Position` Class 
-*Manages position information for tree nodes*
+### Tree
+The main tree structure implementation for managing interval-based hierarchies.
 
-##### Methods
+#### Constructor
+```python
+Tree(source: T, start_lineno: Optional[int] = None, indent_size: int = 4)
+```
 
-*  **`__init__(self, start: int, end: int, info: Any) -> None`**  
-Initializes a position with start, end and info.
+#### Methods
+- **add_leaf(leaf: Leaf) -> None**
+  - Adds a leaf to the tree structure
+  - Parameters:
+    - `leaf`: The leaf node to add
 
-Parameters:
-- `start` (`int`): Start position
-- `end` (`int`): End position  
-- `info` (`Any`): Additional information
+- **find_best_match(start: int, end: int) -> Optional[Leaf]**
+  - Finds the best matching leaf for given position
+  - Returns: Best matching leaf or None
 
-#### 🌳 `Leaf` Class
-*Represents a node in the tree structure*
+### Leaf
+Represents a node in the tree structure.
 
-##### Methods
+#### Constructor
+```python
+Leaf(position: Union[Position, tuple[int, int, Any]])
+```
 
-*  **`__init__(self, position: Union[Position, tuple[int, int, Any]]) -> None`**  
-Initializes a leaf node.
+#### Methods
+- **add_child(child: Leaf) -> None**
+  - Adds a child node
+  - Parameters:
+    - `child`: Child node to add
 
-Parameters:
-- `position` (`Union[Position, tuple[int, int, Any]]`): Position information
+### Position
+Manages position information for tree nodes.
 
-*  **`add_child(self, child: 'Leaf') -> None`**  
-Adds a child node to this leaf.
+#### Constructor
+```python
+Position(start: int, end: int, info: Any)
+```
 
-Parameters:
-- `child` (`Leaf`): The child node to add
+#### Properties
+- `lineno`: Starting line number
+- `end_lineno`: Ending line number
+- `col_offset`: Starting column offset
+- `end_col_offset`: Ending column offset
 
-#### 🌲 `Tree` Class
-*Main tree structure implementation*
+## Visualization
 
-##### Methods
+### TreeVisualizer
+Handles tree structure visualization.
 
-*  **`__init__(self, source: str) -> None`**  
-Initializes a new tree.
+#### Methods
+- **visualize(tree: Tree, config: Optional[VisualizationConfig] = None) -> None**
+  - Visualizes the tree structure
+  - Parameters:
+    - `tree`: Tree to visualize
+    - `config`: Optional visualization configuration
 
-Parameters:
-- `source` (`str`): Source identifier for the tree
+### VisualizationConfig
+Configuration for tree visualization.
 
-*  **`add_leaf(self, leaf: Leaf) -> None`**  
-Adds a leaf to the tree.
+#### Constructor
+```python
+VisualizationConfig(
+    show_info: bool = True,
+    show_size: bool = True,
+    show_children_count: bool = False,
+    position_format: str = "range"
+)
+```
 
-Parameters:
-- `leaf` (`Leaf`): The leaf to add
+## Analysis
 
-*  **`find_best_match(self, start: int, end: int) -> Optional[Leaf]`**  
-Finds the best matching leaf for given position.
+### AstTreeBuilder
+Builds tree structures from Python AST.
 
-Parameters:
-- `start` (`int`): Start position
-- `end` (`int`): End position
+#### Methods
+- **build() -> Tree**
+  - Builds and returns AST tree
 
-Returns:
-- `Optional[Leaf]`: Best matching leaf or None
+### FrameAnalyzer
+Analyzes Python stack frames.
 
-### 🎨 `tree_interval.visualizer`
-
-#### `VisualizationConfig` Class
-*Configuration settings for tree visualization*
-
-##### Methods
-
-*  **`__init__(self, show_info: bool = True, show_size: bool = True, show_children_count: bool = False, position_format: str = "range") -> None`**  
-Initializes visualization configuration.
-
-Parameters:
-- `show_info` (`bool`): Whether to show node info
-- `show_size` (`bool`): Whether to show node sizes
-- `show_children_count` (`bool`): Whether to show children count
-- `position_format` (`str`): Format for position display
+#### Methods
+- **find_current_node() -> Optional[Leaf]**
+  - Finds current AST node
+- **build_tree() -> Optional[Tree]**
+  - Builds tree from frame
