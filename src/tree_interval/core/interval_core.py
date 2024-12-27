@@ -152,6 +152,8 @@ class Leaf:
         end: Optional[int] = None,
         info: Optional[Any] = None,
     ) -> None:
+        if position is None:
+            raise ValueError("Position cannot be None")
         if isinstance(position, Position):
             self.position = position
         elif isinstance(position, tuple):
