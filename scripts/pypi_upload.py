@@ -61,7 +61,7 @@ def main():
     create_pypirc(token)
 
     # Build and upload directly
-    build_and_upload()
+    build_and_upload("../")
     print("Tree Interval package built and uploaded successfully!")
 
 
