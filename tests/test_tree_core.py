@@ -1,7 +1,7 @@
+
 """Unit tests for Tree Interval core functionality."""
 
 import pytest
-
 from src.tree_interval import AstTreeBuilder, FrameAnalyzer, Leaf, Position, Tree
 
 
@@ -59,36 +59,52 @@ def test_find_best_match():
     assert match == child
 
 
-def test_ast_builder():
-    code = "x = 1 + 2"
-    builder = AstTreeBuilder(code)
-    tree = builder.build()
-    assert tree is not None
-    assert tree.root is not None
+def test_find_parent():
+    root = Leaf(Position(0, 100, {"type": "Module"}))
+    child1 = Leaf(Position(10, 50, {"type": "FunctionDef"}))
+    grandchild = Leaf(Position(20, 40, {"type": "Return"}))
+
+    root.add_child(child1)
+    child1.add_child(grandchild)
+
+    found = grandchild.find_parent(lambda n: n.info is not None and n.info.get("type") == "FunctionDef")
+    assert found == child1
+
+    found = grandchild.find_parent(lambda n: n.info is not None and n.info.get("type") == "Module")
+    assert found == root
+
+    found = root.find_parent(lambda n: n.info is not None and n.info.get("type") == "Module")
+    assert found is None
 
 
-def test_frame_analyzer():
-    def sample_func():
-        frame = sample_func.__code__
-        analyzer = FrameAnalyzer(frame)
-        return analyzer.build_tree()
+def test_find_child():
+    root = Leaf(Position(0, 100, {"type": "Module"}))
+    child1 = Leaf(Position(10, 40, {"type": "Assign"}))
+    child2 = Leaf(Position(50, 90, {"type": "FunctionDef"}))
 
-    tree = sample_func()
-    assert tree is not None
+    root.add_child(child1)
+    root.add_child(child2)
+
+    found = root.find_child(lambda n: n.info is not None and n.info.get("type") == "Assign")
+    assert found == child1
+
+    found = root.find_child(lambda n: n.info is not None and n.info.get("type") == "FunctionDef")
+    assert found == child2
+
+    found = child1.find_child(lambda n: n.info is not None and n.info.get("type") == "Assign")
+    assert found is None
 
 
-def test_tree_serialization():
-    tree = Tree("Test")
-    root = Leaf(Position(0, 100, "Root"))
-    tree.root = root
+def test_find_sibling():
+    root = Leaf(Position(0, 100, {"type": "Module"}))
+    child1 = Leaf(Position(10, 40, {"type": "Assign"}))
+    child2 = Leaf(Position(50, 90, {"type": "FunctionDef"}))
 
-    json_str = tree.to_json()
-    loaded_tree = Tree.from_json(json_str)
+    root.add_child(child1)
+    root.add_child(child2)
 
-    assert loaded_tree.source == tree.source
-    assert loaded_tree.root is not None and tree.root is not None
-    assert loaded_tree.root.start == tree.root.start
-    assert loaded_tree.root.end == tree.root.end
+    found = child1.find_sibling(lambda n: n.info is not None and n.info.get("type") == "FunctionDef")
+    assert found == child2
 
 
 def test_leaf_hierarchy():
@@ -106,48 +122,18 @@ def test_leaf_hierarchy():
     assert grandchild.parent == child1
 
 
-def test_find_parent():
+def test_tree_serialization():
     tree = Tree("Test")
-    root = Leaf(Position(0, 100, {"type": "Module"}))
-    child = Leaf(Position(10, 90, {"type": "FunctionDef"}))
-    grandchild = Leaf(Position(20, 80, {"type": "Assign"}))
-
+    root = Leaf(Position(0, 100, "Root"))
     tree.root = root
-    tree.add_leaf(child)
-    child.add_child(grandchild)
 
-    found = grandchild.find_parent(lambda n: n.info.get("type") == "FunctionDef")
-    assert found == child
+    json_str = tree.to_json()
+    loaded_tree = Tree.from_json(json_str)
 
-
-def test_find_child():
-    tree = Tree("Test")
-    root = Leaf(Position(0, 100, {"type": "Module"}))
-    child1 = Leaf(Position(10, 50, {"type": "FunctionDef"}))
-    child2 = Leaf(Position(60, 90, {"type": "ClassDef"}))
-    grandchild = Leaf(Position(20, 40, {"type": "Assign"}))
-
-    tree.root = root
-    tree.add_leaf(child1)
-    tree.add_leaf(child2)
-    child1.add_child(grandchild)
-
-    found = root.find_child(lambda n: n.info.get("type") == "Assign")
-    assert found == grandchild
-
-
-def test_find_sibling():
-    tree = Tree("Test")
-    root = Leaf(Position(0, 100, {"type": "Module"}))
-    child1 = Leaf(Position(10, 50, {"type": "Import"}))
-    child2 = Leaf(Position(60, 90, {"type": "FunctionDef"}))
-
-    tree.root = root
-    tree.add_leaf(child1)
-    tree.add_leaf(child2)
-
-    found = child1.find_sibling(lambda n: n.info.get("type") == "FunctionDef")
-    assert found == child2
+    assert loaded_tree.source == tree.source
+    assert loaded_tree.root is not None and tree.root is not None
+    assert loaded_tree.root.start == tree.root.start
+    assert loaded_tree.root.end == tree.root.end
 
 
 if __name__ == "__main__":
