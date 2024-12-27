@@ -39,7 +39,7 @@ def test_rich_printer_empty_tree(empty_tree, console):
         printer.print_tree(empty_tree)
     
     captured = capture.get()
-    assert "Empty tree" in captured or "Empty tree" in str(console.file.getvalue())
+    assert "Empty tree" in captured
 
 
 def test_rich_printer_basic_tree(basic_tree, console):
@@ -50,7 +50,7 @@ def test_rich_printer_basic_tree(basic_tree, console):
         printer.print_tree(basic_tree)
     
     captured = capture.get()
-    assert "[0-100]" in captured or "[0-100]" in str(console.file.getvalue())
+    assert "[0-100]" in captured
 
 
 def test_rich_printer_custom_config(basic_tree, console):
@@ -77,7 +77,7 @@ def test_rich_printer_custom_styles(basic_tree, console):
         printer.print_tree(basic_tree)
     
     captured = capture.get()
-    assert captured.strip() != "" or str(console.file.getvalue()).strip() != ""
+    assert captured.strip() != ""
 
 
 if __name__ == "__main__":
