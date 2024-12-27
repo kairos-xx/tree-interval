@@ -1,10 +1,11 @@
 import json
 import os
-from replit import info
 import subprocess
 import sys
 import urllib.request
 from pathlib import Path
+
+from replit import info
 
 
 def get_latest_version():
