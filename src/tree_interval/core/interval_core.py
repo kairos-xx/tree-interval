@@ -115,7 +115,7 @@ class Position:
     def __str__(self) -> str:
         return f"Position(start={self.start}, end={self.end}, info={self.info})"
 
-    def find_parent(self, criteria: Callable[[Any], bool]) -> Optional["Leaf"]:
+    def find_parent(self, criteria: Callable[["Leaf"], bool]) -> Optional["Leaf"]:
         """Find first parent that matches the criteria."""
         if not self.parent:
             return None
@@ -123,7 +123,7 @@ class Position:
             return self.parent
         return self.parent.find_parent(criteria)
 
-    def find_child(self, criteria: Callable[[Any], bool]) -> Optional["Leaf"]:
+    def find_child(self, criteria: Callable[["Leaf"], bool]) -> Optional["Leaf"]:
         """Find first child that matches the criteria."""
         for child in self.children:
             if criteria(child):
@@ -133,7 +133,7 @@ class Position:
                 return result
         return None
 
-    def find_sibling(self, criteria: Callable[[Any], bool]) -> Optional["Leaf"]:
+    def find_sibling(self, criteria: Callable[["Leaf"], bool]) -> Optional["Leaf"]:
         """Find first sibling that matches the criteria."""
         if not self.parent:
             return None
