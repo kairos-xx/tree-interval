@@ -176,7 +176,7 @@ class Leaf:
             current = current.parent
         return None
 
-    def find_parent(self, criteria: callable) -> Optional["Leaf"]:
+    def find_parent(self, criteria: Callable[["Leaf"], bool]) -> Optional["Leaf"]:
         """Find first parent node that matches the given criteria.
 
         Args:
@@ -192,7 +192,7 @@ class Leaf:
             current = current.parent
         return None
 
-    def find_child(self, criteria: callable) -> Optional["Leaf"]:
+    def find_child(self, criteria: Callable[["Leaf"], bool]) -> Optional["Leaf"]:
         """Find first child node that matches the given criteria.
 
         Args:
@@ -209,7 +209,7 @@ class Leaf:
                 return result
         return None
 
-    def find_sibling(self, criteria: callable) -> Optional["Leaf"]:
+    def find_sibling(self, criteria: Callable[["Leaf"], bool]) -> Optional["Leaf"]:
         """Find first sibling node that matches the given criteria.
 
         Args:
