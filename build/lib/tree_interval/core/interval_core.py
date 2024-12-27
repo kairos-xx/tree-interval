@@ -24,6 +24,7 @@ T = TypeVar("T")
 
 
 class Position:
+
     def __init__(
         self,
         start: Optional[int] = None,
@@ -36,9 +37,8 @@ class Position:
         self._lineno: Optional[int] = 1
         self._end_lineno: Optional[int] = 1
         self._col_offset: Optional[int] = 0
-        self._end_col_offset: Optional[int] = (
-            end - start if start is not None and end is not None else 0
-        )
+        self._end_col_offset: Optional[int] = (end - start if start is not None
+                                               and end is not None else 0)
         self.parent: Optional["Leaf"] = None
         self.children: List["Leaf"] = []
 
@@ -112,7 +112,8 @@ class Position:
                 return result
         return None
 
-    def find_sibling(self, criteria: Callable[[Any], bool]) -> Optional["Leaf"]:
+    def find_sibling(self, criteria: Callable[[Any],
+                                              bool]) -> Optional["Leaf"]:
         """Find first sibling that matches the criteria."""
         if not self.parent:
             return None
@@ -139,10 +140,8 @@ class Leaf:
             self.position = Position(position, end, info)
 
         # Initialize end_col_offset if not set
-        if (
-            self.position._end_col_offset is None
-            and self.position._col_offset is not None
-        ):
+        if (self.position._end_col_offset is None
+                and self.position._col_offset is not None):
             self.position._end_col_offset = self.position._col_offset + 20
 
         self.parent: Optional[Leaf] = None
@@ -196,12 +195,8 @@ class Leaf:
             best_match = self
             for child in self.children:
                 child_match = child.find_best_match(start, end)
-                if (
-                    child_match
-                    and child_match.size
-                    and best_match.size
-                    and child_match.size < best_match.size
-                ):
+                if (child_match and child_match.size and best_match.size
+                        and child_match.size < best_match.size):
                     best_match = child_match
             return best_match
         return None
@@ -233,7 +228,8 @@ class Leaf:
             current = current.parent
         return None
 
-    def find_parent(self, criteria: Callable[["Leaf"], bool]) -> Optional["Leaf"]:
+    def find_parent(self, criteria: Callable[["Leaf"],
+                                             bool]) -> Optional["Leaf"]:
         """Find first parent node that matches the given criteria.
 
         Args:
@@ -249,7 +245,8 @@ class Leaf:
             current = current.parent
         return None
 
-    def find_child(self, criteria: Callable[["Leaf"], bool]) -> Optional["Leaf"]:
+    def find_child(self, criteria: Callable[["Leaf"],
+                                            bool]) -> Optional["Leaf"]:
         """Find first child node that matches the given criteria.
 
         Args:
@@ -266,7 +263,8 @@ class Leaf:
                 return result
         return None
 
-    def find_sibling(self, criteria: Callable[["Leaf"], bool]) -> Optional["Leaf"]:
+    def find_sibling(self, criteria: Callable[["Leaf"],
+                                              bool]) -> Optional["Leaf"]:
         """Find first sibling node that matches the given criteria.
 
         Args:
@@ -315,9 +313,10 @@ class Leaf:
 class Tree(Generic[T]):
     """A tree structure containing nodes with position information."""
 
-    def __init__(
-        self, source: T, start_lineno: Optional[int] = None, indent_size: int = 4
-    ) -> None:
+    def __init__(self,
+                 source: T,
+                 start_lineno: Optional[int] = None,
+                 indent_size: int = 4) -> None:
         self.source = source
         self.start_lineno = start_lineno
         self.indent_size = indent_size
@@ -400,7 +399,8 @@ class Tree(Generic[T]):
             node.add_child(child)
         return node
 
-    def visualize(self, config: Optional["VisualizationConfig"] = None) -> None:
+    def visualize(self,
+                  config: Optional["VisualizationConfig"] = None) -> None:
         """Visualize the tree structure."""
         from ..visualizer import TreeVisualizer
 

@@ -67,19 +67,16 @@ def test_find_parent():
     root.add_child(child1)
     child1.add_child(grandchild)
 
-    found = grandchild.find_parent(
-        lambda n: isinstance(n.info, dict) and n.info.get("type") == "FunctionDef"
-    )
+    found = grandchild.find_parent(lambda n: isinstance(n.info, dict) and n.
+                                   info.get("type") == "FunctionDef")
     assert found == child1
 
     found = grandchild.find_parent(
-        lambda n: isinstance(n.info, dict) and n.info.get("type") == "Module"
-    )
+        lambda n: isinstance(n.info, dict) and n.info.get("type") == "Module")
     assert found == root
 
     found = root.find_parent(
-        lambda n: isinstance(n.info, dict) and n.info.get("type") == "Module"
-    )
+        lambda n: isinstance(n.info, dict) and n.info.get("type") == "Module")
     assert found is None
 
 
@@ -92,18 +89,15 @@ def test_find_child():
     root.add_child(child2)
 
     found = root.find_child(
-        lambda n: n.info is not None and n.info.get("type") == "Assign"
-    )
+        lambda n: n.info is not None and n.info.get("type") == "Assign")
     assert found == child1
 
     found = root.find_child(
-        lambda n: n.info is not None and n.info.get("type") == "FunctionDef"
-    )
+        lambda n: n.info is not None and n.info.get("type") == "FunctionDef")
     assert found == child2
 
     found = child1.find_child(
-        lambda n: n.info is not None and n.info.get("type") == "Assign"
-    )
+        lambda n: n.info is not None and n.info.get("type") == "Assign")
     assert found is None
 
 
@@ -116,9 +110,9 @@ def test_find_sibling():
     root.add_child(child2)
 
     found = child1.find_sibling(
-        lambda n: n.info is not None and n.info.get("type") == "FunctionDef"
-    )
+        lambda n: n.info is not None and n.info.get("type") == "FunctionDef")
     assert found == child2
+
 
 def test_find():
     root = Leaf(Position(0, 100, {"type": "Module"}))
@@ -131,19 +125,24 @@ def test_find():
     child1.add_child(grandchild)
 
     # Find in current node
-    found = root.find(lambda n: n.info.get("type") == "Module")
+
+    found = root.find(
+        lambda n: n.info is not None and n.info.get("type") == "Module")
     assert found == root
 
     # Find in parent
-    found = grandchild.find(lambda n: n.info.get("type") == "FunctionDef")
+    found = grandchild.find(
+        lambda n: n.info is not None and n.info.get("type") == "FunctionDef")
     assert found == child1
 
     # Find in children
-    found = root.find(lambda n: n.info.get("name") == "hello")
+    found = root.find(
+        lambda n: n.info is not None and n.info.get("name") == "hello")
     assert found == child1
 
     # Find in siblings
-    found = child1.find(lambda n: n.info.get("name") == "MyClass")
+    found = child1.find(
+        lambda n: n.info is not None and n.info.get("name") == "MyClass")
     assert found == child2
 
 

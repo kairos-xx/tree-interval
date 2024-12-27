@@ -1,13 +1,15 @@
 from setuptools import find_packages, setup
 
+with open("README.md", "r") as fh:
+    readme = fh.read()
 setup(
     name="tree-interval",
     version="0.1.3",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
-    description="A Python package for managing and visualizing "
-    + "interval tree structures",
-    long_description=open("README.md").read(),
+    description="A Python package for managing and visualizing " +
+    "interval tree structures",
+    long_description=readme,
     long_description_content_type="text/markdown",
     author="Joao Lopes",
     author_email="joaoslopes@gmail.com",

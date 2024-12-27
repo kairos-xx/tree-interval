@@ -217,18 +217,19 @@ def demonstrate_dot_notation():
     grandchild._as_dict()
 
     # Find parent using dot notation
-    found_parent = grandchild.find_parent(lambda n: n._as_dict(
-    ) and n.attributes.info.get("type") == "FunctionDef")
+    found_parent = grandchild.find_parent(lambda n: bool(n._as_dict(
+    )) and n.attributes.info.get("type") == "FunctionDef")
     print("Parent:", found_parent.attributes.info if found_parent else None)
 
     # Find child using dot notation
-    found_child = root.find_child(
-        lambda n: n._as_dict() and n.attributes.info.get("type") == "ClassDef")
+
+    found_child = root.find_child(lambda n: bool(n._as_dict()) and n.attributes
+                                  .info.get("type") == "ClassDef")
     print("Child:", found_child.attributes.info if found_child else None)
 
     # Find sibling using dot notation
-    found_sibling = child1.find_sibling(
-        lambda n: n._as_dict() and n.attributes.info.get("name") == "MyClass")
+    found_sibling = child1.find_sibling(lambda n: n._as_dict(
+    ) is not None and n.attributes.info.get("name") == "MyClass")
     print("Sibling:", found_sibling.attributes.info if found_sibling else None)
 
 
