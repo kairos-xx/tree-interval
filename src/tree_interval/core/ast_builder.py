@@ -63,9 +63,18 @@ class AstTreeBuilder:
                         if isinstance(value, (str, int, float, bool)):
                             fields_info[field] = value
                         elif isinstance(value, AST):
-                            fields_info[field] = value.__class__.__name__
+                            fields_info[field] = {
+                                "type": value.__class__.__name__,
+                                "fields": {k: getattr(value, k, None) for k in value._fields}
+                            }
                         elif isinstance(value, list):
-                            fields_info[field] = f"List[{len(value)}]"
+                            fields_info[field] = [
+                                {
+                                    "type": item.__class__.__name__,
+                                    "fields": {k: getattr(item, k, None) for k in item._fields}
+                                } if isinstance(item, AST) else item
+                                for item in value
+                            ]
 
                     node_info = {"type": node.__class__.__name__, "fields": fields_info}
 
@@ -97,9 +106,18 @@ class AstTreeBuilder:
                         if isinstance(value, (str, int, float, bool)):
                             fields_info[field] = value
                         elif isinstance(value, AST):
-                            fields_info[field] = value.__class__.__name__
+                            fields_info[field] = {
+                                "type": value.__class__.__name__,
+                                "fields": {k: getattr(value, k, None) for k in value._fields}
+                            }
                         elif isinstance(value, list):
-                            fields_info[field] = f"List[{len(value)}]"
+                            fields_info[field] = [
+                                {
+                                    "type": item.__class__.__name__,
+                                    "fields": {k: getattr(item, k, None) for k in item._fields}
+                                } if isinstance(item, AST) else item
+                                for item in value
+                            ]
 
                     node_info = {"type": node.__class__.__name__, "fields": fields_info}
 
