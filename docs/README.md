@@ -5,12 +5,12 @@
 
 ### Core Components
 - `interval_core.py`: Core tree data structures
-- `ast_builder.py`: AST analysis functionality
+- `ast_builder.py`: AST analysis functionality ([AST Reference](AST_REFERENCE.md))
 - `frame_analyzer.py`: Runtime frame analysis
 
 ### Visualization
 - `visualizer.py`: Tree rendering
-- `config.py`: Visualization configuration
+- `config.py`: Visualization configuration ([Rich Printer Guide](RICH_PRINTER.md))
 
 ## Implementation Details
 
@@ -20,6 +20,7 @@ The tree implementation uses a parent-child relationship model with position awa
 - Line numbers
 - Column offsets
 - Parent/child relationships
+(See [API Reference](API_REFERENCE.md) for detailed implementation)
 
 ### Position Tracking
 Position objects maintain both absolute positions and source-relative positions:
@@ -38,6 +39,7 @@ The AST builder wraps Python's built-in `ast` module to:
 1. Parse source code
 2. Create position-aware nodes
 3. Build hierarchical relationships
+(See [AST Reference](AST_REFERENCE.md) for details)
 
 ### Frame Analysis
 Frame analysis provides runtime code inspection by:
@@ -73,6 +75,7 @@ config = VisualizationConfig(
 )
 tree.visualize(config)
 ```
+(See [Rich Printer Guide](RICH_PRINTER.md) for more visualization options)
 
 ### AST Analysis
 ```python
