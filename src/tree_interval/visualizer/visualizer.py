@@ -1,3 +1,4 @@
+
 """
 Tree Visualizer package.
 
@@ -6,11 +7,9 @@ with support for AST analysis.
 """
 
 from typing import Optional
-
 from .config import VisualizationConfig
 
 DEFAULT_CONFIG = VisualizationConfig()
-
 
 class TreeVisualizer:
     @staticmethod
@@ -29,33 +28,37 @@ class TreeVisualizer:
                     f"Position(start={node.start}, end={node.end}, "
                     f"lineno={node.lineno}, end_lineno={node.end_lineno}, "
                     f"col_offset={node.col_offset}, "
-                    + f"end_col_offset={node.end_col_offset}, "
+                    f"end_col_offset={node.end_col_offset}, "
                     f"size={node.size})"
                 )
             elif config.position_format == "tuple":
                 return f"({node.start}, {node.end})"
             return f"[{node.start}, {node.end}]"
 
-        def _print_node(node, level=0, prefix=""):
-            indent = "    " * level
-            parts = [f"{indent}{prefix}{format_position(node)}"]
-
+        def format_node_info(node) -> str:
+            parts = []
             if config.show_size:
                 parts.append(f"size={node.size}")
             if config.show_info and node.info:
                 parts.append(f"info='{node.info}'")
             if config.show_children_count:
                 parts.append(f"children={len(node.children)}")
+            return " ".join(parts)
 
-            print(" ".join(parts))
+        def _print_node(node, prefix="", is_last=True, level=0):
+            if level == 0:
+                print("┌─" + format_position(node) + " " + format_node_info(node))
+            else:
+                print(prefix + ("└── " if is_last else "├── ") + format_position(node) + " " + format_node_info(node))
 
-            for i, child in enumerate(node.children):
-                is_last = i == len(node.children) - 1
-                _print_node(child, level + 1, "└── " if is_last else "├── ")
+            children = node.children
+            for i, child in enumerate(children):
+                new_prefix = prefix + ("    " if is_last else "│   ")
+                _print_node(child, new_prefix, i == len(children) - 1, level + 1)
 
-        print(f"Source: {tree.source}")
+        print(f"\nTree: {tree.source}")
+        print("=" * (len(tree.source) + 6))
         _print_node(tree.root)
-
 
 __version__ = "0.1.0"
 __all__ = ["TreeVisualizer", "VisualizationConfig"]
