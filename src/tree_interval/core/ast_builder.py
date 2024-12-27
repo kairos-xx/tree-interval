@@ -13,6 +13,12 @@ from typing import Optional, Union
 from .interval_core import Leaf, Tree
 
 
+class Position:  # Added Position class; assuming this is the intended structure.
+    def __init__(self, start: int, end: Optional[int] = None):
+        self.start = start
+        self.end = end
+
+
 class AstTreeBuilder:
     def __init__(self, source: Union[FrameType, str]) -> None:
         self.source = None
@@ -69,7 +75,7 @@ class AstTreeBuilder:
 
                     node_info = {"type": node.__class__.__name__, "fields": fields_info}
 
-                    leaf = Leaf(start, end, node_info)
+                    leaf = Leaf(Position(start, end), None, node_info) #Corrected leaf creation
                     leaf.position._col_offset = col_offset
                     leaf.position._end_col_offset = end_col_offset
                     result_tree.add_leaf(leaf)
@@ -100,7 +106,7 @@ class AstTreeBuilder:
 
                     node_info = {"type": node.__class__.__name__, "fields": fields_info}
 
-                    leaf = Leaf(start, end, node_info)
+                    leaf = Leaf(Position(start, end), None, node_info) #Corrected leaf creation
                     leaf.position._col_offset = col_offset
                     leaf.position._end_col_offset = (
                         end_col_offset if end_col_offset is not None else col_offset + 1

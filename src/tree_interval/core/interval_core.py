@@ -36,9 +36,9 @@ class Position:
         self._lineno: Optional[int] = 1
         self._end_lineno: Optional[int] = 1
         self._col_offset: Optional[int] = 0
-        self._end_col_offset: Optional[int] = (
-            end - start if start is not None and end is not None else 0
-        )
+        self._end_col_offset: Optional[int] = end - start if start is not None and end is not None else 0
+        self.parent: Optional['Leaf'] = None
+        self.children: List['Leaf'] = []
 
     @property
     def lineno(self) -> Optional[int]:
