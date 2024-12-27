@@ -34,9 +34,17 @@ class AstTreeBuilder:
             raise ValueError("No source code available")
 
         tree = parse(self.source)
+        if not tree:
+            raise ValueError("Failed to parse source code")
+            
         result_tree = Tree[str](self.source)
+        if not result_tree:
+            raise ValueError("Failed to create result tree")
+            
         root = Leaf(0, len(self.source), "Module")
         result_tree.root = root
+        if not result_tree.root:
+            raise ValueError("Failed to set root node")
 
         for node in walk(tree):
             lineno = getattr(node, "lineno", None)
