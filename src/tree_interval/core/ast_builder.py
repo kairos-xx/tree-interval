@@ -94,6 +94,8 @@ class AstTreeBuilder:
                     node_info = {"type": node.__class__.__name__, "fields": fields_info}
 
                     leaf = Leaf(start, end, node_info)
+                    leaf.position._col_offset = col_offset
+                    leaf.position._end_col_offset = end_col_offset if end_col_offset is not None else col_offset + 1
                     result_tree.add_leaf(leaf)
 
 
