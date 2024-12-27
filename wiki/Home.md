@@ -3,6 +3,16 @@
 
 A Python package for managing and visualizing interval tree structures with AST analysis capabilities.
 
+## Navigation
+- [Installation Guide](Installation.md)
+- [Core Components](Core-Components.md)
+- [Visualization Guide](Visualization.md)
+
+## Documentation
+- [API Reference](../docs/API_REFERENCE.md)
+- [AST Reference](../docs/AST_REFERENCE.md)
+- [Rich Printer Guide](../docs/RICH_PRINTER.md)
+
 ## Overview
 
 Tree Interval provides tools for:
@@ -29,3 +39,8 @@ tree.add_leaf(child)
 # Visualize the tree
 tree.visualize()
 ```
+
+## Related Topics
+- For core components like Tree, Leaf, and Position, see [Core Components](Core-Components.md)
+- For visualization options, check the [Visualization Guide](Visualization.md)
+- For detailed API documentation, refer to the [API Reference](../docs/API_REFERENCE.md)
