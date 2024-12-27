@@ -48,8 +48,8 @@ class TreeVisualizer:
                 parts.append(f"size={node.size}")
             if config.show_info and node.info:
                 if isinstance(node.info, dict):
-                    node_type = node.info.get('type', '')
-                    fields = node.info.get('fields', {})
+                    node_type = node.info.get("type", "")
+                    fields = node.info.get("fields", {})
                     parts.append(f"type={node_type}")
                     for field, value in fields.items():
                         parts.append(f"{field}={value}")

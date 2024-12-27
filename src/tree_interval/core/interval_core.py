@@ -86,7 +86,9 @@ class Position:
         """Display position with specific format."""
         if position_format == "position":
             col_offset = self.col_offset if self.col_offset is not None else 0
-            end_col_offset = self.end_col_offset if self.end_col_offset is not None else 0
+            end_col_offset = (
+                self.end_col_offset if self.end_col_offset is not None else 0
+            )
             return (
                 f"Position(start={self.start}, "
                 + f"end={self.end}, "
@@ -102,7 +104,7 @@ class Position:
                 self.lineno,
                 self.end_lineno,
                 self.col_offset if self.col_offset is not None else 0,
-                self.end_col_offset if self.end_col_offset is not None else 0
+                self.end_col_offset if self.end_col_offset is not None else 0,
             ]
             return "(" + ", ".join(str(v) for v in values) + ")"
         else:

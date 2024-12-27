@@ -354,14 +354,14 @@ def demonstrate_find_method():
     found = child1.find(
         lambda n: hasattr(n.attributes.info, "type")
         and n.attributes.info.type == "ClassDef"
-    )    
+    )
     print(f"Found class: {found.attributes.info if found else None}")
 
     found = grandchild.find(
         lambda n: hasattr(n.attributes.info, "type")
         and n.attributes.info.type == "Module"
     )
-    
+
     print(f"Found module: {found.attributes.info if found else None}")
 
 

@@ -65,21 +65,27 @@ class AstTreeBuilder:
                         elif isinstance(value, AST):
                             fields_info[field] = {
                                 "type": value.__class__.__name__,
-                                "fields": {k: getattr(value, k, None) for k in value._fields}
+                                "fields": {
+                                    k: getattr(value, k, None) for k in value._fields
+                                },
                             }
                         elif isinstance(value, list):
                             fields_info[field] = [
                                 {
                                     "type": item.__class__.__name__,
-                                    "fields": {k: getattr(item, k, None) for k in item._fields}
-                                } if isinstance(item, AST) else item
+                                    "fields": {
+                                        k: getattr(item, k, None) for k in item._fields
+                                    },
+                                }
+                                if isinstance(item, AST)
+                                else item
                                 for item in value
                             ]
 
                     node_info = {
                         "type": node.__class__.__name__,
                         "fields": fields_info,
-                        "_fields": node._fields
+                        "_fields": node._fields,
                     }
 
                     leaf = Leaf(
@@ -112,21 +118,27 @@ class AstTreeBuilder:
                         elif isinstance(value, AST):
                             fields_info[field] = {
                                 "type": value.__class__.__name__,
-                                "fields": {k: getattr(value, k, None) for k in value._fields}
+                                "fields": {
+                                    k: getattr(value, k, None) for k in value._fields
+                                },
                             }
                         elif isinstance(value, list):
                             fields_info[field] = [
                                 {
                                     "type": item.__class__.__name__,
-                                    "fields": {k: getattr(item, k, None) for k in item._fields}
-                                } if isinstance(item, AST) else item
+                                    "fields": {
+                                        k: getattr(item, k, None) for k in item._fields
+                                    },
+                                }
+                                if isinstance(item, AST)
+                                else item
                                 for item in value
                             ]
 
                     node_info = {
                         "type": node.__class__.__name__,
                         "fields": fields_info,
-                        "_fields": node._fields
+                        "_fields": node._fields,
                     }
 
                     leaf = Leaf(
