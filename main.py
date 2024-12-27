@@ -266,6 +266,42 @@ def demonstrate_ast_rich_printing():
     func_def.add_child(args)
     func_def.add_child(body)
 
+
+
+def demonstrate_find_nodes():
+    print("\n=== Find Nodes Example ===")
+    # Create a tree structure
+    tree = Tree("Find Example")
+    root = Leaf(Position(0, 100, {"type": "Module"}))
+    child1 = Leaf(Position(10, 40, {"type": "FunctionDef", "name": "hello"}))
+    child2 = Leaf(Position(50, 90, {"type": "ClassDef", "name": "MyClass"}))
+    grandchild = Leaf(Position(20, 30, {"type": "Return"}))
+
+    # Build the tree
+    tree.root = root
+    tree.add_leaf(child1)
+    tree.add_leaf(child2)
+    child1.add_child(grandchild)
+
+    # Find parent example
+    found_parent = grandchild.find_parent(
+        lambda n: n.info is not None and n.info.get("type") == "FunctionDef"
+    )
+    print("Found parent:", found_parent.info if found_parent else None)
+
+    # Find child example
+    found_child = root.find_child(
+        lambda n: n.info is not None and n.info.get("type") == "ClassDef"
+    )
+    print("Found child:", found_child.info if found_child else None)
+
+    # Find sibling example
+    found_sibling = child1.find_sibling(
+        lambda n: n.info is not None and n.info.get("type") == "ClassDef"
+    )
+    print("Found sibling:", found_sibling.info if found_sibling else None)
+
+
     printer = RichTreePrinter(RichPrintConfig(show_position=False))
     printer.print_tree(tree)
 
@@ -273,6 +309,7 @@ def demonstrate_ast_rich_printing():
 if __name__ == "__main__":
     print("=== Tree Interval Package Demo ===")
     demonstrate_positions()
+    demonstrate_find_nodes()
     demonstrate_leaves()
     demonstrate_tree_operations()
     demonstrate_frame_analyzer()
