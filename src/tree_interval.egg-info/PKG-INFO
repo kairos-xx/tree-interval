@@ -1,0 +1,90 @@
+Metadata-Version: 2.1
+Name: tree-interval
+Version: 0.1.6
+Summary: A Python package for managing and visualizing interval tree structures
+Home-page: https://github.com/kairos-xx/tree-interval
+Author: Joao Lopes
+Author-email: Joao Lopes <joaoslopes@gmail.com>
+License: 
+        MIT License
+        
+        Copyright (c) 2024 Replit User
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: Homepage, https://github.com/kairos-xx/tree-interval
+Project-URL: Repository, https://github.com/kairos-xx/tree-interval.git
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Software Development :: Code Generators
+Classifier: Topic :: Software Development :: Debuggers
+Classifier: Operating System :: OS Independent
+Classifier: Natural Language :: English
+Classifier: Typing :: Typed
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+
+# Tree Interval
+
+A Python package for managing and visualizing interval tree structures with AST analysis capabilities.
+
+## Installation
+
+```bash
+pip install tree-interval
+```
+
+## Quick Start
+
+```python
+from tree_interval import Tree, Leaf, Position
+
+# Create a basic tree
+tree = Tree("Example")
+root = Leaf(Position(0, 100, "Root"))
+child = Leaf(Position(10, 50, "Child"))
+
+tree.root = root
+tree.add_leaf(child)
+
+# Visualize the tree
+tree.visualize()
+```
+
+## Repository Links
+- GitHub: [https://github.com/kairos-xx/tree-interval](https://github.com/kairos-xx/tree-interval)
+- PyPI: [https://pypi.org/project/tree-interval/](https://pypi.org/project/tree-interval/)
+
+## Features
+- Tree structure management with position tracking
+- AST (Abstract Syntax Tree) analysis
+- Frame analysis for runtime code inspection
+- Position-aware node tracking
+- Customizable tree visualization
+- JSON serialization/deserialization
+
+## License
+MIT License - See LICENSE file for details
