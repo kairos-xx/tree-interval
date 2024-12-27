@@ -71,10 +71,10 @@ printer.print_tree(tree)
 
 ## 📚 Documentation
 
-- [Core Components](../tree/master/docs/wiki/Core-Components.md)
-- [Installation Guide](../tree/master/docs/wiki/Installation.md)
-- [Visualization Guide](../tree/master/docs/wiki/Visualization.md)
-- [API Reference](../tree/master/docs/API_REFERENCE.md)
+- [Core Components](docs/wiki/Core-Components.md)
+- [Installation Guide](docs/wiki/Installation.md)
+- [Visualization Guide](docs/wiki/Visualization.md)
+- [API Reference](docs/API_REFERENCE.md)
 
 ## 💡 Use Cases
 
