@@ -39,7 +39,7 @@ class TreeVisualizer:
                 )
             elif config.position_format == "tuple":
                 return f"({node.start}, {node.end})"
-            return f"[{node.start}, {node.end}]"
+            return f"({node.start}, {node.end})"
 
         def format_node_info(node) -> str:
             parts = []
