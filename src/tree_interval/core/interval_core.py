@@ -306,7 +306,7 @@ class Leaf:
 
     def _as_dict(self) -> Dict[str, Any]:
         """Return a dictionary containing all leaf information."""
-        return {
+        data = {
             "start": self.start,
             "end": self.end,
             "info": self.info,
@@ -319,6 +319,8 @@ class Leaf:
             },
             "children": [child._as_dict() for child in self.children],
         }
+        self.attributes = NestedAttributes(data)
+        return data
 
     def position_as(self, position_format: str = "default") -> str:
         """Display node with specific position format."""
@@ -441,3 +443,14 @@ class Tree(Generic[T]):
         from ..visualizer import TreeVisualizer
 
         TreeVisualizer.visualize(self, config)
+
+
+
+class NestedAttributes:
+    def __init__(self, data: Dict[str, Any]):
+        for key, value in data.items():
+            if isinstance(value, dict):
+                setattr(self, key, NestedAttributes(value))
+            else:
+                setattr(self, key, value)
+
