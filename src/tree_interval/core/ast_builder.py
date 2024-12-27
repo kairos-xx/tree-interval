@@ -25,9 +25,17 @@ class AstTreeBuilder:
     def _get_source(self) -> None:
         try:
             if self.frame.f_code.co_firstlineno:
-                self.source = getsource(self.frame.f_code)
-            if not self.source:
-                self.source = unparse(parse(self.frame.f_code.co_code))
+                source = getsource(self.frame.f_code)
+                lines = source.splitlines()
+                # Find common indentation
+                common_indent = min(len(line) - len(line.lstrip()) 
+                                 for line in lines if line.strip())
+                # Remove common indentation and join lines
+                self.source = '\n'.join(
+                    line[common_indent:] if line.strip() else line 
+                    for line in lines)
+                self.indent_offset = common_indent
+                self.line_offset = self.frame.f_code.co_firstlineno - 1
         except (SyntaxError, TypeError, ValueError):
             pass
 
@@ -47,9 +55,21 @@ class AstTreeBuilder:
             lineno = getattr(node, "lineno", None)
             if lineno is None:
                 return None
-            start_line = lineno - 1
-            end_lineno = getattr(node, "end_lineno", lineno)
-            end_line = end_lineno - 1
+            
+            # Adjust line numbers for frame context
+            if hasattr(self, 'line_offset'):
+                start_line = lineno - 1 + self.line_offset
+                end_lineno = getattr(node, "end_lineno", lineno)
+                end_line = end_lineno - 1 + self.line_offset
+            else:
+                start_line = lineno - 1
+                end_lineno = getattr(node, "end_lineno", lineno)
+                end_line = end_lineno - 1
+                
+            # Adjust column offsets for dedentation
+            col_offset = getattr(node, "col_offset", 0)
+            if hasattr(self, 'indent_offset'):
+                col_offset = max(0, col_offset - self.indent_offset)
             if 0 <= start_line < len(line_positions):
                 start_pos = line_positions[start_line][0]
                 end_pos = line_positions[end_line][1]
