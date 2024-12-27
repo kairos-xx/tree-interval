@@ -1,4 +1,3 @@
-
 """Rich-based tree printer implementation."""
 
 from typing import Optional
@@ -7,9 +6,10 @@ from rich.tree import Tree as RichTree
 from ..core.interval_core import Tree, Leaf
 from .config import RichPrintConfig
 
+
 class RichTreePrinter:
     """Prints tree structures using Rich library."""
-    
+
     def __init__(self, config: Optional[RichPrintConfig] = None):
         self.config = config or RichPrintConfig()
         self.console = Console()
@@ -30,19 +30,21 @@ class RichTreePrinter:
     def _format_node(self, node: Leaf, is_root: bool = False) -> str:
         """Format node information."""
         style = (
-            self.config.root_style if is_root
-            else self.config.leaf_style if not node.children
+            self.config.root_style
+            if is_root
+            else self.config.leaf_style
+            if not node.children
             else self.config.node_style
         )
 
         parts = []
-        
+
         if self.config.show_position:
             parts.append(f"[{node.start}-{node.end}]")
-        
+
         if self.config.show_size:
             parts.append(f"size={node.size}")
-            
+
         if self.config.show_info and node.info:
             info_str = str(node.info)
             parts.append(f"info={info_str}")

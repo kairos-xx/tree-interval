@@ -5,7 +5,17 @@ This module contains the core Tree and Leaf classes used across the project.
 """
 
 from json import dumps, loads
-from typing import TYPE_CHECKING, Any, Dict, Generic, List, Optional, TypeVar, Union
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    Dict,
+    Generic,
+    List,
+    Optional,
+    TypeVar,
+    Union,
+)
 
 if TYPE_CHECKING:
     from ..visualizer.config import VisualizationConfig

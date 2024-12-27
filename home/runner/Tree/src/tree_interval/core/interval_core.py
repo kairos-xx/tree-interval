@@ -1,4 +1,14 @@
-from typing import TYPE_CHECKING, Any, Callable, Dict, Generic, List, Optional, TypeVar, Union
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    Dict,
+    Generic,
+    List,
+    Optional,
+    TypeVar,
+    Union,
+)
 
 if TYPE_CHECKING:
     from tree_interval.core.leaf import Leaf
@@ -31,7 +41,6 @@ class IntervalCore:
                 q.extend(node.children)
 
         return None
-
 
     def find_sibling(self, criteria: Callable[["Leaf"], bool]) -> Optional["Leaf"]:
         """Finds the sibling node matching the given criteria."""
@@ -70,7 +79,6 @@ class IntervalCore:
             node = node.parent
         return results
 
-
     def find_all_siblings(self, criteria: Callable[["Leaf"], bool]) -> List["Leaf"]:
         """Finds all sibling nodes matching the given criteria."""
         if self.root is None or self.root.parent is None:
@@ -81,4 +89,4 @@ class IntervalCore:
                 results.append(sibling)
         return results
 
-    #Other methods...
+    # Other methods...

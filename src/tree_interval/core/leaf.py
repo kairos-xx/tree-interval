@@ -1,6 +1,6 @@
-
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union
 from .interval_core import Position
+
 
 class Leaf:
     """A node in the tree structure containing position and information data."""

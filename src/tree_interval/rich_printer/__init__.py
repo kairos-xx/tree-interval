@@ -1,4 +1,3 @@
-
 """Rich-based tree visualization module."""
 
 from .printer import RichTreePrinter

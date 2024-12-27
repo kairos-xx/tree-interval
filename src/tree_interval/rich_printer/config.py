@@ -1,14 +1,14 @@
-
 """Configuration for Rich tree printer."""
 
 from dataclasses import dataclass
 from typing import Optional
 from rich.style import Style
 
+
 @dataclass
 class RichPrintConfig:
     """Configuration for Rich tree visualization."""
-    
+
     show_info: bool = True
     show_size: bool = True
     show_position: bool = True
