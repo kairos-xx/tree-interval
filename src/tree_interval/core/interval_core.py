@@ -164,6 +164,7 @@ class Leaf:
 
         self.parent: Optional[Leaf] = None
         self.children: List[Leaf] = []
+        self.ast_node: Optional[Any] = None
         self.attributes = NestedAttributes(self._as_dict())
 
     @property

@@ -111,6 +111,7 @@ class FrameAnalyzer:
             position = self._get_node_position(node)
             if position:
                 leaf = Leaf(position)
+                leaf.ast_node = node
                 nodes_with_positions.append((node, leaf))
 
         # Second pass - build hierarchy
