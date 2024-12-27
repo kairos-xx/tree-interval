@@ -65,7 +65,8 @@ class TreeVisualizer:
                 else (TreeVisualizer.GREEN if node.children else TreeVisualizer.YELLOW)
             )
             print(
-                f"{prefix_spaces}{connector}{color}{position_str} {info_str}{TreeVisualizer.RESET}"
+                f"{prefix_spaces}{connector}{color}{position_str} "
+                + f"{info_str}{TreeVisualizer.RESET}"
             )
 
             children = node.children
