@@ -10,7 +10,6 @@ from .interval_core import Leaf, Position, Tree
 
 
 class FrameAnalyzer:
-
     def __init__(self, frame) -> None:
         self.frame = frame
         self.source = self._extract_source()
@@ -25,10 +24,11 @@ class FrameAnalyzer:
                 # Remove common leading whitespace
                 lines = source.splitlines()
                 common_indent = min(
-                    len(line) - len(line.lstrip()) for line in lines
-                    if line.strip())
-                return "\n".join(line[common_indent:] if line.strip() else line
-                                 for line in lines)
+                    len(line) - len(line.lstrip()) for line in lines if line.strip()
+                )
+                return "\n".join(
+                    line[common_indent:] if line.strip() else line for line in lines
+                )
             return None
         except (OSError, TypeError):
             return None
@@ -63,8 +63,7 @@ class FrameAnalyzer:
                 start_pos = self.line_positions[start_line][0]
                 end_pos = self.line_positions[end_line][1]
 
-                position = Position(start_pos, end_pos,
-                                    node.__class__.__name__)
+                position = Position(start_pos, end_pos, node.__class__.__name__)
                 position.lineno = lineno
                 position.end_lineno = end_lineno
                 position.col_offset = getattr(node, "col_offset", 0)

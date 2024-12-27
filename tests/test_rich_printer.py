@@ -34,7 +34,7 @@ def console():
 def test_rich_printer_empty_tree(empty_tree, console):
     """Test printing an empty tree."""
     printer = RichTreePrinter(console=console)
-    
+
     with console.capture() as capture:
         printer.print_tree(empty_tree)
     output = capture.get()
@@ -44,7 +44,7 @@ def test_rich_printer_empty_tree(empty_tree, console):
 def test_rich_printer_basic_tree(basic_tree, console):
     """Test printing a basic tree structure."""
     printer = RichTreePrinter(console=console)
-    
+
     with console.capture() as capture:
         printer.print_tree(basic_tree)
     output = capture.get()
@@ -66,9 +66,11 @@ def test_rich_printer_custom_config(basic_tree, console):
 
 def test_rich_printer_custom_styles(basic_tree, console):
     """Test printing with custom styles."""
-    config = RichPrintConfig(root_style=Style(color="red", bold=True),
-                             node_style=Style(color="blue"),
-                             leaf_style=Style(color="green"))
+    config = RichPrintConfig(
+        root_style=Style(color="red", bold=True),
+        node_style=Style(color="blue"),
+        leaf_style=Style(color="green"),
+    )
     printer = RichTreePrinter(config, console=console)
 
     with console.capture() as capture:
