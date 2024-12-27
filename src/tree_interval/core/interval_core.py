@@ -9,7 +9,7 @@ from json import dumps, loads
 from typing import Any, Dict, Generic, List, Optional, TypeVar, Union
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from ...tree_visualizer.config import VisualizationConfig
+    from ..visualizer.config import VisualizationConfig
 
 T = TypeVar('T')
 

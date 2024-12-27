@@ -5,6 +5,7 @@ A Python package for building and visualizing tree structures with support for A
 """
 
 from .config import VisualizationConfig
+from ..core.interval_core import Tree, Leaf
 
 DEFAULT_CONFIG = VisualizationConfig()
 

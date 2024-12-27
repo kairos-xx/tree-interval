@@ -1,8 +1,8 @@
-
 """
 Comprehensive examples demonstrating all features of the tree interval package.
 """
-from src.tree_interval import Tree, Leaf, Position, TreeVisualizer, VisualizationConfig
+from src.tree_interval import Tree, Leaf, Position, FrameAnalyzer, VisualizationConfig
+from inspect import currentframe
 
 def demonstrate_positions():
     # Basic Position
@@ -143,7 +143,7 @@ def example_frame_analyzer():
         return x + y
 
     # Get current frame
-    frame = sample_function.__code__.co_frame
+    frame = currentframe()
     
     # Create analyzer
     analyzer = FrameAnalyzer(frame)
