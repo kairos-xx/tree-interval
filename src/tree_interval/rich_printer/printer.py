@@ -19,7 +19,7 @@ class RichTreePrinter:
     def print_tree(self, tree: Tree) -> None:
         """Print tree using Rich formatting."""
         if not tree.root:
-            print("[red]Empty tree")
+            self.console.print("[red]Empty tree")
             return
 
         rich_tree = RichTree(
