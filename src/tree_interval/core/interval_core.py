@@ -361,6 +361,44 @@ class Leaf:
         else:
             return f"Position(start={self.start}, end={self.end}, size={self.size})"
 
+    @property
+    def next(self) -> Optional["Leaf"]:
+        """Get the next leaf node in the tree traversal order."""
+        if not self.parent:
+            return None
+            
+        siblings = self.parent.children
+        try:
+            idx = siblings.index(self)
+            if idx < len(siblings) - 1:
+                return siblings[idx + 1]
+            # If last sibling, get first child of next parent
+            next_parent = self.parent.next
+            if next_parent and next_parent.children:
+                return next_parent.children[0]
+        except ValueError:
+            pass
+        return None
+
+    @property
+    def previous(self) -> Optional["Leaf"]:
+        """Get the previous leaf node in the tree traversal order."""
+        if not self.parent:
+            return None
+            
+        siblings = self.parent.children
+        try:
+            idx = siblings.index(self)
+            if idx > 0:
+                return siblings[idx - 1]
+            # If first sibling, get last child of previous parent
+            prev_parent = self.parent.previous
+            if prev_parent and prev_parent.children:
+                return prev_parent.children[-1]
+        except ValueError:
+            pass
+        return None
+
     def __repr__(self) -> str:
         return f"Leaf(start={self.start}, end={self.end}, info={self.info})"
 
