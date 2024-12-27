@@ -1,5 +1,6 @@
 import json
 import os
+from replit import info
 import subprocess
 import sys
 import urllib.request
@@ -108,7 +109,7 @@ def main():
     create_pypirc(token)
 
     # Build and upload directly
-    build_and_upload("/home/runner/Tree")
+    build_and_upload(f'{Path.home()}/{(info.replit_url or "").split("/")[-1]}')
     print("Tree Interval package built and uploaded successfully!")
 
 

@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     readme = fh.read()
 setup(
     name="tree-interval",
-    version="0.1.4",
+    version="0.1.5",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     description="A Python package for managing and visualizing "
