@@ -76,7 +76,11 @@ class AstTreeBuilder:
                                 for item in value
                             ]
 
-                    node_info = {"type": node.__class__.__name__, "fields": fields_info}
+                    node_info = {
+                        "type": node.__class__.__name__,
+                        "fields": fields_info,
+                        "_fields": node._fields
+                    }
 
                     leaf = Leaf(
                         Position(start if start is not None else 0, end, node_info),
@@ -119,7 +123,11 @@ class AstTreeBuilder:
                                 for item in value
                             ]
 
-                    node_info = {"type": node.__class__.__name__, "fields": fields_info}
+                    node_info = {
+                        "type": node.__class__.__name__,
+                        "fields": fields_info,
+                        "_fields": node._fields
+                    }
 
                     leaf = Leaf(
                         Position(start if start is not None else 0, end, node_info),
