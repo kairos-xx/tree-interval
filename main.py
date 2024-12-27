@@ -213,7 +213,7 @@ def demonstrate_frame_analyzer():
     def analyze_this():
         x = 1 + 2  # This line will be analyzed
         analyzer = FrameAnalyzer(currentframe())
-
+        
         # Show current node
         current_node = analyzer.find_current_node()
         print("Current Node Information:")
@@ -221,7 +221,19 @@ def demonstrate_frame_analyzer():
 
         # Build and show tree
         tree = analyzer.build_tree()
-        if tree:
+        if tree and tree.root:
+            # Ensure positions are properly set
+            line_positions = analyzer.ast_builder._calculate_line_positions()
+            for node in tree.flatten():
+                if not node.position.lineno:
+                    node.position.lineno = 1
+                if not node.position.end_lineno:
+                    node.position.end_lineno = len(line_positions)
+                if not node.position.col_offset:
+                    node.position.col_offset = 0
+                if not node.position.end_col_offset:
+                    node.position.end_col_offset = max(end for _, end in line_positions)
+
             print("\nFull AST Tree:")
             TreeVisualizer.visualize(
                 tree,
