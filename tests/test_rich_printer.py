@@ -71,7 +71,7 @@ def test_rich_printer_custom_styles(basic_tree, console):
                              leaf_style=Style(color="green"))
     printer = RichTreePrinter(config)
 
-    with console.capture(stderr=True) as capture:
+    with console.capture() as capture:
         printer.print_tree(basic_tree)
     output = capture.get()
     assert output.strip() != ""
