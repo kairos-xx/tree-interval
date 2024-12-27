@@ -33,18 +33,28 @@ class FrameAnalyzer:
         """Build a complete tree from the frame's AST."""
         tree = self.ast_builder.build_from_frame()
         if tree and tree.root:
-            # Update node positions and build parent-child relationships
             line_positions = self.ast_builder._calculate_line_positions()
+            nodes_by_pos = {}
+            
+            # First pass: Update all node positions
             for node in tree.flatten():
                 if hasattr(node, 'ast_node'):
                     pos = self.ast_builder._get_node_position(node.ast_node, line_positions)
                     if pos:
                         node.position = pos
-                        # Find parent based on position containment
-                        for potential_parent in tree.flatten():
-                            if (potential_parent != node and 
-                                potential_parent.start <= node.start and 
-                                potential_parent.end >= node.end):
-                                potential_parent.add_child(node)
-                                break
+                        nodes_by_pos[(pos.start, pos.end)] = node
+            
+            # Second pass: Build parent-child relationships
+            sorted_positions = sorted(nodes_by_pos.keys(), key=lambda x: (x[0], -x[1]))
+            for start, end in sorted_positions:
+                current_node = nodes_by_pos[(start, end)]
+                # Find the smallest containing interval
+                for parent_start, parent_end in sorted_positions:
+                    if (parent_start <= start and parent_end >= end and 
+                        (parent_start, parent_end) != (start, end)):
+                        parent_node = nodes_by_pos[(parent_start, parent_end)]
+                        if not any(p for p in parent_node.get_ancestors() 
+                                 if p.start <= start and p.end >= end):
+                            parent_node.add_child(current_node)
+                            break
         return tree
