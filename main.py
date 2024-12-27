@@ -382,15 +382,22 @@ def main():
 
 def demonstrate_leaf_navigation():
     print("\n=== Leaf Navigation Example ===")
+    # Create a tree and nodes
+    tree = Tree("Navigation Example")
+    
     # Create test nodes
+    grand_parent = Leaf(Position(0, 400, "Grand Parent"))
     parent1 = Leaf(Position(0, 200, "Parent 1"))
+    parent2 = Leaf(Position(200, 400, "Parent 2"))
     parent1_child1 = Leaf(Position(0, 100, "Child 1.1"))
     parent1_child2 = Leaf(Position(100, 200, "Child 1.2"))
-    parent2 = Leaf(Position(200, 400, "Parent 2"))
     parent2_child1 = Leaf(Position(200, 300, "Child 2.1"))
     parent2_child2 = Leaf(Position(300, 400, "Child 2.2"))
     
-    # Build relationships
+    # Build tree structure
+    tree.root = grand_parent
+    grand_parent.add_child(parent1)
+    grand_parent.add_child(parent2)
     parent1.add_child(parent1_child1)
     parent1.add_child(parent1_child2)
     parent2.add_child(parent2_child1)
@@ -406,7 +413,7 @@ def demonstrate_leaf_navigation():
     print(f"Child 1.2's previous sibling: {parent1_child2.previous.info}")  # Should print "Child 1.1"
     
     # Test chained navigation
-    print(f"Chained navigation example: {parent1_child1.parent.next.previous.parent.info}")  # Should print "Parent 1"
+    print(f"Parent 1's next and previous: {parent1.next.previous.info}")  # Should print "Parent 1"
 
 if __name__ == "__main__":
     main()
