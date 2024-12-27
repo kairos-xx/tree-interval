@@ -12,9 +12,11 @@ from .config import RichPrintConfig
 class RichTreePrinter:
     """Prints tree structures using Rich library."""
 
-    def __init__(self,
-                 config: Optional[RichPrintConfig] = None,
-                 console: Optional[Console] = None):
+    def __init__(
+        self,
+        config: Optional[RichPrintConfig] = None,
+        console: Optional[Console] = None,
+    ):
         self.config = config or RichPrintConfig()
         self.console = console or Console()
 
@@ -33,8 +35,13 @@ class RichTreePrinter:
 
     def _format_node(self, node: Leaf, is_root: bool = False) -> str:
         """Format node information."""
-        style = (self.config.root_style if is_root else self.config.leaf_style
-                 if not node.children else self.config.node_style)
+        style = (
+            self.config.root_style
+            if is_root
+            else self.config.leaf_style
+            if not node.children
+            else self.config.node_style
+        )
 
         parts = []
 

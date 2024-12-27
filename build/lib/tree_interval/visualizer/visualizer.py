@@ -31,11 +31,13 @@ class TreeVisualizer:
 
         def format_position(node) -> str:
             if config.position_format == "position":
-                return (f"Position(start={node.start}, end={node.end}, "
-                        f"lineno={node.lineno}, end_lineno={node.end_lineno}, "
-                        f"col_offset={node.col_offset}, "
-                        f"end_col_offset={node.end_col_offset}, "
-                        f"size={node.size})")
+                return (
+                    f"Position(start={node.start}, end={node.end}, "
+                    f"lineno={node.lineno}, end_lineno={node.end_lineno}, "
+                    f"col_offset={node.col_offset}, "
+                    f"end_col_offset={node.end_col_offset}, "
+                    f"size={node.size})"
+                )
             elif config.position_format == "tuple":
                 return f"({node.start}, {node.end})"
             return f"({node.start}, {node.end})"
@@ -54,13 +56,14 @@ class TreeVisualizer:
             position_str = format_position(node)
             info_str = format_node_info(node)
             prefix_spaces = "    " if level == 0 else prefix
-            connector = "┌── " if level == 0 else (
-                "└── " if is_last else "├── ")
+            connector = "┌── " if level == 0 else ("└── " if is_last else "├── ")
 
             # Color the text content but not the tree lines
-            color = (TreeVisualizer.BLUE if level == 0 else
-                     (TreeVisualizer.GREEN
-                      if node.children else TreeVisualizer.YELLOW))
+            color = (
+                TreeVisualizer.BLUE
+                if level == 0
+                else (TreeVisualizer.GREEN if node.children else TreeVisualizer.YELLOW)
+            )
             print(
                 f"{prefix_spaces}{connector}{color}{position_str} {info_str}{TreeVisualizer.RESET}"
             )
@@ -68,8 +71,7 @@ class TreeVisualizer:
             children = node.children
             for i, child in enumerate(children):
                 new_prefix = prefix + ("    " if is_last else "│   ")
-                _print_node(child, new_prefix, i == len(children) - 1,
-                            level + 1)
+                _print_node(child, new_prefix, i == len(children) - 1, level + 1)
 
         _print_node(tree.root)
 

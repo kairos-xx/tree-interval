@@ -27,16 +27,20 @@ def update_version_in_files(new_version):
         content = f.read()
     with open("pyproject.toml", "w") as f:
         f.write(
-            content.replace(f'version = "{get_latest_version()}"',
-                            f'version = "{new_version}"'))
+            content.replace(
+                f'version = "{get_latest_version()}"', f'version = "{new_version}"'
+            )
+        )
 
     # Update setup.py
     with open("setup.py", "r") as f:
         content = f.read()
     with open("setup.py", "w") as f:
         f.write(
-            content.replace(f'version="{get_latest_version()}"',
-                            f'version="{new_version}"'))
+            content.replace(
+                f'version="{get_latest_version()}"', f'version="{new_version}"'
+            )
+        )
 
 
 def check_token():
@@ -66,20 +70,19 @@ def build_and_upload(project_dir=None):
         print(f"Building and uploading {working_dir}...")
 
         # Clean previous builds
-        subprocess.run("rm -rf dist build *.egg-info",
-                       shell=True,
-                       cwd=working_dir,
-                       check=True)
+        subprocess.run(
+            "rm -rf dist build *.egg-info", shell=True, cwd=working_dir, check=True
+        )
 
         # Build the package
-        subprocess.run(["python", "setup.py", "sdist", "bdist_wheel"],
-                       cwd=working_dir,
-                       check=True)
+        subprocess.run(
+            ["python", "setup.py", "sdist", "bdist_wheel"], cwd=working_dir, check=True
+        )
 
         # Upload to PyPI
-        subprocess.run(["python", "-m", "twine", "upload", "dist/*"],
-                       cwd=working_dir,
-                       check=True)
+        subprocess.run(
+            ["python", "-m", "twine", "upload", "dist/*"], cwd=working_dir, check=True
+        )
 
         print(f"Successfully uploaded {working_dir} to PyPI!")
 
