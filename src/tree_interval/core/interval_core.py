@@ -78,6 +78,15 @@ class Position:
     def absolute_end(self) -> Optional[int]:
         return self.end if self.end is not None else None
 
+    def position_as(self, position_format: str = "default") -> str:
+        """Display position with specific format."""
+        if position_format == "position":
+            return f"Position(start={self.start}, end={self.end}, lineno={self.lineno}, end_lineno={self.end_lineno}, col_offset={self.col_offset}, end_col_offset={self.end_col_offset})"
+        elif position_format == "tuple":
+            return f"({self.start}, {self.end}, {self.lineno}, {self.end_lineno}, {self.col_offset}, {self.end_col_offset})"
+        else:
+            return f"Position(start={self.start}, end={self.end})"
+
     def __str__(self) -> str:
         return f"Position(start={self.start}, end={self.end}, info={self.info})"
 
