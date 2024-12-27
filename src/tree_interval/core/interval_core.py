@@ -176,6 +176,56 @@ class Leaf:
             current = current.parent
         return None
 
+    def find_parent(self, criteria: callable) -> Optional["Leaf"]:
+        """Find first parent node that matches the given criteria.
+
+        Args:
+            criteria: A function that takes a Leaf node and returns bool
+
+        Returns:
+            Matching parent node or None if not found
+        """
+        current = self.parent
+        while current:
+            if criteria(current):
+                return current
+            current = current.parent
+        return None
+
+    def find_child(self, criteria: callable) -> Optional["Leaf"]:
+        """Find first child node that matches the given criteria.
+
+        Args:
+            criteria: A function that takes a Leaf node and returns bool
+
+        Returns:
+            Matching child node or None if not found
+        """
+        for child in self.children:
+            if criteria(child):
+                return child
+            result = child.find_child(criteria)
+            if result:
+                return result
+        return None
+
+    def find_sibling(self, criteria: callable) -> Optional["Leaf"]:
+        """Find first sibling node that matches the given criteria.
+
+        Args:
+            criteria: A function that takes a Leaf node and returns bool
+
+        Returns:
+            Matching sibling node or None if not found
+        """
+        if not self.parent:
+            return None
+
+        for sibling in self.parent.children:
+            if sibling != self and criteria(sibling):
+                return sibling
+        return None
+
     def _as_dict(self) -> Dict[str, Any]:
         """Return a dictionary containing all leaf information."""
         return {
@@ -193,8 +243,7 @@ class Leaf:
         }
 
     def __repr__(self) -> str:
-        """Return a string representation of the leaf."""
-        return f"Leaf(start={self.start}, end={self.end}, info='{self.info}')"
+        return f"Leaf(start={self.start}, end={self.end}, info={self.info})"
 
 
 class Tree(Generic[T]):
