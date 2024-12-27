@@ -2,7 +2,7 @@
 Frame analyzer module for locating current frame nodes in AST.
 """
 
-import ast
+from ast import AST, parse, walk
 from inspect import getsource
 from typing import Optional, Tuple
 
@@ -14,7 +14,7 @@ class FrameAnalyzer:
     def __init__(self, frame) -> None:
         self.frame = frame
         self.source = self._extract_source()
-        self.ast_tree = None if not self.source else ast.parse(self.source)
+        self.ast_tree = None if not self.source else parse(self.source)
         self.line_positions = self._calculate_line_positions()
 
     def _extract_source(self) -> Optional[str]:
@@ -48,7 +48,7 @@ class FrameAnalyzer:
 
         return positions
 
-    def _get_node_position(self, node: ast.AST) -> Optional[Position]:
+    def _get_node_position(self, node: AST) -> Optional[Position]:
         """Get position information for an AST node."""
         if not hasattr(node, "lineno"):
             return None
@@ -107,7 +107,7 @@ class FrameAnalyzer:
 
         # First pass - collect all nodes with their positions
         nodes_with_positions = []
-        for node in ast.walk(self.ast_tree):
+        for node in walk(self.ast_tree):
             position = self._get_node_position(node)
             if position:
                 leaf = Leaf(position)

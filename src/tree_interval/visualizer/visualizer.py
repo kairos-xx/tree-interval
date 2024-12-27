@@ -3,14 +3,15 @@ Tree Visualizer package.
 
 A Python package for building and visualizing tree structures with support for AST analysis.
 """
+from typing import Optional
 
-from ..core.interval_core import Leaf, Tree
 from .config import VisualizationConfig
 
 DEFAULT_CONFIG = VisualizationConfig()
 
 
 class TreeVisualizer:
+
     @staticmethod
     def visualize(tree, config: Optional[VisualizationConfig] = None):
         """Visualize a tree structure with customizable formatting options."""
@@ -27,8 +28,7 @@ class TreeVisualizer:
                     f"Position(start={node.start}, end={node.end}, "
                     f"lineno={node.lineno}, end_lineno={node.end_lineno}, "
                     f"col_offset={node.col_offset}, end_col_offset={node.end_col_offset}, "
-                    f"size={node.size})"
-                )
+                    f"size={node.size})")
             elif config.position_format == "tuple":
                 return f"({node.start}, {node.end})"
             return f"[{node.start}, {node.end}]"
