@@ -46,10 +46,11 @@ class TreeVisualizer:
             return " ".join(parts)
 
         def _print_node(node, prefix="", is_last=True, level=0):
+            node_info = format_position(node) + " " + format_node_info(node)
             if level == 0:
-                print("┌─" + format_position(node) + " " + format_node_info(node))
+                print("    ┌─" + node_info)
             else:
-                print(prefix + ("└── " if is_last else "├── ") + format_position(node) + " " + format_node_info(node))
+                print(prefix + ("└── " if is_last else "├── ") + node_info)
 
             children = node.children
             for i, child in enumerate(children):
