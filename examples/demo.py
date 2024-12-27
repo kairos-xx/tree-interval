@@ -248,7 +248,9 @@ def demonstrate_ast_parsing():
 
     # Find class definition node
     class_node = tree.root.find(
-        lambda n: n.info is not None and n.info.get("type") == "ClassDef"
+        lambda n: n is not None and hasattr(n, 'info') and 
+        n.info is not None and isinstance(n.info, dict) and 
+        n.info.get("type") == "ClassDef"
     )
     print("=== AST Node Info Example ===")
     if class_node and hasattr(class_node, 'ast_node') and class_node.ast_node:
