@@ -107,7 +107,7 @@ VisualizationConfig(
 ## Analysis
 
 ### AstTreeBuilder
-Builds tree structures from Python AST.
+Builds tree structures from Python AST. See [AST Reference](AST_REFERENCE.md) for detailed documentation.
 
 #### Methods
 - **build() -> Tree**
