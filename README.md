@@ -43,6 +43,18 @@ tree.visualize()
 
 ## Features
 
+### Node Search
+```python
+# Find parent with specific type
+parent = node.find_parent(lambda n: n.info.get("type") == "FunctionDef")
+
+# Find child with specific field value
+child = node.find_child(lambda n: n.info.get("fields", {}).get("name") == "x")
+
+# Find sibling with specific type
+sibling = node.find_sibling(lambda n: n.info.get("type") == "If")
+```
+
 ### Position-Aware Nodes
 ```python
 position = Position(start=0, end=100, info="Root")

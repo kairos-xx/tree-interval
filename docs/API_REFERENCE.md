@@ -33,6 +33,24 @@ Tree(source: T, start_lineno: Optional[int] = None, indent_size: int = 4)
   - Finds the best matching leaf for given position
   - Returns: Best matching leaf or None
 
+- **find_parent(criteria: callable) -> Optional[Leaf]**
+  - Finds first parent node matching the given criteria function
+  - Parameters:
+    - `criteria`: Function that takes a Leaf node and returns bool
+  - Returns: Matching parent node or None
+
+- **find_child(criteria: callable) -> Optional[Leaf]**
+  - Finds first child node matching the given criteria function
+  - Parameters:
+    - `criteria`: Function that takes a Leaf node and returns bool
+  - Returns: Matching child node or None
+
+- **find_sibling(criteria: callable) -> Optional[Leaf]**
+  - Finds first sibling node matching the given criteria function
+  - Parameters:
+    - `criteria`: Function that takes a Leaf node and returns bool
+  - Returns: Matching sibling node or None
+
 ### Leaf
 Represents a node in the tree structure.
 
