@@ -404,6 +404,9 @@ def demonstrate_leaf_navigation():
     
     # Test previous relationship
     print(f"Child 1.2's previous sibling: {parent1_child2.previous.info}")  # Should print "Child 1.1"
+    
+    # Test chained navigation
+    print(f"Chained navigation example: {parent1_child1.parent.next.previous.parent.info}")  # Should print "Parent 1"
 
 if __name__ == "__main__":
     main()
