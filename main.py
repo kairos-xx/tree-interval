@@ -404,16 +404,20 @@ def demonstrate_leaf_navigation():
     parent2.add_child(parent2_child2)
     
     # Test parent relationship
-    print(f"Child 1.1's parent: {parent1_child1.parent.info}")  # Should print "Parent 1"
+    parent_info = parent1_child1.parent.info  # Should print "Parent 1"
+    print(f"Child 1.1's parent: {parent_info}")
     
     # Test next relationship
-    print(f"Child 1.1's next sibling: {parent1_child1.next.info}")  # Should print "Child 1.2"
+    next_info = parent1_child1.next.info  # Should print "Child 1.2"
+    print(f"Child 1.1's next sibling: {next_info}")
     
     # Test previous relationship
-    print(f"Child 1.2's previous sibling: {parent1_child2.previous.info}")  # Should print "Child 1.1"
+    prev_info = parent1_child2.previous.info  # Should print "Child 1.1"
+    print(f"Child 1.2's previous sibling: {prev_info}")
     
     # Test chained navigation
-    print(f"Parent 1's next and previous: {parent1.next.previous.info}")  # Should print "Parent 1"
+    chained_info = parent1.next.previous.info  # Should print "Parent 1"
+    print(f"Parent 1's next and previous: {chained_info}")
 
 if __name__ == "__main__":
     main()
