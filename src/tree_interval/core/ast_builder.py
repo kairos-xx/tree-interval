@@ -1,3 +1,4 @@
+
 """
 AST Tree Builder module.
 
@@ -7,16 +8,20 @@ Abstract Syntax Trees.
 
 import ast
 from inspect import getsource
-from typing import Optional
+from typing import Optional, Union
+from types import FrameType
 
-from ..core.interval_core import Leaf, Tree
+from .interval_core import Leaf, Tree
 
 
 class AstTreeBuilder:
-    def __init__(self, frame) -> None:
-        self.frame = frame
+    def __init__(self, source: Union[FrameType, str]) -> None:
         self.source = None
-        self._get_source()
+        if isinstance(source, str):
+            self.source = source
+        else:
+            self.frame = source
+            self._get_source()
 
     def _get_source(self) -> None:
         try:

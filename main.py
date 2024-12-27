@@ -1,4 +1,3 @@
-
 """
 Tree Interval Package Demo - Comprehensive Examples
 """
@@ -12,6 +11,7 @@ from src.tree_interval import (
     TreeVisualizer,
     VisualizationConfig,
 )
+
 
 def demonstrate_basic_tree():
     """Basic tree creation and manipulation."""
@@ -31,13 +31,16 @@ def demonstrate_basic_tree():
     tree.visualize()
 
     print("\nWith position objects:")
-    TreeVisualizer.visualize(tree, VisualizationConfig(position_format="position"))
+    TreeVisualizer.visualize(tree,
+                             VisualizationConfig(position_format="position"))
 
     print("\nWith tuples and children count:")
     TreeVisualizer.visualize(
         tree,
-        VisualizationConfig(position_format="tuple", show_children_count=True, show_size=False)
-    )
+        VisualizationConfig(position_format="tuple",
+                            show_children_count=True,
+                            show_size=False))
+
 
 def demonstrate_ast_analysis():
     """AST analysis example."""
@@ -49,13 +52,15 @@ def factorial(n):
     return n * factorial(n - 1)
     """
     builder = AstTreeBuilder(code)
-    ast_tree = builder.build_tree()
+    ast_tree = builder.build()
     print("AST Tree visualization:")
     ast_tree.visualize()
+
 
 def demonstrate_frame_analysis():
     """Frame analysis example."""
     print("\n=== Frame Analysis Example ===")
+
     def sample_function():
         x = 1
         y = 2
@@ -67,8 +72,9 @@ def demonstrate_frame_analysis():
             print("Current node in execution:")
             print(f"Position: {current_node.start}-{current_node.end}")
             print(f"Info: {current_node.info}")
-    
+
     sample_function()
+
 
 def demonstrate_serialization():
     """JSON serialization example."""
@@ -85,6 +91,7 @@ def demonstrate_serialization():
     loaded_tree = Tree.from_json(json_str)
     print("\nDeserialized tree:")
     loaded_tree.visualize()
+
 
 if __name__ == "__main__":
     demonstrate_basic_tree()
