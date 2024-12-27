@@ -69,7 +69,7 @@ def test_rich_printer_custom_styles(basic_tree, console):
     config = RichPrintConfig(root_style=Style(color="red", bold=True),
                              node_style=Style(color="blue"),
                              leaf_style=Style(color="green"))
-    printer = RichTreePrinter(config)
+    printer = RichTreePrinter(config, console=console)
 
     with console.capture() as capture:
         printer.print_tree(basic_tree)
