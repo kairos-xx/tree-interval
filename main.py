@@ -1,20 +1,18 @@
 """
 Comprehensive demonstration of all features of the tree interval package.
 """
-
 from inspect import currentframe
 
 from rich.style import Style
 
-from src.tree_interval import (
-    FrameAnalyzer,
-    Leaf,
-    Position,
-    Tree,
-    TreeVisualizer,
-    VisualizationConfig,
-)
-from src.tree_interval.rich_printer import RichPrintConfig, RichTreePrinter
+from src.tree_interval import FrameAnalyzer
+from src.tree_interval import Leaf
+from src.tree_interval import Position
+from src.tree_interval import Tree
+from src.tree_interval import TreeVisualizer
+from src.tree_interval import VisualizationConfig
+from src.tree_interval.rich_printer import RichPrintConfig
+from src.tree_interval.rich_printer import RichTreePrinter
 
 
 def demonstrate_positions():
