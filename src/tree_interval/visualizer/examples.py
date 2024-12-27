@@ -1,6 +1,6 @@
 """Examples demonstrating tree visualizer functionality."""
 
-from visualizer import Leaf, Tree, TreeVisualizer, VisualizationConfig
+from src.tree_interval import Leaf, Tree, TreeVisualizer, VisualizationConfig
 
 
 def example_basic_tree():
