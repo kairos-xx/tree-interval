@@ -9,9 +9,9 @@ A Python package for managing and visualizing interval tree structures with AST 
 - [Visualization Guide](Visualization.md)
 
 ## Documentation
-- [API Reference](../docs/API_REFERENCE.md)
-- [AST Reference](../docs/AST_REFERENCE.md)
-- [Rich Printer Guide](../docs/RICH_PRINTER.md)
+- [API Reference](../tree/master/docs/API_REFERENCE.md)
+- [AST Reference](../tree/master/docs/AST_REFERENCE.md)
+- [Rich Printer Guide](../tree/master/docs/RICH_PRINTER.md)
 
 ## Overview
 
