@@ -2,7 +2,7 @@
 
 import pytest
 
-from src.tree_interval import AstTreeBuilder, FrameAnalyzer, Leaf, Position, Tree
+from src.tree_interval import Leaf, Position, Tree
 
 
 def test_position_creation():

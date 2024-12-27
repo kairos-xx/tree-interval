@@ -12,7 +12,7 @@ def get_latest_version():
         with urllib.request.urlopen(url) as response:
             data = json.loads(response.read())
             return data["info"]["version"]
-    except:
+    except Exception:
         return "0.0.0"
 
 
