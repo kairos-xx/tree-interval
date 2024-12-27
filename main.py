@@ -199,6 +199,8 @@ def demonstrate_frame_analyzer():
 
         # Show current node
         current_node = analyzer.find_current_node()
+        print(current_node.attributes)
+        print(dir(current_node))
         print("Current Node Information:")
         print(f"Node: {current_node._as_dict() if current_node else None}")
 
@@ -354,8 +356,7 @@ def demonstrate_find_method():
     found = child1.find(
         lambda n: hasattr(n.attributes.info, "type")
         and n.attributes.info.type == "ClassDef"
-    )
-    print(found.info)
+    )    
     print(f"Found class: {found.attributes.info if found else None}")
 
     found = grandchild.find(
