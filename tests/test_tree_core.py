@@ -20,7 +20,9 @@ class TestTreeCore(unittest.TestCase):
         self.tree.root = self.root
         self.tree.add_leaf(self.child)
         match = self.tree.find_best_match(20, 30)
-        self.assertEqual(match.info, "child")
+        self.assertIsNotNone(match)
+        if match:
+            self.assertEqual(match.info, "child")
 
 
 if __name__ == "__main__":

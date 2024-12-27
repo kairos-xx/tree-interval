@@ -12,7 +12,7 @@ DEFAULT_CONFIG = VisualizationConfig()
 
 class TreeVisualizer:
     @staticmethod
-    def visualize(tree, config: VisualizationConfig = None):
+    def visualize(tree, config: Optional[VisualizationConfig] = None):
         """Visualize a tree structure with customizable formatting options."""
         if config is None:
             config = DEFAULT_CONFIG

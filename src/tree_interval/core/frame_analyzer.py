@@ -87,11 +87,11 @@ class FrameAnalyzer:
 
         # Get current line interval
         frame_first_line = self.frame.f_code.co_firstlineno
-        current_line = self.frame.f_lineno - frame_first_line + 1
+        current_line = self.frame.f_lineno - frame_first_line + 1  # type: ignore
 
         # Find in line positions
         if 0 <= current_line - 1 < len(self.line_positions):
-            start, end = self.line_positions[current_line - 1]
+            start, end = self.line_positions[current_line - 1]  # type: ignore
             return tree.find_best_match(start, end)
 
         return None
