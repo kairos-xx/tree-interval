@@ -1,15 +1,8 @@
-
 """
 Tree Interval Package Demo
 """
-from src.tree_interval import (
-    FrameAnalyzer,
-    Leaf,
-    Position,
-    Tree,
-    TreeVisualizer,
-    VisualizationConfig,
-)
+from src.tree_interval import Leaf, Tree, TreeVisualizer, VisualizationConfig
+
 
 def main():
     # Create a basic tree
@@ -29,16 +22,15 @@ def main():
 
     # Demonstrate different visualization options
     print("\nWith position objects:")
-    TreeVisualizer.visualize(tree, VisualizationConfig(position_format="position"))
+    TreeVisualizer.visualize(tree,
+                             VisualizationConfig(position_format="position"))
 
     print("\nWith tuples and children count:")
     TreeVisualizer.visualize(
         tree,
-        VisualizationConfig(
-            position_format="tuple", 
-            show_children_count=True, 
-            show_size=False
-        ),
+        VisualizationConfig(position_format="tuple",
+                            show_children_count=True,
+                            show_size=False),
     )
 
     # Demonstrate JSON serialization
@@ -48,6 +40,7 @@ def main():
     loaded_tree = Tree.from_json(json_str)
     print("\nDeserialized tree:")
     loaded_tree.visualize()
+
 
 if __name__ == "__main__":
     main()
