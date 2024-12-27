@@ -151,3 +151,63 @@ def test_tree_serialization():
 
 if __name__ == "__main__":
     pytest.main([__file__])
+def test_position_format():
+    # Create root position
+    root_pos = Position(0, 100, "root")
+    root_pos.lineno = 1
+    root_pos.end_lineno = 10
+    root_pos.col_offset = 0
+    root_pos._end_col_offset = 80
+    root = Leaf(root_pos)
+
+    # Create child1 position
+    child1_pos = Position(10, 40, "child1")
+    child1_pos.lineno = 2
+    child1_pos.end_lineno = 4
+    child1_pos.col_offset = 4
+    child1 = Leaf(child1_pos)
+
+    # Create grandchild1 position
+    grandchild1_pos = Position(15, 25, "grandchild1")
+    grandchild1_pos.lineno = 3
+    grandchild1_pos.end_lineno = 3
+    grandchild1_pos.col_offset = 8
+    grandchild1 = Leaf(grandchild1_pos)
+
+    # Create child2 position
+    child2_pos = Position(50, 90, "child2")
+    child2_pos.lineno = 5
+    child2_pos.end_lineno = 8
+    child2_pos.col_offset = 4
+    child2 = Leaf(child2_pos)
+
+    # Create grandchild2 position
+    grandchild2_pos = Position(60, 80, "grandchild2")
+    grandchild2_pos.lineno = 6
+    grandchild2_pos.end_lineno = 7
+    grandchild2_pos.col_offset = 8
+    grandchild2 = Leaf(grandchild2_pos)
+
+    # Build tree structure
+    root.add_child(child1)
+    child1.add_child(grandchild1)
+    root.add_child(child2)
+    child2.add_child(grandchild2)
+
+    # Verify positions and structure
+    assert root.size == 100
+    assert child1.size == 30
+    assert grandchild1.size == 10
+    assert child2.size == 40
+    assert grandchild2.size == 20
+
+    assert root.col_offset == 0
+    assert root.end_col_offset == 80
+    assert child1.col_offset == 4
+    assert grandchild1.col_offset == 8
+    assert child2.col_offset == 4
+    assert grandchild2.col_offset == 8
+
+    assert len(root.children) == 2
+    assert len(child1.children) == 1
+    assert len(child2.children) == 1
