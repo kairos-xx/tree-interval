@@ -1,0 +1,24 @@
+/home/runner/Tree/src/tree_interval/core/ast_builder.py
+  /home/runner/Tree/src/tree_interval/core/ast_builder.py:72:33 - error: Argument of type "int | None" cannot be assigned to parameter "position" of type "Position | tuple[int, int, Any] | int" in function "__init__"
+    Type "int | None" is not assignable to type "Position | tuple[int, int, Any] | int"
+      Type "None" is not assignable to type "Position | tuple[int, int, Any] | int"
+        "None" is not assignable to "Position"
+        "None" is not assignable to "tuple[int, int, Any]"
+        "None" is not assignable to "int" (reportArgumentType)
+  /home/runner/Tree/src/tree_interval/core/ast_builder.py:106:75 - error: Operator "+" not supported for "None" (reportOptionalOperand)
+/home/runner/Tree/src/tree_interval/core/interval_core.py
+  /home/runner/Tree/src/tree_interval/core/interval_core.py:97:21 - error: Cannot access attribute "parent" for class "Position*"
+    Attribute "parent" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/src/tree_interval/core/interval_core.py:99:26 - error: Cannot access attribute "parent" for class "Position*"
+    Attribute "parent" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/src/tree_interval/core/interval_core.py:100:25 - error: Cannot access attribute "parent" for class "Position*"
+    Attribute "parent" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/src/tree_interval/core/interval_core.py:101:21 - error: Cannot access attribute "parent" for class "Position*"
+    Attribute "parent" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/src/tree_interval/core/interval_core.py:105:27 - error: Cannot access attribute "children" for class "Position*"
+    Attribute "children" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/src/tree_interval/core/interval_core.py:115:21 - error: Cannot access attribute "parent" for class "Position*"
+    Attribute "parent" is unknown (reportAttributeAccessIssue)
+  /home/runner/Tree/src/tree_interval/core/interval_core.py:117:27 - error: Cannot access attribute "parent" for class "Position*"
+    Attribute "parent" is unknown (reportAttributeAccessIssue)
+9 errors, 0 warnings, 0 informations 
