@@ -1,88 +1,79 @@
 
-# API Reference
+# Tree Interval API Reference
 
-## Module: `tree_interval.core.interval_core`
+## Core Modules
 
-### Class: `Position`
+### 📦 `tree_interval.core.interval_core`
 
-The `Position` class manages position information for tree nodes.
+#### 📍 `Position` Class 
+*Manages position information for tree nodes*
 
-#### Methods:
+##### Methods
 
-- **`__init__(self, start: int, end: int, info: Any) -> None`**
-  
-  Initializes a position with start, end and info.
+▪ **`__init__(self, start: int, end: int, info: Any) -> None`**  
+Initializes a position with start, end and info.
 
-  - **Parameters:**
-    - `start` (`int`): Start position
-    - `end` (`int`): End position
-    - `info` (`Any`): Additional information
-  
-### Class: `Leaf`
+Parameters:
+- `start` (`int`): Start position
+- `end` (`int`): End position  
+- `info` (`Any`): Additional information
 
-A class representing a node in the tree structure.
+#### 🌳 `Leaf` Class
+*Represents a node in the tree structure*
 
-#### Methods:
+##### Methods
 
-- **`__init__(self, position: Union[Position, tuple[int, int, Any]]) -> None`**
-  
-  Initializes a leaf node.
+▪ **`__init__(self, position: Union[Position, tuple[int, int, Any]]) -> None`**  
+Initializes a leaf node.
 
-  - **Parameters:**
-    - `position` (`Union[Position, tuple[int, int, Any]]`): Position information
+Parameters:
+- `position` (`Union[Position, tuple[int, int, Any]]`): Position information
 
-- **`add_child(self, child: 'Leaf') -> None`**
-  
-  Adds a child node to this leaf.
+▪ **`add_child(self, child: 'Leaf') -> None`**  
+Adds a child node to this leaf.
 
-  - **Parameters:**
-    - `child` (`Leaf`): The child node to add
+Parameters:
+- `child` (`Leaf`): The child node to add
 
-### Class: `Tree`
+#### 🌲 `Tree` Class
+*Main tree structure implementation*
 
-The main tree structure implementation.
+##### Methods
 
-#### Methods:
+▪ **`__init__(self, source: str) -> None`**  
+Initializes a new tree.
 
-- **`__init__(self, source: str) -> None`**
-  
-  Initializes a new tree.
+Parameters:
+- `source` (`str`): Source identifier for the tree
 
-  - **Parameters:**
-    - `source` (`str`): Source identifier for the tree
+▪ **`add_leaf(self, leaf: Leaf) -> None`**  
+Adds a leaf to the tree.
 
-- **`add_leaf(self, leaf: Leaf) -> None`**
-  
-  Adds a leaf to the tree.
+Parameters:
+- `leaf` (`Leaf`): The leaf to add
 
-  - **Parameters:**
-    - `leaf` (`Leaf`): The leaf to add
+▪ **`find_best_match(self, start: int, end: int) -> Optional[Leaf]`**  
+Finds the best matching leaf for given position.
 
-- **`find_best_match(self, start: int, end: int) -> Optional[Leaf]`**
-  
-  Finds the best matching leaf for given position.
+Parameters:
+- `start` (`int`): Start position
+- `end` (`int`): End position
 
-  - **Parameters:**
-    - `start` (`int`): Start position
-    - `end` (`int`): End position
-  
-  - **Returns:**
-    - `Optional[Leaf]`: Best matching leaf or None
+Returns:
+- `Optional[Leaf]`: Best matching leaf or None
 
-## Module: `tree_interval.visualizer`
+### 🎨 `tree_interval.visualizer`
 
-### Class: `VisualizationConfig`
+#### `VisualizationConfig` Class
+*Configuration settings for tree visualization*
 
-Configuration settings for tree visualization.
+##### Methods
 
-#### Methods:
+▪ **`__init__(self, show_info: bool = True, show_size: bool = True, show_children_count: bool = False, position_format: str = "range") -> None`**  
+Initializes visualization configuration.
 
-- **`__init__(self, show_info: bool = True, show_size: bool = True, show_children_count: bool = False, position_format: str = "range") -> None`**
-  
-  Initializes visualization configuration.
-
-  - **Parameters:**
-    - `show_info` (`bool`): Whether to show node info
-    - `show_size` (`bool`): Whether to show node sizes
-    - `show_children_count` (`bool`): Whether to show children count
-    - `position_format` (`str`): Format for position display
+Parameters:
+- `show_info` (`bool`): Whether to show node info
+- `show_size` (`bool`): Whether to show node sizes
+- `show_children_count` (`bool`): Whether to show children count
+- `position_format` (`str`): Format for position display
