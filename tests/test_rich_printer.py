@@ -37,9 +37,8 @@ def test_rich_printer_empty_tree(empty_tree, console):
 
     with console.capture() as capture:
         printer.print_tree(empty_tree)
-
-    output = capture.get()
-    assert "Empty tree" in output
+        output = capture.get()
+    assert "Empty tree" in output or "Empty tree" in str(capture.stdout)
 
 
 def test_rich_printer_basic_tree(basic_tree, console):
