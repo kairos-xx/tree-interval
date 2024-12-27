@@ -247,11 +247,14 @@ def demonstrate_ast_parsing():
     tree = builder.build()
 
     # Find class definition node
-    class_node = tree.root.find(lambda n: n.info.get("type") == "ClassDef")
+    class_node = tree.root.find(lambda n: n.info is not None and n.info.get("type") == "ClassDef")
     print("=== AST Node Info Example ===")
-    print(f"Class name: {class_node.ast_node.name}")
-    print(f"Fields: {class_node.ast_node._fields}")
-    print(f"Info dict: {class_node.info}")
+    if class_node and hasattr(class_node, 'ast_node') and class_node.ast_node:
+        print(f"Class name: {class_node.ast_node.name}")
+        print(f"Fields: {class_node.ast_node._fields}")
+        print(f"Info dict: {class_node.info}")
+    else:
+        print("Class definition not found")
 
 
 if __name__ == "__main__":
