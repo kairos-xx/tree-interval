@@ -1,13 +1,12 @@
-
 """
 Frame analyzer module for locating current frame nodes in AST.
 """
-
 from inspect import getsource
 from typing import Optional
 
-from .interval_core import Leaf, Tree
 from .ast_builder import AstTreeBuilder
+from .interval_core import Leaf
+from .interval_core import Tree
 
 class FrameAnalyzer:
     def __init__(self, frame) -> None:
