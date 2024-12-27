@@ -104,9 +104,17 @@ def demonstrate_frame_analysis():
 def demonstrate_serialization():
     """JSON serialization example."""
     print("\n=== Serialization Example ===")
-    tree = Tree("Serialization Demo")
-    root = Leaf(0, 100, "Root")
-    child = Leaf(10, 50, "Child")
+    tree = Tree("Serialization Demo", start_lineno=1)
+    root_pos = Position(0, 100, "Root")
+    root_pos.lineno = 1
+    root_pos.end_lineno = 5
+    root = Leaf(root_pos)
+    
+    child_pos = Position(10, 50, "Child")
+    child_pos.lineno = 2
+    child_pos.end_lineno = 3
+    child = Leaf(child_pos)
+    
     tree.root = root
     tree.add_leaf(child)
 
