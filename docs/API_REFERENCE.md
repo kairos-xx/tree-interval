@@ -1,4 +1,3 @@
-
 # Tree Interval API Reference
 
 ## Core Modules
