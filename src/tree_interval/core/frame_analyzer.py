@@ -114,7 +114,7 @@ class FrameAnalyzer:
                 nodes_with_positions.append((node, leaf))
 
         # Second pass - build hierarchy
-        for node, leaf in nodes_with_positions:
+        for _, leaf in nodes_with_positions:
             tree.add_leaf(leaf)
 
         return tree

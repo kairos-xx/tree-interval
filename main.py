@@ -15,7 +15,6 @@ from src.tree_interval import (
     VisualizationConfig,
 )
 from src.tree_interval.rich_printer import RichPrintConfig, RichTreePrinter
-from src.tree_interval.core.publish_workflow import run_publish_workflow # Added import
 
 
 def demonstrate_positions():
@@ -379,7 +378,6 @@ def main():
     demonstrate_nested_attributes()
     demonstrate_find_method()
 
+
 if __name__ == "__main__":
     main()
-    # Trigger workflow when needed
-    run_publish_workflow()
