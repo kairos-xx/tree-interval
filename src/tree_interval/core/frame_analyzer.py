@@ -31,4 +31,20 @@ class FrameAnalyzer:
 
     def build_tree(self) -> Optional[Tree]:
         """Build a complete tree from the frame's AST."""
-        return self.ast_builder.build_from_frame()
+        tree = self.ast_builder.build_from_frame()
+        if tree and tree.root:
+            # Update node positions and build parent-child relationships
+            line_positions = self.ast_builder._calculate_line_positions()
+            for node in tree.flatten():
+                if hasattr(node, 'ast_node'):
+                    pos = self.ast_builder._get_node_position(node.ast_node, line_positions)
+                    if pos:
+                        node.position = pos
+                        # Find parent based on position containment
+                        for potential_parent in tree.flatten():
+                            if (potential_parent != node and 
+                                potential_parent.start <= node.start and 
+                                potential_parent.end >= node.end):
+                                potential_parent.add_child(node)
+                                break
+        return tree
