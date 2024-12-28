@@ -74,7 +74,7 @@ class FrameAnalyzer:
             sorted_positions = sorted(nodes_by_pos.keys(), key=lambda x: (x[0], -x[1]))
             for start, end in sorted_positions:
                 current_node = nodes_by_pos[(start, end)]
-                if current_node.match(self.current_node):
+                if self.current_node and current_node.match(self.current_node):
                     current_node.selected = True
                 # Find the smallest containing interval
                 for parent_start, parent_end in sorted_positions:
