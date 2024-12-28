@@ -27,10 +27,13 @@ class AstTreeBuilder:
         try:
             if not isinstance(self.source, str):
                 return
-            if self.frame_firstlineno:
-                lines = self.source.splitlines()
-                if not lines:
-                    return
+            if not self.frame_firstlineno:
+                return
+            if not self.source:
+                return
+            lines = self.source.splitlines()
+            if not lines:
+                return
 
                 # Find common indentation
                 indented_lines = [line for line in lines if line.strip()]
