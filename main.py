@@ -20,7 +20,6 @@ def demonstrate_positions():
     print("\n=== Position Examples ===")
     # Basic Position
     pos1 = Position(0, 100)
-    leaf1 = Leaf(pos1, info="Root")
     print("Basic position:", f"start={pos1.start}, end={pos1.end}")
 
     # Position with line numbers
