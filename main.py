@@ -57,6 +57,41 @@ def demonstrate_positions():
 
     pos4 = Position(30, 70)
     print(
+
+def demonstrate_tree_styling():
+    """Example showcasing rich tree styling capabilities."""
+    print_header("Tree Styling Demo", CYAN)
+    
+    tree = Tree("Styled Tree Example")
+    
+    # Create nodes with different styles
+    root = Leaf(Position(0, 100), info={"type": "Project", "name": "MyApp"})
+    root.rich_style = RichStyle(color="#60A5FA", bold=True)  # Blue
+    
+    module1 = Leaf(Position(10, 40), info={"type": "Module", "name": "auth"})
+    module1.rich_style = RichStyle(color="#F472B6", bold=True)  # Pink
+    
+    module2 = Leaf(Position(50, 90), info={"type": "Module", "name": "api"})
+    module2.rich_style = RichStyle(color="#F472B6", bold=True)  # Pink
+    
+    func1 = Leaf(Position(15, 35), info={"type": "Function", "name": "login"})
+    func1.rich_style = RichStyle(color="#34D399")  # Green
+    func1.selected = True  # Highlight this node
+    
+    func2 = Leaf(Position(55, 85), info={"type": "Function", "name": "getData"})
+    func2.rich_style = RichStyle(color="#34D399")  # Green
+    
+    # Build tree structure
+    tree.root = root
+    tree.add_leaf(module1)
+    tree.add_leaf(module2)
+    module1.add_child(func1)
+    module2.add_child(func2)
+    
+    # Print using rich printer
+    printer = RichTreePrinter(RichPrintConfig(show_position=True))
+    printer.print_tree(tree)
+
         "Absolute positions:",
         f"absolute_start={pos4.absolute_start}, absolute_end={pos4.absolute_end}"
     )
@@ -237,25 +272,29 @@ def demonstrate_frame_analyzer():
             flat_nodes = tree.flatten()
             for node in flat_nodes:
                 # Basic style for all nodes
-                node.rich_style = RichStyle(color="grey70", bold=False)
-                node.style = LeafStyle(color="#888888", bold=False)
+                node.rich_style = RichStyle(color="#6B7280", bold=False)
+                node.style = LeafStyle(color="#6B7280", bold=False)
 
-                # Check if this is the current node by matching position and info
+                # Check if this is the current node
                 if (node.start == current_node.start
                         and node.end == current_node.end
                         and str(node.info) == str(current_node.info)):
-                    node.rich_style = RichStyle(color="green", bold=True)
-                    node.style = LeafStyle(color="#ff0000", bold=True)
+                    node.rich_style = RichStyle(color="#22C55E", bold=True)
+                    node.style = LeafStyle(color="#22C55E", bold=True)
                     node.selected = True
                 # Check node type from info
                 elif hasattr(node, "info") and isinstance(node.info, dict):
-                    node_type = node.info.get("name")
-                    if node_type == "Call":
-                        node.rich_style = RichStyle(color="blue", bold=True)
-                        node.style = LeafStyle(color="#00ff00", bold=True)
+                    node_type = node.info.get("type", "")
+                    if node_type == "Module":
+                        node.rich_style = RichStyle(color="#60A5FA", bold=True)
                     elif node_type == "FunctionDef":
-                        node.rich_style = RichStyle(color="red", bold=False)
-                        node.style = LeafStyle(color="#0000ff", bold=False)
+                        node.rich_style = RichStyle(color="#F472B6", bold=True)
+                    elif node_type == "Call":
+                        node.rich_style = RichStyle(color="#F59E0B", bold=True)
+                    elif node_type == "Name":
+                        node.rich_style = RichStyle(color="#A78BFA", bold=False)
+                    elif node_type == "Arguments":
+                        node.rich_style = RichStyle(color="#34D399", bold=False)
 
             printer = RichTreePrinter()
             printer.print_tree(tree)
@@ -507,6 +546,7 @@ def main():
     demonstrate_positions()
     demonstrate_find_nodes()
     demonstrate_leaves()
+    demonstrate_tree_styling()
     demonstrate_tree_operations()
     demonstrate_frame_analyzer()
     demonstrate_line_positions()
