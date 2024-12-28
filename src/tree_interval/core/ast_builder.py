@@ -150,3 +150,13 @@ class AstTreeBuilder:
                     result_tree.add_leaf(leaf)
 
         return result_tree
+
+    def _line_col_to_pos(self, lineno: int, col_offset: int) -> Optional[int]:
+        """Convert line and column to absolute position."""
+        if not self.source or not isinstance(self.source, str):
+            return None
+        lines = self.source.splitlines()
+        if not lines:
+            return None
+        pos = sum(len(line) + 1 for line in lines[:lineno - 1]) + col_offset
+        return pos
