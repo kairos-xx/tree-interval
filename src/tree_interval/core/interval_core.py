@@ -32,6 +32,7 @@ class Position:
         self,
         start: Optional[Union[int, disposition, FrameType]] = None,
         end: Optional[int] = None,
+        info: Optional[Any] = None,
         source: Optional[str] = None,
         selected: bool = False,
     ):
