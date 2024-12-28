@@ -64,8 +64,14 @@ class RichTreePrinter:
             parts.append(f"size={node.size}")
 
         if self.config.show_info and node.info:
-            info_str = str(node.info)
-            parts.append(f"info={info_str}")
+            if isinstance(node.info, dict):
+                info_str = "Info(" + ", ".join(f"{k}={repr(v)}" for k, v in node.info.items()) + ")"
+            else:
+                info_str = str(node.info)
+            if len(info_str) > 50:  # Truncate if too long
+                parts.append("info=...")
+            else:
+                parts.append(f"info={info_str}")
 
         return style.render(" ".join(parts))
 

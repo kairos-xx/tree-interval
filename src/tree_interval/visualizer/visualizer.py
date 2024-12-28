@@ -49,9 +49,16 @@ class TreeVisualizer:
             if config.show_info and node.info:
                 if isinstance(node.info, dict):
                     info_str = "Info(" + ", ".join(f"{k}={repr(v)}" for k, v in node.info.items()) + ")"
-                    parts.append(info_str)
+                    if len(info_str) > 50:  # Truncate if too long
+                        parts.append("info=...")
+                    else:
+                        parts.append(info_str)
                 else:
-                    parts.append(f"info={repr(node.info)}")
+                    info_str = repr(node.info)
+                    if len(info_str) > 50:  # Truncate if too long
+                        parts.append("info=...")
+                    else:
+                        parts.append(f"info={info_str}")
             if config.show_children_count:
                 parts.append(f"children={len(node.children)}")
             return " ".join(parts)
