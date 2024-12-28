@@ -31,6 +31,7 @@ class Position:
         end: Optional[int] = None,
         info: Optional[Any] = None,
     ):
+        self.selected: bool = False
         self.start = start
         self.end = end
         self.info = info
@@ -153,6 +154,9 @@ class Leaf:
         end: Optional[int] = None,
         info: Optional[Any] = None,
     ) -> None:
+        self.next: Optional['Leaf'] = None
+        self.previous: Optional['Leaf'] = None 
+        self.selected: bool = False
         if isinstance(position, Position):
             self.position = position
         elif isinstance(position, tuple):
@@ -209,9 +213,9 @@ class Leaf:
         child.parent = self
         self.children.append(child)
 
-    def find_best_match(self, start: int, end: int) -> Optional["Leaf"]:
+    def find_best_match(self, start: Optional[int], end: Optional[int]) -> Optional["Leaf"]:
         """Find the leaf that best matches the given range."""
-        if self.start is None or self.end is None:
+        if self.start is None or self.end is None or start is None or end is None:
             return None
 
         if start >= self.start and end <= self.end:
