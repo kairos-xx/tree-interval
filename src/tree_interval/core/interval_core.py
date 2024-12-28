@@ -231,26 +231,31 @@ class Leaf:
         position: Union[Position, tuple[int, int, Any], int],
         second_arg: Optional[Any] = None,
         third_arg: Optional[Any] = None,
+        *,
+        info: Optional[Any] = None,
     ) -> None:
         if position is None:
             raise ValueError("Position cannot be None")
             
-        # If second arg is str/dict, treat it as info with no end
-        if isinstance(second_arg, (str, dict)):
-            info, end = second_arg, third_arg
+        # Handle info keyword argument if provided
+        if info is not None:
+            final_info = info
+            end = second_arg
+        # Otherwise handle positional arguments
+        elif isinstance(second_arg, (str, dict)):
+            final_info, end = second_arg, third_arg
         else:
-            # Otherwise treat it as end with third arg as info
-            info, end = third_arg, second_arg
+            final_info, end = third_arg, second_arg
 
         if isinstance(position, Position):
             self.position = position
-            self._info = info
+            self._info = final_info
         elif isinstance(position, tuple):
             self.position = Position(position[0], position[1])
             self._info = position[2] if len(position) > 2 else info
         else:
             self.position = Position(position, end)
-            self._info = info
+            self._info = final_info
 
         #print(position,self._info,end) #removed print statement
 
