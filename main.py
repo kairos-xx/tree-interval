@@ -1,7 +1,8 @@
 from inspect import currentframe
-
 from typing import NamedTuple
+
 from rich.style import Style as RichStyle
+
 from src.tree_interval import (
     FrameAnalyzer,
     Leaf,
@@ -12,9 +13,11 @@ from src.tree_interval import (
 )
 from src.tree_interval.rich_printer import RichPrintConfig, RichTreePrinter
 
+
 class LeafStyle(NamedTuple):
     color: str
     bold: bool = False
+
 
 # ANSI Colors
 RED = "\033[91m"
@@ -267,16 +270,25 @@ def demonstrate_basic_rich_printing():
     print_header("Basic Rich Printing", CYAN)
     tree = Tree("Basic Example")
 
-    root = Leaf(Position(0, 100), 
-                info={"type": "Module", "name": "example"},
+    root = Leaf(Position(0, 100),
+                info={
+                    "type": "Module",
+                    "name": "example"
+                },
                 style=LeafStyle(color="#ff0000", bold=True),
                 rich_style=RichStyle(color="red", bold=True))
-    child1 = Leaf(Position(10, 40), 
-                  info={"type": "Function", "name": "hello"},
+    child1 = Leaf(Position(10, 40),
+                  info={
+                      "type": "Function",
+                      "name": "hello"
+                  },
                   style=LeafStyle(color="#00ff00", bold=False),
                   rich_style=RichStyle(color="green"))
-    child2 = Leaf(Position(50, 90), 
-                  info={"type": "Class", "name": "MyClass"},
+    child2 = Leaf(Position(50, 90),
+                  info={
+                      "type": "Class",
+                      "name": "MyClass"
+                  },
                   style=LeafStyle(color="#0000ff", bold=True),
                   rich_style=RichStyle(color="blue", bold=True))
 
@@ -291,7 +303,7 @@ def demonstrate_basic_rich_printing():
 def demonstrate_custom_config():
     """Demonstrates custom configuration options for tree visualization."""
     from rich.style import Style
-    
+
     print_header("Custom Rich Printing", MAGENTA)
     tree = Tree("Custom Style Example")
 
