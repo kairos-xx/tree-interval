@@ -165,18 +165,18 @@ def demonstrate_tree_operations():
     # Node finding
     print("\nNode Finding:")
     best_match = tree.find_best_match(20, 30)
-    print(f"Best match for (20, 30): {best_match}")
+    print(f"Best match for (20, 30): {best_match.info if best_match else None}")
 
     common_ancestor = grandchild1.find_common_ancestor(grandchild2)
-    print(f"Common ancestor of grandchildren: {common_ancestor}")
+    print(f"Common ancestor of grandchildren: {common_ancestor.info if common_ancestor else None}")
 
     multi_child = grandchild1.find_first_multi_child_ancestor()
-    print(f"First multi-child ancestor: {multi_child}")
+    print(f"First multi-child ancestor: {multi_child.info if multi_child else None}")
 
-    # Tree traversal
-    print("\nTree Traversal:")
+    # Tree traversal  
+    print("\nTree Traversal:") 
     flat_list = tree.flatten()
-    print("Flattened tree:", [leaf.info for leaf in flat_list])
+    print("Flattened tree:", [str(leaf.info) for leaf in flat_list])
 
     # Different visualization methods
     print("\nVisualization Methods:")
@@ -362,22 +362,26 @@ def demonstrate_find_method():
     root.add_child(child2)
     child1.add_child(grandchild)
 
-    # Initialize attributes
+    # Build tree structure first
+    root.add_child(child1)
+    root.add_child(child2)
+    child1.add_child(grandchild)
+
+    # Initialize attributes after tree structure is complete
     root._as_dict()
     child1._as_dict()
     child2._as_dict()
     grandchild._as_dict()
     
     # Use find method with dot notation
-    found = root.find(lambda n: n.info and n.info.get("name") == "hello")
+    found = root.find(lambda n: isinstance(n.info, dict) and n.info.get("name") == "hello")
     print(f"Found function: {found.info if found else None}")
 
-    found = child1.find(lambda n: n.info and n.info.get("type") == "ClassDef")
+    found = child1.find(lambda n: isinstance(n.info, dict) and n.info.get("type") == "ClassDef")
     print(f"Found class: {found.info if found else None}")
 
-    found = grandchild.find(lambda n: n.info and n.info.get("type") == "Module")
-
-    print(f"Found module: {found.attributes.info if found else None}")
+    found = grandchild.find(lambda n: isinstance(n.info, dict) and n.info.get("type") == "Module")
+    print(f"Found module: {found.info if found else None}")
 
 
 def main():
@@ -418,6 +422,13 @@ def demonstrate_leaf_navigation():
     parent2.add_child(parent2_child1)
     parent2.add_child(parent2_child2)
 
+    # Build complete tree first
+    tree.root = grand_parent
+    grand_parent.add_child(parent1)
+    grand_parent.add_child(parent2)
+    parent1.add_child(parent1_child1)
+    parent1.add_child(parent1_child2)
+    
     # Test parent relationship
     parent_node = parent1_child1.parent
     parent_info = parent_node.info if parent_node else None
@@ -433,11 +444,10 @@ def demonstrate_leaf_navigation():
     prev_info = prev_node.info if prev_node else None
     print(f"Child 1.2's previous sibling: {prev_info}")
 
-    # Test chained navigation
+    # Test parent navigation
     next_parent = parent1.next
-    prev_node = next_parent.previous if next_parent else None
-    chained_info = prev_node.info if prev_node else None
-    print(f"Parent 1's next and previous: {chained_info}")
+    prev_node = parent1.previous
+    print(f"Parent 1's next and previous: {prev_node.info if prev_node else None}")
 
 
 if __name__ == "__main__":
