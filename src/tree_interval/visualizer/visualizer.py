@@ -86,7 +86,7 @@ class TreeVisualizer:
             position_str = format_position(node)
             info_str = format_node_info(node)
             prefix_spaces = "" if level == 0 else prefix
-            connector = "┌── " if level == 0 else (
+            connector = "" if level == 0 else (
                 "└── " if is_last else "├── ")
             
             # Custom styling takes precedence
