@@ -444,7 +444,43 @@ def demonstrate_leaf_navigation():
     print(f"Child 1.2's previous sibling: {prev_info}")
 
     # Test parent navigation
-    print(f"Parent 1's next sibling: {parent1.next.info if parent1.next else None}")
+    print(
+        f"Parent 1's next sibling: {parent1.next.info if parent1.next else None}"
+    )
+
+
+def demonstrate_node_navigation():
+    print("\n=== Node Navigation Examples ===")
+
+    # Create a program structure tree
+    program = Leaf(Position(0, 500), info="Program")
+    class_def = Leaf(Position(0, 250), info="Class: MyClass")
+    function_def = Leaf(Position(250, 500), info="Function: process_data")
+
+    method1 = Leaf(Position(50, 120), info="Method: __init__")
+    method2 = Leaf(Position(130, 200), info="Method: validate")
+
+    param1 = Leaf(Position(270, 300), info="Parameter: data")
+    param2 = Leaf(Position(310, 340), info="Parameter: options")
+
+    # Build tree relationships
+    program.add_child(class_def)
+    program.add_child(function_def)
+    class_def.add_child(method1)
+    class_def.add_child(method2)
+    function_def.add_child(param1)
+    function_def.add_child(param2)
+
+    # Demonstrate navigation
+    print(f"First method's parent: {method1.parent.info}"
+          )  # Shows class definition
+    print(f"First method's next sibling: {method1.next.info}"
+          )  # Shows the validate method
+    print(f"Second method's previous sibling: {method2.previous.info}"
+          )  # Shows the init method
+    print(f"Function's first parameter: {function_def.children[0].info}"
+          )  # Shows first parameter
+
 
 def main():
     print("=== Tree Interval Package Demo ===")
@@ -460,35 +496,7 @@ def main():
     demonstrate_nested_attributes()
     demonstrate_find_method()
     demonstrate_leaf_navigation()
-
-def demonstrate_node_navigation():
-    print("\n=== Node Navigation Examples ===")
-    
-    # Create a program structure tree
-    program = Leaf(Position(0, 500), info="Program")
-    class_def = Leaf(Position(0, 250), info="Class: MyClass")
-    function_def = Leaf(Position(250, 500), info="Function: process_data")
-    
-    method1 = Leaf(Position(50, 120), info="Method: __init__")
-    method2 = Leaf(Position(130, 200), info="Method: validate")
-    
-    param1 = Leaf(Position(270, 300), info="Parameter: data")
-    param2 = Leaf(Position(310, 340), info="Parameter: options")
-    
-    # Build tree relationships
-    program.add_child(class_def)
-    program.add_child(function_def)
-    class_def.add_child(method1)
-    class_def.add_child(method2)
-    function_def.add_child(param1)
-    function_def.add_child(param2)
-    
-    # Demonstrate navigation
-    print(f"First method's parent: {method1.parent.info}")  # Shows class definition
-    print(f"First method's next sibling: {method1.next.info}")  # Shows the validate method
-    print(f"Second method's previous sibling: {method2.previous.info}")  # Shows the init method
-    print(f"Function's first parameter: {function_def.children[0].info}")  # Shows first parameter
-
+    demonstrate_node_navigation()
 
 
 if __name__ == "__main__":
