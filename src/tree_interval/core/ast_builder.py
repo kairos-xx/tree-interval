@@ -84,8 +84,8 @@ class AstTreeBuilder:
                 end_pos = line_positions[end_line][0] + end_col_offset
                 position = Position(
                     start_pos,
-                    end_pos,
-                    {"name": node.__class__.__name__, "source": unparse(node)},
+                    end_pos
+                   
                 )
                 position.lineno = lineno + self.line_offset
                 position.end_lineno = end_lineno + self.line_offset
@@ -119,7 +119,7 @@ class AstTreeBuilder:
         for node in walk(ast_tree):
             position = self._get_node_position(node, line_positions)
             if position:
-                leaf = Leaf(position)
+                leaf = Leaf(position, info={"name": node.__class__.__name__, "source": unparse(node)})
                 leaf.ast_node = node
                 nodes_with_positions.append((node, leaf))
 
