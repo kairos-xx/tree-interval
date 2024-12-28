@@ -15,11 +15,17 @@
 ##### Methods
 
 *  **`__init__(self, start: int, end: int) -> None`**  
-Initializes a position with start and end.
+Initializes a position with start and end positions.
 
 Parameters:
-- `start` (`int`): Start position
-- `end` (`int`): End position
+- `start` (`int`): Start position (required)
+- `end` (`int`): End position (required)
+
+Properties:
+- `lineno` (`int`): Source line number (optional, defaults to 1)
+- `end_lineno` (`int`): End line number (optional, defaults to 1)
+- `col_offset` (`Optional[int]`): Column offset (optional)
+- `end_col_offset` (`Optional[int]`): End column offset (optional)
 
 #### 🌳 `Leaf` Class
 *Represents a node in the tree structure*
