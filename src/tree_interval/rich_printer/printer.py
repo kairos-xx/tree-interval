@@ -1,7 +1,7 @@
 """Rich-based tree printer implementation."""
 from typing import Optional
 
-from rich.console import Console 
+from rich.console import Console
 from rich.style import Style
 from rich.tree import Tree as RichTree
 
