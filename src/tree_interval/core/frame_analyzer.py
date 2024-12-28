@@ -2,12 +2,12 @@
 Frame analyzer module for locating current frame nodes in AST.
 """
 
-from typing import Optional
+from ast import AST, parse, walk
+from inspect import getsource
+from typing import Optional, Tuple, Any, cast
 
 from .ast_builder import AstTreeBuilder
-from .interval_core import Leaf
-from .interval_core import Position
-from .interval_core import Tree
+from .interval_core import Leaf, Position, Tree
 
 
 class FrameAnalyzer:
@@ -49,7 +49,7 @@ class FrameAnalyzer:
             for node in self.tree.flatten():
                 if hasattr(node, "ast_node") and isinstance(node.ast_node, AST):
                     pos = self.ast_builder._get_node_position(
-                        node.ast_node, line_positions
+                        cast(AST, node.ast_node), line_positions
                     )
                     if pos:
                         pos.selected = node.selected

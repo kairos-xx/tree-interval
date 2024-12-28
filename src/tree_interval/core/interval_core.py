@@ -88,12 +88,11 @@ class Position:
                         self.end = pos_end
 
             elif pos and hasattr(pos, 'col_offset') and hasattr(pos, 'end_col_offset'):
-                self.start = pos.col_offset
-                self.end = pos.end_col_offset if pos.end_col_offset is not None else 0
+                self.start = pos.col_offset if hasattr(pos, 'col_offset') and pos.col_offset is not None else 0
+                self.end = pos.end_col_offset if hasattr(pos, 'end_col_offset') and pos.end_col_offset is not None else 0
             else:
                 self.start = 0
                 self.end = 0
-                self.end = pos.end_col_offset if pos.end_col_offset is not None else 0
         else:
             if isinstance(start, disposition):
                 if isinstance(end, str):

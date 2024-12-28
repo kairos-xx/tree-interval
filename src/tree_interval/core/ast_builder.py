@@ -8,7 +8,7 @@ Abstract Syntax Trees.
 from ast import AST, parse, unparse, walk
 from inspect import getsource
 from types import FrameType
-from typing import Optional, Union, Tuple
+from typing import Optional, Union, Tuple, Any
 
 from .interval_core import Leaf, Position, Tree
 
@@ -25,9 +25,9 @@ class AstTreeBuilder:
 
     def _get_source(self) -> None:
         try:
-            if self.source is None:
+            if not isinstance(self.source, str):
                 return
-            if self.source and self.frame_firstlineno and isinstance(self.source, str):
+            if self.frame_firstlineno:
                 lines = self.source.splitlines()
                 if not lines:
                     return
