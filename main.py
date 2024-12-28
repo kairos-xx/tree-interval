@@ -246,7 +246,8 @@ def demonstrate_frame_analyzer():
 
             printer = RichTreePrinter()
             printer.print_tree(tree)
-            TreeVisualizer.visualize(tree)
+            printer = RichTreePrinter()
+            printer.print_tree(tree)
 
     analyze_this()
 
