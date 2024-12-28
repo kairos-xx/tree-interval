@@ -221,19 +221,21 @@ class Leaf:
     def add_child(self, child: "Leaf") -> None:
         """Add a child node to this leaf."""
         child.parent = self
-        # Preserve all node information
+        # Preserve all node information including selected state
         print(f"{id(child)} add_child - selected {child.selected}") 
         if isinstance(child.position, Position):
+            selected_state = child.position.selected  # Store selected state
             child.position = Position(
                 child.position.start,
                 child.position.end,
                 child.position.info,
-                child.position.selected
+                selected_state  # Pass the stored selected state
             )
             child.position._lineno = child.lineno
             child.position._end_lineno = child.end_lineno
             child.position._col_offset = child.col_offset
             child.position._end_col_offset = child.end_col_offset
+            child.position.selected = selected_state  # Ensure selected state is preserved
         self.children.append(child)
 
     def find_best_match(self, start: int, end: int) -> Optional["Leaf"]:
