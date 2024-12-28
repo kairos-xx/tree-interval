@@ -20,7 +20,8 @@ CUSTOM_IGNORE = [
     'flake.txt',
     "poetry.lock",
     ".replit",
-    "replit.nix"
+    "replit.nix",
+    "generated-icon.png"
 ]
 
 
@@ -44,11 +45,9 @@ def get_files_to_commit() -> List[str]:
     return files
 
 
-def commit_changes(message: Optional[str] = None) -> None:
+def commit_changes() -> None:
     """Commit changes to git repository."""
-    if not message:
-        message = f"Auto commit: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
-
+    message = f"Auto commit: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
     files = get_files_to_commit()
 
     try:
@@ -65,6 +64,4 @@ def commit_changes(message: Optional[str] = None) -> None:
 
 
 if __name__ == "__main__":
-    commit_message = input(
-        "Enter commit message (press Enter for auto-message): ").strip()
-    commit_changes(commit_message if commit_message else None)
+    commit_changes()
