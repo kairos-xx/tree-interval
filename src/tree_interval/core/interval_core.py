@@ -222,8 +222,8 @@ class Leaf:
         """Add a child node to this leaf."""
         child.parent = self
         # Ensure selected state is preserved
-        if hasattr(child.position, 'selected'):
-            child.position.selected = child.selected
+        selected_state = child.position.selected
+        child.position.selected = selected_state
         self.children.append(child)
 
     def find_best_match(self, start: int, end: int) -> Optional["Leaf"]:
