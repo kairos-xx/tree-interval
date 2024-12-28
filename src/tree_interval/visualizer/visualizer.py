@@ -66,11 +66,14 @@ class TreeVisualizer:
             connector = "┌── " if level == 0 else ("└── " if is_last else "├── ")
 
             # Color the text content but not the tree lines
-            color = (
-                TreeVisualizer.BLUE
-                if level == 0
-                else (TreeVisualizer.GREEN if node.children else TreeVisualizer.YELLOW)
-            )
+            if hasattr(node, 'selected') and node.selected:
+                color = "\033[91m"  # Bright red for selected nodes
+            else:
+                color = (
+                    TreeVisualizer.BLUE
+                    if level == 0
+                    else (TreeVisualizer.GREEN if node.children else TreeVisualizer.YELLOW)
+                )
             print(
                 f"{prefix_spaces}{connector}{color}{position_str} "
                 + f"{info_str}{TreeVisualizer.RESET}"
