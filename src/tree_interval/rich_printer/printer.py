@@ -1,5 +1,6 @@
 """Rich-based tree printer implementation."""
 
+from inspect import currentframe, getframeinfo
 from typing import Optional
 
 from rich.console import Console
@@ -37,6 +38,7 @@ class RichTreePrinter:
         """Format node information."""
         # Determine style priority: rich_style > selected > default
         if hasattr(node, 'rich_style') and node.rich_style:
+            print(getframeinfo(currentframe() ))
             style = node.rich_style
         elif hasattr(node, "selected") and node.selected:
             style = self.config.selected_style
