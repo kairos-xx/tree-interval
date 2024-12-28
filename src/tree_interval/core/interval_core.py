@@ -139,9 +139,25 @@ class Position:
         """Set end line number."""
         self._end_lineno = value
 
-    # Direct property access for offsets since they can be None
-    col_offset = property(lambda self: self._col_offset)
-    end_col_offset = property(lambda self: self._end_col_offset)
+    @property
+    def col_offset(self) -> Optional[int]:
+        """Get column offset."""
+        return self._col_offset
+        
+    @col_offset.setter
+    def col_offset(self, value: Optional[int]) -> None:
+        """Set column offset."""
+        self._col_offset = value
+
+    @property
+    def end_col_offset(self) -> Optional[int]:
+        """Get end column offset."""
+        return self._end_col_offset
+        
+    @end_col_offset.setter 
+    def end_col_offset(self, value: Optional[int]) -> None:
+        """Set end column offset."""
+        self._end_col_offset = value
 
     @property
     def absolute_start(self) -> Optional[int]:
