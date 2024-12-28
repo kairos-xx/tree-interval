@@ -234,15 +234,15 @@ def demonstrate_frame_analyzer():
             # Color nodes based on type and mark current node
             for node in tree.flatten():
                 if node == current_node:
-                    node.style = LeafStyle(color="#ff0000", bold=True)
+                    node.rich_style = RichStyle(color="red", bold=True)
                     node.selected = True
                 elif isinstance(node.info, dict) and "type" in node.info:
                     if node.info["name"] == "Module":
-                        node.style = LeafStyle(color="#00ff00", bold=True)
+                        node.rich_style = RichStyle(color="green", bold=True)
                     elif node.info["name"] == "FunctionDef":
-                        node.style = LeafStyle(color="#0000ff", bold=False)
+                        node.rich_style = RichStyle(color="blue", bold=False)
                     else:
-                        node.style = LeafStyle(color="#888888", bold=False)
+                        node.rich_style = RichStyle(color="grey70", bold=False)
 
             printer = RichTreePrinter()
             printer.print_tree(tree)
