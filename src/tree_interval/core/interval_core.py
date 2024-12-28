@@ -222,6 +222,7 @@ class Leaf:
         """Add a child node to this leaf."""
         child.parent = self
         # Preserve child's original selected state
+        print(child.selected,child.position.selected,id(child))
         child.position.selected = child.selected
         self.children.append(child)
 
