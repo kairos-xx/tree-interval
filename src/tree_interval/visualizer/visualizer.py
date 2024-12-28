@@ -90,16 +90,21 @@ class TreeVisualizer:
                 "└── " if is_last else "├── ")
             
             #Added style handling here
-            style_prefix = ""
-            style_suffix = ""
-            if hasattr(node, 'style') and node.style:
+            # Default styling if no custom style is set
+            if not hasattr(node, 'style') or not node.style:
+                color = TreeVisualizer.BLUE if level == 0 else (
+                    TreeVisualizer.GREEN if node.children else TreeVisualizer.YELLOW)
+                style_prefix = color
+                style_suffix = TreeVisualizer.RESET
+            else:
+                # Custom styling
                 color = node.style.color.lstrip('#')
                 style_prefix = f"\033[38;2;{int(color[:2], 16)};{int(color[2:4], 16)};{int(color[4:], 16)}m"
                 style_suffix = "\033[0m"
                 if node.style.bold:
                     style_prefix = "\033[1m" + style_prefix
 
-            print(f"{prefix_spaces}{connector}{style_prefix}{position_str} {info_str}{style_suffix}{TreeVisualizer.RESET}")
+            print(f"{prefix_spaces}{connector}{style_prefix}{position_str} {info_str}{style_suffix}")
 
 
             children = node.children
