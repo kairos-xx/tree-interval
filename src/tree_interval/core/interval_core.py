@@ -29,14 +29,17 @@ T = TypeVar("T")
 class Position:
     def __init__(
         self,
-        start: Optional[Union[int, disposition, FrameType]]=None,
-        end: Optional[int]=None,
+        start: Optional[Union[int, disposition, FrameType]] = None,
+        end: Optional[int] = None,
         info: Optional[Any] = None,
         source: Optional[str] = None,
         selected: bool = False,
     ):
         self.selected = selected
-        
+        self._lineno: Optional[int] = None
+        self._end_lineno: Optional[int] = None
+        self._col_offset: Optional[int] = None
+        self._end_col_offset: Optional[int] = None
         if isinstance(start, FrameType):
             frame = start
             frame_info = getframeinfo(frame)
@@ -45,53 +48,74 @@ class Position:
                     source = getsource(frame.f_code)
                     # Calculate indentation
                     lines = source.splitlines()
-                    common_indent = min(len(line) - len(line.lstrip()) for line in lines if line.strip())
+                    common_indent = min(
+                        len(line) - len(line.lstrip()) for line in lines if line.strip()
+                    )
                     # Remove indentation and join
-                    source = '\n'.join(line[common_indent:] if line.strip() else line for line in lines)
+                    source = "\n".join(
+                        line[common_indent:] if line.strip() else line for line in lines
+                    )
                 except (OSError, TypeError):
                     source = None
-                    
+
             pos = frame_info.positions
             line_offset = frame.f_code.co_firstlineno - 1
+            self._lineno = pos.lineno
+            self._end_lineno = pos.end_lineno
+            self._col_offset = pos.col_offset
+            self._end_col_offset = pos.end_col_offset
             if source is not None:
-                lines = source.split('\n')
-                pos_start = sum(len(line) + 1 for line in lines[:pos.lineno - line_offset - 1]) + pos.col_offset
-                pos_end = sum(len(line) + 1 for line in lines[:pos.end_lineno - line_offset - 1]) + pos.end_col_offset
+                lines = source.split("\n")
+                pos_start = (
+                    sum(len(line) + 1 for line in lines[: pos.lineno - line_offset - 1])
+                    + pos.col_offset
+                )
+                pos_end = (
+                    sum(
+                        len(line) + 1
+                        for line in lines[: pos.end_lineno - line_offset - 1]
+                    )
+                    + pos.end_col_offset
+                )
                 self.start = pos_start
                 self.end = pos_end
+
             else:
                 self.start = pos.col_offset
                 self.end = pos.end_col_offset
-                
-        elif isinstance(start, disposition):
-            if isinstance(end,str):
-                source = end
-                end = None
-            dis_pos = start
-            if source is not None:
-                # Calculate start and end from line/col offsets
-                lines = source.split('\n')
-                pos_start = sum(len(line) + 1 for line in lines[:dis_pos.lineno - 1]) + dis_pos.col_offset
-                pos_end = sum(len(line) + 1 for line in lines[:dis_pos.end_lineno - 1]) + dis_pos.end_col_offset
-                self.start = pos_start
-                self.end = pos_end
-            else:
-                # Fallback to using line numbers as positions if no source provided
-                self.start = dis_pos.col_offset
-                self.end = dis_pos.end_col_offset
         else:
-            if start is None or end is None:
-                raise ValueError("Position start and end must not be None")
-            self.start = start
-            self.end = end
-            
+            if isinstance(start, disposition):
+                if isinstance(end, str):
+                    source = end
+                    end = None
+                dis_pos = start
+                if source is not None:
+                    # Calculate start and end from line/col offsets
+                    lines = source.split("\n")
+                    pos_start = (
+                        sum(len(line) + 1 for line in lines[: dis_pos.lineno - 1])
+                        + dis_pos.col_offset
+                    )
+                    pos_end = (
+                        sum(len(line) + 1 for line in lines[: dis_pos.end_lineno - 1])
+                        + dis_pos.end_col_offset
+                    )
+                    self.start = pos_start
+                    self.end = pos_end
+                else:
+                    # Fallback to using line numbers as positions if no source provided
+                    self.start = dis_pos.col_offset
+                    self.end = dis_pos.end_col_offset
+            else:
+                if start is None or end is None:
+                    raise ValueError("Position start and end must not be None")
+                self.start = start
+                self.end = end
+
+            self._end_col_offset: Optional[int] = (
+                end - start if start is not None and end is not None else 0
+            )
         self.info = info
-        self._lineno: Optional[int] = None
-        self._end_lineno: Optional[int] = None
-        self._col_offset: Optional[int] = None
-        self._end_col_offset: Optional[int] = (
-            end - start if start is not None and end is not None else 0
-        )
         self.parent: Optional["Leaf"] = None
         self.children: List["Leaf"] = []
 
@@ -274,24 +298,42 @@ class Leaf:
         child.parent = self
         self.children.append(child)
 
-    def find_best_match(self, start: int, end: int) -> Optional["Leaf"]:
+    def find_best_match(
+        self, start: int, end: int, best_match_distance: Optional[int] = None
+    ) -> Optional["Leaf"]:
         """Find the leaf that best matches the given range."""
         if self.start is None or self.end is None:
             return None
+        best_match_distance = (
+            float("inf") if best_match_distance is None else best_match_distance
+        )
 
-        if start >= self.start and end <= self.end:
+        if start >= self.start:  # and end <= self.end:
             best_match = self
+
             for child in self.children:
-                child_match = child.find_best_match(start, end)
-                if (
-                    child_match 
-                    and child_match.start is not None 
-                    and child_match.end is not None
-                    and start >= child_match.start 
-                    and end <= child_match.end
-                    and (child_match.end - child_match.start) <= (best_match.end - best_match.start)
-                ):
+                child_match = child.find_best_match(start, end, best_match_distance)
+                if child_match:
+                    distance = abs(start - child_match.start) + abs(
+                        child_match.end - end
+                    )
+                else:
+                    distance = float("inf")
+
+                if distance < best_match_distance:
+                    best_match_distance = distance
                     best_match = child_match
+
+            #  if (
+            #      child_match
+            #      and child_match.start is not None
+            #      and child_match.end is not None
+            #      and start >= child_match.start
+            #      and end <= child_match.end
+            #      and (child_match.end - child_match.start) <= (best_match.end - best_match.start)
+            #      and distance < best_match_distance
+            #  ):
+            #      best_match = child_match
             return best_match
         return None
 
@@ -439,7 +481,7 @@ class Leaf:
         parent = self._get_parent()
         if parent is None:
             return None
-            
+
         siblings = parent.children
         try:
             idx = siblings.index(self)
@@ -459,7 +501,7 @@ class Leaf:
         parent = self._get_parent()
         if parent is None:
             return None
-            
+
         siblings = parent.children
         try:
             idx = siblings.index(self)
@@ -485,9 +527,9 @@ class Leaf:
     def __repr__(self) -> str:
         return f"Leaf(start={self.start}, end={self.end}, info={self.info})"
 
-    def match (self, other: Any) :
-        return self.position == other.position #and self.info == other.info
-    
+    def match(self, other: Any):
+        return self.position == other.position  # and self.info == other.info
+
 
 class Tree(Generic[T]):
     """A tree structure containing nodes with position information."""
@@ -583,7 +625,6 @@ class Tree(Generic[T]):
 
         TreeVisualizer.visualize(self, config)
 
-    
 
 class NestedAttributes:
     position: "NestedAttributes"

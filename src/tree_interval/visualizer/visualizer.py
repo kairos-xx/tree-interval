@@ -65,14 +65,23 @@ class TreeVisualizer:
             prefix_spaces = "    " if level == 0 else prefix
             connector = "┌── " if level == 0 else ("└── " if is_last else "├── ")
             # Color the text content but not the tree lines
-            if hasattr(node, 'selected') and node.selected or (hasattr(node, 'position') and hasattr(node.position, 'selected') and node.position.selected):
-                
+            if (
+                hasattr(node, "selected")
+                and node.selected
+                or (
+                    hasattr(node, "position")
+                    and hasattr(node.position, "selected")
+                    and node.position.selected
+                )
+            ):
                 color = "\033[91m"  # Bright red for selected nodes
             else:
                 color = (
                     TreeVisualizer.BLUE
                     if level == 0
-                    else (TreeVisualizer.GREEN if node.children else TreeVisualizer.YELLOW)
+                    else (
+                        TreeVisualizer.GREEN if node.children else TreeVisualizer.YELLOW
+                    )
                 )
             print(
                 f"{prefix_spaces}{connector}{color}{position_str} "

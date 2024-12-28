@@ -1,6 +1,7 @@
 """
 Comprehensive demonstration of all features of the tree interval package.
 """
+
 from inspect import currentframe
 
 from rich.style import Style
@@ -13,6 +14,8 @@ from src.tree_interval import TreeVisualizer
 from src.tree_interval import VisualizationConfig
 from src.tree_interval.rich_printer import RichPrintConfig
 from src.tree_interval.rich_printer import RichTreePrinter
+
+from ast import unparse
 
 
 def demonstrate_positions():
@@ -211,20 +214,22 @@ def demonstrate_frame_analyzer():
     def analyze_this():
         x = 1 + 2  # This line will be analyzed
         analyzer = FrameAnalyzer(currentframe())
-        
+
         # Show current node
         current_node = analyzer.find_current_node()
         print("Current Node Information:")
-        print(f"Node: {current_node if current_node else None}")
-                # Build and show tree
+        print(f"Node: {unparse(current_node.ast_node) if current_node else None}")
+        # Build and show tree
         tree = analyzer.build_tree()
-        
+
         if tree and tree.root:
             print("\nFull AST Tree:")
             printer = RichTreePrinter()
             printer.print_tree(tree)
-            TreeVisualizer.visualize(tree, VisualizationConfig(position_format="position"))
-            
+            TreeVisualizer.visualize(
+                tree, VisualizationConfig(position_format="position")
+            )
+
         return x
 
     # Execute the function to perform analysis
@@ -399,7 +404,7 @@ def demonstrate_leaf_navigation():
     print("\n=== Leaf Navigation Example ===")
     # Create a tree and nodes
     tree = Tree("Navigation Example")
-    
+
     # Create test nodes
     grand_parent = Leaf(Position(0, 400, "Grand Parent"))
     parent1 = Leaf(Position(0, 200, "Parent 1"))
@@ -408,7 +413,7 @@ def demonstrate_leaf_navigation():
     parent1_child2 = Leaf(Position(100, 200, "Child 1.2"))
     parent2_child1 = Leaf(Position(200, 300, "Child 2.1"))
     parent2_child2 = Leaf(Position(300, 400, "Child 2.2"))
-    
+
     # Build tree structure
     tree.root = grand_parent
     grand_parent.add_child(parent1)
@@ -417,27 +422,28 @@ def demonstrate_leaf_navigation():
     parent1.add_child(parent1_child2)
     parent2.add_child(parent2_child1)
     parent2.add_child(parent2_child2)
-    
+
     # Test parent relationship
     parent_node = parent1_child1.parent
     parent_info = parent_node.info if parent_node else None
     print(f"Child 1.1's parent: {parent_info}")
-    
+
     # Test next relationship
     next_node = parent1_child1.next
     next_info = next_node.info if next_node else None
     print(f"Child 1.1's next sibling: {next_info}")
-    
+
     # Test previous relationship
     prev_node = parent1_child2.previous
     prev_info = prev_node.info if prev_node else None
     print(f"Child 1.2's previous sibling: {prev_info}")
-    
+
     # Test chained navigation
     next_parent = parent1.next
     prev_node = next_parent.previous if next_parent else None
     chained_info = prev_node.info if prev_node else None
     print(f"Parent 1's next and previous: {chained_info}")
+
 
 if __name__ == "__main__":
     main()

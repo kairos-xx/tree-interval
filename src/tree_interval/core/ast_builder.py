@@ -1,4 +1,3 @@
-
 """
 AST Tree Builder module.
 
@@ -13,29 +12,32 @@ from typing import Optional, Union, Tuple
 
 from .interval_core import Leaf, Position, Tree
 
+
 class AstTreeBuilder:
     def __init__(self, source: Union[FrameType, str]) -> None:
         self.source = None
         if isinstance(source, str):
             self.source = source
         else:
-            self.frame = source
+            self.frame_firstlineno = source.f_code.co_firstlineno
+            self.source = getsource(source)
             self._get_source()
-            
+
     def _get_source(self) -> None:
         try:
-            if self.frame.f_code.co_firstlineno:
-                source = getsource(self.frame.f_code)
-                lines = source.splitlines()
+            if self.frame_firstlineno:
+                # source = getsource(self.frame.f_code)
+                lines = self.source.splitlines()
                 # Find common indentation
-                common_indent = min(len(line) - len(line.lstrip()) 
-                                 for line in lines if line.strip())
+                common_indent = min(
+                    len(line) - len(line.lstrip()) for line in lines if line.strip()
+                )
                 # Remove common indentation and join lines
-                self.source = '\n'.join(
-                    line[common_indent:] if line.strip() else line 
-                    for line in lines)
+                self.source = "\n".join(
+                    line[common_indent:] if line.strip() else line for line in lines
+                )
                 self.indent_offset = common_indent
-                self.line_offset = self.frame.f_code.co_firstlineno - 1
+                self.line_offset = self.frame_firstlineno - 1
         except (SyntaxError, TypeError, ValueError):
             pass
 
@@ -50,39 +52,45 @@ class AstTreeBuilder:
             start += len(line)
         return positions
 
-    def _get_node_position(self, node: AST, line_positions: list[Tuple[int, int]]) -> Optional[Position]:
+    def _get_node_position(
+        self, node: AST, line_positions: list[Tuple[int, int]]
+    ) -> Optional[Position]:
         try:
             lineno = getattr(node, "lineno", None)
             if lineno is None:
                 return None
-            
+
             # Adjust line numbers for frame context
-            if hasattr(self, 'line_offset'):
-                start_line = lineno - 1 #+ self.line_offset
+            if hasattr(self, "line_offset"):
+                start_line = lineno - 1  # + self.line_offset
                 end_lineno = getattr(node, "end_lineno", lineno)
-                end_line = end_lineno - 1 #+ self.line_offset
+                end_line = end_lineno - 1  # + self.line_offset
             else:
                 start_line = lineno - 1
                 end_lineno = getattr(node, "end_lineno", lineno)
                 end_line = end_lineno - 1
-                
+
             # Adjust column offsets for dedentation
             col_offset = getattr(node, "col_offset", 0)
-            if hasattr(self, 'indent_offset'):
+            if hasattr(self, "indent_offset"):
                 col_offset = max(0, col_offset - self.indent_offset)
 
             end_col_offset = getattr(node, "end_col_offset", 0)
-            if hasattr(self, 'indent_offset'):
+            if hasattr(self, "indent_offset"):
                 end_col_offset = max(0, end_col_offset - self.indent_offset)
 
             if 0 <= start_line < len(line_positions):
                 start_pos = line_positions[start_line][0] + col_offset
                 end_pos = line_positions[end_line][0] + end_col_offset
-                position = Position(start_pos, end_pos, node.__class__.__name__)
-                position.lineno = lineno+self.line_offset
-                position.end_lineno = end_lineno+self.line_offset
+                position = Position(
+                    start_pos,
+                    end_pos,
+                    {"name": node.__class__.__name__, "source": unparse(node)},
+                )
+                position.lineno = lineno + self.line_offset
+                position.end_lineno = end_lineno + self.line_offset
                 position.col_offset = col_offset
-                position.end_col_offset =end_col_offset
+                position.end_col_offset = end_col_offset
                 return position
         except (IndexError, AttributeError):
             pass
@@ -93,8 +101,6 @@ class AstTreeBuilder:
             raise ValueError("No source code available")
         tree = parse(self.source)
         return self._build_tree_from_ast(tree)
-
-    
 
     def build_from_frame(self) -> Optional[Tree]:
         if not self.source:
@@ -109,9 +115,8 @@ class AstTreeBuilder:
 
         line_positions = self._calculate_line_positions()
         nodes_with_positions = []
-        
+
         for node in walk(ast_tree):
-            
             position = self._get_node_position(node, line_positions)
             if position:
                 leaf = Leaf(position)
