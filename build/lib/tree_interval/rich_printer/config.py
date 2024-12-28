@@ -18,3 +18,4 @@ class RichPrintConfig:
     leaf_style: Style = Style(color="cyan")
     info_style: Style = Style(color="yellow", italic=True)
     guide_style: Style = Style(color="grey70")
+    selected_style: Style = Style(color="red", bold=True)
