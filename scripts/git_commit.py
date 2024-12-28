@@ -1,14 +1,17 @@
+
 import os
 import subprocess
 from datetime import datetime
 from typing import List, Optional
 
-# Custom list of folders/files to ignore
+# Custom list of patterns to ignore (directories and files)
 CUSTOM_IGNORE = [
+    # Directories
     'build', '__pycache__', 'dist', 'attached_assets', '.pytest_cache',
-    '.ruff_cache', 'tree_interval.egg-info'
+    '.ruff_cache', 'tree_interval.egg-info',
+    # Individual files
+    '.coverage', 'poetry.lock', 'flake.txt'
 ]
-
 
 def get_files_to_commit() -> List[str]:
     """Get list of files to commit, excluding ignored patterns."""
@@ -18,14 +21,16 @@ def get_files_to_commit() -> List[str]:
         dirs[:] = [
             d for d in dirs if not d.startswith('.') and d not in CUSTOM_IGNORE
         ]
-
+        
+        # Filter filenames
         for filename in filenames:
-            if not any(ignore in os.path.join(root, filename)
-                       for ignore in CUSTOM_IGNORE):
-                files.append(os.path.join(root, filename))
+            filepath = os.path.join(root, filename)
+            # Skip if the file matches any ignore pattern
+            if (not any(ignore in filepath for ignore in CUSTOM_IGNORE) and
+                not filename in CUSTOM_IGNORE):
+                files.append(filepath)
 
     return files
-
 
 def commit_changes(message: Optional[str] = None) -> None:
     """Commit changes to git repository."""
@@ -45,7 +50,6 @@ def commit_changes(message: Optional[str] = None) -> None:
 
     except subprocess.CalledProcessError as e:
         print(f"Error during git operations: {e}")
-
 
 if __name__ == "__main__":
     commit_message = input(
