@@ -36,12 +36,22 @@ class RichTreePrinter:
 
     def _format_node(self, node: Leaf, is_root: bool = False) -> str:
         """Format node information."""
-        # Determine style priority: rich_style > selected > default
+        # Determine style priority: rich_style > selected > type-based > default
         style = None
+        
+        # Check for custom rich_style or selected state
         if hasattr(node, 'rich_style') and node.rich_style:
             style = node.rich_style
         elif hasattr(node, "selected") and node.selected:
             style = self.config.selected_style
+        # Check for type-based styling
+        elif isinstance(node.info, dict) and "type" in node.info:
+            if node.info["type"] == "Module":
+                style = Style(color="green", bold=True)
+            elif node.info["type"] == "FunctionDef":
+                style = Style(color="blue", bold=False)
+            else:
+                style = Style(color="grey70", bold=False)
         else:
             style = (self.config.root_style if is_root else
                      (self.config.leaf_style if not node.children 
