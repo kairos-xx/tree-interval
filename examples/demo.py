@@ -15,11 +15,11 @@ from tree_interval import AstTreeBuilder
 def demonstrate_positions():
     print("\n=== Position Examples ===")
     # Basic Position
-    pos1 = Position(0, 100, "Root")
-    print("Basic position:", f"start={pos1.start}, end={pos1.end}, info={pos1.info}")
+    pos1 = Position(0, 100)
+    print("Basic position:", f"start={pos1.start}, end={pos1.end}")
 
     # Position with line numbers
-    pos2 = Position(10, 50, "With Lines")
+    pos2 = Position(10, 50)
     pos2.lineno = 1
     pos2.end_lineno = 5
     print("Position with lines:", f"lineno={pos2.lineno}, end_lineno={pos2.end_lineno}")

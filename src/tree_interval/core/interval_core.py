@@ -187,7 +187,7 @@ class Position:
             return f"Position(start={self.start}, end={self.end})"
 
     def __str__(self) -> str:
-        return f"Position(start={self.start}, end={self.end}, info={self.info})"
+        return f"Position(start={self.start}, end={self.end})"
 
     def find_parent(self, criteria: Callable[["Leaf"],
                                              bool]) -> Optional["Leaf"]:
@@ -244,7 +244,7 @@ class Leaf:
             self.position = Position(position, end)
             self._info = info
 
-        print(position,self._info,end)
+        #print(position,self._info,end) #removed print statement
 
         # Initialize end_col_offset if not set
         if (self.position._end_col_offset is None
