@@ -237,16 +237,18 @@ def demonstrate_frame_analyzer():
             for node in tree.flatten():
                 if node == current_node:
                     node.rich_style = RichStyle(color="red", bold=True)
-                    node.style=LeafStyle(color="#0000ff", bold=True)
+                    node.style = LeafStyle(color="#ff0000", bold=True)
                     node.selected = True
                 elif isinstance(node.info, dict) and "type" in node.info:
-                    if node.info["name"] == "Module":
+                    if node.info["type"] == "Module":
                         node.rich_style = RichStyle(color="green", bold=True)
-                    elif node.info["name"] == "FunctionDef":
+                        node.style = LeafStyle(color="#00ff00", bold=True)
+                    elif node.info["type"] == "FunctionDef":
                         node.rich_style = RichStyle(color="blue", bold=False)
-
+                        node.style = LeafStyle(color="#0000ff", bold=False)
                     else:
                         node.rich_style = RichStyle(color="grey70", bold=False)
+                        node.style = LeafStyle(color="#888888", bold=False)
 
             printer = RichTreePrinter()
             printer.print_tree(tree)
