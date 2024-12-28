@@ -66,7 +66,7 @@ class TreeVisualizer:
             connector = "┌── " if level == 0 else ("└── " if is_last else "├── ")
 
             # Color the text content but not the tree lines
-            if hasattr(node, 'selected') and node.selected:
+            if hasattr(node.position, 'selected') and node.position.selected:
                 color = "\033[91m"  # Bright red for selected nodes
             else:
                 color = (

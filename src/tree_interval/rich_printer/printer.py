@@ -35,9 +35,10 @@ class RichTreePrinter:
 
     def _format_node(self, node: Leaf, is_root: bool = False) -> str:
         """Format node information."""
-        if hasattr(node, 'selected') and node.selected:
+        style = None
+        if hasattr(node.position, 'selected') and node.position.selected:
             style = self.config.selected_style
-        else:
+        if style is None:
             style = (
                 self.config.root_style
                 if is_root
