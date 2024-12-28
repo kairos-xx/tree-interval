@@ -409,6 +409,15 @@ class Leaf:
             pass
         return None
 
+    def get_ancestors(self) -> List["Leaf"]:
+        """Get all ancestor nodes of this leaf."""
+        ancestors = []
+        current = self.parent
+        while current:
+            ancestors.append(current)
+            current = current.parent
+        return ancestors
+
     def __repr__(self) -> str:
         return f"Leaf(start={self.start}, end={self.end}, info={self.info})"
 
