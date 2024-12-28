@@ -271,14 +271,14 @@ class Leaf:
 
     def __init__(
         self,
-        position: Union[Position, tuple, int],
+        position: Union[Position, tuple, int, None],
         info: Any = None,
         end: Optional[int] = None,
         style: Optional[Any] = None,
         rich_style: Optional[Any] = None,
     ):
         if position is None:
-            raise ValueError("Position cannot be None")
+            position = Position(0, 0)
 
         if isinstance(position, Position):
             self.position = position
