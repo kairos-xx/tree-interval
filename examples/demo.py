@@ -2,6 +2,7 @@
 Comprehensive demonstration of all features of the tree interval package.
 """
 
+from rich.style import Style as RichStyle
 from src.tree_interval import (
     Leaf,
     Position,
@@ -9,6 +10,7 @@ from src.tree_interval import (
     TreeVisualizer,
     VisualizationConfig,
 )
+from src.tree_interval.rich_printer import RichTreePrinter
 from tree_interval import AstTreeBuilder
 
 
@@ -126,10 +128,10 @@ def demonstrate_tree_operations():
 def example_basic_tree():
     """Basic tree creation and visualization."""
     tree = Tree("Basic Example")
-    root = Leaf(0, 100, "Root")
-    child1 = Leaf(10, 40, "Child 1")
-    child2 = Leaf(50, 90, "Child 2")
-    grandchild = Leaf(15, 35, "Grandchild")
+    root = Leaf(Position(0, 100), info="Root")
+    child1 = Leaf(Position(10, 40), info="Child 1")
+    child2 = Leaf(Position(50, 90), info="Child 2")
+    grandchild = Leaf(Position(15, 35), info="Grandchild")
 
     tree.root = root
     tree.add_leaf(child1)
