@@ -418,9 +418,7 @@ def main():
     demonstrate_ast_rich_printing()
     demonstrate_nested_attributes()
     demonstrate_find_method()
-
-
-def demonstrate_leaf_navigation():
+    
     print("\n=== Leaf Navigation Example ===")
     # Create a tree and nodes
     tree = Tree("Navigation Example")
@@ -473,6 +471,6 @@ def demonstrate_leaf_navigation():
     )
 
 
+
 if __name__ == "__main__":
     main()
-    demonstrate_leaf_navigation()
