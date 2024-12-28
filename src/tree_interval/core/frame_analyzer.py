@@ -33,7 +33,7 @@ class FrameAnalyzer:
 
         if 0 <= current_line - 1 < len(line_positions):
             start, end = line_positions[current_line - 1]
-            print(f"Start: {start}, End: {end}")
+            print(f"Start: {start}, End: {end}") 
             self.current_node = self.tree.find_best_match(start, end)
             # return self.current_node
         return self.current_node
