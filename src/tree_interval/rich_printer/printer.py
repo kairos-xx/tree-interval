@@ -71,7 +71,7 @@ class RichTreePrinter:
 
                 columns, _ = shutil.get_terminal_size()
                 return columns
-            except:
+            except (OSError, ValueError):
                 return 80
 
         if self.config.show_info and node.info:

@@ -313,5 +313,6 @@ def demonstrate_node_navigation():
     print(f"Child 1's parent: {child1.parent.info if child1.parent else None}")
     print(f"Child 1's next sibling: {child1.next.info if child1.next else None}")
     print(
-        f"Child 2's previous sibling: {child2.previous.info if child2.previous else None}"
+        "Child 2's previous sibling:"
+        f" {child2.previous.info if child2.previous else None}"
     )
