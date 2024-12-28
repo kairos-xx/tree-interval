@@ -32,7 +32,6 @@ class Position:
         self,
         start: Optional[Union[int, disposition, FrameType]] = None,
         end: Optional[int] = None,
-        info: Optional[Any] = None,
         source: Optional[str] = None,
         selected: bool = False,
     ):
@@ -112,7 +111,6 @@ class Position:
             self._end_col_offset: Optional[int] = (end -
                                                    start if start is not None
                                                    and end is not None else 0)
-        self.info = info
         self.parent: Optional["Leaf"] = None
         self.children: List["Leaf"] = []
 
