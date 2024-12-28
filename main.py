@@ -30,7 +30,8 @@ def demonstrate_positions():
     pos2 = Position(10, 50)
     pos2.lineno = 1
     pos2.end_lineno = 5
-    print("Position with lines:", f"lineno={pos2.lineno}, end_lineno={pos2.end_lineno}")
+    print("Position with lines:",
+          f"lineno={pos2.lineno}, end_lineno={pos2.end_lineno}")
 
     # Position with column offsets
     pos3 = Position(60, 90)
@@ -88,21 +89,18 @@ def demonstrate_find_nodes():
     child1.add_child(grandchild)
 
     # Find parent example
-    found_parent = grandchild.find_parent(
-        lambda n: isinstance(n.info, dict) and n.info.get("type") == "FunctionDef"
-    )
+    found_parent = grandchild.find_parent(lambda n: isinstance(
+        n.info, dict) and n.info.get("type") == "FunctionDef")
     print("Found parent:", found_parent.info if found_parent else None)
 
     # Find child example
-    found_child = root.find_child(
-        lambda n: isinstance(n.info, dict) and n.info.get("type") == "ClassDef"
-    )
+    found_child = root.find_child(lambda n: isinstance(n.info, dict) and n.info
+                                  .get("type") == "ClassDef")
     print("Found child:", found_child.info if found_child else None)
 
     # Find sibling example
-    found_sibling = child1.find_sibling(
-        lambda n: isinstance(n.info, dict) and n.info.get("type") == "ClassDef"
-    )
+    found_sibling = child1.find_sibling(lambda n: isinstance(n.info, dict) and
+                                        n.info.get("type") == "ClassDef")
     print("Found sibling:", found_sibling.info if found_sibling else None)
 
 
@@ -170,18 +168,16 @@ def demonstrate_tree_operations():
     # Node finding
     print("\nNode Finding:")
     best_match = tree.find_best_match(20, 30)
-    print(f"Best match for (20, 30): {best_match.info if best_match else None}")
+    print(
+        f"Best match for (20, 30): {best_match.info if best_match else None}")
 
     common_ancestor = grandchild1.find_common_ancestor(grandchild2)
-    print(
-        "Common ancestor of grandchildren:"
-        + f" {common_ancestor.info if common_ancestor else None}"
-    )
+    print("Common ancestor of grandchildren:" +
+          f" {common_ancestor.info if common_ancestor else None}")
 
     multi_child = grandchild1.find_first_multi_child_ancestor()
-    print(
-        "First multi-child ancestor:" + f" {multi_child.info if multi_child else None}"
-    )
+    print("First multi-child ancestor:" +
+          f" {multi_child.info if multi_child else None}")
 
     # Tree traversal
     print("\nTree Traversal:")
@@ -194,14 +190,15 @@ def demonstrate_tree_operations():
     tree.visualize()
 
     print("\n2. Position format:")
-    TreeVisualizer.visualize(tree, VisualizationConfig(position_format="position"))
+    TreeVisualizer.visualize(tree,
+                             VisualizationConfig(position_format="position"))
 
     print("\n3. Tuple format with children count:")
     TreeVisualizer.visualize(
         tree,
-        VisualizationConfig(
-            position_format="tuple", show_children_count=True, show_size=False
-        ),
+        VisualizationConfig(position_format="tuple",
+                            show_children_count=True,
+                            show_size=False),
     )
 
     # JSON operations
@@ -220,7 +217,6 @@ def demonstrate_frame_analyzer():
     print("\n=== Frame Analyzer Demo ===")
 
     def analyze_this():
-        x = 1 + 2  # This line will be analyzed
         analyzer = FrameAnalyzer(currentframe())
 
         # Show current node
@@ -234,11 +230,7 @@ def demonstrate_frame_analyzer():
             print("\nFull AST Tree:")
             printer = RichTreePrinter()
             printer.print_tree(tree)
-            TreeVisualizer.visualize(
-                tree, VisualizationConfig(position_format="position")
-            )
-
-        return x
+            TreeVisualizer.visualize(tree)
 
     # Execute the function to perform analysis
     analyze_this()
@@ -271,7 +263,8 @@ def demonstrate_line_positions():
     tree.visualize()
 
     print("\nDetailed position view:")
-    TreeVisualizer.visualize(tree, VisualizationConfig(position_format="position"))
+    TreeVisualizer.visualize(tree,
+                             VisualizationConfig(position_format="position"))
 
 
 def demonstrate_basic_rich_printing():
@@ -319,7 +312,11 @@ def demonstrate_ast_rich_printing():
     tree = Tree("AST Example")
 
     root = Leaf(Position(0, 100), info={"type": "Module"})
-    func_def = Leaf(Position(10, 90), info={"type": "FunctionDef", "name": "example"})
+    func_def = Leaf(Position(10, 90),
+                    info={
+                        "type": "FunctionDef",
+                        "name": "example"
+                    })
     args = Leaf(Position(20, 30), info={"type": "Arguments"})
     body = Leaf(Position(40, 80), info={"type": "Body"})
 
@@ -363,8 +360,16 @@ def demonstrate_find_method():
 
     # Create a tree structure
     root = Leaf(Position(0, 100), info={"type": "Module", "name": "main"})
-    child1 = Leaf(Position(10, 40), info={"type": "FunctionDef", "name": "hello"})
-    child2 = Leaf(Position(50, 90), info={"type": "ClassDef", "name": "MyClass"})
+    child1 = Leaf(Position(10, 40),
+                  info={
+                      "type": "FunctionDef",
+                      "name": "hello"
+                  })
+    child2 = Leaf(Position(50, 90),
+                  info={
+                      "type": "ClassDef",
+                      "name": "MyClass"
+                  })
     grandchild = Leaf(Position(20, 30), info={"type": "Return"})
 
     # Build tree
@@ -385,18 +390,15 @@ def demonstrate_find_method():
 
     # Use find method with dot notation
     found = root.find(
-        lambda n: isinstance(n.info, dict) and n.info.get("name") == "hello"
-    )
+        lambda n: isinstance(n.info, dict) and n.info.get("name") == "hello")
     print(f"Found function: {found.info if found else None}")
 
-    found = child1.find(
-        lambda n: isinstance(n.info, dict) and n.info.get("type") == "ClassDef"
-    )
+    found = child1.find(lambda n: isinstance(n.info, dict) and n.info.get(
+        "type") == "ClassDef")
     print(f"Found class: {found.info if found else None}")
 
     found = grandchild.find(
-        lambda n: isinstance(n.info, dict) and n.info.get("type") == "Module"
-    )
+        lambda n: isinstance(n.info, dict) and n.info.get("type") == "Module")
     print(f"Found module: {found.info if found else None}")
 
 
@@ -439,7 +441,9 @@ def demonstrate_leaf_navigation():
     print(f"Child 1.2's previous sibling: {prev_info}")
 
     # Test parent navigation
-    print(f"Parent 1's next sibling: {parent1.next.info if parent1.next else None}")
+    print(
+        f"Parent 1's next sibling: {parent1.next.info if parent1.next else None}"
+    )
 
 
 def demonstrate_node_navigation():
@@ -465,21 +469,15 @@ def demonstrate_node_navigation():
     function_def.add_child(param2)
 
     # Demonstrate navigation
+    print("First method's parent: " +
+          f"{method1.parent.info if method1.parent else None}")
+    print("First method's next sibling: " +
+          f"{method1.next.info if method1.next else None}")
+    print("Second method's previous sibling: " +
+          f"{method2.previous.info if method2.previous else None}")
     print(
-        "First method's parent: " + f"{method1.parent.info if method1.parent else None}"
-    )
-    print(
-        "First method's next sibling: "
-        + f"{method1.next.info if method1.next else None}"
-    )
-    print(
-        "Second method's previous sibling: "
-        + f"{method2.previous.info if method2.previous else None}"
-    )
-    print(
-        "Function's first parameter:"
-        + f" {function_def.children[0].info if function_def.children else None}"
-    )
+        "Function's first parameter:" +
+        f" {function_def.children[0].info if function_def.children else None}")
 
 
 def main():

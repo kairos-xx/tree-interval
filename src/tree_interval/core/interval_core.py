@@ -45,6 +45,7 @@ class Position:
         if isinstance(start, FrameType):
             frame = start
             frame_info = getframeinfo(frame)
+            common_indent = 0
             if source is None:
                 try:
                     source = getsource(frame.f_code)
@@ -59,7 +60,6 @@ class Position:
                         for line in lines)
                 except (OSError, TypeError):
                     source = None
-
             pos = frame_info.positions if frame_info else None
             if pos and frame and frame.f_code:
                 line_offset = (frame.f_code.co_firstlineno -
@@ -71,50 +71,39 @@ class Position:
                     pos, "col_offset") else None)
                 self._end_col_offset = (pos.end_col_offset if hasattr(
                     pos, "end_col_offset") else None)
-                print(
-                    f"Line number: {self._lineno} End lno: {self._end_lineno} Coff: {self._col_offset} End Coff: {self._end_col_offset}"
-                )
-
                 if source is not None and isinstance(source, str):
                     lines = source.split("\n")
                     line_offset_val = (int(line_offset) if isinstance(
                         line_offset, int) else 0)
-
                     if (self._lineno is not None
                             and self._col_offset is not None and lines):
                         adjusted_lineno = (int(self._lineno) if isinstance(
                             self._lineno, int) else 1)
                         line_idx = max(0,
                                        adjusted_lineno - line_offset_val - 1)
-                        
                         pos_start = (sum(
-                            len(line) + 1
+                            len(line) + 1 - common_indent
                             for line in lines[:line_idx]) if lines else 0)
                         pos_start = pos_start + (self._col_offset
                                                  if self._col_offset
                                                  is not None else 0)
-                        print(f"Pos start: {pos_start} ")
-
                         if (self._end_lineno is not None
                                 and self._end_col_offset is not None):
                             end_line_idx = max(
                                 0,
-                                int(self._end_lineno) if isinstance(
-                                    self._end_lineno, int) else 1 -
+                                (int(self._end_lineno) if isinstance(
+                                    self._end_lineno, int) else 1) -
                                 line_offset_val - 1,
                             )
-                            print(f"End line idx: {end_line_idx}")
                             pos_end = (sum(
-                                len(line) + 1  for line in lines[:end_line_idx])
+                                len(line) + 1 - common_indent
+                                for line in lines[:end_line_idx])
                                        if lines else pos_start)
-                            print(f"Pos end: {pos_end} ")
                             pos_end = pos_end + (self._end_col_offset
                                                  if self._end_col_offset
                                                  is not None else 0)
-                            print(f"Pos end: {pos_end} ")
                         else:
                             pos_end = pos_start
-
                         self.start = pos_start
                         self.end = pos_end
 
@@ -151,7 +140,6 @@ class Position:
                     pos_end = (
                         sum(len(line) + 1 for line in lines[:end_lineno - 1]) +
                         end_col_offset)
-
                     self.start = pos_start
                     self.end = pos_end
                 else:
