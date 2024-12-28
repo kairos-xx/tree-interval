@@ -229,8 +229,8 @@ class Leaf:
     def __init__(
         self,
         position: Union[Position, tuple[int, int, Any], int],
-        end: Optional[int] = None,
         info: Optional[Any] = None,
+        end: Optional[int] = None,
     ) -> None:
         if position is None:
             raise ValueError("Position cannot be None")
