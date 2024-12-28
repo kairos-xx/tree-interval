@@ -85,6 +85,7 @@ class TreeVisualizer:
         def _print_node(node, prefix="", is_last=True, level=0):
             position_str = format_position(node)
             info_str = format_node_info(node)
+            prefix_spaces = "" if level == 0 else prefix
             connector = "┌── " if level == 0 else (
                 "└── " if is_last else "├── ")
             
@@ -100,7 +101,7 @@ class TreeVisualizer:
                     TreeVisualizer.GREEN if node.children else TreeVisualizer.YELLOW)
             style_suffix = TreeVisualizer.RESET
 
-            print(f"{connector}{style_prefix}{position_str} {info_str}{style_suffix}")
+            print(f"{prefix_spaces}{connector}{style_prefix}{position_str} {info_str}{style_suffix}")
 
 
             children = node.children
