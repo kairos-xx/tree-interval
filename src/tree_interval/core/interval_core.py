@@ -68,14 +68,22 @@ class Position:
 
                 if source is not None and isinstance(source, str):
                     lines = source.split("\n")
+                    line_offset_val = line_offset if isinstance(line_offset, int) else 0
+                    
                     if self._lineno is not None and self._col_offset is not None and lines:
-                        line_idx = max(0, self._lineno - line_offset - 1)
-                        pos_start = sum(len(line) + 1 for line in lines[:line_idx]) + self._col_offset
+                        line_idx = max(0, self._lineno - line_offset_val - 1)
+                        pos_start = sum(len(line) + 1 for line in lines[:line_idx])
+                        if self._col_offset is not None:
+                            pos_start += self._col_offset
+                            
                         if self._end_lineno is not None and self._end_col_offset is not None:
-                            end_line_idx = max(0, self._end_lineno - line_offset - 1)
-                            pos_end = sum(len(line) + 1 for line in lines[:end_line_idx]) + self._end_col_offset
+                            end_line_idx = max(0, self._end_lineno - line_offset_val - 1)
+                            pos_end = sum(len(line) + 1 for line in lines[:end_line_idx])
+                            if self._end_col_offset is not None:
+                                pos_end += self._end_col_offset
                         else:
                             pos_end = pos_start
+                            
                         self.start = pos_start
                         self.end = pos_end
 

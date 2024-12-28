@@ -214,22 +214,30 @@ def demonstrate_dot_notation():
     grandchild._as_dict()
 
     # Find parent using dot notation
+    def safe_get_info(node):
+        if not node or not hasattr(node, 'attributes'):
+            return None
+        attrs = getattr(node, 'attributes', None)
+        if not attrs:
+            return None
+        return getattr(attrs, 'info', None)
+
     found_parent = grandchild.find_parent(
-        lambda n: n and bool(n._as_dict()) and n.attributes and n.attributes.info and n.attributes.info.get("type") == "FunctionDef"
+        lambda n: n and bool(n._as_dict()) and safe_get_info(n) and safe_get_info(n).get("type") == "FunctionDef"
     )
-    print("Parent:", found_parent.attributes.info if found_parent and found_parent.attributes else None)
+    print("Parent:", safe_get_info(found_parent))
 
     # Find child using dot notation
     found_child = root.find_child(
-        lambda n: n and bool(n._as_dict()) and n.attributes and n.attributes.info and n.attributes.info.get("type") == "ClassDef"
+        lambda n: n and bool(n._as_dict()) and safe_get_info(n) and safe_get_info(n).get("type") == "ClassDef"
     )
-    print("Child:", found_child.attributes.info if found_child and found_child.attributes else None)
+    print("Child:", safe_get_info(found_child))
 
     # Find sibling using dot notation
     found_sibling = child1.find_sibling(
-        lambda n: n and n._as_dict() is not None and n.attributes and n.attributes.info and n.attributes.info.get("name") == "MyClass"
+        lambda n: n and n._as_dict() is not None and safe_get_info(n) and safe_get_info(n).get("name") == "MyClass"
     )
-    print("Sibling:", found_sibling.attributes.info if found_sibling and found_sibling.attributes else None)
+    print("Sibling:", safe_get_info(found_sibling))
 
 
 def demonstrate_ast_parsing():

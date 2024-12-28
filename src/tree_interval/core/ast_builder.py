@@ -25,13 +25,20 @@ class AstTreeBuilder:
 
     def _get_source(self) -> None:
         try:
-            if self.frame_firstlineno:
-                # source = getsource(self.frame.f_code)
+            if self.frame_firstlineno and isinstance(self.source, str):
                 lines = self.source.splitlines()
+                if not lines:
+                    return
+
                 # Find common indentation
+                indented_lines = [line for line in lines if line.strip()]
+                if not indented_lines:
+                    return
+                    
                 common_indent = min(
-                    len(line) - len(line.lstrip()) for line in lines if line.strip()
+                    len(line) - len(line.lstrip()) for line in indented_lines
                 )
+                
                 # Remove common indentation and join lines
                 self.source = "\n".join(
                     line[common_indent:] if line.strip() else line for line in lines
