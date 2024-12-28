@@ -235,6 +235,7 @@ def demonstrate_frame_analyzer():
             for node in tree.flatten():
                 if node == current_node:
                     node.rich_style = RichStyle(color="red", bold=True)
+                    node.style = LeafStyle(color="green", bold=True)
                     node.selected = True
                 elif isinstance(node.info, dict) and "type" in node.info:
                     if node.info["name"] == "Module":
