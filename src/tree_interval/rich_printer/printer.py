@@ -37,7 +37,7 @@ class RichTreePrinter:
         """Format node information."""
         # Determine style priority: rich_style > selected > type-based > default
         style = None
-        
+
         # Check for custom rich_style or selected state
         if hasattr(node, 'rich_style') and node.rich_style:
             style = node.rich_style
@@ -53,8 +53,8 @@ class RichTreePrinter:
                 style = Style(color="grey70", bold=False)
         else:
             style = (self.config.root_style if is_root else
-                     (self.config.leaf_style if not node.children 
-                      else self.config.node_style))
+                     (self.config.leaf_style
+                      if not node.children else self.config.node_style))
 
         # Ensure style is applied
         if not style:
