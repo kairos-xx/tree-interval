@@ -64,33 +64,55 @@ class Position:
             if pos and frame and frame.f_code:
                 line_offset = frame.f_code.co_firstlineno - 1 if frame.f_code.co_firstlineno else 0
                 self._lineno = pos.lineno if hasattr(pos, 'lineno') else None
-                self._end_lineno = pos.end_lineno if hasattr(pos, 'end_lineno') else None
-                self._col_offset = pos.col_offset if hasattr(pos, 'col_offset') else None
-                self._end_col_offset = pos.end_col_offset if hasattr(pos, 'end_col_offset') else None
+                self._end_lineno = pos.end_lineno if hasattr(
+                    pos, 'end_lineno') else None
+                self._col_offset = pos.col_offset if hasattr(
+                    pos, 'col_offset') else None
+                self._end_col_offset = pos.end_col_offset if hasattr(
+                    pos, 'end_col_offset') else None
 
                 if source is not None and isinstance(source, str):
                     lines = source.split("\n")
-                    line_offset_val = int(line_offset) if isinstance(line_offset, int) else 0
-                    
+                    line_offset_val = int(line_offset) if isinstance(
+                        line_offset, int) else 0
+
                     if self._lineno is not None and self._col_offset is not None and lines:
-                        adjusted_lineno = int(self._lineno) if isinstance(self._lineno, int) else 1
-                        line_idx = max(0, adjusted_lineno - line_offset_val - 1)
-                        pos_start = sum(len(line) + 1 for line in lines[:line_idx]) if lines else 0
-                        pos_start = pos_start + (self._col_offset if self._col_offset is not None else 0)
-                            
+                        adjusted_lineno = int(self._lineno) if isinstance(
+                            self._lineno, int) else 1
+                        line_idx = max(0,
+                                       adjusted_lineno - line_offset_val - 1)
+                        pos_start = sum(
+                            len(line) + 1
+                            for line in lines[:line_idx]) if lines else 0
+                        pos_start = pos_start + (self._col_offset
+                                                 if self._col_offset
+                                                 is not None else 0)
+
                         if self._end_lineno is not None and self._end_col_offset is not None:
-                            end_line_idx = max(0, int(self._end_lineno) if isinstance(self._end_lineno, int) else 1 - line_offset_val - 1)
-                            pos_end = sum(len(line) + 1 for line in lines[:end_line_idx]) if lines else pos_start
-                            pos_end = pos_end + (self._end_col_offset if self._end_col_offset is not None else 0)
+                            end_line_idx = max(
+                                0,
+                                int(self._end_lineno) if isinstance(
+                                    self._end_lineno, int) else 1 -
+                                line_offset_val - 1)
+                            pos_end = sum(
+                                len(line) + 1 for line in
+                                lines[:end_line_idx]) if lines else pos_start
+                            pos_end = pos_end + (self._end_col_offset
+                                                 if self._end_col_offset
+                                                 is not None else 0)
                         else:
                             pos_end = pos_start
-                            
+
                         self.start = pos_start
                         self.end = pos_end
 
-            elif pos and hasattr(pos, 'col_offset') and hasattr(pos, 'end_col_offset'):
-                self.start = pos.col_offset if hasattr(pos, 'col_offset') and pos.col_offset is not None else 0
-                self.end = pos.end_col_offset if hasattr(pos, 'end_col_offset') and pos.end_col_offset is not None else 0
+            elif pos and hasattr(pos, 'col_offset') and hasattr(
+                    pos, 'end_col_offset'):
+                self.start = pos.col_offset if hasattr(
+                    pos, 'col_offset') and pos.col_offset is not None else 0
+                self.end = pos.end_col_offset if hasattr(
+                    pos,
+                    'end_col_offset') and pos.end_col_offset is not None else 0
             else:
                 self.start = 0
                 self.end = 0
@@ -108,11 +130,16 @@ class Position:
                     lineno = int(getattr(dis_pos, 'lineno', 1))
                     end_lineno = int(getattr(dis_pos, 'end_lineno', lineno))
                     col_offset = int(getattr(dis_pos, 'col_offset', 0))
-                    end_col_offset = int(getattr(dis_pos, 'end_col_offset', col_offset))
-                    
-                    pos_start = sum(len(line) + 1 for line in lines[:lineno - 1]) + col_offset
-                    pos_end = sum(len(line) + 1 for line in lines[:end_lineno - 1]) + end_col_offset
-                    
+                    end_col_offset = int(
+                        getattr(dis_pos, 'end_col_offset', col_offset))
+
+                    pos_start = sum(
+                        len(line) + 1
+                        for line in lines[:lineno - 1]) + col_offset
+                    pos_end = sum(
+                        len(line) + 1
+                        for line in lines[:end_lineno - 1]) + end_col_offset
+
                     self.start = pos_start
                     self.end = pos_end
                 else:
@@ -125,8 +152,9 @@ class Position:
                 self.start = start
                 self.end = end
 
-            self._end_col_offset: Optional[int] = ((end or 0 )-
-                                                   (start or 0) )
+            if isinstance(end, int) and isinstance(start, int):
+                self._end_col_offset: Optional[int] = ((end or 0) -
+                                                       (start or 0))
         self.parent: Optional["Leaf"] = None
         self.children: List["Leaf"] = []
 
