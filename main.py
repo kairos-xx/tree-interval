@@ -261,9 +261,18 @@ def demonstrate_basic_rich_printing():
     print_header("Basic Rich Printing", CYAN)
     tree = Tree("Basic Example")
 
-    root = Leaf(Position(0, 100), info={"type": "Module", "name": "example"})
-    child1 = Leaf(Position(10, 40), info={"type": "Function", "name": "hello"})
-    child2 = Leaf(Position(50, 90), info={"type": "Class", "name": "MyClass"})
+    root = Leaf(Position(0, 100), 
+                info={"type": "Module", "name": "example"},
+                style=LeafStyle(color="#ff0000", bold=True),
+                rich_style=RichStyle(color="red", bold=True))
+    child1 = Leaf(Position(10, 40), 
+                  info={"type": "Function", "name": "hello"},
+                  style=LeafStyle(color="#00ff00", bold=False),
+                  rich_style=RichStyle(color="green"))
+    child2 = Leaf(Position(50, 90), 
+                  info={"type": "Class", "name": "MyClass"},
+                  style=LeafStyle(color="#0000ff", bold=True),
+                  rich_style=RichStyle(color="blue", bold=True))
 
     tree.root = root
     tree.add_leaf(child1)

@@ -46,7 +46,9 @@ class RichTreePrinter:
             )
         ):
             style = self.config.selected_style
-        if style is None:
+        if hasattr(node, 'rich_style') and node.rich_style:
+            style = node.rich_style
+        elif style is None:
             style = (
                 self.config.root_style
                 if is_root

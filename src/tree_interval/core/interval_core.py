@@ -277,34 +277,24 @@ class Leaf:
 
     def __init__(
         self,
-        position: Union[Position, tuple[int, int, Any], int],
-        second_arg: Optional[Any] = None,
-        third_arg: Optional[Any] = None,
-        *,
-        info: Optional[Any] = None,
-    ) -> None:
+        position: Union[Position, tuple, int],
+        info: Any = None,
+        end: Optional[int] = None,
+        style: Optional[Any] = None,
+        rich_style: Optional[Any] = None,
+    ):
         if position is None:
             raise ValueError("Position cannot be None")
 
-        # Handle info keyword argument if provided
-        if info is not None:
-            final_info = info
-            end = second_arg
-        # Otherwise handle positional arguments
-        elif isinstance(second_arg, (str, dict)):
-            final_info, end = second_arg, third_arg
-        else:
-            final_info, end = third_arg, second_arg
-
         if isinstance(position, Position):
             self.position = position
-            self._info = final_info
+            self._info = info
         elif isinstance(position, tuple):
             self.position = Position(position[0], position[1])
             self._info = position[2] if len(position) > 2 else info
         else:
             self.position = Position(position, end)
-            self._info = final_info
+            self._info = info
 
         # Initialize end_col_offset if not set
         if (self.position._end_col_offset is None
@@ -315,6 +305,8 @@ class Leaf:
         self.children: List[Leaf] = []
         self.ast_node: Optional[Any] = None
         self.attributes = NestedAttributes(self._as_dict())
+        self.style = style
+        self.rich_style = rich_style
 
     @property
     def start(self) -> Optional[int]:
@@ -506,6 +498,8 @@ class Leaf:
                 "end_col_offset": self.end_col_offset,
             },
             "children": [child._as_dict() for child in self.children],
+            "style": self.style,
+            "rich_style": self.rich_style
         }
         self.attributes = NestedAttributes(data)
         return data
@@ -662,6 +656,8 @@ class Tree(Generic[T]):
             "end": node.end,
             "info": node._info,
             "children": [self._node_to_dict(child) for child in node.children],
+            "style": node.style,
+            "rich_style": node.rich_style
         }
 
     @classmethod
@@ -676,7 +672,7 @@ class Tree(Generic[T]):
     @staticmethod
     def _dict_to_node(data: Dict) -> Leaf:
         """Create a node from a dictionary."""
-        node = Leaf(data["start"], data["end"], data["info"])
+        node = Leaf(data["start"], data["end"], data["info"], style=data.get("style"), rich_style=data.get("rich_style"))
         for child_data in data["children"]:
             child = Tree._dict_to_node(child_data)
             node.add_child(child)
@@ -697,6 +693,8 @@ class NestedAttributes:
     info: Any
     size: Optional[int]
     children: List[Dict[str, Any]]
+    style: Optional[Any]
+    rich_style: Optional[Any]
 
     def __init__(self, data: Dict[str, Any]):
         for key, value in data.items():
