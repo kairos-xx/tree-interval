@@ -220,7 +220,10 @@ class Leaf:
         if start >= self.start and end <= self.end:
             best_match = self
             for child in self.children:
+                
                 child_match = child.find_best_match(start, end)
+                if child_match:
+                    print("---",start, end,best_match,child_match.size)
                 if (
                     child_match
                     and child_match.size

@@ -23,8 +23,10 @@ class FrameAnalyzer:
         current_line = self.frame.f_lineno - frame_first_line + 1
 
         line_positions = self.ast_builder._calculate_line_positions()
+        
         if 0 <= current_line - 1 < len(line_positions):
             start, end = line_positions[current_line - 1]
+            print( start, end)
             return tree.find_best_match(start, end)
         return None
 
@@ -34,9 +36,7 @@ class FrameAnalyzer:
         
         if tree and tree.root:
             line_positions = self.ast_builder._calculate_line_positions()
-            nodes_by_pos = {}
-           # print(tree.flatten())
-            
+            nodes_by_pos = {}            
             # First pass: Update all node positions
             for node in tree.flatten():
                 if hasattr(node, 'ast_node'):

@@ -58,7 +58,6 @@ class AstTreeBuilder:
             
             # Adjust line numbers for frame context
             if hasattr(self, 'line_offset'):
-                print(self.line_offset)
                 start_line = lineno - 1 #+ self.line_offset
                 end_lineno = getattr(node, "end_lineno", lineno)
                 end_line = end_lineno - 1 #+ self.line_offset
@@ -84,7 +83,6 @@ class AstTreeBuilder:
                 position.end_lineno = end_lineno+self.line_offset
                 position.col_offset = col_offset
                 position.end_col_offset =end_col_offset
-                print(position.position_as("position"))
                 return position
         except (IndexError, AttributeError):
             pass
@@ -106,6 +104,7 @@ class AstTreeBuilder:
 
     def _build_tree_from_ast(self, ast_tree: AST) -> Tree[str]:
         result_tree = Tree[str](self.source)
+        print(result_tree)
         root_pos = Position(0, len(self.source), "Module")
         result_tree.root = Leaf(root_pos)
 
