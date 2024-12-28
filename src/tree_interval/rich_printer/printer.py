@@ -27,9 +27,9 @@ class RichTreePrinter:
             return
 
         rich_tree = RichTree(
-                self._format_node(tree.root, is_root=True),
-                guide_style=self.config.guide_style
-            )
+            self._format_node(tree.root, is_root=True),
+            guide_style=self.config.guide_style
+        )
         self._add_children(tree.root, rich_tree)
         self.console.print(rich_tree)
 
