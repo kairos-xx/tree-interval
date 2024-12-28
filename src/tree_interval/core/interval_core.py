@@ -513,7 +513,7 @@ class Leaf:
             if idx > 0:
                 return siblings[idx - 1]
             # If first sibling, get last child of previous parent
-            prev_parent = parent.next
+            prev_parent = parent.previous
             if prev_parent is not None and prev_parent.children:
                 return prev_parent.children[-1]
         except ValueError:
