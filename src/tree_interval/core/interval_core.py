@@ -59,23 +59,20 @@ class Position:
                     source = None
 
             pos = frame_info.positions
-            line_offset = frame.f_code.co_firstlineno - 1
-            self._lineno = pos.lineno
-            self._end_lineno = pos.end_lineno
-            self._col_offset = pos.col_offset
-            self._end_col_offset = pos.end_col_offset
-            if source is not None:
-                lines = source.split("\n")
-                pos_start = (sum(
-                    len(line) + 1
-                    for line in lines[:pos.lineno - line_offset - 1]) +
-                             pos.col_offset)
-                pos_end = (sum(
-                    len(line) + 1
-                    for line in lines[:pos.end_lineno - line_offset - 1]) +
-                           pos.end_col_offset)
-                self.start = pos_start
-                self.end = pos_end
+            if pos and frame and frame.f_code:
+                line_offset = frame.f_code.co_firstlineno - 1 if frame.f_code.co_firstlineno else 0
+                self._lineno = pos.lineno if hasattr(pos, 'lineno') else None
+                self._end_lineno = pos.end_lineno if hasattr(pos, 'end_lineno') else None
+                self._col_offset = pos.col_offset if hasattr(pos, 'col_offset') else None
+                self._end_col_offset = pos.end_col_offset if hasattr(pos, 'end_col_offset') else None
+                
+                if source is not None and isinstance(source, str):
+                    lines = source.split("\n")
+                    if self._lineno is not None and self._col_offset is not None:
+                        pos_start = sum(len(line) + 1 for line in lines[:self._lineno - line_offset - 1]) + self._col_offset
+                        pos_end = (sum(len(line) + 1 for line in lines[:self._end_lineno - line_offset - 1]) + self._end_col_offset) if self._end_lineno is not None and self._end_col_offset is not None else pos_start
+                        self.start = pos_start
+                        self.end = pos_end
 
             else:
                 self.start = pos.col_offset
