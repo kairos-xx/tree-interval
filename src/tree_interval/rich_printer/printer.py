@@ -50,9 +50,11 @@ class RichTreePrinter:
             style = (
                 self.config.root_style
                 if is_root
-                else self.config.leaf_style
-                if not node.children
-                else self.config.node_style
+                else (
+                    self.config.leaf_style
+                    if not node.children
+                    else self.config.node_style
+                )
             )
 
         parts = []

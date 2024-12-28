@@ -27,7 +27,6 @@ T = TypeVar("T")
 
 
 class Position:
-
     def __init__(
         self,
         start: Optional[Union[int, disposition, FrameType]] = None,
@@ -51,68 +50,94 @@ class Position:
                     # Calculate indentation
                     lines = source.splitlines()
                     common_indent = min(
-                        len(line) - len(line.lstrip()) for line in lines
-                        if line.strip())
+                        len(line) - len(line.lstrip()) for line in lines if line.strip()
+                    )
                     # Remove indentation and join
                     source = "\n".join(
-                        line[common_indent:] if line.strip() else line
-                        for line in lines)
+                        line[common_indent:] if line.strip() else line for line in lines
+                    )
                 except (OSError, TypeError):
                     source = None
 
             pos = frame_info.positions if frame_info else None
             if pos and frame and frame.f_code:
-                line_offset = frame.f_code.co_firstlineno - 1 if frame.f_code.co_firstlineno else 0
-                self._lineno = pos.lineno if hasattr(pos, 'lineno') else None
-                self._end_lineno = pos.end_lineno if hasattr(
-                    pos, 'end_lineno') else None
-                self._col_offset = pos.col_offset if hasattr(
-                    pos, 'col_offset') else None
-                self._end_col_offset = pos.end_col_offset if hasattr(
-                    pos, 'end_col_offset') else None
+                line_offset = (
+                    frame.f_code.co_firstlineno - 1
+                    if frame.f_code.co_firstlineno
+                    else 0
+                )
+                self._lineno = pos.lineno if hasattr(pos, "lineno") else None
+                self._end_lineno = (
+                    pos.end_lineno if hasattr(pos, "end_lineno") else None
+                )
+                self._col_offset = (
+                    pos.col_offset if hasattr(pos, "col_offset") else None
+                )
+                self._end_col_offset = (
+                    pos.end_col_offset if hasattr(pos, "end_col_offset") else None
+                )
 
                 if source is not None and isinstance(source, str):
                     lines = source.split("\n")
-                    line_offset_val = int(line_offset) if isinstance(
-                        line_offset, int) else 0
+                    line_offset_val = (
+                        int(line_offset) if isinstance(line_offset, int) else 0
+                    )
 
-                    if self._lineno is not None and self._col_offset is not None and lines:
-                        adjusted_lineno = int(self._lineno) if isinstance(
-                            self._lineno, int) else 1
-                        line_idx = max(0,
-                                       adjusted_lineno - line_offset_val - 1)
-                        pos_start = sum(
-                            len(line) + 1
-                            for line in lines[:line_idx]) if lines else 0
-                        pos_start = pos_start + (self._col_offset
-                                                 if self._col_offset
-                                                 is not None else 0)
+                    if (
+                        self._lineno is not None
+                        and self._col_offset is not None
+                        and lines
+                    ):
+                        adjusted_lineno = (
+                            int(self._lineno) if isinstance(self._lineno, int) else 1
+                        )
+                        line_idx = max(0, adjusted_lineno - line_offset_val - 1)
+                        pos_start = (
+                            sum(len(line) + 1 for line in lines[:line_idx])
+                            if lines
+                            else 0
+                        )
+                        pos_start = pos_start + (
+                            self._col_offset if self._col_offset is not None else 0
+                        )
 
-                        if self._end_lineno is not None and self._end_col_offset is not None:
+                        if (
+                            self._end_lineno is not None
+                            and self._end_col_offset is not None
+                        ):
                             end_line_idx = max(
                                 0,
-                                int(self._end_lineno) if isinstance(
-                                    self._end_lineno, int) else 1 -
-                                line_offset_val - 1)
-                            pos_end = sum(
-                                len(line) + 1 for line in
-                                lines[:end_line_idx]) if lines else pos_start
-                            pos_end = pos_end + (self._end_col_offset
-                                                 if self._end_col_offset
-                                                 is not None else 0)
+                                int(self._end_lineno)
+                                if isinstance(self._end_lineno, int)
+                                else 1 - line_offset_val - 1,
+                            )
+                            pos_end = (
+                                sum(len(line) + 1 for line in lines[:end_line_idx])
+                                if lines
+                                else pos_start
+                            )
+                            pos_end = pos_end + (
+                                self._end_col_offset
+                                if self._end_col_offset is not None
+                                else 0
+                            )
                         else:
                             pos_end = pos_start
 
                         self.start = pos_start
                         self.end = pos_end
 
-            elif pos and hasattr(pos, 'col_offset') and hasattr(
-                    pos, 'end_col_offset'):
-                self.start = pos.col_offset if hasattr(
-                    pos, 'col_offset') and pos.col_offset is not None else 0
-                self.end = pos.end_col_offset if hasattr(
-                    pos,
-                    'end_col_offset') and pos.end_col_offset is not None else 0
+            elif pos and hasattr(pos, "col_offset") and hasattr(pos, "end_col_offset"):
+                self.start = (
+                    pos.col_offset
+                    if hasattr(pos, "col_offset") and pos.col_offset is not None
+                    else 0
+                )
+                self.end = (
+                    pos.end_col_offset
+                    if hasattr(pos, "end_col_offset") and pos.end_col_offset is not None
+                    else 0
+                )
             else:
                 self.start = 0
                 self.end = 0
@@ -127,25 +152,31 @@ class Position:
                 if source is not None and isinstance(source, str):
                     # Calculate start and end from line/col offsets
                     lines = source.split("\n")
-                    lineno = int(getattr(dis_pos, 'lineno', 1))
-                    end_lineno = int(getattr(dis_pos, 'end_lineno', lineno))
-                    col_offset = int(getattr(dis_pos, 'col_offset', 0))
-                    end_col_offset = int(
-                        getattr(dis_pos, 'end_col_offset', col_offset))
+                    lineno = int(getattr(dis_pos, "lineno", 1))
+                    end_lineno = int(getattr(dis_pos, "end_lineno", lineno))
+                    col_offset = int(getattr(dis_pos, "col_offset", 0))
+                    end_col_offset = int(getattr(dis_pos, "end_col_offset", col_offset))
 
-                    pos_start = sum(
-                        len(line) + 1
-                        for line in lines[:lineno - 1]) + col_offset
-                    pos_end = sum(
-                        len(line) + 1
-                        for line in lines[:end_lineno - 1]) + end_col_offset
+                    pos_start = (
+                        sum(len(line) + 1 for line in lines[: lineno - 1]) + col_offset
+                    )
+                    pos_end = (
+                        sum(len(line) + 1 for line in lines[: end_lineno - 1])
+                        + end_col_offset
+                    )
 
                     self.start = pos_start
                     self.end = pos_end
                 else:
                     # Fallback to using line numbers as positions if no source provided
-                    self.start = dis_pos.col_offset if dis_pos.col_offset is not None else 0
-                    self.end = dis_pos.end_col_offset if dis_pos.end_col_offset is not None else 0
+                    self.start = (
+                        dis_pos.col_offset if dis_pos.col_offset is not None else 0
+                    )
+                    self.end = (
+                        dis_pos.end_col_offset
+                        if dis_pos.end_col_offset is not None
+                        else 0
+                    )
             else:
                 if start is None or end is None:
                     raise ValueError("Position start and end must not be None")
@@ -153,8 +184,7 @@ class Position:
                 self.end = end
 
             if isinstance(end, int) and isinstance(start, int):
-                self._end_col_offset: Optional[int] = ((end or 0) -
-                                                       (start or 0))
+                self._end_col_offset: Optional[int] = (end or 0) - (start or 0)
         self.parent: Optional["Leaf"] = None
         self.children: List["Leaf"] = []
 
@@ -210,13 +240,17 @@ class Position:
         """Display position with specific format."""
         if position_format == "position":
             col_offset = self.col_offset if self.col_offset is not None else 0
-            end_col_offset = (self.end_col_offset
-                              if self.end_col_offset is not None else 0)
-            return (f"Position(start={self.start}, " + f"end={self.end}, " +
-                    f"lineno={self.lineno}, " +
-                    f"end_lineno={self.end_lineno}, " +
-                    f"col_offset={col_offset}, " +
-                    f"end_col_offset={end_col_offset})")
+            end_col_offset = (
+                self.end_col_offset if self.end_col_offset is not None else 0
+            )
+            return (
+                f"Position(start={self.start}, "
+                + f"end={self.end}, "
+                + f"lineno={self.lineno}, "
+                + f"end_lineno={self.end_lineno}, "
+                + f"col_offset={col_offset}, "
+                + f"end_col_offset={end_col_offset})"
+            )
         elif position_format == "tuple":
             values = [
                 self.start,
@@ -233,8 +267,7 @@ class Position:
     def __str__(self) -> str:
         return f"Position(start={self.start}, end={self.end})"
 
-    def find_parent(self, criteria: Callable[["Leaf"],
-                                             bool]) -> Optional["Leaf"]:
+    def find_parent(self, criteria: Callable[["Leaf"], bool]) -> Optional["Leaf"]:
         """Find first parent that matches the criteria."""
         if not self.parent:
             return None
@@ -242,8 +275,7 @@ class Position:
             return self.parent
         return self.parent.find_parent(criteria)
 
-    def find_child(self, criteria: Callable[["Leaf"],
-                                            bool]) -> Optional["Leaf"]:
+    def find_child(self, criteria: Callable[["Leaf"], bool]) -> Optional["Leaf"]:
         """Find first child that matches the criteria."""
         for child in self.children:
             if criteria(child):
@@ -253,8 +285,7 @@ class Position:
                 return result
         return None
 
-    def find_sibling(self, criteria: Callable[["Leaf"],
-                                              bool]) -> Optional["Leaf"]:
+    def find_sibling(self, criteria: Callable[["Leaf"], bool]) -> Optional["Leaf"]:
         """Find first sibling that matches the criteria."""
         if not self.parent:
             return None
@@ -302,8 +333,10 @@ class Leaf:
             self._info = final_info
 
         # Initialize end_col_offset if not set
-        if (self.position._end_col_offset is None
-                and self.position._col_offset is not None):
+        if (
+            self.position._end_col_offset is None
+            and self.position._col_offset is not None
+        ):
             self.position._end_col_offset = self.position._col_offset + 20
 
         self.parent: Optional[Leaf] = None
@@ -362,7 +395,7 @@ class Leaf:
         self,
         start: int,
         end: int,
-        best_match_distance: Optional[Union[int, float]] = None
+        best_match_distance: Optional[Union[int, float]] = None,
     ) -> Optional["Leaf"]:
         """Find the leaf that best matches the given range."""
         if self.start is None or self.end is None:
@@ -371,20 +404,19 @@ class Leaf:
         def calc_distance(leaf: "Leaf") -> int:
             leaf_start = leaf.start or 0
             leaf_end = leaf.end or 0
-            return ((start - leaf_start) if start > leaf_start else
-                    (leaf_start - start)) + +(
-                        (end - leaf_end) if end > leaf_end else
-                        (leaf_end - end))
+            return (
+                (start - leaf_start) if start > leaf_start else (leaf_start - start)
+            ) + +((end - leaf_end) if end > leaf_end else (leaf_end - end))
 
-        best_match_distance = (float("inf") if best_match_distance is None else
-                               best_match_distance)
+        best_match_distance = (
+            float("inf") if best_match_distance is None else best_match_distance
+        )
         distance = calc_distance(self)
         if distance < best_match_distance:
             best_match_distance = distance
         best_match = self
         for child in self.children:
-            child_match = child.find_best_match(start, end,
-                                                best_match_distance)
+            child_match = child.find_best_match(start, end, best_match_distance)
             if child_match is not None:
                 distance = calc_distance(child_match)
                 if distance < best_match_distance:
@@ -419,8 +451,7 @@ class Leaf:
             current = current.parent
         return None
 
-    def find_parent(self, criteria: Callable[["Leaf"],
-                                             bool]) -> Optional["Leaf"]:
+    def find_parent(self, criteria: Callable[["Leaf"], bool]) -> Optional["Leaf"]:
         """Find first parent node that matches the given criteria.
 
         Args:
@@ -436,8 +467,7 @@ class Leaf:
             current = current.parent
         return None
 
-    def find_child(self, criteria: Callable[["Leaf"],
-                                            bool]) -> Optional["Leaf"]:
+    def find_child(self, criteria: Callable[["Leaf"], bool]) -> Optional["Leaf"]:
         """Find first child node that matches the given criteria.
 
         Args:
@@ -454,8 +484,7 @@ class Leaf:
                 return result
         return None
 
-    def find_sibling(self, criteria: Callable[["Leaf"],
-                                              bool]) -> Optional["Leaf"]:
+    def find_sibling(self, criteria: Callable[["Leaf"], bool]) -> Optional["Leaf"]:
         """Find first sibling node that matches the given criteria.
 
         Args:
@@ -508,16 +537,24 @@ class Leaf:
     def position_as(self, position_format: str = "default") -> str:
         """Display node with specific position format."""
         if position_format == "position":
-            return (f"Position(start={self.start}, " + f"end={self.end}, " +
-                    f"lineno={self.lineno}, " +
-                    f"end_lineno={self.end_lineno}, " +
-                    f"col_offset={self.col_offset}, " +
-                    f"end_col_offset={self.end_col_offset}, " +
-                    f"size={self.size})")
+            return (
+                f"Position(start={self.start}, "
+                + f"end={self.end}, "
+                + f"lineno={self.lineno}, "
+                + f"end_lineno={self.end_lineno}, "
+                + f"col_offset={self.col_offset}, "
+                + f"end_col_offset={self.end_col_offset}, "
+                + f"size={self.size})"
+            )
         elif position_format == "tuple":
-            return (f"({self.start}, " + f"{self.end}, " + f"{self.lineno}, " +
-                    f"{self.end_lineno}, " + f"{self.col_offset}, " +
-                    f"{self.end_col_offset})")
+            return (
+                f"({self.start}, "
+                + f"{self.end}, "
+                + f"{self.lineno}, "
+                + f"{self.end_lineno}, "
+                + f"{self.col_offset}, "
+                + f"{self.end_col_offset})"
+            )
         else:
             return f"Position(start={self.start}, end={self.end}, size={self.size})"
 
@@ -576,9 +613,11 @@ class Leaf:
 
     def __repr__(self) -> str:
         if isinstance(self._info, dict):
-            info_str = ("Info(" + ", ".join(f"{k}={repr(v)}"
-                                            for k, v in self._info.items()) +
-                        ")")
+            info_str = (
+                "Info("
+                + ", ".join(f"{k}={repr(v)}" for k, v in self._info.items())
+                + ")"
+            )
         else:
             info_str = repr(self._info)
         return f"Leaf(start={self.start}, end={self.end}, info={info_str})"
@@ -590,10 +629,9 @@ class Leaf:
 class Tree(Generic[T]):
     """A tree structure containing nodes with position information."""
 
-    def __init__(self,
-                 source: T,
-                 start_lineno: Optional[int] = None,
-                 indent_size: int = 4) -> None:
+    def __init__(
+        self, source: T, start_lineno: Optional[int] = None, indent_size: int = 4
+    ) -> None:
         self.source = source
         self.start_lineno = start_lineno
         self.indent_size = indent_size
@@ -676,8 +714,7 @@ class Tree(Generic[T]):
             node.add_child(child)
         return node
 
-    def visualize(self,
-                  config: Optional["VisualizationConfig"] = None) -> None:
+    def visualize(self, config: Optional["VisualizationConfig"] = None) -> None:
         """Visualize the tree structure."""
         from ..visualizer import TreeVisualizer
 

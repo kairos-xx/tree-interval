@@ -22,7 +22,10 @@ def demonstrate_positions():
     pos2 = Position(10, 50)
     pos2.lineno = 1
     pos2.end_lineno = 5
-    print("Position with lines:", f"lineno={pos2.lineno}, end_lineno={pos2.end_lineno}")
+    print(
+        "Position with lines:",
+        f"lineno={pos2.lineno}, end_lineno={pos2.end_lineno}",
+    )
 
     # Position with column offsets
     pos3 = Position(60, 90, "With Columns")
@@ -30,16 +33,14 @@ def demonstrate_positions():
     pos3.end_col_offset = 8
     print(
         "Position with columns:",
-        (f"col_offset={pos3.col_offset}, "
-         f"end_col_offset={pos3.end_col_offset}"),
+        (f"col_offset={pos3.col_offset}, " f"end_col_offset={pos3.end_col_offset}"),
     )
 
     # Position with absolute positions
     pos4 = Position(30, 70, "Absolute")
     print(
         "Absolute positions:",
-        (f"absolute_start={pos4.absolute_start}, "
-         f"absolute_end={pos4.absolute_end}"),
+        (f"absolute_start={pos4.absolute_start}, " f"absolute_end={pos4.absolute_end}"),
     )
 
     # Different position formats
@@ -217,22 +218,26 @@ def demonstrate_dot_notation():
 
     # Find parent using dot notation
     def safe_get_info(node):
-        if not node or not hasattr(node, 'attributes'):
+        if not node or not hasattr(node, "attributes"):
             return {}
-        attrs = getattr(node, 'attributes', None)
+        attrs = getattr(node, "attributes", None)
         if not attrs:
             return {}
-        info = getattr(attrs, 'info', {})
+        info = getattr(attrs, "info", {})
         return info if isinstance(info, dict) else {}
 
     found_parent = grandchild.find_parent(
-        lambda n: bool(n and n._as_dict() and safe_get_info(n).get("type") == "FunctionDef")
+        lambda n: bool(
+            n and n._as_dict() and safe_get_info(n).get("type") == "FunctionDef"
+        )
     )
     print("Parent:", safe_get_info(found_parent))
 
     # Find child using dot notation
     found_child = root.find_child(
-        lambda n: bool(n and n._as_dict() and safe_get_info(n).get("type") == "ClassDef")
+        lambda n: bool(
+            n and n._as_dict() and safe_get_info(n).get("type") == "ClassDef"
+        )
     )
     print("Child:", safe_get_info(found_child))
 
@@ -257,7 +262,7 @@ def demonstrate_ast_parsing():
     if tree is None:
         print("Tree is None")
         return
-        
+
     if tree.root is None:
         print("Tree root is None")
         return
@@ -307,4 +312,6 @@ def demonstrate_node_navigation():
     # Demonstrate navigation
     print(f"Child 1's parent: {child1.parent.info if child1.parent else None}")
     print(f"Child 1's next sibling: {child1.next.info if child1.next else None}")
-    print(f"Child 2's previous sibling: {child2.previous.info if child2.previous else None}")
+    print(
+        f"Child 2's previous sibling: {child2.previous.info if child2.previous else None}"
+    )
