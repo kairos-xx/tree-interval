@@ -237,19 +237,20 @@ def demonstrate_frame_analyzer():
             for node in tree.flatten():
                 if node == current_node:
                     node.rich_style = RichStyle(color="red", bold=True)
+                    node.style=LeafStyle(color="#0000ff", bold=True)
                     node.selected = True
                 elif isinstance(node.info, dict) and "type" in node.info:
                     if node.info["name"] == "Module":
                         node.rich_style = RichStyle(color="green", bold=True)
                     elif node.info["name"] == "FunctionDef":
                         node.rich_style = RichStyle(color="blue", bold=False)
+
                     else:
                         node.rich_style = RichStyle(color="grey70", bold=False)
 
             printer = RichTreePrinter()
             printer.print_tree(tree)
-            printer = RichTreePrinter()
-            printer.print_tree(tree)
+            tree.visualize()
 
     analyze_this()
 
@@ -291,21 +292,18 @@ def demonstrate_basic_rich_printing():
                     "type": "Module",
                     "name": "example"
                 },
-                style=LeafStyle(color="#ff0000", bold=True),
                 rich_style=RichStyle(color="red", bold=True))
     child1 = Leaf(Position(10, 40),
                   info={
                       "type": "Function",
                       "name": "hello"
                   },
-                  style=LeafStyle(color="#00ff00", bold=False),
                   rich_style=RichStyle(color="green"))
     child2 = Leaf(Position(50, 90),
                   info={
                       "type": "Class",
                       "name": "MyClass"
                   },
-                  style=LeafStyle(color="#0000ff", bold=True),
                   rich_style=RichStyle(color="blue", bold=True))
 
     tree.root = root
