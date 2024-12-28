@@ -104,7 +104,6 @@ class AstTreeBuilder:
 
     def _build_tree_from_ast(self, ast_tree: AST) -> Tree[str]:
         result_tree = Tree[str](self.source)
-        print(result_tree)
         root_pos = Position(0, len(self.source), "Module")
         result_tree.root = Leaf(root_pos)
 

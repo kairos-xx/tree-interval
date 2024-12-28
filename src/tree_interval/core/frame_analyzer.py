@@ -26,7 +26,6 @@ class FrameAnalyzer:
         
         if 0 <= current_line - 1 < len(line_positions):
             start, end = line_positions[current_line - 1]
-            print( start, end)
             return tree.find_best_match(start, end)
         return None
 
