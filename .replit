@@ -40,3 +40,21 @@ author = 299513
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "ruff format"
+
+[[workflows.workflow]]
+name = "create zip"
+mode = "sequential"
+author = 299513
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python scripts/create_zip.py"
+
+[[workflows.workflow]]
+name = "git commit"
+mode = "sequential"
+author = 299513
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python scripts/git_commit.py"
