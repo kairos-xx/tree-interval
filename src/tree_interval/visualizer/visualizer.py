@@ -88,17 +88,19 @@ class TreeVisualizer:
             prefix_spaces = "    " if level == 0 else prefix
             connector = "┌── " if level == 0 else (
                 "└── " if is_last else "├── ")
-            # Color the text content but not the tree lines
+            
+            #Added style handling here
+            style_prefix = ""
+            style_suffix = ""
             if hasattr(node, 'style') and node.style:
-                color = node.style.color
+                color = node.style.color.lstrip('#')
+                style_prefix = f"\033[38;2;{int(color[:2], 16)};{int(color[2:4], 16)};{int(color[4:], 16)}m"
+                style_suffix = "\033[0m"
                 if node.style.bold:
-                    color = f"\033[1m{color}"
-            else:
-                color = (TreeVisualizer.BLUE if level == 0 else
-                         (TreeVisualizer.GREEN
-                          if node.children else TreeVisualizer.YELLOW))
-            print(f"{prefix_spaces}{connector}{color}{position_str} " +
-                  f"{info_str}{TreeVisualizer.RESET}")
+                    style_prefix = "\033[1m" + style_prefix
+
+            print(f"{prefix_spaces}{connector}{style_prefix}{position_str} {info_str}{style_suffix}{TreeVisualizer.RESET}")
+
 
             children = node.children
             for i, child in enumerate(children):
