@@ -86,24 +86,25 @@ class TreeVisualizer:
             position_str = format_position(node)
             info_str = format_node_info(node)
             prefix_spaces = "" if level == 0 else prefix
-            connector = "" if level == 0 else (
-                "└── " if is_last else "├── "
-            )
-            
+            connector = "" if level == 0 else ("└── " if is_last else "├── ")
+
             # Custom styling takes precedence
             if hasattr(node, 'style') and node.style:
                 color = node.style.color.lstrip('#')
-                style_prefix = f"\033[38;2;{int(color[:2], 16)};{int(color[2:4], 16)};{int(color[4:], 16)}m"
+                style_prefix = (f"\033[38;2;{int(color[:2], 16)};" +
+                                f"{int(color[2:4], 16)};" +
+                                f"{int(color[4:], 16)}m")
                 if node.style.bold:
                     style_prefix = "\033[1m" + style_prefix
             else:
                 # Default styling
                 style_prefix = TreeVisualizer.BLUE if level == 0 else (
-                    TreeVisualizer.GREEN if node.children else TreeVisualizer.YELLOW)
+                    TreeVisualizer.GREEN
+                    if node.children else TreeVisualizer.YELLOW)
             style_suffix = TreeVisualizer.RESET
 
-            print(f"{prefix_spaces}{connector}{style_prefix}{position_str} {info_str}{style_suffix}")
-
+            print(f"{prefix_spaces}{connector}{style_prefix}{position_str} " +
+                  f"{info_str}{style_suffix}")
 
             children = node.children
             for i, child in enumerate(children):
