@@ -67,6 +67,7 @@ if node.previous:
 ```
 
 # Search
+```python
 func_node = root.find(lambda n: n.info.get("type") == "FunctionDef")
 parent = child.find_parent(lambda n: n.info.get("type") == "Module")
 ```
