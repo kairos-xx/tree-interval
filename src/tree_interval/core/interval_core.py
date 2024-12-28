@@ -234,10 +234,13 @@ class Leaf:
             raise ValueError("Position cannot be None")
         if isinstance(position, Position):
             self.position = position
+            self._info = info
         elif isinstance(position, tuple):
-            self.position = Position(*position)
+            self.position = Position(position[0], position[1])
+            self._info = position[2] if len(position) > 2 else info
         else:
-            self.position = Position(position, end, info)
+            self.position = Position(position, end)
+            self._info = info
 
         # Initialize end_col_offset if not set
         if (
@@ -261,7 +264,7 @@ class Leaf:
 
     @property
     def info(self) -> Optional[Any]:
-        return self.position.info
+        return self._info
 
     @property
     def size(self) -> Optional[int]:
@@ -434,7 +437,7 @@ class Leaf:
         data = {
             "start": self.start,
             "end": self.end,
-            "info": self.info,
+            "info": self._info,
             "size": self.size,
             "position": {
                 "lineno": self.lineno,
@@ -525,7 +528,7 @@ class Leaf:
         return ancestors
 
     def __repr__(self) -> str:
-        return f"Leaf(start={self.start}, end={self.end}, info={self.info})"
+        return f"Leaf(start={self.start}, end={self.end}, info={self._info})"
 
     def match(self, other: Any):
         return self.position == other.position  # and self.info == other.info
@@ -597,7 +600,7 @@ class Tree(Generic[T]):
         return {
             "start": node.start,
             "end": node.end,
-            "info": node.info,
+            "info": node._info,
             "children": [self._node_to_dict(child) for child in node.children],
         }
 
