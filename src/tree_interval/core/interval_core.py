@@ -33,8 +33,10 @@ class Position:
         start: Optional[Union[int, disposition, FrameType]] = None,
         end: Optional[int] = None,
         source: Optional[Union[str, dict]] = None,
+        info: Optional[Any] = None,
         selected: bool = False,
     ):
+        self.info = info
         self.selected = selected
         self._lineno: Optional[int] = None
         self._end_lineno: Optional[int] = None
@@ -72,15 +74,13 @@ class Position:
                     
                     if self._lineno is not None and self._col_offset is not None and lines:
                         line_idx = max(0, self._lineno - line_offset_val - 1)
-                        pos_start = sum(len(line) + 1 for line in lines[:line_idx])
-                        if self._col_offset is not None:
-                            pos_start += self._col_offset
+                        pos_start = sum(len(line) + 1 for line in lines[:line_idx]) if lines else 0
+                        pos_start = pos_start + (self._col_offset if self._col_offset is not None else 0)
                             
                         if self._end_lineno is not None and self._end_col_offset is not None:
                             end_line_idx = max(0, self._end_lineno - line_offset_val - 1)
-                            pos_end = sum(len(line) + 1 for line in lines[:end_line_idx])
-                            if self._end_col_offset is not None:
-                                pos_end += self._end_col_offset
+                            pos_end = sum(len(line) + 1 for line in lines[:end_line_idx]) if lines else pos_start
+                            pos_end = pos_end + (self._end_col_offset if self._end_col_offset is not None else 0)
                         else:
                             pos_end = pos_start
                             
