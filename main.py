@@ -234,27 +234,32 @@ def demonstrate_frame_analyzer():
         if tree and tree.root:
             print("\nFull AST Tree:")
             # Color nodes based on type and mark current node
-            for node in tree.flatten():
-                node.rich_style = RichStyle(color="green", bold=True) # WORKS 
-                node.style = LeafStyle(color="#ff0000", bold=True) # WORKS
-                if node == current_node:
-                    print("IM CURRENT NODE") # DOESNT WORK 
+            flat_nodes = tree.flatten()
+            for node in flat_nodes:
+                # Basic style for all nodes
+                node.rich_style = RichStyle(color="grey70", bold=False)
+                node.style = LeafStyle(color="#888888", bold=False)
+                
+                # Check if this is the current node by matching position and info
+                if (node.start == current_node.start and 
+                    node.end == current_node.end and
+                    str(node.info) == str(current_node.info)):
+                    print("Found current node:", node.info)
                     node.rich_style = RichStyle(color="green", bold=True)
                     node.style = LeafStyle(color="#ff0000", bold=True)
                     node.selected = True
-                elif isinstance(node.info, dict) and "type" in node.info:
-                    print(node.info) # DOESNT WORK 
-                    if node.info["type"] == "Module":
-                        print("IM MODULE") # DOESNT WORK 
+                # Check node type from info
+                elif hasattr(node, "info") and isinstance(node.info, dict):
+                    node_type = node.info.get("type")
+                    print("Node info:", node.info)
+                    if node_type == "Module":
+                        print("Found Module node")
                         node.rich_style = RichStyle(color="green", bold=True)
                         node.style = LeafStyle(color="#00ff00", bold=True)
-                    elif node.info["type"] == "FunctionDef":
-                        print("IM FunctionDef") # DOESNT WORK 
+                    elif node_type == "FunctionDef":
+                        print("Found FunctionDef node")
                         node.rich_style = RichStyle(color="blue", bold=False)
                         node.style = LeafStyle(color="#0000ff", bold=False)
-                    else:
-                        node.rich_style = RichStyle(color="grey70", bold=False)
-                        node.style = LeafStyle(color="#888888", bold=False)
 
             printer = RichTreePrinter()
             printer.print_tree(tree)
