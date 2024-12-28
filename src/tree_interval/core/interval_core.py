@@ -119,6 +119,8 @@ class Position:
         self.parent: Optional["Leaf"] = None
         self.children: List["Leaf"] = []
 
+    
+
     @property
     def lineno(self) -> int:
         """Get line number with fallback to 1."""
@@ -141,23 +143,24 @@ class Position:
 
     @property
     def col_offset(self) -> Optional[int]:
-        """Get column offset."""
         return self._col_offset
-        
+
     @col_offset.setter
     def col_offset(self, value: Optional[int]) -> None:
-        """Set column offset."""
         self._col_offset = value
 
     @property
     def end_col_offset(self) -> Optional[int]:
-        """Get end column offset."""
         return self._end_col_offset
-        
-    @end_col_offset.setter 
+
+    @end_col_offset.setter
     def end_col_offset(self, value: Optional[int]) -> None:
-        """Set end column offset."""
         self._end_col_offset = value
+
+
+    # Direct property access for offsets since they can be None
+    # col_offset = property(lambda self: self._col_offset)
+    # end_col_offset = property(lambda self: self._end_col_offset)
 
     @property
     def absolute_start(self) -> Optional[int]:
@@ -227,6 +230,7 @@ class Position:
 
     def __eq__(self, other: Any) -> bool:
         return self.start == other.start and self.end == other.end
+
 
 
 class Leaf:
@@ -315,12 +319,14 @@ class Leaf:
         """Find the leaf that best matches the given range."""
         if self.start is None or self.end is None:
             return None
-
-        def calc_distance(leaf: "Leaf") -> int:
+        
+        def calc_distance(leaf:"Leaf") -> int:
             return (
-                (start - leaf.start) if start > leaf.start else (leaf.start - start)
+                (start - leaf.start)
+                if start > leaf.start
+                else (leaf.start - start)
             ) + +((end - leaf.end) if end > leaf.end else (leaf.end - end))
-
+        
         best_match_distance = (
             float("inf") if best_match_distance is None else best_match_distance
         )
@@ -332,8 +338,8 @@ class Leaf:
             child_match = child.find_best_match(start, end, best_match_distance)
             distance = calc_distance(child_match)
             if distance < best_match_distance:
-                best_match_distance = distance
-                best_match = child_match
+                best_match_distance = distance 
+                best_match =    child_match
         return best_match
 
     def find_common_ancestor(self, other: "Leaf") -> Optional["Leaf"]:
@@ -477,14 +483,19 @@ class Leaf:
     @property
     def next(self) -> Optional["Leaf"]:
         """Get the next leaf node in the tree traversal order."""
-        if not self.parent:
+        parent = self._get_parent()
+        if parent is None:
             return None
-            
-        siblings = self.parent.children
+
+        siblings = parent.children
         try:
             idx = siblings.index(self)
             if idx < len(siblings) - 1:
                 return siblings[idx + 1]
+            # If last sibling, get first child of next parent
+            next_parent = parent.next
+            if next_parent is not None and next_parent.children:
+                return next_parent.children[0]
         except ValueError:
             pass
         return None
@@ -492,14 +503,19 @@ class Leaf:
     @property
     def previous(self) -> Optional["Leaf"]:
         """Get the previous leaf node in the tree traversal order."""
-        if not self.parent:
+        parent = self._get_parent()
+        if parent is None:
             return None
-            
-        siblings = self.parent.children
+
+        siblings = parent.children
         try:
             idx = siblings.index(self)
             if idx > 0:
                 return siblings[idx - 1]
+            # If first sibling, get last child of previous parent
+            prev_parent = parent.next
+            if prev_parent is not None and prev_parent.children:
+                return prev_parent.children[-1]
         except ValueError:
             pass
         return None
@@ -624,16 +640,6 @@ class Tree(Generic[T]):
 
 
 class NestedAttributes:
-    """Dynamic attribute container for nested node properties.
-    
-    Attributes:
-        position: Nested position attributes
-        start: Start position
-        end: End position 
-        info: Node information
-        size: Node size
-        children: Child nodes
-    """
     position: "NestedAttributes"
     start: Optional[int]
     end: Optional[int]

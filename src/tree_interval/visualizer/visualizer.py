@@ -45,7 +45,6 @@ class TreeVisualizer:
         def get_terminal_width() -> int:
             try:
                 import shutil
-
                 columns, _ = shutil.get_terminal_size()
                 return columns
             except:
@@ -59,17 +58,13 @@ class TreeVisualizer:
 
             if config.show_size:
                 parts.append(f"size={node.size}")
-
+            
             if config.show_info and node.info:
                 if isinstance(node.info, dict):
-                    info_str = (
-                        "Info("
-                        + ", ".join(f"{k}={repr(v)}" for k, v in node.info.items())
-                        + ")"
-                    )
+                    info_str = "Info(" + ", ".join(f"{k}={repr(v)}" for k, v in node.info.items()) + ")"
                 else:
                     info_str = repr(node.info)
-
+                
                 # Calculate total length including existing parts
                 current_length = len(" ".join(parts))
                 remaining_width = available_width - current_length - 1  # -1 for space
@@ -77,13 +72,11 @@ class TreeVisualizer:
                 if len(info_str) > remaining_width:
                     parts.append("info=...")
                 else:
-                    parts.append(
-                        info_str if isinstance(node.info, dict) else f"info={info_str}"
-                    )
+                    parts.append(info_str if isinstance(node.info, dict) else f"info={info_str}")
 
             if config.show_children_count:
                 parts.append(f"children={len(node.children)}")
-
+            
             return " ".join(parts)
 
         def _print_node(node, prefix="", is_last=True, level=0):
