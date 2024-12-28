@@ -236,7 +236,7 @@ def demonstrate_frame_analyzer():
             # Color nodes based on type and mark current node
             for node in tree.flatten():
                 if node == current_node:
-                    node.rich_style = RichStyle(color="red", bold=True)
+                    node.rich_style = RichStyle(color="green", bold=True)
                     node.style = LeafStyle(color="#ff0000", bold=True)
                     node.selected = True
                 elif isinstance(node.info, dict) and "type" in node.info:
