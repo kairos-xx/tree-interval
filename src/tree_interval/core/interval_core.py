@@ -100,16 +100,16 @@ class Position:
                     source = end
                     end = None
                 dis_pos = start
-                if source is not None:
+                if source is not None and isinstance(source, str):
                     # Calculate start and end from line/col offsets
                     lines = source.split("\n")
-                    pos_start = (sum(
-                        len(line) + 1 for line in lines[:dis_pos.lineno - 1]) +
-                                 dis_pos.col_offset)
-                    pos_end = (sum(
-                        len(line) + 1
-                        for line in lines[:dis_pos.end_lineno - 1]) +
-                               dis_pos.end_col_offset)
+                    col_offset = dis_pos.col_offset if dis_pos.col_offset is not None else 0
+                    end_col_offset = dis_pos.end_col_offset if dis_pos.end_col_offset is not None else 0
+                    lineno = dis_pos.lineno if hasattr(dis_pos, 'lineno') else 1
+                    end_lineno = dis_pos.end_lineno if hasattr(dis_pos, 'end_lineno') else lineno
+                    
+                    pos_start = sum(len(line) + 1 for line in lines[:lineno - 1]) + col_offset
+                    pos_end = sum(len(line) + 1 for line in lines[:end_lineno - 1]) + end_col_offset
                     self.start = pos_start
                     self.end = pos_end
                 else:
