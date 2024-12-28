@@ -107,7 +107,8 @@ class Position:
             return f"Position(start={self.start}, end={self.end})"
 
     def __str__(self) -> str:
-        return f"Position(start={self.start}, end={self.end}, info={self.info})"
+        return (f"Position(start={self.start}, " + f"end={self.end}, " +
+                f"info={self.info})")
 
     def find_parent(self, criteria: Callable[["Leaf"],
                                              bool]) -> Optional["Leaf"]:
@@ -141,7 +142,10 @@ class Position:
 
 
 class Leaf:
-    """A node in the tree structure containing position and information data."""
+    """
+    A node in the tree structure containing position and
+    information data.
+    """
 
     def __init__(
         self,
@@ -347,7 +351,8 @@ class Leaf:
                     f"{self.end_lineno}, " + f"{self.col_offset}, " +
                     f"{self.end_col_offset})")
         else:
-            return f"Position(start={self.start}, end={self.end}, size={self.size})"
+            return (f"Position(start={self.start}, " + f"end={self.end}, " +
+                    f"size={self.size})")
 
     def __repr__(self) -> str:
         return f"Leaf(start={self.start}, end={self.end}, info={self.info})"

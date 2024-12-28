@@ -1,7 +1,7 @@
 import os
 import zipfile
 from datetime import datetime
-from typing import List, Optional
+from typing import List
 
 from git_commit import CUSTOM_IGNORE
 
