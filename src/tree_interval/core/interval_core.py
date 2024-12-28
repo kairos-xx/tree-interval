@@ -5,7 +5,7 @@ This module contains the core Tree and Leaf classes used across the project.
 """
 
 from dis import Positions as disposition
-from inspect import getframeinfo, getsource
+from inspect import currentframe, getframeinfo, getsource
 from json import dumps, loads
 from types import FrameType
 from typing import (

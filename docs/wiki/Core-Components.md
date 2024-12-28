@@ -113,9 +113,9 @@ Analyze runtime code positions:
 
 ```python
 from tree_interval import FrameAnalyzer
-import sys
+from inspect import currentframe
 
-frame = sys._getframe()
+frame = currentframe()
 analyzer = FrameAnalyzer(frame)
 
 # Get current node

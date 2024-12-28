@@ -10,6 +10,7 @@ from src.tree_interval import (
     VisualizationConfig,
 )
 from tree_interval import AstTreeBuilder
+from inspect import currentframe
 
 
 def demonstrate_positions():
