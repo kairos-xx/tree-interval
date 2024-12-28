@@ -215,11 +215,13 @@ class Leaf:
 
     @selected.setter
     def selected(self, value: bool) -> None:
+        print(id(self))
         self.position.selected = value
 
     def add_child(self, child: "Leaf") -> None:
         """Add a child node to this leaf."""
         child.parent = self
+        print("..",id(child),child.selected)
         self.children.append(child)
 
     def find_best_match(self, start: int, end: int) -> Optional["Leaf"]:

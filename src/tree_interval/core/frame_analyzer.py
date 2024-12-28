@@ -38,11 +38,13 @@ class FrameAnalyzer:
             nodes_by_pos = {}            
             # First pass: Update all node positions
             for node in tree.flatten():
+                print(f"Node {node} has position {node.selected}")
                 if hasattr(node, 'ast_node'):
                     pos = self.ast_builder._get_node_position(node.ast_node, line_positions)
                     if pos:
                         # Preserve selected state
                         pos.selected = node.selected
+                        
                         node.position = pos
                         nodes_by_pos[(pos.start, pos.end)] = node
             

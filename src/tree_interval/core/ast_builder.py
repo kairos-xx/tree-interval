@@ -94,7 +94,7 @@ class AstTreeBuilder:
         tree = parse(self.source)
         return self._build_tree_from_ast(tree)
 
-    
+    e
 
     def build_from_frame(self) -> Optional[Tree]:
         if not self.source:
