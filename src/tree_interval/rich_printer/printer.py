@@ -38,7 +38,9 @@ class RichTreePrinter:
         """Format node information."""
         # Determine style priority: rich_style > selected > default
         if hasattr(node, 'rich_style') and node.rich_style:
-            print(getframeinfo(currentframe() ))
+            print("Node info:", node.info)
+            print("Rich style:", node.rich_style)
+            print("Selected:", getattr(node, "selected", False))
             style = node.rich_style
         elif hasattr(node, "selected") and node.selected:
             style = self.config.selected_style
