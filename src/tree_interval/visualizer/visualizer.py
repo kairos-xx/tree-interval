@@ -89,20 +89,17 @@ class TreeVisualizer:
             connector = "┌── " if level == 0 else (
                 "└── " if is_last else "├── ")
             
-            #Added style handling here
-            # Default styling if no custom style is set
-            if not hasattr(node, 'style') or not node.style:
-                color = TreeVisualizer.BLUE if level == 0 else (
-                    TreeVisualizer.GREEN if node.children else TreeVisualizer.YELLOW)
-                style_prefix = color
-                style_suffix = TreeVisualizer.RESET
-            else:
-                # Custom styling
+            # Custom styling takes precedence
+            if hasattr(node, 'style') and node.style:
                 color = node.style.color.lstrip('#')
                 style_prefix = f"\033[38;2;{int(color[:2], 16)};{int(color[2:4], 16)};{int(color[4:], 16)}m"
-                style_suffix = "\033[0m"
                 if node.style.bold:
                     style_prefix = "\033[1m" + style_prefix
+            else:
+                # Default styling
+                style_prefix = TreeVisualizer.BLUE if level == 0 else (
+                    TreeVisualizer.GREEN if node.children else TreeVisualizer.YELLOW)
+            style_suffix = TreeVisualizer.RESET
 
             print(f"{prefix_spaces}{connector}{style_prefix}{position_str} {info_str}{style_suffix}")
 

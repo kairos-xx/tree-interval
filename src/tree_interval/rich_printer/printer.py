@@ -35,29 +35,15 @@ class RichTreePrinter:
 
     def _format_node(self, node: Leaf, is_root: bool = False) -> str:
         """Format node information."""
-        style = None
-        if (
-            hasattr(node, "selected")
-            and node.selected
-            or (
-                hasattr(node, "position")
-                and hasattr(node.position, "selected")
-                and node.position.selected
-            )
-        ):
-            style = self.config.selected_style
+        # Determine style priority: rich_style > selected > default
         if hasattr(node, 'rich_style') and node.rich_style:
             style = node.rich_style
-        elif style is None:
-            style = (
-                self.config.root_style
-                if is_root
-                else (
-                    self.config.leaf_style
-                    if not node.children
-                    else self.config.node_style
-                )
-            )
+        elif hasattr(node, "selected") and node.selected:
+            style = self.config.selected_style
+        else:
+            style = (self.config.root_style if is_root 
+                    else (self.config.leaf_style if not node.children 
+                          else self.config.node_style))
 
         parts = []
 
