@@ -63,18 +63,25 @@ def commit_changes() -> None:
         return
 
     message = f"Auto commit: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
-    files = get_files_to_commit()
-
+    
     try:
+        # Fetch and merge remote changes
+        subprocess.run(['git', 'fetch', 'origin', 'main'], check=True)
+        subprocess.run(['git', 'merge', 'origin/main', '--allow-unrelated-histories'], check=True)
+        
         # Add all files
         subprocess.run(['git', 'add', '.'], check=True)
         
         # Commit
         subprocess.run(['git', 'commit', '-m', message], check=True)
-        print("Changes committed successfully!")
+        
+        # Push changes
+        subprocess.run(['git', 'push', 'origin', 'main'], check=True)
+        print("Changes committed and pushed successfully!")
 
     except subprocess.CalledProcessError as e:
         print(f"Error during git operations: {e}")
+        print("Try resolving any merge conflicts manually")
 
 if __name__ == "__main__":
     commit_changes()
