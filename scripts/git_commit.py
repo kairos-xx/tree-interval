@@ -66,14 +66,12 @@ def commit_changes() -> None:
     files = get_files_to_commit()
 
     try:
-        # Add files
-        for file in files:
-            subprocess.run(['git', 'add', file], check=True)
-
+        # Add all files
+        subprocess.run(['git', 'add', '.'], check=True)
+        
         # Commit
         subprocess.run(['git', 'commit', '-m', message], check=True)
         print("Changes committed successfully!")
-        print(f"Total files committed: {len(files)}")
 
     except subprocess.CalledProcessError as e:
         print(f"Error during git operations: {e}")
