@@ -43,7 +43,8 @@ class AstTreeBuilder:
                 return
 
             common_indent = min(
-                len(line) - len(line.lstrip()) for line in indented_lines
+                len(line) - len(line.lstrip())
+                for line in indented_lines
             )
 
             # Remove common indentation and join lines

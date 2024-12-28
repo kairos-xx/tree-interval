@@ -33,14 +33,16 @@ def demonstrate_positions():
     pos3.end_col_offset = 8
     print(
         "Position with columns:",
-        (f"col_offset={pos3.col_offset}, " f"end_col_offset={pos3.end_col_offset}"),
+        f"col_offset={pos3.col_offset}, "
+        f"end_col_offset={pos3.end_col_offset}",
     )
 
     # Position with absolute positions
     pos4 = Position(30, 70, "Absolute")
     print(
         "Absolute positions:",
-        (f"absolute_start={pos4.absolute_start}, " f"absolute_end={pos4.absolute_end}"),
+        f"absolute_start={pos4.absolute_start}, "
+        f"absolute_end={pos4.absolute_end}",
     )
 
     # Different position formats
