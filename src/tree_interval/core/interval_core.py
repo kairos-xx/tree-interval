@@ -89,24 +89,24 @@ class Position:
 
             elif pos and hasattr(pos, 'col_offset') and hasattr(pos, 'end_col_offset'):
                 self.start = pos.col_offset
-                self.end = pos.end_col_offset
+                self.end = pos.end_col_offset if pos.end_col_offset is not None else 0
             else:
                 self.start = 0
                 self.end = 0
-                self.end = pos.end_col_offset
+                self.end = pos.end_col_offset if pos.end_col_offset is not None else 0
         else:
             if isinstance(start, disposition):
                 if isinstance(end, str):
                     source = end
                     end = None
                 dis_pos = start
-                if source is not None and isinstance(source, str):
+                if source is not None:
                     # Calculate start and end from line/col offsets
                     lines = source.split("\n")
-                    col_offset = dis_pos.col_offset if dis_pos.col_offset is not None else 0
-                    end_col_offset = dis_pos.end_col_offset if dis_pos.end_col_offset is not None else 0
-                    lineno = dis_pos.lineno if hasattr(dis_pos, 'lineno') else 1
-                    end_lineno = dis_pos.end_lineno if hasattr(dis_pos, 'end_lineno') else lineno
+                    lineno = getattr(dis_pos, 'lineno', 1)
+                    end_lineno = getattr(dis_pos, 'end_lineno', lineno)
+                    col_offset = getattr(dis_pos, 'col_offset', 0)
+                    end_col_offset = getattr(dis_pos, 'end_col_offset', col_offset)
                     
                     pos_start = sum(len(line) + 1 for line in lines[:lineno - 1]) + col_offset
                     pos_end = sum(len(line) + 1 for line in lines[:end_lineno - 1]) + end_col_offset
@@ -114,8 +114,8 @@ class Position:
                     self.end = pos_end
                 else:
                     # Fallback to using line numbers as positions if no source provided
-                    self.start = dis_pos.col_offset
-                    self.end = dis_pos.end_col_offset
+                    self.start = dis_pos.col_offset if dis_pos.col_offset is not None else 0
+                    self.end = dis_pos.end_col_offset if dis_pos.end_col_offset is not None else 0
             else:
                 if start is None or end is None:
                     raise ValueError("Position start and end must not be None")

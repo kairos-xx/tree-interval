@@ -47,7 +47,7 @@ class FrameAnalyzer:
             nodes_by_pos = {}
             # First pass: Update all node positions
             for node in self.tree.flatten():
-                if hasattr(node, "ast_node"):
+                if hasattr(node, "ast_node") and isinstance(node.ast_node, AST):
                     pos = self.ast_builder._get_node_position(
                         node.ast_node, line_positions
                     )
