@@ -17,6 +17,42 @@ CUSTOM_IGNORE = [
     ".replit", "replit.nix", "generated-icon.png"
 ]
 
+def clean_merge_conflicts(file_path: str) -> None:
+    """Remove merge conflict markers from a file."""
+    try:
+        with open(file_path, 'r') as f:
+            content = f.read()
+        
+        # Skip if no conflict markers
+        if '<<<<<<< HEAD' not in content:
+            return
+
+        # Keep the HEAD version (local changes)
+        lines = content.split('\n')
+        cleaned_lines = []
+        skip_mode = False
+        
+        for line in lines:
+            if line.startswith('<<<<<<< HEAD'):
+                skip_mode = False
+                continue
+            elif line.startswith('======='):
+                skip_mode = True
+                continue
+            elif line.startswith('>>>>>>> origin/main'):
+                skip_mode = False
+                continue
+            
+            if not skip_mode:
+                cleaned_lines.append(line)
+        
+        # Write back cleaned content
+        with open(file_path, 'w') as f:
+            f.write('\n'.join(cleaned_lines))
+            
+    except Exception as e:
+        print(f"Error cleaning merge conflicts in {file_path}: {e}")
+
 def get_files_to_process() -> List[str]:
     """Get list of files to process, excluding ignored patterns."""
     files = []
@@ -28,55 +64,6 @@ def get_files_to_process() -> List[str]:
                 files.append(filepath)
     return files
 
-def create_zip():
-    """Create a zip file with all non-ignored files."""
-    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-    output_filename = f'tree_interval_{timestamp}.zip'
-    files = get_files_to_process()
-
-    try:
-        with zipfile.ZipFile(output_filename, 'w', zipfile.ZIP_DEFLATED) as zipf:
-            for file in files:
-                zipf.write(file)
-        print(f"✅ Zip file created: {output_filename}")
-    except Exception as e:
-        print(f"❌ Error creating zip: {e}")
-
-def get_latest_version():
-    try:
-        with urllib.request.urlopen("https://pypi.org/pypi/tree-interval/json") as response:
-            return json.loads(response.read())["info"]["version"]
-    except Exception:
-        return "0.0.0"
-
-def upload_to_pypi():
-    """Build and upload package to PyPI."""
-    try:
-        token = os.getenv("PYPI_TOKEN")
-        if not token:
-            print("❌ Error: PYPI_TOKEN not set")
-            return
-
-        # Create .pypirc
-        pypirc_content = f"""[distutils]
-index-servers = pypi
-
-[pypi]
-username = __token__
-password = {token}
-"""
-        with open(str(Path.home() / ".pypirc"), "w") as f:
-            f.write(pypirc_content)
-
-        # Build and upload
-        subprocess.run(["pip", "install", "wheel", "twine", "build"], check=True)
-        subprocess.run("rm -rf dist build *.egg-info", shell=True, check=True)
-        subprocess.run(["python", "setup.py", "sdist", "bdist_wheel"], check=True)
-        subprocess.run(["python", "-m", "twine", "upload", "dist/*"], check=True)
-        print("✅ Package uploaded to PyPI")
-    except Exception as e:
-        print(f"❌ Error uploading to PyPI: {e}")
-
 def commit_changes():
     """Commit and push changes to git."""
     try:
@@ -84,7 +71,12 @@ def commit_changes():
             subprocess.run(['git', 'init'], check=True)
             subprocess.run(['git', 'config', 'user.email', "noreply@replit.com"], check=True)
             subprocess.run(['git', 'config', 'user.name', "Replit"], check=True)
-
+        
+        # Clean merge conflicts in all files
+        files = get_files_to_process()
+        for file in files:
+            clean_merge_conflicts(file)
+        
         subprocess.run(['git', 'add', '.'], check=True)
         message = f"Auto commit: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
         subprocess.run(['git', 'commit', '-m', message], check=True)
@@ -96,16 +88,8 @@ def commit_changes():
 def main():
     """Run all operations."""
     print("🚀 Starting automated operations...")
-    
-    print("\n1. Creating ZIP archive...")
-    create_zip()
-    
-    print("\n2. Uploading to PyPI...")
-    upload_to_pypi()
-    
-    print("\n3. Committing changes...")
+    print("\nCommitting changes...")
     commit_changes()
-    
     print("\n✨ All operations completed!")
 
 if __name__ == "__main__":
