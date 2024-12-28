@@ -209,6 +209,14 @@ class Leaf:
     def end_col_offset(self) -> Optional[int]:
         return self.position._end_col_offset
 
+    @property
+    def selected(self) -> bool:
+        return self.position.selected
+
+    @selected.setter
+    def selected(self, value: bool) -> None:
+        self.position.selected = value
+
     def add_child(self, child: "Leaf") -> None:
         """Add a child node to this leaf."""
         child.parent = self
