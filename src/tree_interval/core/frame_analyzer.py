@@ -28,7 +28,8 @@ class FrameAnalyzer:
             return None
         if self.current_node is None:
             self.current_node = self.tree.find_best_match(
-                self.frame_position.start, self.frame_position.end
+                self.frame_position.start,
+                self.frame_position.end
             )
         return self.current_node
 

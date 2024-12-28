@@ -43,12 +43,14 @@ class AstTreeBuilder:
                 return
 
             common_indent = min(
-                len(line) - len(line.lstrip()) for line in indented_lines
+                len(line) - len(line.lstrip())
+                for line in indented_lines
             )
 
             # Remove common indentation and join lines
             self.source = "\n".join(
-                line[common_indent:] if line.strip() else line for line in lines
+                line[common_indent:] if line.strip() else line
+                for line in lines
             )
             self.indent_offset = common_indent
             self.line_offset = self.frame_firstlineno - 1
