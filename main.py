@@ -405,20 +405,7 @@ def demonstrate_find_method():
     print(f"Found module: {found.info if found else None}")
 
 
-def main():
-    print("=== Tree Interval Package Demo ===")
-    demonstrate_positions()
-    demonstrate_find_nodes()
-    demonstrate_leaves()
-    demonstrate_tree_operations()
-    demonstrate_frame_analyzer()
-    demonstrate_line_positions()
-    demonstrate_basic_rich_printing()
-    demonstrate_custom_config()
-    demonstrate_ast_rich_printing()
-    demonstrate_nested_attributes()
-    demonstrate_find_method()
-    
+def demonstrate_leaf_navigation():
     print("\n=== Leaf Navigation Example ===")
     # Create a tree and nodes
     tree = Tree("Navigation Example")
@@ -458,6 +445,21 @@ def main():
 
     # Test parent navigation
     print(f"Parent 1's next sibling: {parent1.next.info if parent1.next else None}")
+
+def main():
+    print("=== Tree Interval Package Demo ===")
+    demonstrate_positions()
+    demonstrate_find_nodes()
+    demonstrate_leaves()
+    demonstrate_tree_operations()
+    demonstrate_frame_analyzer()
+    demonstrate_line_positions()
+    demonstrate_basic_rich_printing()
+    demonstrate_custom_config()
+    demonstrate_ast_rich_printing()
+    demonstrate_nested_attributes()
+    demonstrate_find_method()
+    demonstrate_leaf_navigation()
 
 def demonstrate_node_navigation():
     print("\n=== Node Navigation Examples ===")
