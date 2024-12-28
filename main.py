@@ -362,23 +362,20 @@ def demonstrate_find_method():
     root.add_child(child2)
     child1.add_child(grandchild)
 
+    # Initialize attributes
+    root._as_dict()
+    child1._as_dict()
+    child2._as_dict()
+    grandchild._as_dict()
+    
     # Use find method with dot notation
-    found = root.find(
-        lambda n: hasattr(n.attributes.info, "name")
-        and n.attributes.info.name == "hello"
-    )
-    print(f"Found function: {found.attributes.info if found else None}")
+    found = root.find(lambda n: n.info and n.info.get("name") == "hello")
+    print(f"Found function: {found.info if found else None}")
 
-    found = child1.find(
-        lambda n: hasattr(n.attributes.info, "type")
-        and n.attributes.info.type == "ClassDef"
-    )
-    print(f"Found class: {found.attributes.info if found else None}")
+    found = child1.find(lambda n: n.info and n.info.get("type") == "ClassDef")
+    print(f"Found class: {found.info if found else None}")
 
-    found = grandchild.find(
-        lambda n: hasattr(n.attributes.info, "type")
-        and n.attributes.info.type == "Module"
-    )
+    found = grandchild.find(lambda n: n.info and n.info.get("type") == "Module")
 
     print(f"Found module: {found.attributes.info if found else None}")
 
