@@ -7,7 +7,6 @@ def test_ast_node_access() -> None:
     code = "x = 1 + 2"
     builder = AstTreeBuilder(code)
     tree = builder.build()
-<<<<<<< HEAD
     if tree is None:
         raise AssertionError("Tree is None")
     if tree.root is None:
@@ -15,13 +14,6 @@ def test_ast_node_access() -> None:
 
     found_node = tree.root.find(
         lambda n: (n.info is not None and n.info.get("type") == "Assign")
-=======
-    if not tree.root:
-        raise AssertionError("Tree root is None")
-
-    found_node = tree.root.find(
-        lambda n: n.info is not None and n.info.get("type") == "Assign"
->>>>>>> origin/main
     )
     if not found_node or not found_node.ast_node:
         raise AssertionError("Node not found or ast_node is None")
@@ -33,7 +25,6 @@ def test_ast_node_fields() -> None:
     code = "def test(): pass"
     builder = AstTreeBuilder(code)
     tree = builder.build()
-<<<<<<< HEAD
     if tree is None:
         raise AssertionError("Tree is None")
     if tree.root is None:
@@ -41,13 +32,6 @@ def test_ast_node_fields() -> None:
 
     found_node = tree.root.find(
         lambda n: (n.info is not None and n.info.get("type") == "FunctionDef")
-=======
-    if not tree.root:
-        raise AssertionError("Tree root is None")
-
-    found_node = tree.root.find(
-        lambda n: n.info is not None and n.info.get("type") == "FunctionDef"
->>>>>>> origin/main
     )
     if not found_node or not found_node.ast_node:
         raise AssertionError("Node not found or ast_node is None")

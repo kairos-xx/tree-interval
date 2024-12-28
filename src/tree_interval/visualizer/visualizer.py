@@ -31,26 +31,15 @@ class TreeVisualizer:
 
         def format_position(node) -> str:
             if config.position_format == "position":
-<<<<<<< HEAD
                 return (f"Position(start={node.start}, end={node.end}, "
                         f"lineno={node.lineno}, end_lineno={node.end_lineno}, "
                         f"col_offset={node.col_offset}, "
                         f"end_col_offset={node.end_col_offset}, "
                         f"size={node.size})")
-=======
-                return (
-                    f"Position(start={node.start}, end={node.end}, "
-                    f"lineno={node.lineno}, end_lineno={node.end_lineno}, "
-                    f"col_offset={node.col_offset}, "
-                    f"end_col_offset={node.end_col_offset}, "
-                    f"size={node.size})"
-                )
->>>>>>> origin/main
             elif config.position_format == "tuple":
                 return f"({node.start}, {node.end})"
             return f"({node.start}, {node.end})"
 
-<<<<<<< HEAD
         def get_terminal_width() -> int:
             try:
                 import shutil
@@ -91,30 +80,12 @@ class TreeVisualizer:
             if config.show_children_count:
                 parts.append(f"children={len(node.children)}")
 
-=======
-        def format_node_info(node) -> str:
-            parts = []
-            if config.show_size:
-                parts.append(f"size={node.size}")
-            if config.show_info and node.info:
-                if isinstance(node.info, dict):
-                    node_type = node.info.get("type", "")
-                    fields = node.info.get("fields", {})
-                    parts.append(f"type={node_type}")
-                    for field, value in fields.items():
-                        parts.append(f"{field}={value}")
-                else:
-                    parts.append(f"info='{node.info}'")
-            if config.show_children_count:
-                parts.append(f"children={len(node.children)}")
->>>>>>> origin/main
             return " ".join(parts)
 
         def _print_node(node, prefix="", is_last=True, level=0):
             position_str = format_position(node)
             info_str = format_node_info(node)
             prefix_spaces = "    " if level == 0 else prefix
-<<<<<<< HEAD
             connector = "┌── " if level == 0 else (
                 "└── " if is_last else "├── ")
             # Color the text content but not the tree lines
@@ -129,30 +100,12 @@ class TreeVisualizer:
                           if node.children else TreeVisualizer.YELLOW))
             print(f"{prefix_spaces}{connector}{color}{position_str} " +
                   f"{info_str}{TreeVisualizer.RESET}")
-=======
-            connector = "┌── " if level == 0 else ("└── " if is_last else "├── ")
-
-            # Color the text content but not the tree lines
-            color = (
-                TreeVisualizer.BLUE
-                if level == 0
-                else (TreeVisualizer.GREEN if node.children else TreeVisualizer.YELLOW)
-            )
-            print(
-                f"{prefix_spaces}{connector}{color}{position_str} "
-                + f"{info_str}{TreeVisualizer.RESET}"
-            )
->>>>>>> origin/main
 
             children = node.children
             for i, child in enumerate(children):
                 new_prefix = prefix + ("    " if is_last else "│   ")
-<<<<<<< HEAD
                 _print_node(child, new_prefix, i == len(children) - 1,
                             level + 1)
-=======
-                _print_node(child, new_prefix, i == len(children) - 1, level + 1)
->>>>>>> origin/main
 
         _print_node(tree.root)
 

@@ -1,19 +1,10 @@
 
 <div align="center">
-<<<<<<< HEAD
   <img src="resources/icon_raster.png" alt="Tree Interval Logo" width="150"/>
   <h1>🌳 Tree Interval</h1>
   <p><em>A powerful Python package for managing, analyzing, and visualizing tree structures with rich interval-based node positioning</em></p>
   
   
-=======
-  <h1>🌳 Tree Interval</h1>
-  <p><em>A powerful Python package for managing, analyzing, and visualizing tree structures with rich interval-based node positioning</em></p>
-  
-  [![Build Status](https://github.com/kairos-xx/tree-interval/actions/workflows/python-publish.yml/badge.svg)](https://github.com/kairos-xx/tree-interval/actions)
-  [![Python Versions](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
->>>>>>> origin/main
 </div>
 
 ## ✨ Features

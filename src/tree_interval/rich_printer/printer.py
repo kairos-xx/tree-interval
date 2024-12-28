@@ -35,7 +35,6 @@ class RichTreePrinter:
 
     def _format_node(self, node: Leaf, is_root: bool = False) -> str:
         """Format node information."""
-<<<<<<< HEAD
         style = None
         if (
             hasattr(node, "selected")
@@ -57,15 +56,6 @@ class RichTreePrinter:
                     else self.config.node_style
                 )
             )
-=======
-        style = (
-            self.config.root_style
-            if is_root
-            else self.config.leaf_style
-            if not node.children
-            else self.config.node_style
-        )
->>>>>>> origin/main
 
         parts = []
 
@@ -75,7 +65,6 @@ class RichTreePrinter:
         if self.config.show_size:
             parts.append(f"size={node.size}")
 
-<<<<<<< HEAD
         def get_terminal_width() -> int:
             try:
                 import shutil
@@ -108,11 +97,6 @@ class RichTreePrinter:
                 parts.append("info=...")
             else:
                 parts.append(f"info={info_str}")
-=======
-        if self.config.show_info and node.info:
-            info_str = str(node.info)
-            parts.append(f"info={info_str}")
->>>>>>> origin/main
 
         return style.render(" ".join(parts))
 

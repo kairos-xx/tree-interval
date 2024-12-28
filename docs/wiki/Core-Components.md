@@ -41,7 +41,6 @@ parent = child.parent  # Get parent
 siblings = child.siblings  # Get siblings
 children = root.children  # Get children
 
-<<<<<<< HEAD
 ### Navigation Methods
 
 The `Leaf` class provides methods for navigating between nodes:
@@ -68,8 +67,6 @@ if node.previous:
 ```
 
 
-=======
->>>>>>> origin/main
 # Search
 func_node = root.find(lambda n: n.info.get("type") == "FunctionDef")
 parent = child.find_parent(lambda n: n.info.get("type") == "Module")
@@ -116,15 +113,9 @@ Analyze runtime code positions:
 
 ```python
 from tree_interval import FrameAnalyzer
-<<<<<<< HEAD
 from inspect import currentframe
 
 frame = currentframe()
-=======
-import sys
-
-frame = sys._getframe()
->>>>>>> origin/main
 analyzer = FrameAnalyzer(frame)
 
 # Get current node
