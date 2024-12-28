@@ -78,6 +78,7 @@ class AstTreeBuilder:
             if 0 <= start_line < len(line_positions):
                 start_pos = line_positions[start_line][0]+self.line_offset
                 end_pos = line_positions[end_line][1]+self.line_offset
+                print(node.lineno, node.end_lineno, node.col_offset, node.end_col_offset,start_pos,end_pos)
                 position = Position(start_pos, end_pos, node.__class__.__name__)
                 position.lineno = lineno+self.line_offset
                 position.end_lineno = end_lineno+self.line_offset
