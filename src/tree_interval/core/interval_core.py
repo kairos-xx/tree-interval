@@ -295,6 +295,9 @@ class Leaf:
         else:
             self.position = Position(position, end)
             self._info = info
+            
+        self.style = style
+        self.rich_style = rich_style
 
         # Initialize end_col_offset if not set
         if (self.position._end_col_offset is None
