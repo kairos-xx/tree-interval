@@ -16,7 +16,7 @@ from tree_interval.rich_printer import RichTreePrinter
 
 # Create a tree
 tree = Tree("Example")
-root = Leaf(Position(0, 100, "Root"))
+root = Leaf(Position(0, 100), "Root")
 tree.root = root
 
 # Print using Rich
@@ -58,8 +58,8 @@ printer = RichTreePrinter(config)
 ### Basic Tree
 ```python
 tree = Tree("Example")
-root = Leaf(Position(0, 100, {"type": "Root"}))
-child = Leaf(Position(10, 50, {"type": "Child"}))
+root = Leaf(Position(0, 100), {"type": "Root"})
+child = Leaf(Position(10, 50), {"type": "Child"})
 tree.root = root
 tree.add_leaf(child)
 
@@ -80,8 +80,8 @@ printer = RichTreePrinter(config)
 ### AST Visualization
 ```python
 tree = Tree("AST")
-root = Leaf(Position(0, 100, {"type": "Module"}))
-func = Leaf(Position(10, 90, {"type": "Function", "name": "main"}))
+root = Leaf(Position(0, 100), {"type": "Module"})
+func = Leaf(Position(10, 90), {"type": "Function", "name": "main"})
 tree.root = root
 tree.add_leaf(func)
 

@@ -12,8 +12,8 @@ from src.tree_interval.rich_printer import RichPrintConfig, RichTreePrinter
 def basic_tree():
     """Fixture for creating a basic test tree."""
     tree = Tree("Test")
-    root = Leaf(Position(0, 100, "Root"))
-    child = Leaf(Position(10, 50, "Child"))
+    root = Leaf(Position(0, 100), "Root")
+    child = Leaf(Position(10, 50), "Child")
     tree.root = root
     tree.add_leaf(child)
     return tree

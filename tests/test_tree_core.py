@@ -6,7 +6,7 @@ from src.tree_interval import Leaf, Position, Tree
 
 
 def test_position_creation():
-    pos = Position(0, 100, "Test")
+    pos = Position(0, 100)
     assert pos.start == 0
     assert pos.end == 100
     assert pos.info == "Test"
@@ -14,7 +14,7 @@ def test_position_creation():
 
 
 def test_position_line_info():
-    pos = Position(0, 100, "Test")
+    pos = Position(0, 100)
     pos.lineno = 1
     pos.end_lineno = 5
     assert pos.lineno == 1
@@ -22,8 +22,8 @@ def test_position_line_info():
 
 
 def test_leaf_creation():
-    pos = Position(0, 100, "Root")
-    leaf = Leaf(pos)
+    pos = Position(0, 100)
+    leaf = Leaf(pos, "Root")
     assert leaf.start == 0
     assert leaf.end == 100
     assert leaf.info == "Root"
@@ -37,8 +37,8 @@ def test_tree_creation():
 
 def test_tree_add_leaf():
     tree = Tree("Test")
-    root = Leaf(Position(0, 100, "Root"))
-    child = Leaf(Position(10, 50, "Child"))
+    root = Leaf(Position(0, 100), "Root")
+    child = Leaf(Position(10, 50), "Child")
 
     tree.root = root
     tree.add_leaf(child)
@@ -49,8 +49,8 @@ def test_tree_add_leaf():
 
 def test_find_best_match():
     tree = Tree("Test")
-    root = Leaf(Position(0, 100, "Root"))
-    child = Leaf(Position(10, 50, "Child"))
+    root = Leaf(Position(0, 100), "Root")
+    child = Leaf(Position(10, 50), "Child")
 
     tree.root = root
     tree.add_leaf(child)
@@ -60,9 +60,9 @@ def test_find_best_match():
 
 
 def test_find_parent():
-    root = Leaf(Position(0, 100, {"type": "Module"}))
-    child1 = Leaf(Position(10, 50, {"type": "FunctionDef"}))
-    grandchild = Leaf(Position(20, 40, {"type": "Return"}))
+    root = Leaf(Position(0, 100), {"type": "Module"})
+    child1 = Leaf(Position(10, 50), {"type": "FunctionDef"})
+    grandchild = Leaf(Position(20, 40), {"type": "Return"})
 
     root.add_child(child1)
     child1.add_child(grandchild)
@@ -81,9 +81,9 @@ def test_find_parent():
 
 
 def test_find_child():
-    root = Leaf(Position(0, 100, {"type": "Module"}))
-    child1 = Leaf(Position(10, 40, {"type": "Assign"}))
-    child2 = Leaf(Position(50, 90, {"type": "FunctionDef"}))
+    root = Leaf(Position(0, 100), {"type": "Module"})
+    child1 = Leaf(Position(10, 40), {"type": "Assign"})
+    child2 = Leaf(Position(50, 90), {"type": "FunctionDef"})
 
     root.add_child(child1)
     root.add_child(child2)
@@ -102,9 +102,9 @@ def test_find_child():
 
 
 def test_find_sibling():
-    root = Leaf(Position(0, 100, {"type": "Module"}))
-    child1 = Leaf(Position(10, 40, {"type": "Assign"}))
-    child2 = Leaf(Position(50, 90, {"type": "FunctionDef"}))
+    root = Leaf(Position(0, 100), {"type": "Module"})
+    child1 = Leaf(Position(10, 40), {"type": "Assign"})
+    child2 = Leaf(Position(50, 90), {"type": "FunctionDef"})
 
     root.add_child(child1)
     root.add_child(child2)
@@ -115,10 +115,10 @@ def test_find_sibling():
 
 
 def test_find():
-    root = Leaf(Position(0, 100, {"type": "Module"}))
-    child1 = Leaf(Position(10, 40, {"type": "FunctionDef", "name": "hello"}))
-    child2 = Leaf(Position(50, 90, {"type": "ClassDef", "name": "MyClass"}))
-    grandchild = Leaf(Position(20, 30, {"type": "Return"}))
+    root = Leaf(Position(0, 100), {"type": "Module"})
+    child1 = Leaf(Position(10, 40), {"type": "FunctionDef", "name": "hello"})
+    child2 = Leaf(Position(50, 90), {"type": "ClassDef", "name": "MyClass"})
+    grandchild = Leaf(Position(20, 30), {"type": "Return"})
 
     root.add_child(child1)
     root.add_child(child2)
@@ -147,10 +147,10 @@ def test_find():
 
 
 def test_leaf_hierarchy():
-    root = Leaf(Position(0, 100, "Root"))
-    child1 = Leaf(Position(10, 40, "Child1"))
-    child2 = Leaf(Position(50, 90, "Child2"))
-    grandchild = Leaf(Position(15, 35, "Grandchild"))
+    root = Leaf(Position(0, 100), "Root")
+    child1 = Leaf(Position(10, 40), "Child1")
+    child2 = Leaf(Position(50, 90), "Child2")
+    grandchild = Leaf(Position(15, 35), "Grandchild")
 
     root.add_child(child1)
     root.add_child(child2)
@@ -163,7 +163,7 @@ def test_leaf_hierarchy():
 
 def test_tree_serialization():
     tree = Tree("Test")
-    root = Leaf(Position(0, 100, "Root"))
+    root = Leaf(Position(0, 100), "Root")
     tree.root = root
 
     json_str = tree.to_json()
@@ -177,7 +177,7 @@ def test_tree_serialization():
 
 def test_position_format():
     # Create root position
-    root_pos = Position(0, 100, "root")
+    root_pos = Position(0, 100)
     root_pos.lineno = 1
     root_pos.end_lineno = 10
     root_pos.col_offset = 0
@@ -185,7 +185,7 @@ def test_position_format():
     root = Leaf(root_pos)
 
     # Create child1 position
-    child1_pos = Position(10, 40, "child1")
+    child1_pos = Position(10, 40)
     child1_pos.lineno = 2
     child1_pos.end_lineno = 4
     child1_pos.col_offset = 4
@@ -193,7 +193,7 @@ def test_position_format():
     child1 = Leaf(child1_pos)
 
     # Create grandchild1 position
-    grandchild1_pos = Position(15, 25, "grandchild1")
+    grandchild1_pos = Position(15, 25)
     grandchild1_pos.lineno = 3
     grandchild1_pos.end_lineno = 3
     grandchild1_pos.col_offset = 8
@@ -201,7 +201,7 @@ def test_position_format():
     grandchild1 = Leaf(grandchild1_pos)
 
     # Create child2 position
-    child2_pos = Position(50, 90, "child2")
+    child2_pos = Position(50, 90)
     child2_pos.lineno = 5
     child2_pos.end_lineno = 8
     child2_pos.col_offset = 4
@@ -209,7 +209,7 @@ def test_position_format():
     child2 = Leaf(child2_pos)
 
     # Create grandchild2 position
-    grandchild2_pos = Position(60, 80, "grandchild2")
+    grandchild2_pos = Position(60, 80)
     grandchild2_pos.lineno = 6
     grandchild2_pos.end_lineno = 7
     grandchild2_pos.col_offset = 8
@@ -246,9 +246,9 @@ if __name__ == "__main__":
 
 
 def test_node_navigation():
-    root = Leaf(Position(0, 100, "Root"))
-    child1 = Leaf(Position(10, 40, "Child1"))
-    child2 = Leaf(Position(50, 90, "Child2"))
+    root = Leaf(Position(0, 100), "Root")
+    child1 = Leaf(Position(10, 40), "Child1")
+    child2 = Leaf(Position(50, 90), "Child2")
 
     root.add_child(child1)
     root.add_child(child2)

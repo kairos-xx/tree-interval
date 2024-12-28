@@ -1,7 +1,5 @@
 from inspect import currentframe
 
-from rich.style import Style
-
 from src.tree_interval import (
     FrameAnalyzer,
     Leaf,
@@ -27,7 +25,6 @@ def print_header(title, color=BLUE):
     width = 60
     print(f"\n{color}╔{'═' * (width-2)}╗")
     print(f"║{title.center(width-2)}║")
-    print(f"╚{'═' * (width-2)}╝{RESET}\n")
     print(f"╚{'═' * (width-2)}╝{RESET}\n")
 
 
@@ -278,6 +275,8 @@ def demonstrate_basic_rich_printing():
 
 def demonstrate_custom_config():
     """Demonstrates custom configuration options for tree visualization."""
+    from rich.style import Style
+    
     print_header("Custom Rich Printing", MAGENTA)
     tree = Tree("Custom Style Example")
 

@@ -23,8 +23,8 @@ from tree_interval import Tree, Leaf, Position
 
 # Create a basic tree
 tree = Tree("Example")
-root = Leaf(Position(0, 100, "Root"))
-child = Leaf(Position(10, 50, "Child"))
+root = Leaf(Position(0, 100), "Root")
+child = Leaf(Position(10, 50), "Child")
 
 tree.root = root
 tree.add_leaf(child)
@@ -44,15 +44,15 @@ pip install tree-interval
 ### Position Types
 ```python
 # Basic Position
-pos = Position(0, 100, "Basic")
+pos = Position(0, 100)
 
 # Line-Aware Position
-pos = Position(0, 100, "Lines")
+pos = Position(0, 100)
 pos.lineno = 1
 pos.end_lineno = 5
 
 # Column-Aware Position
-pos = Position(0, 100, "Columns")
+pos = Position(0, 100)
 pos.col_offset = 4
 pos.end_col_offset = 8
 ```

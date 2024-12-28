@@ -39,8 +39,8 @@ from tree_interval import Tree, Leaf, Position
 
 # Create a basic tree
 tree = Tree("Example")
-root = Leaf(Position(0, 100, "Root"))
-child = Leaf(Position(10, 50, "Child"))
+root = Leaf(Position(0, 100), "Root")
+child = Leaf(Position(10, 50), "Child")
 
 tree.root = root
 tree.add_leaf(child)
@@ -60,19 +60,19 @@ tree.visualize()
 
 1. **Basic Position**: Simple start/end interval
 ```python
-pos = Position(0, 100, "Basic")
+pos = Position(0, 100)
 ```
 
 2. **Line-Aware Position**: Track line numbers
 ```python 
-pos = Position(0, 100, "Lines")
+pos = Position(0, 100)
 pos.lineno = 1
 pos.end_lineno = 5
 ```
 
 3. **Column-Aware Position**: Full position tracking
 ```python
-pos = Position(0, 100, "Columns")
+pos = Position(0, 100)
 pos.col_offset = 4
 pos.end_col_offset = 8
 ```

@@ -28,7 +28,6 @@ Position objects maintain both absolute positions and source-relative positions:
 Position(
     start=10,          # Absolute start
     end=50,           # Absolute end
-    info="Node",      # Node information
     lineno=2,         # Source line number
     end_lineno=3      # End line number
 )

@@ -28,7 +28,7 @@ def demonstrate_positions():
     )
 
     # Position with column offsets
-    pos3 = Position(60, 90, "With Columns")
+    pos3 = Position(60, 9)
     pos3.col_offset = 4
     pos3.end_col_offset = 8
     print(
@@ -38,7 +38,7 @@ def demonstrate_positions():
     )
 
     # Position with absolute positions
-    pos4 = Position(30, 70, "Absolute")
+    pos4 = Position(30, 70)
     print(
         "Absolute positions:",
         f"absolute_start={pos4.absolute_start}, "
@@ -54,11 +54,11 @@ def demonstrate_positions():
 def demonstrate_leaves():
     print("\n=== Leaf Examples ===")
     # Create leaf with Position object
-    leaf1 = Leaf(Position(0, 100, "Using Position"))
+    leaf1 = Leaf(Position(0, 100), "Using Position")
     print("Leaf from Position:", leaf1)
 
     # Create leaf with tuple
-    leaf2 = Leaf((10, 50, "Using Tuple"))
+    leaf2 = Leaf((10, 50), "Using Tuple")
     print("Leaf from tuple:", leaf2)
 
     # Create leaf with separate arguments
@@ -73,27 +73,27 @@ def demonstrate_tree_operations():
     print("Tree created with source:", tree.source)
 
     # Build hierarchy with line numbers
-    root = Leaf(Position(0, 100, "root"))
+    root = Leaf(Position(0, 100), "root")
     root.position.lineno = 1
     root.position.end_lineno = 10
     tree.root = root
 
-    child1 = Leaf(Position(10, 40, "child1"))
+    child1 = Leaf(Position(10, 40), "child1")
     child1.position.lineno = 2
     child1.position.end_lineno = 4
     child1.position.col_offset = 4
 
-    child2 = Leaf(Position(50, 90, "child2"))
+    child2 = Leaf(Position(50, 90), "child2")
     child2.position.lineno = 5
     child2.position.end_lineno = 8
     child2.position.col_offset = 4
 
-    grandchild1 = Leaf(Position(15, 25, "grandchild1"))
+    grandchild1 = Leaf(Position(15, 25), "grandchild1")
     grandchild1.position.lineno = 3
     grandchild1.position.end_lineno = 3
     grandchild1.position.col_offset = 8
 
-    grandchild2 = Leaf(Position(60, 80, "grandchild2"))
+    grandchild2 = Leaf(Position(60, 80), "grandchild2")
     grandchild2.position.lineno = 6
     grandchild2.position.end_lineno = 7
     grandchild2.position.col_offset = 8
@@ -177,7 +177,7 @@ def demonstrate_line_positions():
     tree = Tree("Line Number Example")
 
     # Create root with line numbers
-    root = Leaf(Position(0, 100, "Function"))
+    root = Leaf(Position(0, 100), "Function")
     root.position.lineno = 1
     root.position.end_lineno = 10
     root.position.col_offset = 0
@@ -185,7 +185,7 @@ def demonstrate_line_positions():
     tree.root = root
 
     # Create a child node (if statement)
-    if_node = Leaf(Position(20, 60, "If Block"))
+    if_node = Leaf(Position(20, 60), "If Block")
     if_node.position.lineno = 3
     if_node.position.end_lineno = 5
     if_node.position.col_offset = 4
@@ -204,10 +204,10 @@ def demonstrate_line_positions():
 def demonstrate_dot_notation():
     print("\n=== Dot Notation Examples ===")
     # Create a tree structure
-    root = Leaf(Position(0, 100, {"type": "Module"}))
-    child1 = Leaf(Position(10, 40, {"type": "FunctionDef", "name": "hello"}))
-    child2 = Leaf(Position(50, 90, {"type": "ClassDef", "name": "MyClass"}))
-    grandchild = Leaf(Position(20, 30, {"type": "Return"}))
+    root = Leaf(Position(0, 100), {"type": "Module"})
+    child1 = Leaf(Position(10, 40), {"type": "FunctionDef", "name": "hello"})
+    child2 = Leaf(Position(50, 90), {"type": "ClassDef", "name": "MyClass"})
+    grandchild = Leaf(Position(20, 30), {"type": "Return"})
 
     # Build the tree
     root.add_child(child1)
@@ -277,26 +277,13 @@ def demonstrate_ast_parsing():
         print("Class definition not found")
 
 
-if __name__ == "__main__":
-    print("=== Tree Interval Package Demo ===")
-    demonstrate_positions()
-    demonstrate_leaves()
-    demonstrate_tree_operations()
-    example_basic_tree()
-    example_custom_visualization()
-    example_json_serialization()
-    demonstrate_line_positions()
-    demonstrate_dot_notation()
-    demonstrate_ast_parsing()
-
-
 def demonstrate_node_navigation():
     print("\n=== Node Navigation Examples ===")
 
     # Create test nodes
-    root = Leaf(Position(0, 100, "Root"))
-    child1 = Leaf(Position(10, 40, "Child 1"))
-    child2 = Leaf(Position(50, 90, "Child 2"))
+    root = Leaf(Position(0, 100), "Root")
+    child1 = Leaf(Position(10, 40), "Child 1")
+    child2 = Leaf(Position(50, 90), "Child 2")
 
     # Build tree structure
     root.add_child(child1)
@@ -310,3 +297,18 @@ def demonstrate_node_navigation():
     print(f"Child 1's parent: {parent_info}")
     print(f"Child 1's next sibling: {next_info}")
     print(f"Child 2's previous sibling: {prev_info}")
+
+
+if __name__ == "__main__":
+    print("=== Tree Interval Package Demo ===")
+    demonstrate_positions()
+    demonstrate_leaves()
+    demonstrate_tree_operations()
+    example_basic_tree()
+    example_custom_visualization()
+    example_json_serialization()
+    demonstrate_line_positions()
+    demonstrate_dot_notation()
+    demonstrate_ast_parsing()
+    demonstrate_node_navigation()
+
