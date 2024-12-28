@@ -63,12 +63,26 @@ class RichTreePrinter:
         if self.config.show_size:
             parts.append(f"size={node.size}")
 
+        def get_terminal_width() -> int:
+            try:
+                import shutil
+                columns, _ = shutil.get_terminal_size()
+                return columns
+            except:
+                return 80
+
         if self.config.show_info and node.info:
+            terminal_width = get_terminal_width()
+            current_width = sum(len(p) for p in parts) + len(parts) * 1  # Add spaces between parts
+            
             if isinstance(node.info, dict):
                 info_str = "Info(" + ", ".join(f"{k}={repr(v)}" for k, v in node.info.items()) + ")"
             else:
                 info_str = str(node.info)
-            if len(info_str) > 50:  # Truncate if too long
+                
+            available_width = terminal_width - current_width - 10  # Extra padding for rich formatting
+            
+            if len(info_str) > available_width:
                 parts.append("info=...")
             else:
                 parts.append(f"info={info_str}")
