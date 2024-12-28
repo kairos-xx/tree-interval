@@ -100,6 +100,7 @@ def demonstrate_find_nodes():
     print("Found sibling:", found_sibling.info if found_sibling else None)
 
 def demonstrate_leaves():
+    """Demonstrates different ways to create and use Leaf nodes."""
     print_header("Leaf Examples", YELLOW)
     leaf1 = Leaf(Position(0, 100), info="Using Position")
     print("Leaf from Position:", leaf1)
@@ -111,6 +112,7 @@ def demonstrate_leaves():
     print("Leaf from args:", leaf3)
 
 def demonstrate_tree_operations():
+    """Demonstrates various tree operations including creation, modification and visualization."""
     print_header("Tree Operations", BLUE)
     tree = Tree[str]("Example Code", start_lineno=1, indent_size=4)
     print("Tree created with source:", tree.source)
@@ -195,6 +197,7 @@ def demonstrate_tree_operations():
     return tree
 
 def demonstrate_frame_analyzer():
+    """Demonstrates the frame analyzer functionality for inspecting call stack frames."""
     print_header("Frame Analyzer Demo", MAGENTA)
 
     def analyze_this():
@@ -215,6 +218,7 @@ def demonstrate_frame_analyzer():
     analyze_this()
 
 def demonstrate_line_positions():
+    """Demonstrates working with line positions in the tree structure."""
     print_header("Line Position Examples", GREEN)
     tree = Tree("Line Number Example")
 
@@ -240,6 +244,7 @@ def demonstrate_line_positions():
                            VisualizationConfig(position_format="position"))
 
 def demonstrate_basic_rich_printing():
+    """Demonstrates basic rich printing capabilities for tree visualization."""
     print_header("Basic Rich Printing", CYAN)
     tree = Tree("Basic Example")
 
@@ -255,6 +260,7 @@ def demonstrate_basic_rich_printing():
     printer.print_tree(tree)
 
 def demonstrate_custom_config():
+    """Demonstrates custom configuration options for tree visualization."""
     print_header("Custom Rich Printing", MAGENTA)
     tree = Tree("Custom Style Example")
 
@@ -275,6 +281,7 @@ def demonstrate_custom_config():
     printer.print_tree(tree)
 
 def demonstrate_ast_rich_printing():
+    """Demonstrates rich printing of Abstract Syntax Tree (AST) structures."""
     print_header("AST Rich Printing", YELLOW)
     tree = Tree("AST Example")
 
@@ -293,6 +300,7 @@ def demonstrate_ast_rich_printing():
     printer.print_tree(tree)
 
 def demonstrate_nested_attributes():
+    """Demonstrates working with nested attributes in tree nodes."""
     print_header("Nested Attributes Example", BLUE)
     tree = Tree("Nested Attributes Example")
     root = Leaf(Position(0, 100), info="Root Node")
@@ -314,6 +322,7 @@ def demonstrate_nested_attributes():
     print(f"Column offset: {root.attributes.position.col_offset}")
 
 def demonstrate_find_method():
+    """Demonstrates various node finding methods in the tree structure."""
     print_header("Find Method Example", GREEN)
 
     root = Leaf(Position(0, 100), info={"type": "Module", "name": "main"})
@@ -345,6 +354,7 @@ def demonstrate_find_method():
     print(f"Found module: {found.info if found else None}")
 
 def demonstrate_leaf_navigation():
+    """Demonstrates navigation between leaf nodes in the tree."""
     print_header("Leaf Navigation Example", CYAN)
     tree = Tree("Navigation Example")
 
@@ -379,6 +389,7 @@ def demonstrate_leaf_navigation():
     print(f"Parent 1's next sibling: {parent1.next.info if parent1.next else None}")
 
 def demonstrate_node_navigation():
+    """Demonstrates navigation between different types of nodes in the tree."""
     print_header("Node Navigation Examples", MAGENTA)
 
     program = Leaf(Position(0, 500), info="Program")
