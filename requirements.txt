@@ -3,5 +3,8 @@ pytest>=7.0.0
 pytest
 rich
 replit==4.1.0
+<<<<<<< HEAD
 black
 flake8
+=======
+>>>>>>> origin/main

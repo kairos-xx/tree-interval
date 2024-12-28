@@ -13,8 +13,12 @@ class VisualizationConfig:
         show_info: Whether to display node information
         show_size: Whether to display node sizes
         show_children_count: Whether to display number of children
+<<<<<<< HEAD
         position_format: Format for position display
         ('range', 'position', or 'tuple')
+=======
+        position_format: Format for position display ('range', 'position', or 'tuple')
+>>>>>>> origin/main
     """
 
     show_info: bool = True

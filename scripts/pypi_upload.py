@@ -30,8 +30,12 @@ def update_version_in_files(new_version):
     with open("pyproject.toml", "w") as f:
         f.write(
             content.replace(
+<<<<<<< HEAD
                 f'version = "{get_latest_version()}"',
                 f'version = "{new_version}"',
+=======
+                f'version = "{get_latest_version()}"', f'version = "{new_version}"'
+>>>>>>> origin/main
             )
         )
 
@@ -74,24 +78,36 @@ def build_and_upload(project_dir=None):
 
         # Clean previous builds
         subprocess.run(
+<<<<<<< HEAD
             "rm -rf dist build *.egg-info",
             shell=True,
             cwd=working_dir,
             check=True,
+=======
+            "rm -rf dist build *.egg-info", shell=True, cwd=working_dir, check=True
+>>>>>>> origin/main
         )
 
         # Build the package
         subprocess.run(
+<<<<<<< HEAD
             ["python", "setup.py", "sdist", "bdist_wheel"],
             cwd=working_dir,
             check=True,
+=======
+            ["python", "setup.py", "sdist", "bdist_wheel"], cwd=working_dir, check=True
+>>>>>>> origin/main
         )
 
         # Upload to PyPI
         subprocess.run(
+<<<<<<< HEAD
             ["python", "-m", "twine", "upload", "dist/*"],
             cwd=working_dir,
             check=True,
+=======
+            ["python", "-m", "twine", "upload", "dist/*"], cwd=working_dir, check=True
+>>>>>>> origin/main
         )
 
         print(f"Successfully uploaded {working_dir} to PyPI!")

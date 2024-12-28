@@ -67,6 +67,7 @@ def test_find_parent():
     root.add_child(child1)
     child1.add_child(grandchild)
 
+<<<<<<< HEAD
     found = grandchild.find_parent(lambda n: isinstance(n.info, dict) and n.
                                    info.get("type") == "FunctionDef")
     assert found == child1
@@ -77,6 +78,21 @@ def test_find_parent():
 
     found = root.find_parent(
         lambda n: isinstance(n.info, dict) and n.info.get("type") == "Module")
+=======
+    found = grandchild.find_parent(
+        lambda n: isinstance(n.info, dict) and n.info.get("type") == "FunctionDef"
+    )
+    assert found == child1
+
+    found = grandchild.find_parent(
+        lambda n: isinstance(n.info, dict) and n.info.get("type") == "Module"
+    )
+    assert found == root
+
+    found = root.find_parent(
+        lambda n: isinstance(n.info, dict) and n.info.get("type") == "Module"
+    )
+>>>>>>> origin/main
     assert found is None
 
 
@@ -89,6 +105,7 @@ def test_find_child():
     root.add_child(child2)
 
     found = root.find_child(
+<<<<<<< HEAD
         lambda n: n.info is not None and n.info.get("type") == "Assign")
     assert found == child1
 
@@ -98,6 +115,20 @@ def test_find_child():
 
     found = child1.find_child(
         lambda n: n.info is not None and n.info.get("type") == "Assign")
+=======
+        lambda n: n.info is not None and n.info.get("type") == "Assign"
+    )
+    assert found == child1
+
+    found = root.find_child(
+        lambda n: n.info is not None and n.info.get("type") == "FunctionDef"
+    )
+    assert found == child2
+
+    found = child1.find_child(
+        lambda n: n.info is not None and n.info.get("type") == "Assign"
+    )
+>>>>>>> origin/main
     assert found is None
 
 
@@ -110,7 +141,12 @@ def test_find_sibling():
     root.add_child(child2)
 
     found = child1.find_sibling(
+<<<<<<< HEAD
         lambda n: n.info is not None and n.info.get("type") == "FunctionDef")
+=======
+        lambda n: n.info is not None and n.info.get("type") == "FunctionDef"
+    )
+>>>>>>> origin/main
     assert found == child2
 
 
@@ -126,23 +162,41 @@ def test_find():
 
     # Find in current node
 
+<<<<<<< HEAD
     found = root.find(
         lambda n: n.info is not None and n.info.get("type") == "Module")
+=======
+    found = root.find(lambda n: n.info is not None and n.info.get("type") == "Module")
+>>>>>>> origin/main
     assert found == root
 
     # Find in parent
     found = grandchild.find(
+<<<<<<< HEAD
         lambda n: n.info is not None and n.info.get("type") == "FunctionDef")
     assert found == child1
 
     # Find in children
     found = root.find(
         lambda n: n.info is not None and n.info.get("name") == "hello")
+=======
+        lambda n: n.info is not None and n.info.get("type") == "FunctionDef"
+    )
+    assert found == child1
+
+    # Find in children
+    found = root.find(lambda n: n.info is not None and n.info.get("name") == "hello")
+>>>>>>> origin/main
     assert found == child1
 
     # Find in siblings
     found = child1.find(
+<<<<<<< HEAD
         lambda n: n.info is not None and n.info.get("name") == "MyClass")
+=======
+        lambda n: n.info is not None and n.info.get("name") == "MyClass"
+    )
+>>>>>>> origin/main
     assert found == child2
 
 
@@ -243,6 +297,7 @@ def test_position_format():
 
 if __name__ == "__main__":
     pytest.main([__file__])
+<<<<<<< HEAD
 
 
 def test_node_navigation():
@@ -264,3 +319,5 @@ def test_node_navigation():
     # Test previous sibling
     assert child2.previous == child1
     assert child1.previous is None
+=======
+>>>>>>> origin/main
