@@ -271,11 +271,11 @@ def demonstrate_ast_parsing():
 
     # Find class definition node
     class_node = tree.root.find(
-        lambda n: n is not None
-        and hasattr(n, "info")
-        and n.info is not None
-        and isinstance(n.info, dict)
-        and n.info.get("type") == "ClassDef"
+        lambda n: (n is not None and 
+                  hasattr(n, "info") and 
+                  n.info is not None and
+                  isinstance(n.info, dict) and
+                  n.info.get("type") == "ClassDef")
     )
     print("=== AST Node Info Example ===")
     if class_node and hasattr(class_node, "ast_node") and class_node.ast_node:
@@ -312,9 +312,10 @@ def demonstrate_node_navigation():
     root.add_child(child2)
 
     # Demonstrate navigation
-    print(f"Child 1's parent: {child1.parent.info if child1.parent else None}")
-    print(f"Child 1's next sibling: {child1.next.info if child1.next else None}")
-    print(
-        "Child 2's previous sibling:"
-        f" {child2.previous.info if child2.previous else None}"
-    )
+    parent_info = child1.parent.info if child1.parent else None
+    next_info = child1.next.info if child1.next else None
+    prev_info = child2.previous.info if child2.previous else None
+    
+    print(f"Child 1's parent: {parent_info}")
+    print(f"Child 1's next sibling: {next_info}")
+    print(f"Child 2's previous sibling: {prev_info}")
