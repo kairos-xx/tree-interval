@@ -235,15 +235,21 @@ def demonstrate_frame_analyzer():
             print("\nFull AST Tree:")
             # Color nodes based on type and mark current node
             for node in tree.flatten():
+                node.rich_style = RichStyle(color="green", bold=True) # WORKS 
+                node.style = LeafStyle(color="#ff0000", bold=True) # WORKS
                 if node == current_node:
+                    print("IM CURRENT NODE") # DOESNT WORK 
                     node.rich_style = RichStyle(color="green", bold=True)
                     node.style = LeafStyle(color="#ff0000", bold=True)
                     node.selected = True
                 elif isinstance(node.info, dict) and "type" in node.info:
+                    print(node.info) # DOESNT WORK 
                     if node.info["type"] == "Module":
+                        print("IM MODULE") # DOESNT WORK 
                         node.rich_style = RichStyle(color="green", bold=True)
                         node.style = LeafStyle(color="#00ff00", bold=True)
                     elif node.info["type"] == "FunctionDef":
+                        print("IM FunctionDef") # DOESNT WORK 
                         node.rich_style = RichStyle(color="blue", bold=False)
                         node.style = LeafStyle(color="#0000ff", bold=False)
                     else:
