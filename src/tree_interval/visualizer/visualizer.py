@@ -105,7 +105,7 @@ class TreeVisualizer:
 
             children = node.children
             for i, child in enumerate(children):
-                new_prefix = ("    " if is_last else "│   ")
+                new_prefix = prefix + ("    " if is_last else "│   ")
                 _print_node(child, new_prefix, i == len(children) - 1,
                             level + 1)
 
