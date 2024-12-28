@@ -62,7 +62,7 @@ def demonstrate_leaves():
     print("Leaf from tuple:", leaf2)
 
     # Create leaf with separate arguments
-    leaf3 = Leaf(60, None, 90, "Using Args")
+    leaf3 = Leaf(60, "Using Args", 90)
     print("Leaf from args:", leaf3)
 
 

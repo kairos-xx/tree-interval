@@ -4,7 +4,10 @@ Core tree data structures.
 This module contains the core Tree and Leaf classes used across the project.
 """
 
+from dis import Positions as disposition
+from inspect import getframeinfo, getsource
 from json import dumps, loads
+from types import FrameType
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -27,36 +30,154 @@ class Position:
 
     def __init__(
         self,
-        start: Optional[int] = None,
+        start: Optional[Union[int, disposition, FrameType]] = None,
         end: Optional[int] = None,
+        source: Optional[Union[str, dict]] = None,
         info: Optional[Any] = None,
+        selected: bool = False,
     ):
-        self.selected: bool = False
-        self.start = start
-        self.end = end
         self.info = info
+        self.selected = selected
         self._lineno: Optional[int] = None
         self._end_lineno: Optional[int] = None
         self._col_offset: Optional[int] = None
-        self._end_col_offset: Optional[int] = (end - start if start is not None
-                                               and end is not None else 0)
+        self._end_col_offset: Optional[int] = None
+        if isinstance(start, FrameType):
+            frame = start
+            frame_info = getframeinfo(frame)
+            common_indent = 0
+            if source is None:
+                try:
+                    source = getsource(frame.f_code)
+                    # Calculate indentation
+                    lines = source.splitlines()
+                    common_indent = (min(
+                        len(line) - len(line.lstrip()) for line in lines
+                        if line.strip()))
+                    # Remove indentation and join
+                    source = "\n".join(
+                        line[common_indent:] if line.strip() else line
+                        for line in lines)
+                except (OSError, TypeError):
+                    source = None
+            pos = frame_info.positions if frame_info else None
+            if pos and frame and frame.f_code:
+                line_offset = (frame.f_code.co_firstlineno -
+                               1 if frame.f_code.co_firstlineno else 0)
+                self._lineno = pos.lineno if hasattr(pos, "lineno") else None
+                self._end_lineno = (pos.end_lineno if hasattr(
+                    pos, "end_lineno") else None)
+                self._col_offset = (pos.col_offset if hasattr(
+                    pos, "col_offset") else None)
+                self._end_col_offset = (pos.end_col_offset if hasattr(
+                    pos, "end_col_offset") else None)
+                if source is not None and isinstance(source, str):
+                    lines = source.split("\n")
+                    line_offset_val = (int(line_offset) if isinstance(
+                        line_offset, int) else 0)
+                    if (self._lineno is not None
+                            and self._col_offset is not None and lines):
+                        adjusted_lineno = (int(self._lineno) if isinstance(
+                            self._lineno, int) else 1)
+                        line_idx = max(0,
+                                       adjusted_lineno - line_offset_val - 1)
+                        pos_start = (sum(
+                            len(line) + 1 - common_indent
+                            for line in lines[:line_idx]) if lines else 0)
+                        pos_start = pos_start + (self._col_offset
+                                                 if self._col_offset
+                                                 is not None else 0)
+                        if (self._end_lineno is not None
+                                and self._end_col_offset is not None):
+                            end_line_idx = max(
+                                0,
+                                (int(self._end_lineno) if isinstance(
+                                    self._end_lineno, int) else 1) -
+                                line_offset_val - 1,
+                            )
+                            pos_end = (sum(
+                                len(line) + 1 - common_indent
+                                for line in lines[:end_line_idx])
+                                       if lines else pos_start)
+                            pos_end = pos_end + (self._end_col_offset
+                                                 if self._end_col_offset
+                                                 is not None else 0)
+                        else:
+                            pos_end = pos_start
+                        self.start = pos_start
+                        self.end = pos_end
+
+            elif pos and hasattr(pos, "col_offset") and hasattr(
+                    pos, "end_col_offset"):
+                self.start = (pos.col_offset if hasattr(pos, "col_offset")
+                              and pos.col_offset is not None else 0)
+                self.end = (pos.end_col_offset
+                            if hasattr(pos, "end_col_offset")
+                            and pos.end_col_offset is not None else 0)
+            else:
+                self.start = 0
+                self.end = 0
+        else:
+            if isinstance(start, disposition):
+                if isinstance(end, str):
+                    source = end
+                    end = None
+                dis_pos = start
+                pos_start = 0
+                pos_end = 0
+                if source is not None and isinstance(source, str):
+                    # Calculate start and end from line/col offsets
+                    lines = source.split("\n")
+                    lineno = int(getattr(dis_pos, "lineno", 1))
+                    end_lineno = int(getattr(dis_pos, "end_lineno", lineno))
+                    col_offset = int(getattr(dis_pos, "col_offset", 0))
+                    end_col_offset = int(
+                        getattr(dis_pos, "end_col_offset", col_offset))
+
+                    pos_start = (
+                        sum(len(line) + 1
+                            for line in lines[:lineno - 1]) + col_offset)
+                    pos_end = (
+                        sum(len(line) + 1 for line in lines[:end_lineno - 1]) +
+                        end_col_offset)
+                    self.start = pos_start
+                    self.end = pos_end
+                else:
+                    # Fallback to using line numbers as positions if no
+                    # source provided
+                    self.start = (dis_pos.col_offset
+                                  if dis_pos.col_offset is not None else 0)
+                    self.end = (dis_pos.end_col_offset
+                                if dis_pos.end_col_offset is not None else 0)
+            else:
+                if start is None or end is None:
+                    raise ValueError("Position start and end must not be None")
+                self.start = start
+                self.end = end
+
+            if isinstance(end, int) and isinstance(start, int):
+                self._end_col_offset: Optional[int] = (end or 0) - (start or 0)
         self.parent: Optional["Leaf"] = None
         self.children: List["Leaf"] = []
 
     @property
     def lineno(self) -> int:
+        """Get line number with fallback to 1."""
         return self._lineno if self._lineno is not None else 1
 
     @lineno.setter
     def lineno(self, value: Optional[int]) -> None:
+        """Set line number."""
         self._lineno = value
 
     @property
     def end_lineno(self) -> int:
+        """Get end line number with fallback to 1."""
         return self._end_lineno if self._end_lineno is not None else 1
 
     @end_lineno.setter
     def end_lineno(self, value: Optional[int]) -> None:
+        """Set end line number."""
         self._end_lineno = value
 
     @property
@@ -74,6 +195,10 @@ class Position:
     @end_col_offset.setter
     def end_col_offset(self, value: Optional[int]) -> None:
         self._end_col_offset = value
+
+    # Direct property access for offsets since they can be None
+    # col_offset = property(lambda self: self._col_offset)
+    # end_col_offset = property(lambda self: self._end_col_offset)
 
     @property
     def absolute_start(self) -> Optional[int]:
@@ -108,8 +233,7 @@ class Position:
             return f"Position(start={self.start}, end={self.end})"
 
     def __str__(self) -> str:
-        return (f"Position(start={self.start}, " + f"end={self.end}, " +
-                f"info={self.info})")
+        return f"Position(start={self.start}, end={self.end})"
 
     def find_parent(self, criteria: Callable[["Leaf"],
                                              bool]) -> Optional["Leaf"]:
@@ -141,28 +265,46 @@ class Position:
                 return child
         return None
 
+    def __eq__(self, other: Any) -> bool:
+        return self.start == other.start and self.end == other.end
+
 
 class Leaf:
     """
-    A node in the tree structure containing position and
-    information data.
+    A node in the tree structure containing position
+    and information data.
     """
 
     def __init__(
         self,
         position: Union[Position, tuple[int, int, Any], int],
-        end: Optional[int] = None,
+        second_arg: Optional[Any] = None,
+        third_arg: Optional[Any] = None,
+        *,
         info: Optional[Any] = None,
     ) -> None:
-        self.next: Optional['Leaf'] = None
-        self.previous: Optional['Leaf'] = None 
-        self.selected: bool = False
+        if position is None:
+            raise ValueError("Position cannot be None")
+
+        # Handle info keyword argument if provided
+        if info is not None:
+            final_info = info
+            end = second_arg
+        # Otherwise handle positional arguments
+        elif isinstance(second_arg, (str, dict)):
+            final_info, end = second_arg, third_arg
+        else:
+            final_info, end = third_arg, second_arg
+
         if isinstance(position, Position):
             self.position = position
+            self._info = final_info
         elif isinstance(position, tuple):
-            self.position = Position(*position)
+            self.position = Position(position[0], position[1])
+            self._info = position[2] if len(position) > 2 else info
         else:
-            self.position = Position(position, end, info)
+            self.position = Position(position, end)
+            self._info = final_info
 
         # Initialize end_col_offset if not set
         if (self.position._end_col_offset is None
@@ -184,7 +326,7 @@ class Leaf:
 
     @property
     def info(self) -> Optional[Any]:
-        return self.position.info
+        return self._info
 
     @property
     def size(self) -> Optional[int]:
@@ -208,25 +350,52 @@ class Leaf:
     def end_col_offset(self) -> Optional[int]:
         return self.position._end_col_offset
 
+    @property
+    def selected(self) -> bool:
+        return self.position.selected
+
+    @selected.setter
+    def selected(self, value: bool) -> None:
+        self.position.selected = value
+
     def add_child(self, child: "Leaf") -> None:
         """Add a child node to this leaf."""
         child.parent = self
         self.children.append(child)
 
-    def find_best_match(self, start: Optional[int], end: Optional[int]) -> Optional["Leaf"]:
+    def find_best_match(
+        self,
+        start: int,
+        end: int,
+        best_match_distance: Optional[Union[int, float]] = None,
+    ) -> Optional["Leaf"]:
         """Find the leaf that best matches the given range."""
-        if self.start is None or self.end is None or start is None or end is None:
+        if self.start is None or self.end is None:
             return None
 
-        if start >= self.start and end <= self.end:
-            best_match = self
-            for child in self.children:
-                child_match = child.find_best_match(start, end)
-                if (child_match and child_match.size and best_match.size
-                        and child_match.size < best_match.size):
+        def calc_distance(leaf: "Leaf") -> int:
+            leaf_start = leaf.start or 0
+            leaf_end = leaf.end or 0
+            return ((start - leaf_start) if start > leaf_start else
+                    (leaf_start - start)) + +(
+                        (end - leaf_end) if end > leaf_end else
+                        (leaf_end - end))
+
+        best_match_distance = (float("inf") if best_match_distance is None else
+                               best_match_distance)
+        distance = calc_distance(self)
+        if distance < best_match_distance:
+            best_match_distance = distance
+        best_match = self
+        for child in self.children:
+            child_match = child.find_best_match(start, end,
+                                                best_match_distance)
+            if child_match is not None:
+                distance = calc_distance(child_match)
+                if distance < best_match_distance:
+                    best_match_distance = distance
                     best_match = child_match
-            return best_match
-        return None
+        return best_match
 
     def find_common_ancestor(self, other: "Leaf") -> Optional["Leaf"]:
         """Find the first common ancestor between this leaf and another."""
@@ -328,7 +497,7 @@ class Leaf:
         data = {
             "start": self.start,
             "end": self.end,
-            "info": self.info,
+            "info": self._info,
             "size": self.size,
             "position": {
                 "lineno": self.lineno,
@@ -358,8 +527,70 @@ class Leaf:
             return (f"Position(start={self.start}, " + f"end={self.end}, " +
                     f"size={self.size})")
 
+    def _get_parent(self) -> Optional["Leaf"]:
+        """Safe accessor for parent property."""
+        return self.parent if self.parent is not None else None
+
+    @property
+    def next(self) -> Optional["Leaf"]:
+        """Get the next leaf node in the tree traversal order."""
+        parent = self._get_parent()
+        if parent is None:
+            return None
+
+        siblings = parent.children
+        try:
+            idx = siblings.index(self)
+            if idx < len(siblings) - 1:
+                return siblings[idx + 1]
+            # If last sibling, get first child of next parent
+            next_parent = parent.next
+            if next_parent is not None and next_parent.children:
+                return next_parent.children[0]
+        except ValueError:
+            pass
+        return None
+
+    @property
+    def previous(self) -> Optional["Leaf"]:
+        """Get the previous leaf node in the tree traversal order."""
+        parent = self._get_parent()
+        if parent is None:
+            return None
+
+        siblings = parent.children
+        try:
+            idx = siblings.index(self)
+            if idx > 0:
+                return siblings[idx - 1]
+            # If first sibling, get last child of previous parent
+            prev_parent = parent.previous
+            if prev_parent is not None and prev_parent.children:
+                return prev_parent.children[-1]
+        except ValueError:
+            pass
+        return None
+
+    def get_ancestors(self) -> List["Leaf"]:
+        """Get all ancestor nodes of this leaf."""
+        ancestors = []
+        current = self.parent
+        while current:
+            ancestors.append(current)
+            current = current.parent
+        return ancestors
+
     def __repr__(self) -> str:
-        return f"Leaf(start={self.start}, end={self.end}, info={self.info})"
+        if isinstance(self._info, dict):
+            info_str = ("Info(" + ", ".join(f"{k}={repr(v)}"
+                                            for k, v in self._info.items()) +
+                        ")")
+        else:
+            info_str = repr(self._info)
+        return f"Leaf(start={self.start}, end={self.end}, info={info_str})"
+
+    def match(self, other: Any):
+        return self.position == other.position  # and self.info == other.info
 
 
 class Tree(Generic[T]):
@@ -429,7 +660,7 @@ class Tree(Generic[T]):
         return {
             "start": node.start,
             "end": node.end,
-            "info": node.info,
+            "info": node._info,
             "children": [self._node_to_dict(child) for child in node.children],
         }
 
