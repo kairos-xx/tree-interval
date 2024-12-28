@@ -223,6 +223,8 @@ def demonstrate_frame_analyzer():
             print("\nFull AST Tree:")
             printer = RichTreePrinter()
             printer.print_tree(tree)
+            TreeVisualizer.visualize(tree, VisualizationConfig(position_format="position"))
+            
         return x
 
     # Execute the function to perform analysis
