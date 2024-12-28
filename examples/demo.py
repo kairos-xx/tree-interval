@@ -1,9 +1,10 @@
 """
 Comprehensive demonstration of all features of the tree interval package.
 """
-
 from rich.style import Style as RichStyle
+
 from src.tree_interval import (
+    AstTreeBuilder,
     Leaf,
     Position,
     Tree,
@@ -11,7 +12,6 @@ from src.tree_interval import (
     VisualizationConfig,
 )
 from src.tree_interval.rich_printer import RichTreePrinter
-from tree_interval import AstTreeBuilder
 
 
 def demonstrate_positions():
@@ -71,19 +71,19 @@ def demonstrate_leaves():
 def demonstrate_tree_operations():
     """Demonstrates various tree operations including styling."""
     print("\n=== Tree Operations ===")
-    
+
     # Add styling examples
     print("\n=== Styling Examples ===")
     root = Leaf(Position(0, 100), info={"type": "Module"})
     root.rich_style = RichStyle(color="green", bold=True)
-    
+
     child = Leaf(Position(10, 50), info={"type": "FunctionDef"})
     child.rich_style = RichStyle(color="blue", bold=False)
-    
+
     tree = Tree("Styled Example")
     tree.root = root
     tree.add_leaf(child)
-    
+
     printer = RichTreePrinter()
     printer.print_tree(tree)
     # Create tree
@@ -329,4 +329,3 @@ if __name__ == "__main__":
     demonstrate_dot_notation()
     demonstrate_ast_parsing()
     demonstrate_node_navigation()
-
