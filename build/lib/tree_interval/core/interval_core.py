@@ -51,9 +51,9 @@ class Position:
                     source = getsource(frame.f_code)
                     # Calculate indentation
                     lines = source.splitlines()
-                    common_indent = (min(
+                    common_indent = min(
                         len(line) - len(line.lstrip()) for line in lines
-                        if line.strip()))
+                        if line.strip())
                     # Remove indentation and join
                     source = "\n".join(
                         line[common_indent:] if line.strip() else line
@@ -73,12 +73,12 @@ class Position:
                     pos, "end_col_offset") else None)
                 if source is not None and isinstance(source, str):
                     lines = source.split("\n")
-                    line_offset_val = (int(line_offset) if isinstance(
-                        line_offset, int) else 0)
+                    line_offset_val = int(line_offset) if isinstance(
+                        line_offset, int) else 0
                     if (self._lineno is not None
                             and self._col_offset is not None and lines):
-                        adjusted_lineno = (int(self._lineno) if isinstance(
-                            self._lineno, int) else 1)
+                        adjusted_lineno = int(self._lineno) if isinstance(
+                            self._lineno, int) else 1
                         line_idx = max(0,
                                        adjusted_lineno - line_offset_val - 1)
                         pos_start = (sum(
@@ -109,11 +109,11 @@ class Position:
 
             elif pos and hasattr(pos, "col_offset") and hasattr(
                     pos, "end_col_offset"):
-                self.start = (pos.col_offset if hasattr(pos, "col_offset")
-                              and pos.col_offset is not None else 0)
-                self.end = (pos.end_col_offset
-                            if hasattr(pos, "end_col_offset")
-                            and pos.end_col_offset is not None else 0)
+                self.start = pos.col_offset if hasattr(
+                    pos, "col_offset") and pos.col_offset is not None else 0
+                self.end = pos.end_col_offset if hasattr(
+                    pos,
+                    "end_col_offset") and pos.end_col_offset is not None else 0
             else:
                 self.start = 0
                 self.end = 0
@@ -134,17 +134,17 @@ class Position:
                     end_col_offset = int(
                         getattr(dis_pos, "end_col_offset", col_offset))
 
-                    pos_start = (
-                        sum(len(line) + 1
-                            for line in lines[:lineno - 1]) + col_offset)
-                    pos_end = (
-                        sum(len(line) + 1 for line in lines[:end_lineno - 1]) +
-                        end_col_offset)
+                    pos_start = sum(
+                        len(line) + 1
+                        for line in lines[:lineno - 1]) + col_offset
+                    pos_end = sum(
+                        len(line) + 1
+                        for line in lines[:end_lineno - 1]) + end_col_offset
                     self.start = pos_start
                     self.end = pos_end
                 else:
-                    # Fallback to using line numbers as positions if no
-                    # source provided
+                    # Fallback to using line numbers as positions
+                    # if no source provided
                     self.start = (dis_pos.col_offset
                                   if dis_pos.col_offset is not None else 0)
                     self.end = (dis_pos.end_col_offset
@@ -196,10 +196,6 @@ class Position:
     def end_col_offset(self, value: Optional[int]) -> None:
         self._end_col_offset = value
 
-    # Direct property access for offsets since they can be None
-    # col_offset = property(lambda self: self._col_offset)
-    # end_col_offset = property(lambda self: self._end_col_offset)
-
     @property
     def absolute_start(self) -> Optional[int]:
         return self.start if self.start is not None else None
@@ -212,13 +208,11 @@ class Position:
         """Display position with specific format."""
         if position_format == "position":
             col_offset = self.col_offset if self.col_offset is not None else 0
-            end_col_offset = (self.end_col_offset
-                              if self.end_col_offset is not None else 0)
-            return (f"Position(start={self.start}, " + f"end={self.end}, " +
-                    f"lineno={self.lineno}, " +
-                    f"end_lineno={self.end_lineno}, " +
-                    f"col_offset={col_offset}, " +
-                    f"end_col_offset={end_col_offset})")
+            end_col_offset = (self.end_col_offset if self.end_col_offset is not None else 0)
+            return (
+                f"Position(start={self.start}, end={self.end}, "
+                f"lineno={self.lineno}, end_lineno={self.end_lineno}, "
+                f"col_offset={col_offset}, end_col_offset={end_col_offset})")
         elif position_format == "tuple":
             values = [
                 self.start,
@@ -277,44 +271,38 @@ class Leaf:
 
     def __init__(
         self,
-        position: Union[Position, tuple[int, int, Any], int],
-        second_arg: Optional[Any] = None,
-        third_arg: Optional[Any] = None,
-        *,
-        info: Optional[Any] = None,
-    ) -> None:
+        position: Union[Position, tuple, int, None],
+        info: Any = None,
+        end: Optional[int] = None,
+        style: Optional[Any] = None,
+        rich_style: Optional[Any] = None,
+    ):
         if position is None:
-            raise ValueError("Position cannot be None")
-
-        # Handle info keyword argument if provided
-        if info is not None:
-            final_info = info
-            end = second_arg
-        # Otherwise handle positional arguments
-        elif isinstance(second_arg, (str, dict)):
-            final_info, end = second_arg, third_arg
-        else:
-            final_info, end = third_arg, second_arg
+            position = Position(0, 0)
 
         if isinstance(position, Position):
             self.position = position
-            self._info = final_info
+            self._info = info
         elif isinstance(position, tuple):
             self.position = Position(position[0], position[1])
             self._info = position[2] if len(position) > 2 else info
         else:
             self.position = Position(position, end)
-            self._info = final_info
+            self._info = info
+
+        self.style = style
+        self.rich_style = rich_style
 
         # Initialize end_col_offset if not set
-        if (self.position._end_col_offset is None
-                and self.position._col_offset is not None):
+        if (self.position._end_col_offset is None and self.position._col_offset is not None):
             self.position._end_col_offset = self.position._col_offset + 20
 
         self.parent: Optional[Leaf] = None
         self.children: List[Leaf] = []
         self.ast_node: Optional[Any] = None
         self.attributes = NestedAttributes(self._as_dict())
+        self.style = style
+        self.rich_style = rich_style
 
     @property
     def start(self) -> Optional[int]:
@@ -377,12 +365,12 @@ class Leaf:
             leaf_start = leaf.start or 0
             leaf_end = leaf.end or 0
             return ((start - leaf_start) if start > leaf_start else
-                    (leaf_start - start)) + +(
+                    (leaf_start - start)) + (
                         (end - leaf_end) if end > leaf_end else
                         (leaf_end - end))
 
-        best_match_distance = (float("inf") if best_match_distance is None else
-                               best_match_distance)
+        best_match_distance = float(
+            "inf") if best_match_distance is None else best_match_distance
         distance = calc_distance(self)
         if distance < best_match_distance:
             best_match_distance = distance
@@ -506,6 +494,8 @@ class Leaf:
                 "end_col_offset": self.end_col_offset,
             },
             "children": [child._as_dict() for child in self.children],
+            "style": self.style,
+            "rich_style": self.rich_style,
         }
         self.attributes = NestedAttributes(data)
         return data
@@ -513,19 +503,18 @@ class Leaf:
     def position_as(self, position_format: str = "default") -> str:
         """Display node with specific position format."""
         if position_format == "position":
-            return (f"Position(start={self.start}, " + f"end={self.end}, " +
-                    f"lineno={self.lineno}, " +
-                    f"end_lineno={self.end_lineno}, " +
-                    f"col_offset={self.col_offset}, " +
-                    f"end_col_offset={self.end_col_offset}, " +
-                    f"size={self.size})")
+            return (
+                f"Position(start={self.start}, end={self.end}, "
+                f"lineno={self.lineno}, end_lineno={self.end_lineno}, "
+                f"col_offset={self.col_offset}, "+f"end_col_offset={self.end_col_offset}, "
+                f"size={self.size})")
         elif position_format == "tuple":
-            return (f"({self.start}, " + f"{self.end}, " + f"{self.lineno}, " +
-                    f"{self.end_lineno}, " + f"{self.col_offset}, " +
-                    f"{self.end_col_offset})")
+            return (
+                f"({self.start}, {self.end}, {self.lineno}, "
+                f"{self.end_lineno}, {self.col_offset}, {self.end_col_offset})"
+            )
         else:
-            return (f"Position(start={self.start}, " + f"end={self.end}, " +
-                    f"size={self.size})")
+            return (f"Position(start={self.start}, end={self.end}, size={self.size})")
 
     def _get_parent(self) -> Optional["Leaf"]:
         """Safe accessor for parent property."""
@@ -582,15 +571,17 @@ class Leaf:
 
     def __repr__(self) -> str:
         if isinstance(self._info, dict):
-            info_str = ("Info(" + ", ".join(f"{k}={repr(v)}"
-                                            for k, v in self._info.items()) +
-                        ")")
+            info_str = "Info(" + ", ".join(
+                f"{k}={repr(v)}" for k, v in self._info.items()) + ")"
         else:
             info_str = repr(self._info)
         return f"Leaf(start={self.start}, end={self.end}, info={info_str})"
 
-    def match(self, other: Any):
-        return self.position == other.position  # and self.info == other.info
+    def match(self, other: Any) -> bool:
+        """Compare two nodes for equality."""
+        if not isinstance(other, Leaf):
+            return False
+        return self.position == other.position and self.info == other.info and self.start == other.start and self.end == other.end
 
 
 class Tree(Generic[T]):
@@ -662,6 +653,8 @@ class Tree(Generic[T]):
             "end": node.end,
             "info": node._info,
             "children": [self._node_to_dict(child) for child in node.children],
+            "style": node.style,
+            "rich_style": node.rich_style,
         }
 
     @classmethod
@@ -676,7 +669,13 @@ class Tree(Generic[T]):
     @staticmethod
     def _dict_to_node(data: Dict) -> Leaf:
         """Create a node from a dictionary."""
-        node = Leaf(data["start"], data["end"], data["info"])
+        start = int(data["start"]) if data["start"] is not None else None
+        end = int(data["end"]) if data["end"] is not None else None
+        node = Leaf(start,
+                    data["info"],
+                    end,
+                    style=data.get("style"),
+                    rich_style=data.get("rich_style"))
         for child_data in data["children"]:
             child = Tree._dict_to_node(child_data)
             node.add_child(child)
@@ -697,6 +696,8 @@ class NestedAttributes:
     info: Any
     size: Optional[int]
     children: List[Dict[str, Any]]
+    style: Optional[Any]
+    rich_style: Optional[Any]
 
     def __init__(self, data: Dict[str, Any]):
         for key, value in data.items():

@@ -85,21 +85,26 @@ class TreeVisualizer:
         def _print_node(node, prefix="", is_last=True, level=0):
             position_str = format_position(node)
             info_str = format_node_info(node)
-            prefix_spaces = "    " if level == 0 else prefix
-            connector = "┌── " if level == 0 else (
-                "└── " if is_last else "├── ")
-            # Color the text content but not the tree lines
-            if (hasattr(node, "selected") and node.selected
-                    or (hasattr(node, "position")
-                        and hasattr(node.position, "selected")
-                        and node.position.selected)):
-                color = "\033[91m"  # Bright red for selected nodes
+            prefix_spaces = "" if level == 0 else prefix
+            connector = "" if level == 0 else ("└── " if is_last else "├── ")
+
+            # Custom styling takes precedence
+            if hasattr(node, 'style') and node.style:
+                color = node.style.color.lstrip('#')
+                style_prefix = (f"\033[38;2;{int(color[:2], 16)};" +
+                                f"{int(color[2:4], 16)};" +
+                                f"{int(color[4:], 16)}m")
+                if node.style.bold:
+                    style_prefix = "\033[1m" + style_prefix
             else:
-                color = (TreeVisualizer.BLUE if level == 0 else
-                         (TreeVisualizer.GREEN
-                          if node.children else TreeVisualizer.YELLOW))
-            print(f"{prefix_spaces}{connector}{color}{position_str} " +
-                  f"{info_str}{TreeVisualizer.RESET}")
+                # Default styling
+                style_prefix = TreeVisualizer.BLUE if level == 0 else (
+                    TreeVisualizer.GREEN
+                    if node.children else TreeVisualizer.YELLOW)
+            style_suffix = TreeVisualizer.RESET
+
+            print(f"{prefix_spaces}{connector}{style_prefix}{position_str} " +
+                  f"{info_str}{style_suffix}")
 
             children = node.children
             for i, child in enumerate(children):
