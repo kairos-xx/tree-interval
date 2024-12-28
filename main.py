@@ -231,6 +231,19 @@ def demonstrate_frame_analyzer():
 
         if tree and tree.root:
             print("\nFull AST Tree:")
+            # Color nodes based on type and mark current node
+            for node in tree.flatten():
+                if node == current_node:
+                    node.style = LeafStyle(color="#ff0000", bold=True)
+                    node.selected = True
+                elif isinstance(node.info, dict) and "type" in node.info:
+                    if node.info["type"] == "Module":
+                        node.style = LeafStyle(color="#00ff00", bold=True)
+                    elif node.info["type"] == "FunctionDef":
+                        node.style = LeafStyle(color="#0000ff", bold=False)
+                    else:
+                        node.style = LeafStyle(color="#888888", bold=False)
+
             printer = RichTreePrinter()
             printer.print_tree(tree)
             TreeVisualizer.visualize(tree)
