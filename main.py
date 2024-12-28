@@ -216,10 +216,9 @@ def demonstrate_frame_analyzer():
         current_node = analyzer.find_current_node()
         print("Current Node Information:")
         print(f"Node: {current_node if current_node else None}")
-        current_node.selected=True
-        print(f"Node: {current_node.selected if current_node else None}")
-        # Build and show tree
+                # Build and show tree
         tree = analyzer.build_tree()
+        
         if tree and tree.root:
             print("\nFull AST Tree:")
             printer = RichTreePrinter()

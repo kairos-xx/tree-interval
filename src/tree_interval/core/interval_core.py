@@ -4,6 +4,7 @@ Core tree data structures.
 This module contains the core Tree and Leaf classes used across the project.
 """
 
+from dis import Position as disposition
 from json import dumps, loads
 from typing import (
     TYPE_CHECKING,
@@ -26,11 +27,14 @@ T = TypeVar("T")
 class Position:
     def __init__(
         self,
-        start: int,
-        end: int,
+        start: Optional[int]=None,
+        end: Optional[int]=None,
+        position:Optional[disposition]=None,
         info: Optional[Any] = None,
         selected: bool = False,
     ):
+        if isinstance(start, disposition):
+            position = start
         self.selected = selected
         if start is None or end is None:
             raise ValueError("Position start and end must not be None")
@@ -144,6 +148,9 @@ class Position:
                 return child
         return None
 
+    def __eq__(self, other: Any) -> bool:
+        return self.start == other.start and self.end == other.end
+
 
 class Leaf:
     """A node in the tree structure containing position and information data."""
@@ -215,27 +222,11 @@ class Leaf:
 
     @selected.setter
     def selected(self, value: bool) -> None:
-        print(f"{id(self)} Setting selected to {value} ")
         self.position.selected = value
 
     def add_child(self, child: "Leaf") -> None:
         """Add a child node to this leaf."""
         child.parent = self
-        # Preserve all node information including selected state
-        print(f"{id(child)} add_child - selected {child.selected}") 
-        if isinstance(child.position, Position):
-            selected_state = child.position.selected  # Store selected state
-            child.position = Position(
-                child.position.start,
-                child.position.end,
-                child.position.info,
-                selected_state  # Pass the stored selected state
-            )
-            child.position._lineno = child.lineno
-            child.position._end_lineno = child.end_lineno
-            child.position._col_offset = child.col_offset
-            child.position._end_col_offset = child.end_col_offset
-            child.position.selected = selected_state  # Ensure selected state is preserved
         self.children.append(child)
 
     def find_best_match(self, start: int, end: int) -> Optional["Leaf"]:
@@ -449,6 +440,9 @@ class Leaf:
     def __repr__(self) -> str:
         return f"Leaf(start={self.start}, end={self.end}, info={self.info})"
 
+    def match (self, other: Any) :
+        return self.position == other.position #and self.info == other.info
+    
 
 class Tree(Generic[T]):
     """A tree structure containing nodes with position information."""
@@ -544,6 +538,7 @@ class Tree(Generic[T]):
 
         TreeVisualizer.visualize(self, config)
 
+    
 
 class NestedAttributes:
     position: "NestedAttributes"

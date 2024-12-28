@@ -64,7 +64,6 @@ class TreeVisualizer:
             info_str = format_node_info(node)
             prefix_spaces = "    " if level == 0 else prefix
             connector = "┌── " if level == 0 else ("└── " if is_last else "├── ")
-            print(node,node.selected)
             # Color the text content but not the tree lines
             if hasattr(node, 'selected') and node.selected or (hasattr(node, 'position') and hasattr(node.position, 'selected') and node.position.selected):
                 
