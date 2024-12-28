@@ -15,8 +15,6 @@ from src.tree_interval import VisualizationConfig
 from src.tree_interval.rich_printer import RichPrintConfig
 from src.tree_interval.rich_printer import RichTreePrinter
 
-from ast import unparse
-
 
 def demonstrate_positions():
     print("\n=== Position Examples ===")
@@ -218,7 +216,7 @@ def demonstrate_frame_analyzer():
         # Show current node
         current_node = analyzer.find_current_node()
         print("Current Node Information:")
-        print(f"Node: {unparse(current_node.ast_node) if current_node else None}")
+        print(f"Node: {current_node} if current_node else None}")
         # Build and show tree
         tree = analyzer.build_tree()
 
