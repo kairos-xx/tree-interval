@@ -55,7 +55,6 @@ class FrameAnalyzer:
                         parent_node = nodes_by_pos[(parent_start, parent_end)]
                         if not any(p for p in parent_node.get_ancestors() 
                                  if p.start <= start and p.end >= end):
-                            print("-----",current_node)
                             parent_node.add_child(current_node)
                             break
         return tree
