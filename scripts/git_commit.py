@@ -2,11 +2,6 @@
 import os
 import subprocess
 from datetime import datetime
-import zipfile
-import urllib.request
-import json
-from pathlib import Path
-import sys
 from typing import List
 
 # Custom list of patterns to ignore
@@ -20,7 +15,11 @@ CUSTOM_IGNORE = [
 def clean_merge_conflicts(file_path: str) -> None:
     """Remove merge conflict markers from a file."""
     try:
-        with open(file_path, 'r') as f:
+        # Skip binary files and non-text files
+        if os.path.splitext(file_path)[1] in ['.png', '.jpg', '.zip', '.pyc']:
+            return
+
+        with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
         
         # Skip if no conflict markers
@@ -33,13 +32,13 @@ def clean_merge_conflicts(file_path: str) -> None:
         skip_mode = False
         
         for line in lines:
-            if line.startswith('<<<<<<< HEAD'):
+            if line.strip().startswith('<<<<<<< HEAD'):
                 skip_mode = False
                 continue
-            elif line.startswith('======='):
+            elif line.strip().startswith('======='):
                 skip_mode = True
                 continue
-            elif line.startswith('>>>>>>> origin/main'):
+            elif line.strip().startswith('>>>>>>> origin/main'):
                 skip_mode = False
                 continue
             
@@ -47,22 +46,29 @@ def clean_merge_conflicts(file_path: str) -> None:
                 cleaned_lines.append(line)
         
         # Write back cleaned content
-        with open(file_path, 'w') as f:
+        with open(file_path, 'w', encoding='utf-8') as f:
             f.write('\n'.join(cleaned_lines))
+        print(f"✅ Cleaned merge conflicts in {file_path}")
             
     except Exception as e:
-        print(f"Error cleaning merge conflicts in {file_path}: {e}")
+        print(f"❌ Error cleaning merge conflicts in {file_path}: {e}")
 
-def get_files_to_process() -> List[str]:
-    """Get list of files to process, excluding ignored patterns."""
+def get_all_files(directory: str = '.') -> List[str]:
+    """Get list of all files recursively."""
     files = []
-    for root, dirs, filenames in os.walk('.'):
+    for root, dirs, filenames in os.walk(directory):
         dirs[:] = [d for d in dirs if not d.startswith('.') and d not in CUSTOM_IGNORE]
         for filename in filenames:
             filepath = os.path.join(root, filename)
-            if not any(ignore in filepath for ignore in CUSTOM_IGNORE) and filename not in CUSTOM_IGNORE:
+            if not any(ignore in filepath for ignore in CUSTOM_IGNORE):
                 files.append(filepath)
     return files
+
+def clean_all_files() -> None:
+    """Clean merge conflicts in all files."""
+    files = get_all_files()
+    for file in files:
+        clean_merge_conflicts(file)
 
 def commit_changes():
     """Commit and push changes to git."""
@@ -72,10 +78,8 @@ def commit_changes():
             subprocess.run(['git', 'config', 'user.email', "noreply@replit.com"], check=True)
             subprocess.run(['git', 'config', 'user.name', "Replit"], check=True)
         
-        # Clean merge conflicts in all files
-        files = get_files_to_process()
-        for file in files:
-            clean_merge_conflicts(file)
+        # Clean merge conflicts in all files first
+        clean_all_files()
         
         subprocess.run(['git', 'add', '.'], check=True)
         message = f"Auto commit: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
@@ -88,7 +92,7 @@ def commit_changes():
 def main():
     """Run all operations."""
     print("🚀 Starting automated operations...")
-    print("\nCommitting changes...")
+    print("\nCleaning merge conflicts and committing changes...")
     commit_changes()
     print("\n✨ All operations completed!")
 
