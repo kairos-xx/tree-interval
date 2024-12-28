@@ -215,13 +215,14 @@ class Leaf:
 
     @selected.setter
     def selected(self, value: bool) -> None:
-        print(id(self))
+        print(f"{id(self)} Setting selected to {value} ")
         self.position.selected = value
 
     def add_child(self, child: "Leaf") -> None:
         """Add a child node to this leaf."""
         child.parent = self
         # Preserve all node information
+        print(f"{id(child)} add_child - selected {child.selected}") 
         if isinstance(child.position, Position):
             child.position = Position(
                 child.position.start,
