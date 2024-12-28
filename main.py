@@ -254,11 +254,11 @@ def demonstrate_frame_analyzer():
                     print("Node info:", node.info)
                     if node_type == "Module":
                         print("Found Module node")
-                        node.rich_style = RichStyle(color="green", bold=True)
+                        node.rich_style = RichStyle(color="blue", bold=True)
                         node.style = LeafStyle(color="#00ff00", bold=True)
                     elif node_type == "FunctionDef":
                         print("Found FunctionDef node")
-                        node.rich_style = RichStyle(color="blue", bold=False)
+                        node.rich_style = RichStyle(color="red", bold=False)
                         node.style = LeafStyle(color="#0000ff", bold=False)
 
             printer = RichTreePrinter()
