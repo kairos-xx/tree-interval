@@ -1,8 +1,8 @@
-
 """Examples demonstrating tree node styling capabilities."""
-from typing import Dict, Any
+from typing import Dict
 
 from rich.style import Style as RichStyle
+
 from src.tree_interval import Leaf, Position, Tree
 from src.tree_interval.rich_printer import RichPrintConfig, RichTreePrinter
 
@@ -10,13 +10,16 @@ from src.tree_interval.rich_printer import RichPrintConfig, RichTreePrinter
 def example_syntax_highlighting():
     """Demonstrates syntax-highlighting style tree visualization."""
     tree = Tree("AST Example")
-    
+
     # Create nodes with different types
     root = Leaf(Position(0, 100), info={"type": "Module", "name": "main"})
-    func_def = Leaf(Position(10, 90), 
-                    info={"type": "FunctionDef", "name": "process_data"})
+    func_def = Leaf(Position(10, 90),
+                    info={
+                        "type": "FunctionDef",
+                        "name": "process_data"
+                    })
     args = Leaf(Position(20, 30), info={"type": "Arguments"})
-    
+
     # Build tree structure
     tree.root = root
     tree.add_leaf(func_def)
