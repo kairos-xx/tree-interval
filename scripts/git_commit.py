@@ -1,4 +1,3 @@
-
 import os
 import subprocess
 from datetime import datetime
@@ -25,18 +24,23 @@ CUSTOM_IGNORE = [
     "generated-icon.png"
 ]
 
+
 def init_git_repo():
     """Initialize git repository if not already initialized."""
     if not os.path.exists('.git'):
         try:
             subprocess.run(['git', 'init'], check=True)
-            subprocess.run(['git', 'config', 'user.email', "noreply@replit.com"], check=True)
-            subprocess.run(['git', 'config', 'user.name', "Replit"], check=True)
+            subprocess.run(
+                ['git', 'config', 'user.email', "noreply@replit.com"],
+                check=True)
+            subprocess.run(['git', 'config', 'user.name', "Replit"],
+                           check=True)
             print("Git repository initialized")
         except subprocess.CalledProcessError as e:
             print(f"Error initializing git repository: {e}")
             return False
     return True
+
 
 def get_files_to_commit() -> List[str]:
     """Get list of files to commit, excluding ignored patterns."""
@@ -57,24 +61,27 @@ def get_files_to_commit() -> List[str]:
 
     return files
 
+
 def commit_changes() -> None:
     """Commit changes to git repository."""
     if not init_git_repo():
         return
 
     message = f"Auto commit: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
-    
+
     try:
         # Fetch and merge remote changes
         subprocess.run(['git', 'fetch', 'origin', 'main'], check=True)
-        subprocess.run(['git', 'merge', 'origin/main', '--allow-unrelated-histories'], check=True)
-        
+        subprocess.run(
+            ['git', 'merge', 'origin/main', '--allow-unrelated-histories'],
+            check=True)
+
         # Add all files
         subprocess.run(['git', 'add', '.'], check=True)
-        
+
         # Commit
         subprocess.run(['git', 'commit', '-m', message], check=True)
-        
+
         # Push changes
         subprocess.run(['git', 'push', 'origin', 'main'], check=True)
         print("Changes committed and pushed successfully!")
@@ -82,6 +89,7 @@ def commit_changes() -> None:
     except subprocess.CalledProcessError as e:
         print(f"Error during git operations: {e}")
         print("Try resolving any merge conflicts manually")
+
 
 if __name__ == "__main__":
     commit_changes()
