@@ -27,19 +27,33 @@ T = TypeVar("T")
 class Position:
     def __init__(
         self,
-        start: Optional[int]=None,
+        start: Optional[Union[int, disposition]]=None,
         end: Optional[int]=None,
-        position:Optional[disposition]=None,
         info: Optional[Any] = None,
+        source: Optional[str] = None,
         selected: bool = False,
     ):
-        if isinstance(start, disposition):
-            position = start
         self.selected = selected
-        if start is None or end is None:
-            raise ValueError("Position start and end must not be None")
-        self.start = start
-        self.end = end
+        
+        if isinstance(start, disposition):
+            dis_pos = start
+            if source is not None:
+                # Calculate start and end from line/col offsets
+                lines = source.split('\n')
+                pos_start = sum(len(line) + 1 for line in lines[:dis_pos.lineno - 1]) + dis_pos.col_offset
+                pos_end = sum(len(line) + 1 for line in lines[:dis_pos.end_lineno - 1]) + dis_pos.end_col_offset
+                self.start = pos_start
+                self.end = pos_end
+            else:
+                # Fallback to using line numbers as positions if no source provided
+                self.start = dis_pos.lineno
+                self.end = dis_pos.end_lineno
+        else:
+            if start is None or end is None:
+                raise ValueError("Position start and end must not be None")
+            self.start = start
+            self.end = end
+            
         self.info = info
         self._lineno: Optional[int] = None
         self._end_lineno: Optional[int] = None
