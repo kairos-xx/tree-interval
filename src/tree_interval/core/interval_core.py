@@ -5,7 +5,9 @@ This module contains the core Tree and Leaf classes used across the project.
 """
 
 from dis import Positions as disposition
+from inspect import getframeinfo, getsource
 from json import dumps, loads
+from types import FrameType
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -27,15 +29,41 @@ T = TypeVar("T")
 class Position:
     def __init__(
         self,
-        start: Optional[Union[int, disposition]]=None,
+        start: Optional[Union[int, disposition, FrameType]]=None,
         end: Optional[int]=None,
         info: Optional[Any] = None,
         source: Optional[str] = None,
         selected: bool = False,
     ):
         self.selected = selected
-    
-        if isinstance(start, disposition):
+        
+        if isinstance(start, FrameType):
+            frame = start
+            frame_info = getframeinfo(frame)
+            if source is None:
+                try:
+                    source = getsource(frame.f_code)
+                    # Calculate indentation
+                    lines = source.splitlines()
+                    common_indent = min(len(line) - len(line.lstrip()) for line in lines if line.strip())
+                    # Remove indentation and join
+                    source = '\n'.join(line[common_indent:] if line.strip() else line for line in lines)
+                except (OSError, TypeError):
+                    source = None
+                    
+            pos = frame_info.positions
+            line_offset = frame.f_code.co_firstlineno - 1
+            if source is not None:
+                lines = source.split('\n')
+                pos_start = sum(len(line) + 1 for line in lines[:pos.lineno - line_offset - 1]) + pos.col_offset
+                pos_end = sum(len(line) + 1 for line in lines[:pos.end_lineno - line_offset - 1]) + pos.end_col_offset
+                self.start = pos_start
+                self.end = pos_end
+            else:
+                self.start = pos.col_offset
+                self.end = pos.end_col_offset
+                
+        elif isinstance(start, disposition):
             if isinstance(end,str):
                 source = end
                 end = None
