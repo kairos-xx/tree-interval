@@ -229,11 +229,19 @@ class Leaf:
     def __init__(
         self,
         position: Union[Position, tuple[int, int, Any], int],
-        info: Optional[Any] = None,
-        end: Optional[int] = None,
+        second_arg: Optional[Any] = None,
+        third_arg: Optional[Any] = None,
     ) -> None:
         if position is None:
             raise ValueError("Position cannot be None")
+            
+        # If second arg is str/dict, treat it as info with no end
+        if isinstance(second_arg, (str, dict)):
+            info, end = second_arg, third_arg
+        else:
+            # Otherwise treat it as end with third arg as info
+            info, end = third_arg, second_arg
+
         if isinstance(position, Position):
             self.position = position
             self._info = info
