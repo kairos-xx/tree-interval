@@ -216,26 +216,27 @@ def demonstrate_dot_notation():
     # Find parent using dot notation
     def safe_get_info(node):
         if not node or not hasattr(node, 'attributes'):
-            return None
+            return {}
         attrs = getattr(node, 'attributes', None)
         if not attrs:
-            return None
-        return getattr(attrs, 'info', None)
+            return {}
+        info = getattr(attrs, 'info', {})
+        return info if isinstance(info, dict) else {}
 
     found_parent = grandchild.find_parent(
-        lambda n: n and bool(n._as_dict()) and safe_get_info(n) and safe_get_info(n).get("type") == "FunctionDef"
+        lambda n: bool(n and n._as_dict() and safe_get_info(n).get("type") == "FunctionDef")
     )
     print("Parent:", safe_get_info(found_parent))
 
     # Find child using dot notation
     found_child = root.find_child(
-        lambda n: n and bool(n._as_dict()) and safe_get_info(n) and safe_get_info(n).get("type") == "ClassDef"
+        lambda n: bool(n and n._as_dict() and safe_get_info(n).get("type") == "ClassDef")
     )
     print("Child:", safe_get_info(found_child))
 
     # Find sibling using dot notation
     found_sibling = child1.find_sibling(
-        lambda n: n and n._as_dict() is not None and safe_get_info(n) and safe_get_info(n).get("name") == "MyClass"
+        lambda n: bool(n and n._as_dict() and safe_get_info(n).get("name") == "MyClass")
     )
     print("Sibling:", safe_get_info(found_sibling))
 
