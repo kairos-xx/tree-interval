@@ -25,17 +25,7 @@ def print_header(title, color=BLUE):
     print(f"║{title.center(width-2)}║")
     print(f"╚{'═' * (width-2)}╝{RESET}\n")
 
-def main():
-    # Basic Tree Demo
-    print_header("Basic Tree Operations", BLUE)
-    tree = Tree("Example")
-    root = Leaf(Position(0, 100), info="Root Node")
-    child = Leaf(Position(10, 50), info="Child Node")
-    tree.root = root
-    tree.add_leaf(child)
-    tree.visualize()
-
-    # Position Demo
+def demonstrate_positions():
     print_header("Position Examples", GREEN)
     pos = Position(0, 100)
     pos.lineno = 1
@@ -44,13 +34,24 @@ def main():
     pos.end_col_offset = 20
     print(f"{GREEN}Position: {pos.position_as('position')}{RESET}")
 
-    # Node Navigation
-    print_header("Node Navigation", YELLOW)
-    child.parent = root
-    print(f"{YELLOW}Parent of child: {child.parent.info}{RESET}")
-    print(f"{YELLOW}Children of root: {len(root.children)}{RESET}")
+def demonstrate_leaves():
+    print_header("Leaf Examples", YELLOW)
+    leaf1 = Leaf(Position(0, 100, "Using Position"))
+    print(f"{YELLOW}Leaf from Position: {leaf1}{RESET}")
+    leaf2 = Leaf((10, 50, "Using Tuple"))
+    print(f"{YELLOW}Leaf from tuple: {leaf2}{RESET}")
 
-    # Frame Analysis
+def demonstrate_tree_operations():
+    print_header("Tree Operations", BLUE)
+    tree = Tree("Example")
+    root = Leaf(Position(0, 100), info="Root Node")
+    child = Leaf(Position(10, 50), info="Child Node")
+    tree.root = root
+    tree.add_leaf(child)
+    print(f"{BLUE}Tree structure:{RESET}")
+    tree.visualize()
+
+def demonstrate_frame_analysis():
     print_header("Frame Analysis", MAGENTA)
     analyzer = FrameAnalyzer(sys._getframe())
     tree = analyzer.build_tree()
@@ -58,11 +59,24 @@ def main():
         print(f"{MAGENTA}Current frame analyzed successfully{RESET}")
         tree.visualize()
 
-    # Tree Search
+def demonstrate_tree_search():
     print_header("Tree Search Operations", CYAN)
+    tree = Tree("Search Example")
+    root = Leaf(Position(0, 100), info="Root")
+    child = Leaf(Position(10, 50), info="Child")
+    tree.root = root
+    tree.add_leaf(child)
     result = tree.find_best_match(10, 50)
     if result:
         print(f"{CYAN}Found node at position: {result.position_as()}{RESET}")
+
+def main():
+    print_header("Tree Interval Package Demo", BLUE)
+    demonstrate_positions()
+    demonstrate_leaves()
+    demonstrate_tree_operations()
+    demonstrate_frame_analysis()
+    demonstrate_tree_search()
 
 if __name__ == "__main__":
     main()
