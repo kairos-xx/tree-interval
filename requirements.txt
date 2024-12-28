@@ -3,3 +3,5 @@ pytest>=7.0.0
 pytest
 rich
 replit==4.1.0
+black
+flake8
