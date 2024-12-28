@@ -220,15 +220,14 @@ class Leaf:
         if start >= self.start and end <= self.end:
             best_match = self
             for child in self.children:
-                
                 child_match = child.find_best_match(start, end)
-                if child_match:
-                    print("---",start, end,best_match,child_match.size)
                 if (
-                    child_match
-                    and child_match.size
-                    and best_match.size
-                    and child_match.size < best_match.size
+                    child_match 
+                    and child_match.start is not None 
+                    and child_match.end is not None
+                    and start >= child_match.start 
+                    and end <= child_match.end
+                    and (child_match.end - child_match.start) <= (best_match.end - best_match.start)
                 ):
                     best_match = child_match
             return best_match
