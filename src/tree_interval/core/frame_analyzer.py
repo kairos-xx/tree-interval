@@ -33,9 +33,18 @@ class FrameAnalyzer:
 
         if 0 <= current_line - 1 < len(line_positions):
             start, end = line_positions[current_line - 1]
-            print(f"Start: {start}, End: {end}") 
-            self.current_node = self.tree.find_best_match(start, end)
-            # return self.current_node
+            print(f"Start: {start}, End: {end}")
+            # Find the largest node that contains the current line
+            candidates = [
+                node for node in self.tree.flatten()
+                if node.start <= start and node.end >= end
+            ]
+            if candidates:
+                # Sort by size descending, get the smallest that fully contains the line
+                self.current_node = sorted(
+                    candidates,
+                    key=lambda n: (-(n.end - n.start))
+                )[0]
         return self.current_node
 
     def build_tree(self) -> Optional[Tree]:
