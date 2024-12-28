@@ -82,11 +82,7 @@ class AstTreeBuilder:
             if 0 <= start_line < len(line_positions):
                 start_pos = line_positions[start_line][0] + col_offset
                 end_pos = line_positions[end_line][0] + end_col_offset
-                position = Position(
-                    start_pos,
-                    end_pos
-                   
-                )
+                position = Position(start_pos, end_pos)
                 position.lineno = lineno + self.line_offset
                 position.end_lineno = end_lineno + self.line_offset
                 position.col_offset = col_offset
@@ -119,13 +115,16 @@ class AstTreeBuilder:
         for node in walk(ast_tree):
             position = self._get_node_position(node, line_positions)
             if position:
-                leaf = Leaf(position, info={"name": node.__class__.__name__, "source": unparse(node)})
+                leaf = Leaf(
+                    position,
+                    info={"name": node.__class__.__name__, "source": unparse(node)},
+                )
                 leaf.ast_node = node
                 nodes_with_positions.append((position.start, position.end, leaf))
 
         # Sort nodes by position and size to ensure proper nesting
         nodes_with_positions.sort(key=lambda x: (x[0], -(x[1] - x[0])))
-        
+
         # Add nodes to tree maintaining proper hierarchy
         for _, _, leaf in nodes_with_positions:
             if not result_tree.root:
@@ -134,12 +133,17 @@ class AstTreeBuilder:
                 # Find the innermost containing node
                 best_match = None
                 for start, end, potential_parent in nodes_with_positions:
-                    if (start <= leaf.start and end >= leaf.end and 
-                        potential_parent != leaf and 
-                        (not best_match or 
-                         (end - start) < (best_match.end - best_match.start))):
+                    if (
+                        start <= leaf.start
+                        and end >= leaf.end
+                        and potential_parent != leaf
+                        and (
+                            not best_match
+                            or (end - start) < (best_match.end - best_match.start)
+                        )
+                    ):
                         best_match = potential_parent
-                
+
                 if best_match:
                     best_match.add_child(leaf)
                 else:

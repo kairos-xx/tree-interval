@@ -66,6 +66,7 @@ class RichTreePrinter:
         def get_terminal_width() -> int:
             try:
                 import shutil
+
                 columns, _ = shutil.get_terminal_size()
                 return columns
             except:
@@ -73,15 +74,23 @@ class RichTreePrinter:
 
         if self.config.show_info and node.info:
             terminal_width = get_terminal_width()
-            current_width = sum(len(p) for p in parts) + len(parts) * 1  # Add spaces between parts
-            
+            current_width = (
+                sum(len(p) for p in parts) + len(parts) * 1
+            )  # Add spaces between parts
+
             if isinstance(node.info, dict):
-                info_str = "Info(" + ", ".join(f"{k}={repr(v)}" for k, v in node.info.items()) + ")"
+                info_str = (
+                    "Info("
+                    + ", ".join(f"{k}={repr(v)}" for k, v in node.info.items())
+                    + ")"
+                )
             else:
                 info_str = str(node.info)
-                
-            available_width = terminal_width - current_width - 10  # Extra padding for rich formatting
-            
+
+            available_width = (
+                terminal_width - current_width - 10
+            )  # Extra padding for rich formatting
+
             if len(info_str) > available_width:
                 parts.append("info=...")
             else:

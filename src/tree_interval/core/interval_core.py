@@ -307,38 +307,26 @@ class Leaf:
         """Find the leaf that best matches the given range."""
         if self.start is None or self.end is None:
             return None
+
+        def calc_distance(leaf: "Leaf") -> int:
+            return (
+                (start - leaf.start) if start > leaf.start else (leaf.start - start)
+            ) + +((end - leaf.end) if end > leaf.end else (leaf.end - end))
+
         best_match_distance = (
             float("inf") if best_match_distance is None else best_match_distance
         )
-
-        if start >= self.start:  # and end <= self.end:
-            best_match = self
-
-            for child in self.children:
-                child_match = child.find_best_match(start, end, best_match_distance)
-                if child_match:
-                    distance = abs(start - child_match.start) + abs(
-                        child_match.end - end
-                    )
-                else:
-                    distance = float("inf")
-
-                if distance < best_match_distance:
-                    best_match_distance = distance
-                    best_match = child_match
-
-            #  if (
-            #      child_match
-            #      and child_match.start is not None
-            #      and child_match.end is not None
-            #      and start >= child_match.start
-            #      and end <= child_match.end
-            #      and (child_match.end - child_match.start) <= (best_match.end - best_match.start)
-            #      and distance < best_match_distance
-            #  ):
-            #      best_match = child_match
-            return best_match
-        return None
+        distance = calc_distance(self)
+        if distance < best_match_distance:
+            best_match_distance = distance
+        best_match = self
+        for child in self.children:
+            child_match = child.find_best_match(start, end, best_match_distance)
+            distance = calc_distance(child_match)
+            if distance < best_match_distance:
+                best_match_distance = distance
+                best_match = child_match
+        return best_match
 
     def find_common_ancestor(self, other: "Leaf") -> Optional["Leaf"]:
         """Find the first common ancestor between this leaf and another."""
@@ -529,7 +517,11 @@ class Leaf:
 
     def __repr__(self) -> str:
         if isinstance(self._info, dict):
-            info_str = "Info(" + ", ".join(f"{k}={repr(v)}" for k, v in self._info.items()) + ")"
+            info_str = (
+                "Info("
+                + ", ".join(f"{k}={repr(v)}" for k, v in self._info.items())
+                + ")"
+            )
         else:
             info_str = repr(self._info)
         return f"Leaf(start={self.start}, end={self.end}, info={info_str})"

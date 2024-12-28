@@ -26,26 +26,11 @@ class FrameAnalyzer:
         self.tree = self.tree or self.build_tree()
         if not self.tree or not self.tree.root:
             return None
-
-        # frame_first_line = self.frame.f_code.co_firstlineno
-        current_line = self.frame_lineno - self.frame_firstlineno + 1
-        line_positions = self.ast_builder._calculate_line_positions()
-
-        if 0 <= current_line - 1 < len(line_positions):
-            start, end = line_positions[current_line - 1]
-            print(f"Start: {start}, End: {end}")
-            # Find the largest node that contains the current line
-            candidates = [
-                node for node in self.tree.flatten()
-                if node.start <= start and node.end >= end 
-                and node.info and node.start >= start - 50  # Ensure node starts near target
+        self.current_node = self.tree.find_best_match(
+            *self.ast_builder._calculate_line_positions()[
+                self.frame_lineno - self.frame_firstlineno
             ]
-            if candidates:
-                # Sort by size and proximity to target position
-                self.current_node = sorted(
-                    candidates,
-                    key=lambda n: (abs(n.start - start), n.end - n.start)
-                )[0]
+        )
         return self.current_node
 
     def build_tree(self) -> Optional[Tree]:
@@ -63,18 +48,15 @@ class FrameAnalyzer:
                         node.ast_node, line_positions
                     )
                     if pos:
-                        # Preserve selected state
                         pos.selected = node.selected
                         node.position = pos
                         nodes_by_pos[(pos.start, pos.end)] = node
-                    #  from ast import unparse
-                    #  node.position.info = {"name": unparse(node.ast_node)
 
             # Second pass: Build parent-child relationships
             sorted_positions = sorted(nodes_by_pos.keys(), key=lambda x: (x[0], -x[1]))
             for start, end in sorted_positions:
                 current_node = nodes_by_pos[(start, end)]
-                if self.current_node and current_node.match(self.current_node):
+                if current_node.match(self.current_node):
                     current_node.selected = True
                 # Find the smallest containing interval
                 for parent_start, parent_end in sorted_positions:
