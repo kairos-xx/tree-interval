@@ -675,7 +675,9 @@ class Tree(Generic[T]):
     @staticmethod
     def _dict_to_node(data: Dict) -> Leaf:
         """Create a node from a dictionary."""
-        node = Leaf(data["start"], data["end"], data["info"], style=data.get("style"), rich_style=data.get("rich_style"))
+        start = int(data["start"]) if data["start"] is not None else None
+        end = int(data["end"]) if data["end"] is not None else None
+        node = Leaf(start, data["info"], end, style=data.get("style"), rich_style=data.get("rich_style"))
         for child_data in data["children"]:
             child = Tree._dict_to_node(child_data)
             node.add_child(child)
