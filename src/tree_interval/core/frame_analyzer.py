@@ -37,13 +37,13 @@ class FrameAnalyzer:
             # Find the largest node that contains the current line
             candidates = [
                 node for node in self.tree.flatten()
-                if node.start <= start and node.end >= end
+                if node.start <= start and node.end >= end and node.info
             ]
             if candidates:
-                # Sort by size descending, get the smallest that fully contains the line
+                # Sort by size ascending to get the most specific node
                 self.current_node = sorted(
                     candidates,
-                    key=lambda n: (-(n.end - n.start))
+                    key=lambda n: (n.end - n.start)
                 )[0]
         return self.current_node
 
