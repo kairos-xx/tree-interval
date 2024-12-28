@@ -252,7 +252,11 @@ def demonstrate_ast_parsing():
 
     builder = AstTreeBuilder(code)
     tree = builder.build()
-    if not tree.root:
+    if tree is None:
+        print("Tree is None")
+        return
+        
+    if tree.root is None:
         print("Tree root is None")
         return
 
