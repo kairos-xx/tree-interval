@@ -26,13 +26,17 @@ class FrameAnalyzer:
 
         frame_first_line = self.frame.f_code.co_firstlineno
         current_line = self.frame.f_lineno - frame_first_line + 1
-        print(Position(getframeinfo(self.frame).positions))
-
+        p=Position(getframeinfo(self.frame).positions,self.ast_builder.source)
+        
         line_positions = self.ast_builder._calculate_line_positions()
         print(line_positions)
         if 0 <= current_line - 1 < len(line_positions):
             start, end = line_positions[current_line - 1]
             print(f"Start: {start}, End: {end}")
+            start = p.start
+            end = p.end
+            print(f"Start: {start}, End: {end}")
+            print()
 
             self.current_node=self.tree.find_best_match(start, end)
             #return self.current_node

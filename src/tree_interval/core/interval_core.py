@@ -4,7 +4,7 @@ Core tree data structures.
 This module contains the core Tree and Leaf classes used across the project.
 """
 
-from dis import Position as disposition
+from dis import Positions as disposition
 from json import dumps, loads
 from typing import (
     TYPE_CHECKING,
@@ -34,8 +34,11 @@ class Position:
         selected: bool = False,
     ):
         self.selected = selected
-        
+    
         if isinstance(start, disposition):
+            if isinstance(end,str):
+                source = end
+                end = None
             dis_pos = start
             if source is not None:
                 # Calculate start and end from line/col offsets
@@ -46,8 +49,8 @@ class Position:
                 self.end = pos_end
             else:
                 # Fallback to using line numbers as positions if no source provided
-                self.start = dis_pos.lineno
-                self.end = dis_pos.end_lineno
+                self.start = dis_pos.col_offset
+                self.end = dis_pos.end_col_offset
         else:
             if start is None or end is None:
                 raise ValueError("Position start and end must not be None")
