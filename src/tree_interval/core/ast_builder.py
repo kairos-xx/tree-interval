@@ -14,6 +14,7 @@ from .interval_core import Leaf, Position, Tree
 
 
 class AstTreeBuilder:
+
     def __init__(self, source: Union[FrameType, str]) -> None:
         self.source: Optional[str] = None
         self.indent_offset: int = 0
@@ -43,14 +44,12 @@ class AstTreeBuilder:
                 return
 
             common_indent = min(
-                len(line) - len(line.lstrip())
-                for line in indented_lines
-            )
+                len(line) - len(line.lstrip()) for line in indented_lines)
 
             # Remove common indentation and join lines
             self.source = "\n".join(
-                line[common_indent:] if line.strip() else line for line in lines
-            )
+                line[common_indent:] if line.strip() else line
+                for line in lines)
             self.indent_offset = common_indent
             self.line_offset = self.frame_firstlineno - 1
         except (SyntaxError, TypeError, ValueError):
@@ -68,8 +67,8 @@ class AstTreeBuilder:
         return positions
 
     def _get_node_position(
-        self, node: AST, line_positions: list[Tuple[int, int]]
-    ) -> Optional[Position]:
+            self, node: AST,
+            line_positions: list[Tuple[int, int]]) -> Optional[Position]:
         try:
             lineno = getattr(node, "lineno", None)
             if lineno is None:
@@ -134,10 +133,14 @@ class AstTreeBuilder:
             if position:
                 leaf = Leaf(
                     position,
-                    info={"name": node.__class__.__name__, "source": unparse(node)},
+                    info={
+                        "name": node.__class__.__name__,
+                        "source": unparse(node)
+                    },
                 )
                 leaf.ast_node = node
-                nodes_with_positions.append((position.start, position.end, leaf))
+                nodes_with_positions.append(
+                    (position.start, position.end, leaf))
 
         # Sort nodes by position and size to ensure proper nesting
         nodes_with_positions.sort(key=lambda x: (x[0], -(x[1] - x[0])))
@@ -150,15 +153,10 @@ class AstTreeBuilder:
                 # Find the innermost containing node
                 best_match = None
                 for start, end, potential_parent in nodes_with_positions:
-                    if (
-                        start <= leaf.start
-                        and end >= leaf.end
-                        and potential_parent != leaf
-                        and (
-                            not best_match
-                            or (end - start) < (best_match.end - best_match.start)
-                        )
-                    ):
+                    if (start <= leaf.start and end >= leaf.end
+                            and potential_parent != leaf and
+                        (not best_match or
+                         (end - start) < (best_match.end - best_match.start))):
                         best_match = potential_parent
 
                 if best_match:
@@ -175,5 +173,5 @@ class AstTreeBuilder:
         lines = self.source.splitlines()
         if not lines:
             return None
-        pos = sum(len(line) + 1 for line in lines[: lineno - 1]) + col_offset
+        pos = sum(len(line) + 1 for line in lines[:lineno - 1]) + col_offset
         return pos

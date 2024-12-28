@@ -31,13 +31,11 @@ class TreeVisualizer:
 
         def format_position(node) -> str:
             if config.position_format == "position":
-                return (
-                    f"Position(start={node.start}, end={node.end}, "
-                    f"lineno={node.lineno}, end_lineno={node.end_lineno}, "
-                    f"col_offset={node.col_offset}, "
-                    f"end_col_offset={node.end_col_offset}, "
-                    f"size={node.size})"
-                )
+                return (f"Position(start={node.start}, end={node.end}, "
+                        f"lineno={node.lineno}, end_lineno={node.end_lineno}, "
+                        f"col_offset={node.col_offset}, "
+                        f"end_col_offset={node.end_col_offset}, "
+                        f"size={node.size})")
             elif config.position_format == "tuple":
                 return f"({node.start}, {node.end})"
             return f"({node.start}, {node.end})"
@@ -62,24 +60,22 @@ class TreeVisualizer:
 
             if config.show_info and node.info:
                 if isinstance(node.info, dict):
-                    info_str = (
-                        "Info("
-                        + ", ".join(f"{k}={repr(v)}" for k, v in node.info.items())
-                        + ")"
-                    )
+                    info_str = ("Info(" +
+                                ", ".join(f"{k}={repr(v)}"
+                                          for k, v in node.info.items()) + ")")
                 else:
                     info_str = repr(node.info)
 
                 # Calculate total length including existing parts
                 current_length = len(" ".join(parts))
-                remaining_width = available_width - current_length - 1  # -1 for space
+                remaining_width = available_width - current_length - 1
+                # -1 for space
 
                 if len(info_str) > remaining_width:
                     parts.append("info=...")
                 else:
-                    parts.append(
-                        info_str if isinstance(node.info, dict) else f"info={info_str}"
-                    )
+                    parts.append(info_str if isinstance(node.info, dict) else
+                                 f"info={info_str}")
 
             if config.show_children_count:
                 parts.append(f"children={len(node.children)}")
@@ -90,35 +86,26 @@ class TreeVisualizer:
             position_str = format_position(node)
             info_str = format_node_info(node)
             prefix_spaces = "    " if level == 0 else prefix
-            connector = "┌── " if level == 0 else ("└── " if is_last else "├── ")
+            connector = "┌── " if level == 0 else (
+                "└── " if is_last else "├── ")
             # Color the text content but not the tree lines
-            if (
-                hasattr(node, "selected")
-                and node.selected
-                or (
-                    hasattr(node, "position")
-                    and hasattr(node.position, "selected")
-                    and node.position.selected
-                )
-            ):
+            if (hasattr(node, "selected") and node.selected
+                    or (hasattr(node, "position")
+                        and hasattr(node.position, "selected")
+                        and node.position.selected)):
                 color = "\033[91m"  # Bright red for selected nodes
             else:
-                color = (
-                    TreeVisualizer.BLUE
-                    if level == 0
-                    else (
-                        TreeVisualizer.GREEN if node.children else TreeVisualizer.YELLOW
-                    )
-                )
-            print(
-                f"{prefix_spaces}{connector}{color}{position_str} "
-                + f"{info_str}{TreeVisualizer.RESET}"
-            )
+                color = (TreeVisualizer.BLUE if level == 0 else
+                         (TreeVisualizer.GREEN
+                          if node.children else TreeVisualizer.YELLOW))
+            print(f"{prefix_spaces}{connector}{color}{position_str} " +
+                  f"{info_str}{TreeVisualizer.RESET}")
 
             children = node.children
             for i, child in enumerate(children):
                 new_prefix = prefix + ("    " if is_last else "│   ")
-                _print_node(child, new_prefix, i == len(children) - 1, level + 1)
+                _print_node(child, new_prefix, i == len(children) - 1,
+                            level + 1)
 
         _print_node(tree.root)
 
