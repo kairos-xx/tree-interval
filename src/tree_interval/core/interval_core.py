@@ -586,8 +586,14 @@ class Leaf:
             info_str = repr(self._info)
         return f"Leaf(start={self.start}, end={self.end}, info={info_str})"
 
-    def match(self, other: Any):
-        return self.position == other.position  # and self.info == other.info
+    def match(self, other: Any) -> bool:
+        """Compare two nodes for equality."""
+        if not isinstance(other, Leaf):
+            return False
+        return (self.position == other.position and 
+                self.info == other.info and
+                self.start == other.start and 
+                self.end == other.end)
 
 
 class Tree(Generic[T]):
