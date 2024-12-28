@@ -29,7 +29,9 @@ class Position:
         start: int,
         end: int,
         info: Optional[Any] = None,
+        selected: bool = False,
     ):
+        self.selected = selected
         if start is None or end is None:
             raise ValueError("Position start and end must not be None")
         self.start = start
