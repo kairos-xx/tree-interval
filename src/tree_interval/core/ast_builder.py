@@ -75,22 +75,20 @@ class AstTreeBuilder:
                 return None
 
             # Adjust line numbers for frame context
+            start_line = lineno - 1
+            end_lineno = getattr(node, "end_lineno", lineno)
+            end_line = end_lineno - 1
+
             if hasattr(self, "line_offset"):
-                start_line = lineno - 1  # + self.line_offset
-                end_lineno = getattr(node, "end_lineno", lineno)
-                end_line = end_lineno - 1  # + self.line_offset
-            else:
-                start_line = lineno - 1
-                end_lineno = getattr(node, "end_lineno", lineno)
-                end_line = end_lineno - 1
+                start_line += self.line_offset
+                end_line += self.line_offset
 
             # Adjust column offsets for dedentation
             col_offset = getattr(node, "col_offset", 0)
-            if hasattr(self, "indent_offset"):
-                col_offset = max(0, col_offset - self.indent_offset)
-
             end_col_offset = getattr(node, "end_col_offset", 0)
-            if hasattr(self, "indent_offset"):
+            
+            if hasattr(self, "indent_offset") and self.indent_offset:
+                col_offset = max(0, col_offset - self.indent_offset)
                 end_col_offset = max(0, end_col_offset - self.indent_offset)
 
             if 0 <= start_line < len(line_positions):
