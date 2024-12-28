@@ -221,10 +221,8 @@ def demonstrate_frame_analyzer():
         tree = analyzer.build_tree()
         if tree and tree.root:
             print("\nFull AST Tree:")
-            TreeVisualizer.visualize(
-                tree,
-                VisualizationConfig(position_format="tuple", show_children_count=True),
-            )
+            printer = RichTreePrinter()
+            printer.print_tree(tree)
         return x
 
     # Execute the function to perform analysis
