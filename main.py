@@ -129,9 +129,8 @@ def demonstrate_tree_operations():
     and visualization.
     """
     print_header("Tree Operations", BLUE)
-    tree = Tree[str]("Example Code", start_lineno=1, indent_size=4)
-    print("Tree created with source:", tree.source)
-
+    tree = Tree("Example Code", start_lineno=1, indent_size=4)
+    print(f"{YELLOW}=== Basic Tree Structure ==={RESET}")
     root = Leaf(Position(0, 100), info="root")
     root.position.lineno = 1
     root.position.end_lineno = 10
@@ -202,13 +201,16 @@ def demonstrate_tree_operations():
                             show_size=False),
     )
 
-    print("\nJSON Operations:")
+    print(f"\n{CYAN}=== JSON Operations ==={RESET}")
     json_str = tree.to_json()
-    print("Tree as JSON:", json_str)
+    print("JSON representation:", json_str)
 
-    print("\nRecreated from JSON:")
-    new_tree = Tree.from_json(json_str)
-    new_tree.visualize()
+    print(f"\n{MAGENTA}=== Deserialized Tree ==={RESET}")
+    loaded_tree = Tree.from_json(json_str)
+    loaded_tree.visualize()
+
+    print(f"\n{GREEN}=== Final Tree State ==={RESET}")
+    tree.visualize()
 
     return tree
 
