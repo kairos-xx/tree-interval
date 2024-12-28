@@ -121,9 +121,28 @@ class AstTreeBuilder:
             if position:
                 leaf = Leaf(position, info={"name": node.__class__.__name__, "source": unparse(node)})
                 leaf.ast_node = node
-                nodes_with_positions.append((node, leaf))
+                nodes_with_positions.append((position.start, position.end, leaf))
 
-        for _, leaf in nodes_with_positions:
-            result_tree.add_leaf(leaf)
+        # Sort nodes by position and size to ensure proper nesting
+        nodes_with_positions.sort(key=lambda x: (x[0], -(x[1] - x[0])))
+        
+        # Add nodes to tree maintaining proper hierarchy
+        for _, _, leaf in nodes_with_positions:
+            if not result_tree.root:
+                result_tree.root = leaf
+            else:
+                # Find the innermost containing node
+                best_match = None
+                for start, end, potential_parent in nodes_with_positions:
+                    if (start <= leaf.start and end >= leaf.end and 
+                        potential_parent != leaf and 
+                        (not best_match or 
+                         (end - start) < (best_match.end - best_match.start))):
+                        best_match = potential_parent
+                
+                if best_match:
+                    best_match.add_child(leaf)
+                else:
+                    result_tree.add_leaf(leaf)
 
         return result_tree
