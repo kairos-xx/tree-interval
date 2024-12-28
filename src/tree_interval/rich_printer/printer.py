@@ -1,6 +1,4 @@
 """Rich-based tree printer implementation."""
-
-from inspect import currentframe, getframeinfo
 from typing import Optional
 
 from rich.console import Console 

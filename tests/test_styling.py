@@ -41,3 +41,7 @@ def test_printer_config():
     assert config.root_style.color == "blue"
     assert config.node_style.color == "green"
     assert config.leaf_style.color == "yellow"
+
+
+if __name__ == "__main__":
+    pytest.main([__file__])
