@@ -1,7 +1,6 @@
 
 import sys
 from inspect import currentframe
-from rich.style import Style
 from src.tree_interval import (
     FrameAnalyzer,
     Leaf,
@@ -9,10 +8,6 @@ from src.tree_interval import (
     Tree,
     TreeVisualizer,
     VisualizationConfig,
-)
-from src.tree_interval.rich_printer import (
-    RichPrintConfig,
-    RichTreePrinter,
 )
 
 # ANSI Colors
@@ -32,407 +27,82 @@ def print_header(title, color=BLUE):
     print(f"╚{'═' * (width-2)}╝{RESET}\n")
 
 def demonstrate_positions():
+    """Demonstrates basic Position class usage."""
     print_header("Position Examples", GREEN)
     pos1 = Position(0, 100)
-    print("Basic position:", f"start={pos1.start}, end={pos1.end}")
+    print(f"{GREEN}Basic position: start={pos1.start}, end={pos1.end}{RESET}")
 
     pos2 = Position(10, 50)
     pos2.lineno = 1
     pos2.end_lineno = 5
-    print("Position with lines:",
-          f"lineno={pos2.lineno}, end_lineno={pos2.end_lineno}")
+    print(f"{GREEN}Position with lines: lineno={pos2.lineno}, end_lineno={pos2.end_lineno}{RESET}")
 
     pos3 = Position(60, 90)
     pos3.col_offset = 4
     pos3.end_col_offset = 8
-    print("Position with columns:",
-          f"col_offset={pos3.col_offset}, end_col_offset={pos3.end_col_offset}")
+    print(f"{GREEN}Position with columns: col_offset={pos3.col_offset}, end_col_offset={pos3.end_col_offset}{RESET}")
 
     pos4 = Position(30, 70)
-    print("Absolute positions:",
-          f"absolute_start={pos4.absolute_start}, absolute_end={pos4.absolute_end}")
-
-    print("Position format:", pos4.position_as("position"))
-    print("Tuple format:", pos4.position_as("tuple"))
-    print("Default format:", pos4.position_as())
+    print(f"{GREEN}Position formats:")
+    print(f"Position: {pos4.position_as('position')}")
+    print(f"Tuple: {pos4.position_as('tuple')}")
+    print(f"Default: {pos4.position_as()}{RESET}")
 
 def demonstrate_find_nodes():
+    """Demonstrates node finding capabilities."""
     print_header("Find Nodes Example", YELLOW)
     tree = Tree("Find Example")
     root = Leaf(Position(0, 100), info={"type": "Module"})
-
-    child1_pos = Position(10, 40)
-    child1_pos.lineno = 2
-    child1_pos.end_lineno = 4
-    child1_pos.col_offset = 4
-    child1_pos.end_col_offset = 40
-    child1 = Leaf(child1_pos, info={"type": "FunctionDef", "name": "hello"})
-
-    child2_pos = Position(50, 90)
-    child2_pos.lineno = 5
-    child2_pos.end_lineno = 8
-    child2_pos.col_offset = 4
-    child2_pos.end_col_offset = 90
-    child2 = Leaf(child2_pos, info={"type": "ClassDef", "name": "MyClass"})
-
-    grandchild_pos = Position(20, 30)
-    grandchild_pos.lineno = 3
-    grandchild_pos.end_lineno = 3
-    grandchild_pos.col_offset = 8
-    grandchild_pos.end_col_offset = 30
-    grandchild = Leaf(grandchild_pos, info={"type": "Return"})
-
+    child1 = Leaf(Position(10, 40), info={"type": "FunctionDef", "name": "hello"})
+    child2 = Leaf(Position(50, 90), info={"type": "ClassDef", "name": "MyClass"})
+    
     tree.root = root
     tree.add_leaf(child1)
     tree.add_leaf(child2)
-    child1.add_child(grandchild)
-
-    found_parent = grandchild.find_parent(lambda n: isinstance(
-        n.info, dict) and n.info.get("type") == "FunctionDef")
-    print("Found parent:", found_parent.info if found_parent else None)
-
-    found_child = root.find_child(lambda n: isinstance(n.info, dict) and 
-                                 n.info.get("type") == "ClassDef")
-    print("Found child:", found_child.info if found_child else None)
-
-    found_sibling = child1.find_sibling(lambda n: isinstance(n.info, dict) and
-                                      n.info.get("type") == "ClassDef")
-    print("Found sibling:", found_sibling.info if found_sibling else None)
-
-def demonstrate_leaves():
-    """Demonstrates different ways to create and use Leaf nodes."""
-    print_header("Leaf Examples", YELLOW)
-    leaf1 = Leaf(Position(0, 100), info="Using Position")
-    print("Leaf from Position:", leaf1)
-
-    leaf2 = Leaf((10, 50, "Using Tuple"))
-    print("Leaf from tuple:", leaf2)
-
-    leaf3 = Leaf(60, 90, "Using Args")
-    print("Leaf from args:", leaf3)
+    
+    print(f"{YELLOW}Tree structure:{RESET}")
+    tree.visualize()
 
 def demonstrate_tree_operations():
-    """Demonstrates various tree operations including creation, modification and visualization."""
+    """Demonstrates tree operations."""
     print_header("Tree Operations", BLUE)
-    tree = Tree[str]("Example Code", start_lineno=1, indent_size=4)
-    print("Tree created with source:", tree.source)
-
-    root = Leaf(Position(0, 100), info="root")
-    root.position.lineno = 1
-    root.position.end_lineno = 10
-    root.position.col_offset = 0
-    root.position.end_col_offset = 80
-    tree.root = root
-
-    child1 = Leaf(Position(10, 40), info="child1")
-    child1.position.lineno = 2
-    child1.position.end_lineno = 4
-    child1.position.col_offset = 4
-
-    child2 = Leaf(Position(50, 90), info="child2")
-    child2.position.lineno = 5
-    child2.position.end_lineno = 8
-    child2.position.col_offset = 4
-
-    grandchild1 = Leaf(Position(15, 25), info="grandchild1")
-    grandchild1.position.lineno = 3
-    grandchild1.position.end_lineno = 3
-    grandchild1.position.col_offset = 8
-
-    grandchild2 = Leaf(Position(60, 80), info="grandchild2")
-    grandchild2.position.lineno = 6
-    grandchild2.position.end_lineno = 7
-    grandchild2.position.col_offset = 8
-
-    tree.add_leaf(child1)
-    tree.add_leaf(child2)
-    child1.add_child(grandchild1)
-    child2.add_child(grandchild2)
-
-    print("\nTree Information:")
-    print(f"Root size: {root.size}")
-    print(f"Number of root's children: {len(root.children)}")
-    print(f"Child1 position: ({child1.start}, {child1.end})")
-
-    print("\nNode Finding:")
-    best_match = tree.find_best_match(20, 30)
-    print(f"Best match for (20, 30): {best_match.info if best_match else None}")
-
-    common_ancestor = grandchild1.find_common_ancestor(grandchild2)
-    print("Common ancestor of grandchildren:" +
-          f" {common_ancestor.info if common_ancestor else None}")
-
-    multi_child = grandchild1.find_first_multi_child_ancestor()
-    print("First multi-child ancestor:" +
-          f" {multi_child.info if multi_child else None}")
-
-    print("\nTree Traversal:")
-    flat_list = tree.flatten()
-    print("Flattened tree:", flat_list)
-
-    print("\nVisualization Methods:")
-    print("\n1. Default visualization:")
-    tree.visualize()
-
-    print("\n2. Position format:")
-    TreeVisualizer.visualize(tree,
-                           VisualizationConfig(position_format="position"))
-
-    print("\n3. Tuple format with children count:")
-    TreeVisualizer.visualize(
-        tree,
-        VisualizationConfig(position_format="tuple",
-                          show_children_count=True,
-                          show_size=False),
-    )
-
-    print("\nJSON Operations:")
-    json_str = tree.to_json()
-    print("Tree as JSON:", json_str)
-
-    print("\nRecreated from JSON:")
-    new_tree = Tree.from_json(json_str)
-    new_tree.visualize()
-
-    return tree
-
-def demonstrate_frame_analyzer():
-    """Demonstrates the frame analyzer functionality for inspecting call stack frames."""
-    print_header("Frame Analyzer Demo", MAGENTA)
-
-    def analyze_this():
-        analyzer = FrameAnalyzer(currentframe())
-
-        current_node = analyzer.find_current_node()
-        print("Current Node Information:")
-        print(f"Node: {current_node if current_node else None}")
-
-        tree = analyzer.build_tree()
-
-        if tree and tree.root:
-            print("\nFull AST Tree:")
-            printer = RichTreePrinter()
-            printer.print_tree(tree)
-            TreeVisualizer.visualize(tree)
-
-    analyze_this()
-
-def demonstrate_line_positions():
-    """Demonstrates working with line positions in the tree structure."""
-    print_header("Line Position Examples", GREEN)
-    tree = Tree("Line Number Example")
-
-    root = Leaf(Position(0, 100), info="Function")
-    root.position.lineno = 1
-    root.position.end_lineno = 10
-    root.position.col_offset = 0
-    root.position.end_col_offset = 4
-    tree.root = root
-
-    if_node = Leaf(Position(20, 60), info="If Block")
-    if_node.position.lineno = 3
-    if_node.position.end_lineno = 5
-    if_node.position.col_offset = 4
-    if_node.position.end_col_offset = 8
-    tree.add_leaf(if_node)
-
-    print("\nDefault view:")
-    tree.visualize()
-
-    print("\nDetailed position view:")
-    TreeVisualizer.visualize(tree,
-                           VisualizationConfig(position_format="position"))
-
-def demonstrate_basic_rich_printing():
-    """Demonstrates basic rich printing capabilities for tree visualization."""
-    print_header("Basic Rich Printing", CYAN)
-    tree = Tree("Basic Example")
-
-    root = Leaf(Position(0, 100), info={"type": "Module", "name": "example"})
-    child1 = Leaf(Position(10, 40), info={"type": "Function", "name": "hello"})
-    child2 = Leaf(Position(50, 90), info={"type": "Class", "name": "MyClass"})
-
-    tree.root = root
-    tree.add_leaf(child1)
-    tree.add_leaf(child2)
-
-    printer = RichTreePrinter()
-    printer.print_tree(tree)
-
-def demonstrate_custom_config():
-    """Demonstrates custom configuration options for tree visualization."""
-    print_header("Custom Rich Printing", MAGENTA)
-    tree = Tree("Custom Style Example")
-
-    root = Leaf(Position(0, 100), {"type": "Program"})
-    child = Leaf(Position(10, 50), {"type": "Variable"})
-    tree.root = root
-    tree.add_leaf(child)
-
-    config = RichPrintConfig(
-        show_size=True,
-        show_info=True,
-        root_style=Style(color="magenta", bold=True),
-        node_style=Style(color="yellow"),
-        leaf_style=Style(color="green"),
-    )
-
-    printer = RichTreePrinter(config)
-    printer.print_tree(tree)
-
-def demonstrate_ast_rich_printing():
-    """Demonstrates rich printing of Abstract Syntax Tree (AST) structures."""
-    print_header("AST Rich Printing", YELLOW)
-    tree = Tree("AST Example")
-
-    root = Leaf(Position(0, 100), info={"type": "Module"})
-    func_def = Leaf(Position(10, 90),
-                   info={"type": "FunctionDef", "name": "example"})
-    args = Leaf(Position(20, 30), info={"type": "Arguments"})
-    body = Leaf(Position(40, 80), info={"type": "Body"})
-
-    tree.root = root
-    tree.add_leaf(func_def)
-    func_def.add_child(args)
-    func_def.add_child(body)
-
-    printer = RichTreePrinter(RichPrintConfig(show_position=True))
-    printer.print_tree(tree)
-
-def demonstrate_nested_attributes():
-    """Demonstrates working with nested attributes in tree nodes."""
-    print_header("Nested Attributes Example", BLUE)
-    tree = Tree("Nested Attributes Example")
+    tree = Tree("Example")
     root = Leaf(Position(0, 100), info="Root Node")
     child = Leaf(Position(10, 50), info="Child Node")
-
-    root.position.lineno = 1
-    root.position.end_lineno = 5
-    root.position.col_offset = 0
-    root.position.end_col_offset = 20
-
     tree.root = root
     tree.add_leaf(child)
+    
+    print(f"{BLUE}Tree visualization:{RESET}")
+    tree.visualize()
 
-    root._as_dict()
+def demonstrate_frame_analysis():
+    """Demonstrates frame analysis capabilities."""
+    print_header("Frame Analysis", MAGENTA)
+    analyzer = FrameAnalyzer(sys._getframe())
+    tree = analyzer.build_tree()
+    if tree and tree.root:
+        print(f"{MAGENTA}Frame analysis tree:{RESET}")
+        tree.visualize()
 
-    print(f"Start position: {root.attributes.start}")
-    print(f"Size: {root.attributes.size}")
-    print(f"Line number: {root.attributes.position.lineno}")
-    print(f"Column offset: {root.attributes.position.col_offset}")
-
-def demonstrate_find_method():
-    """Demonstrates various node finding methods in the tree structure."""
-    print_header("Find Method Example", GREEN)
-
-    root = Leaf(Position(0, 100), info={"type": "Module", "name": "main"})
-    child1 = Leaf(Position(10, 40),
-                 info={"type": "FunctionDef", "name": "hello"})
-    child2 = Leaf(Position(50, 90),
-                 info={"type": "ClassDef", "name": "MyClass"})
-    grandchild = Leaf(Position(20, 30), info={"type": "Return"})
-
-    root.add_child(child1)
-    root.add_child(child2)
-    child1.add_child(grandchild)
-
-    root._as_dict()
-    child1._as_dict()
-    child2._as_dict()
-    grandchild._as_dict()
-
-    found = root.find(lambda n: isinstance(n.info, dict) and 
-                     n.info.get("name") == "hello")
-    print(f"Found function: {found.info if found else None}")
-
-    found = child1.find(lambda n: isinstance(n.info, dict) and 
-                       n.info.get("type") == "ClassDef")
-    print(f"Found class: {found.info if found else None}")
-
-    found = grandchild.find(lambda n: isinstance(n.info, dict) and 
-                           n.info.get("type") == "Module")
-    print(f"Found module: {found.info if found else None}")
-
-def demonstrate_leaf_navigation():
-    """Demonstrates navigation between leaf nodes in the tree."""
-    print_header("Leaf Navigation Example", CYAN)
-    tree = Tree("Navigation Example")
-
-    grand_parent = Leaf(Position(0, 400), info="Grand Parent")
-    parent1 = Leaf(Position(0, 200), info="Parent 1")
-    parent2 = Leaf(Position(200, 400), info="Parent 2")
-    parent1_child1 = Leaf(Position(0, 100), info="Child 1.1")
-    parent1_child2 = Leaf(Position(100, 200), info="Child 1.2")
-    parent2_child1 = Leaf(Position(200, 300), info="Child 2.1")
-    parent2_child2 = Leaf(Position(300, 400), info="Child 2.2")
-
-    tree.root = grand_parent
-    grand_parent.add_child(parent1)
-    grand_parent.add_child(parent2)
-    parent1.add_child(parent1_child1)
-    parent1.add_child(parent1_child2)
-    parent2.add_child(parent2_child1)
-    parent2.add_child(parent2_child2)
-
-    parent_node = parent1_child1.parent
-    parent_info = parent_node.info if parent_node else None
-    print(f"Child 1.1's parent: {parent_info}")
-
-    next_node = parent1_child1.next
-    next_info = next_node.info if next_node else None
-    print(f"Child 1.1's next sibling: {next_info}")
-
-    prev_node = parent1_child2.previous
-    prev_info = prev_node.info if prev_node else None
-    print(f"Child 1.2's previous sibling: {prev_info}")
-
-    print(f"Parent 1's next sibling: {parent1.next.info if parent1.next else None}")
-
-def demonstrate_node_navigation():
-    """Demonstrates navigation between different types of nodes in the tree."""
-    print_header("Node Navigation Examples", MAGENTA)
-
-    program = Leaf(Position(0, 500), info="Program")
-    class_def = Leaf(Position(0, 250), info="Class: MyClass")
-    function_def = Leaf(Position(250, 500), info="Function: process_data")
-
-    method1 = Leaf(Position(50, 120), info="Method: __init__")
-    method2 = Leaf(Position(130, 200), info="Method: validate")
-
-    param1 = Leaf(Position(270, 300), info="Parameter: data")
-    param2 = Leaf(Position(310, 340), info="Parameter: options")
-
-    program.add_child(class_def)
-    program.add_child(function_def)
-    class_def.add_child(method1)
-    class_def.add_child(method2)
-    function_def.add_child(param1)
-    function_def.add_child(param2)
-
-    print("First method's parent: " +
-          f"{method1.parent.info if method1.parent else None}")
-    print("First method's next sibling: " +
-          f"{method1.next.info if method1.next else None}")
-    print("Second method's previous sibling: " +
-          f"{method2.previous.info if method2.previous else None}")
-    print("Function's first parameter:" +
-          f" {function_def.children[0].info if function_def.children else None}")
+def demonstrate_tree_search():
+    """Demonstrates tree search operations."""
+    print_header("Tree Search", CYAN)
+    tree = Tree("Search Example")
+    root = Leaf(Position(0, 100), info="Root")
+    child = Leaf(Position(10, 50), info="Target Node")
+    tree.root = root
+    tree.add_leaf(child)
+    
+    result = tree.find_best_match(10, 50)
+    print(f"{CYAN}Found node: {result.info if result else 'None'}{RESET}")
 
 def main():
     print_header("Tree Interval Package Demo", BLUE)
     demonstrate_positions()
     demonstrate_find_nodes()
-    demonstrate_leaves()
     demonstrate_tree_operations()
-    demonstrate_frame_analyzer()
-    demonstrate_line_positions()
-    demonstrate_basic_rich_printing()
-    demonstrate_custom_config()
-    demonstrate_ast_rich_printing()
-    demonstrate_nested_attributes()
-    demonstrate_find_method()
-    demonstrate_leaf_navigation()
-    demonstrate_node_navigation()
+    demonstrate_frame_analysis()
+    demonstrate_tree_search()
 
 if __name__ == "__main__":
     main()
