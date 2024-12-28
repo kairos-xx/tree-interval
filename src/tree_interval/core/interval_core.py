@@ -528,7 +528,11 @@ class Leaf:
         return ancestors
 
     def __repr__(self) -> str:
-        return f"Leaf(start={self.start}, end={self.end}, info={self._info})"
+        if isinstance(self._info, dict):
+            info_str = "Info(" + ", ".join(f"{k}={repr(v)}" for k, v in self._info.items()) + ")"
+        else:
+            info_str = repr(self._info)
+        return f"Leaf(start={self.start}, end={self.end}, info={info_str})"
 
     def match(self, other: Any):
         return self.position == other.position  # and self.info == other.info

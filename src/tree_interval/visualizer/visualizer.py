@@ -48,13 +48,10 @@ class TreeVisualizer:
                 parts.append(f"size={node.size}")
             if config.show_info and node.info:
                 if isinstance(node.info, dict):
-                    node_type = node.info.get("type", "")
-                    fields = node.info.get("fields", {})
-                    parts.append(f"type={node_type}")
-                    for field, value in fields.items():
-                        parts.append(f"{field}={value}")
+                    info_str = "Info(" + ", ".join(f"{k}={repr(v)}" for k, v in node.info.items()) + ")"
+                    parts.append(info_str)
                 else:
-                    parts.append(f"info='{node.info}'")
+                    parts.append(f"info={repr(node.info)}")
             if config.show_children_count:
                 parts.append(f"children={len(node.children)}")
             return " ".join(parts)
