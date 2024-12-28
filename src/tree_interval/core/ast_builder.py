@@ -29,11 +29,9 @@ class AstTreeBuilder:
 
     def _get_source(self) -> None:
         try:
-            if not isinstance(self.source, str):
+            if self.source is None or not isinstance(self.source, str):
                 return
             if not self.frame_firstlineno:
-                return
-            if not self.source:
                 return
             lines = self.source.splitlines()
             if not lines:
