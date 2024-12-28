@@ -3,10 +3,11 @@ Frame analyzer module for locating current frame nodes in AST.
 """
 
 from ast import AST
-from typing import Optional
+from inspect import getframeinfo
+from typing import Optional, cast
 
 from .ast_builder import AstTreeBuilder
-from .interval_core import Leaf, Tree
+from .interval_core import Leaf, Position, Tree
 
 
 class FrameAnalyzer:
@@ -14,6 +15,7 @@ class FrameAnalyzer:
         self.frame = frame
         self.frame_firstlineno = self.frame.f_code.co_firstlineno
         self.frame_lineno = self.frame.f_lineno
+        print(getframeinfo(self.frame),Position(self.frame))
         self.ast_builder = AstTreeBuilder(frame)
         self.tree = None
         self.current_node = None
@@ -34,6 +36,7 @@ class FrameAnalyzer:
                     self.frame_lineno - self.frame_firstlineno
                 ]
             )
+            print(self.ast_builder._calculate_line_positions())
         return self.current_node
 
     def build_tree(self) -> Optional[Tree]:
