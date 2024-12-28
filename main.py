@@ -472,14 +472,10 @@ def demonstrate_node_navigation():
     function_def.add_child(param2)
 
     # Demonstrate navigation
-    print(f"First method's parent: {method1.parent.info}"
-          )  # Shows class definition
-    print(f"First method's next sibling: {method1.next.info}"
-          )  # Shows the validate method
-    print(f"Second method's previous sibling: {method2.previous.info}"
-          )  # Shows the init method
-    print(f"Function's first parameter: {function_def.children[0].info}"
-          )  # Shows first parameter
+    print(f"First method's parent: {method1.parent.info if method1.parent else None}")
+    print(f"First method's next sibling: {method1.next.info if method1.next else None}")
+    print(f"Second method's previous sibling: {method2.previous.info if method2.previous else None}")
+    print(f"Function's first parameter: {function_def.children[0].info if function_def.children else None}")
 
 
 def main():

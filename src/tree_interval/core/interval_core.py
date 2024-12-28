@@ -32,7 +32,7 @@ class Position:
         self,
         start: Optional[Union[int, disposition, FrameType]] = None,
         end: Optional[int] = None,
-        source: Optional[str] = None,
+        source: Optional[Union[str, dict]] = None,
         selected: bool = False,
     ):
         self.selected = selected
@@ -236,7 +236,7 @@ class Leaf:
     ) -> None:
         if position is None:
             raise ValueError("Position cannot be None")
-            
+
         # Handle info keyword argument if provided
         if info is not None:
             final_info = info
@@ -256,8 +256,6 @@ class Leaf:
         else:
             self.position = Position(position, end)
             self._info = final_info
-
-        #print(position,self._info,end) #removed print statement
 
         # Initialize end_col_offset if not set
         if (self.position._end_col_offset is None
