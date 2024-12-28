@@ -97,6 +97,7 @@ class FrameAnalyzer:
         return None
 
     def build_tree(self) -> Optional[Tree]:
+        print(1)
         """Build a complete tree from the frame's AST."""
         if not self.source or not self.ast_tree:
             return None

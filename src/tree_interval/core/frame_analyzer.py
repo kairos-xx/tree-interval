@@ -31,9 +31,11 @@ class FrameAnalyzer:
     def build_tree(self) -> Optional[Tree]:
         """Build a complete tree from the frame's AST."""
         tree = self.ast_builder.build_from_frame()
+        
         if tree and tree.root:
             line_positions = self.ast_builder._calculate_line_positions()
             nodes_by_pos = {}
+           # print(tree.flatten())
             
             # First pass: Update all node positions
             for node in tree.flatten():
