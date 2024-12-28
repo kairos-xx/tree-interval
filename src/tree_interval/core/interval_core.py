@@ -111,9 +111,9 @@ class Position:
                     
                     pos_start = sum(len(line) + 1 for line in lines[:lineno - 1]) + col_offset
                     pos_end = sum(len(line) + 1 for line in lines[:end_lineno - 1]) + end_col_offset
-                
-                self.start = pos_start
-                self.end = pos_end
+                    
+                    self.start = pos_start
+                    self.end = pos_end
                 else:
                     # Fallback to using line numbers as positions if no source provided
                     self.start = dis_pos.col_offset if dis_pos.col_offset is not None else 0
@@ -124,9 +124,8 @@ class Position:
                 self.start = start
                 self.end = end
 
-            self._end_col_offset: Optional[int] = (end -
-                                                   start if start is not None
-                                                   and end is not None else 0)
+            self._end_col_offset: Optional[int] = ((end or 0 )-
+                                                   (start or 0) )
         self.parent: Optional["Leaf"] = None
         self.children: List["Leaf"] = []
 
