@@ -14,13 +14,12 @@
 
 ##### Methods
 
-*  **`__init__(self, start: int, end: int, info: Any) -> None`**  
-Initializes a position with start, end and info.
+*  **`__init__(self, start: int, end: int) -> None`**  
+Initializes a position with start and end.
 
 Parameters:
 - `start` (`int`): Start position
-- `end` (`int`): End position  
-- `info` (`Any`): Additional information
+- `end` (`int`): End position
 
 #### 🌳 `Leaf` Class
 *Represents a node in the tree structure*
