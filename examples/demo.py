@@ -145,9 +145,9 @@ def example_basic_tree():
 def example_custom_visualization():
     """Demonstrate different visualization options."""
     tree = Tree("Visualization Example")
-    root = Leaf(0, 100, "Root")
-    child1 = Leaf(10, 40, "Child 1")
-    child2 = Leaf(50, 90, "Child 2")
+    root = Leaf(Position(0, 100), info="Root")
+    child1 = Leaf(Position(10, 40), info="Child 1")
+    child2 = Leaf(Position(50, 90), info="Child 2")
 
     tree.root = root
     tree.add_leaf(child1)
@@ -173,8 +173,8 @@ def example_json_serialization():
     """Demonstrate JSON serialization."""
     # Create a simple tree
     tree = Tree("Serialization Example")
-    root = Leaf(0, 100, "Root")
-    child = Leaf(10, 50, "Child")
+    root = Leaf(Position(0, 100), info="Root")
+    child = Leaf(Position(10, 50), info="Child")
     tree.root = root
     tree.add_leaf(child)
 
