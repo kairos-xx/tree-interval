@@ -71,7 +71,23 @@ Parameters:
 Returns:
 - `Optional[Leaf]`: Best matching leaf or None
 
-### 🎨 `tree_interval.visualizer`
+### 🎯 `tree_interval.rich_printer` 
+
+#### `RichStyle` Class
+*Configuration for node styling*
+
+Properties:
+- `color` (`str`): Color name or hex code
+- `bold` (`bool`): Bold text styling
+
+#### `LeafStyle` Class
+*Tuple-based styling configuration*
+
+Properties:
+- `color` (`str`): Color hex code
+- `bold` (`bool`): Bold text styling (default: False)
+
+#### 🎨 `tree_interval.visualizer`
 
 #### `VisualizationConfig` Class
 *Configuration settings for tree visualization*

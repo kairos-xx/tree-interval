@@ -67,7 +67,23 @@ def demonstrate_leaves():
 
 
 def demonstrate_tree_operations():
+    """Demonstrates various tree operations including styling."""
     print("\n=== Tree Operations ===")
+    
+    # Add styling examples
+    print("\n=== Styling Examples ===")
+    root = Leaf(Position(0, 100), info={"type": "Module"})
+    root.rich_style = RichStyle(color="green", bold=True)
+    
+    child = Leaf(Position(10, 50), info={"type": "FunctionDef"})
+    child.rich_style = RichStyle(color="blue", bold=False)
+    
+    tree = Tree("Styled Example")
+    tree.root = root
+    tree.add_leaf(child)
+    
+    printer = RichTreePrinter()
+    printer.print_tree(tree)
     # Create tree
     tree = Tree[str]("Example Code", start_lineno=1, indent_size=4)
     print("Tree created with source:", tree.source)
