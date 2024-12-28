@@ -441,13 +441,6 @@ def main():
     parent2.add_child(parent2_child1)
     parent2.add_child(parent2_child2)
 
-    # Build complete tree first
-    tree.root = grand_parent
-    grand_parent.add_child(parent1)
-    grand_parent.add_child(parent2)
-    parent1.add_child(parent1_child1)
-    parent1.add_child(parent1_child2)
-
     # Test parent relationship
     parent_node = parent1_child1.parent
     parent_info = parent_node.info if parent_node else None
@@ -464,11 +457,7 @@ def main():
     print(f"Child 1.2's previous sibling: {prev_info}")
 
     # Test parent navigation
-    next_parent = parent1.next
-    prev_node = parent1.previous
-    print(
-        f"Parent 1's next and previous: {prev_node.info if prev_node else None}"
-    )
+    print(f"Parent 1's next sibling: {parent1.next.info if parent1.next else None}")
 
 def demonstrate_node_navigation():
     print("\n=== Node Navigation Examples ===")
