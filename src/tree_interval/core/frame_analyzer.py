@@ -20,17 +20,21 @@ class FrameAnalyzer:
         self.current_node = None
 
     def find_current_node(self) -> Optional[Leaf]:
-        """Find the AST node corresponding to current frame position."""
-        if self.current_node is not None:
-            return self.current_node
+        """Find the AST node corresponding to current frame position.
+        
+        Returns:
+            Optional[Leaf]: The AST node at current frame position, or None if not found
+        """
         self.tree = self.tree or self.build_tree()
         if not self.tree or not self.tree.root:
             return None
-        self.current_node = self.tree.find_best_match(
-            *self.ast_builder._calculate_line_positions()[
-                self.frame_lineno - self.frame_firstlineno
-            ]
-        )
+            
+        if self.current_node is None:
+            self.current_node = self.tree.find_best_match(
+                *self.ast_builder._calculate_line_positions()[
+                    self.frame_lineno - self.frame_firstlineno
+                ]
+            )
         return self.current_node
 
     def build_tree(self) -> Optional[Tree]:

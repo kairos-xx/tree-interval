@@ -121,35 +121,27 @@ class Position:
 
     @property
     def lineno(self) -> int:
+        """Get line number with fallback to 1."""
         return self._lineno if self._lineno is not None else 1
 
     @lineno.setter
     def lineno(self, value: Optional[int]) -> None:
+        """Set line number."""
         self._lineno = value
 
     @property
     def end_lineno(self) -> int:
+        """Get end line number with fallback to 1."""
         return self._end_lineno if self._end_lineno is not None else 1
 
     @end_lineno.setter
     def end_lineno(self, value: Optional[int]) -> None:
+        """Set end line number."""
         self._end_lineno = value
 
-    @property
-    def col_offset(self) -> Optional[int]:
-        return self._col_offset
-
-    @col_offset.setter
-    def col_offset(self, value: Optional[int]) -> None:
-        self._col_offset = value
-
-    @property
-    def end_col_offset(self) -> Optional[int]:
-        return self._end_col_offset
-
-    @end_col_offset.setter
-    def end_col_offset(self, value: Optional[int]) -> None:
-        self._end_col_offset = value
+    # Direct property access for offsets since they can be None
+    col_offset = property(lambda self: self._col_offset)
+    end_col_offset = property(lambda self: self._end_col_offset)
 
     @property
     def absolute_start(self) -> Optional[int]:
@@ -626,6 +618,16 @@ class Tree(Generic[T]):
 
 
 class NestedAttributes:
+    """Dynamic attribute container for nested node properties.
+    
+    Attributes:
+        position: Nested position attributes
+        start: Start position
+        end: End position 
+        info: Node information
+        size: Node size
+        children: Child nodes
+    """
     position: "NestedAttributes"
     start: Optional[int]
     end: Optional[int]
