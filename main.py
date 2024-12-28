@@ -216,7 +216,7 @@ def demonstrate_frame_analyzer():
         # Show current node
         current_node = analyzer.find_current_node()
         print("Current Node Information:")
-        print(f"Node: {current_node} if current_node else None}")
+        print(f"Node: {current_node if current_node else None}")
         # Build and show tree
         tree = analyzer.build_tree()
 
