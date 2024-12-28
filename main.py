@@ -237,9 +237,9 @@ def demonstrate_frame_analyzer():
                     node.style = LeafStyle(color="#ff0000", bold=True)
                     node.selected = True
                 elif isinstance(node.info, dict) and "type" in node.info:
-                    if node.info["type"] == "Module":
+                    if node.info["name"] == "Module":
                         node.style = LeafStyle(color="#00ff00", bold=True)
-                    elif node.info["type"] == "FunctionDef":
+                    elif node.info["name"] == "FunctionDef":
                         node.style = LeafStyle(color="#0000ff", bold=False)
                     else:
                         node.style = LeafStyle(color="#888888", bold=False)
