@@ -295,7 +295,7 @@ class Leaf:
         else:
             self.position = Position(position, end)
             self._info = info
-            
+
         self.style = style
         self.rich_style = rich_style
 
@@ -383,8 +383,8 @@ class Leaf:
             best_match_distance = distance
         best_match = self
         for child in self.children:
-            child_match = child.find_best_match(start, end,
-                                                best_match_distance)
+            child_match = child.find_best_match(
+                start, end, best_match_distance)
             if child_match is not None:
                 distance = calc_distance(child_match)
                 if distance < best_match_distance:
@@ -590,9 +590,9 @@ class Leaf:
         """Compare two nodes for equality."""
         if not isinstance(other, Leaf):
             return False
-        return (self.position == other.position and 
+        return (self.position == other.position and
                 self.info == other.info and
-                self.start == other.start and 
+                self.start == other.start and
                 self.end == other.end)
 
 
