@@ -39,21 +39,21 @@ class AstTreeBuilder:
             if not lines:
                 return
 
-                # Find common indentation
-                indented_lines = [line for line in lines if line.strip()]
-                if not indented_lines:
-                    return
-                    
-                common_indent = min(
-                    len(line) - len(line.lstrip()) for line in indented_lines
-                )
+            # Find common indentation
+            indented_lines = [line for line in lines if line.strip()]
+            if not indented_lines:
+                return
                 
-                # Remove common indentation and join lines
-                self.source = "\n".join(
-                    line[common_indent:] if line.strip() else line for line in lines
-                )
-                self.indent_offset = common_indent
-                self.line_offset = self.frame_firstlineno - 1
+            common_indent = min(
+                len(line) - len(line.lstrip()) for line in indented_lines
+            )
+            
+            # Remove common indentation and join lines
+            self.source = "\n".join(
+                line[common_indent:] if line.strip() else line for line in lines
+            )
+            self.indent_offset = common_indent
+            self.line_offset = self.frame_firstlineno - 1
         except (SyntaxError, TypeError, ValueError):
             pass
 
