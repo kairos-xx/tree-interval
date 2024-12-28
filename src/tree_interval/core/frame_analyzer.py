@@ -43,6 +43,7 @@ class FrameAnalyzer:
                     if pos:
                         node.position = pos
                         nodes_by_pos[(pos.start, pos.end)] = node
+                        print(node.selected)
             
             # Second pass: Build parent-child relationships
             sorted_positions = sorted(nodes_by_pos.keys(), key=lambda x: (x[0], -x[1]))
