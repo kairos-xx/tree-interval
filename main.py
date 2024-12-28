@@ -176,7 +176,7 @@ def demonstrate_tree_operations():
     # Tree traversal  
     print("\nTree Traversal:") 
     flat_list = tree.flatten()
-    print("Flattened tree:", [str(leaf.info) for leaf in flat_list])
+    print("Flattened tree:", flat_list)
 
     # Different visualization methods
     print("\nVisualization Methods:")
