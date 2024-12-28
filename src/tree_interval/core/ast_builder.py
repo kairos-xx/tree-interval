@@ -15,7 +15,11 @@ from .interval_core import Leaf, Position, Tree
 
 class AstTreeBuilder:
     def __init__(self, source: Union[FrameType, str]) -> None:
-        self.source = None
+        self.source: Optional[str] = None
+        self.indent_offset: int = 0
+        self.line_offset: int = 0
+        self.frame_firstlineno: Optional[int] = None
+        
         if isinstance(source, str):
             self.source = source
         else:

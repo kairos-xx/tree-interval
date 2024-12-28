@@ -99,19 +99,21 @@ class Position:
                     source = end
                     end = None
                 dis_pos = start
-                if source is not None:
-                    if isinstance(source, str):
-                        # Calculate start and end from line/col offsets
-                        lines = source.split("\n")
-                        lineno = int(getattr(dis_pos, 'lineno', 1))
-                        end_lineno = int(getattr(dis_pos, 'end_lineno', lineno))
-                        col_offset = int(getattr(dis_pos, 'col_offset', 0))
-                        end_col_offset = int(getattr(dis_pos, 'end_col_offset', col_offset))
-                        
-                        pos_start = sum(len(line) + 1 for line in lines[:lineno - 1]) + col_offset
-                        pos_end = sum(len(line) + 1 for line in lines[:end_lineno - 1]) + end_col_offset
-                    self.start = pos_start
-                    self.end = pos_end
+                pos_start = 0
+                pos_end = 0
+                if source is not None and isinstance(source, str):
+                    # Calculate start and end from line/col offsets
+                    lines = source.split("\n")
+                    lineno = int(getattr(dis_pos, 'lineno', 1))
+                    end_lineno = int(getattr(dis_pos, 'end_lineno', lineno))
+                    col_offset = int(getattr(dis_pos, 'col_offset', 0))
+                    end_col_offset = int(getattr(dis_pos, 'end_col_offset', col_offset))
+                    
+                    pos_start = sum(len(line) + 1 for line in lines[:lineno - 1]) + col_offset
+                    pos_end = sum(len(line) + 1 for line in lines[:end_lineno - 1]) + end_col_offset
+                
+                self.start = pos_start
+                self.end = pos_end
                 else:
                     # Fallback to using line numbers as positions if no source provided
                     self.start = dis_pos.col_offset if dis_pos.col_offset is not None else 0
