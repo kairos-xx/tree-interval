@@ -148,6 +148,7 @@ class AstTreeBuilder:
     def build(self) -> Optional[Tree]:
         if not self.source:
             raise ValueError("No source code available")
+        
         tree = parse(self.source)
         return self._build_tree_from_ast(tree)
 
@@ -161,6 +162,7 @@ class AstTreeBuilder:
         if not self.source:
             raise ValueError("No source code available")
         result_tree = Tree[str](self.source)
+        
         root_pos = Position(0, len(self.source), "Module")
         result_tree.root = Leaf(root_pos)
 
@@ -184,13 +186,14 @@ class AstTreeBuilder:
 
         # Sort nodes by position and size to ensure proper nesting
         nodes_with_positions.sort(key=lambda x: (x[0], -(x[1] - x[0])))
-
+        
         # Add nodes to tree maintaining proper hierarchy
         for _, _, leaf in nodes_with_positions:
             if not result_tree.root:
                 result_tree.root = leaf
             else:
                 # Find the innermost containing node
+                
                 best_match = None
                 for start, end, potential_parent in nodes_with_positions:
                     if (start <= leaf.start and end >= leaf.end
@@ -199,11 +202,15 @@ class AstTreeBuilder:
                          (end - start) < (best_match.end - best_match.start))):
                         best_match = potential_parent
 
+
+                print(f"leaf: {leaf.info} | best_match: {bool(best_match)}")
                 if best_match:
                     best_match.add_child(leaf)
                 else:
                     result_tree.add_leaf(leaf)
+                
 
+        print(result_tree.flatten())
         return result_tree
 
     def _line_col_to_pos(self, lineno: int, col_offset: int) -> Optional[int]:

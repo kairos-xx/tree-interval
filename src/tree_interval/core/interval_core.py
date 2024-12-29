@@ -38,6 +38,7 @@ from typing import (
     TypeVar,
     Union,
 )
+
 from .ast_types import AST_TYPES
 
 
@@ -427,7 +428,7 @@ class Leaf:
         """
         if not self.info or self.info.get("type") != "Attribute":
             return None
-            
+
         current = self.parent
         while current:
             if current.info and current.info.get("type") == "Attribute":
@@ -440,11 +441,10 @@ class Leaf:
         """Find the closest parent node that is a statement according to AST_TYPES."""
         current = self
         while current:
-            if (current.info 
-                and isinstance(current.info, dict) 
-                and current.info.get("type") 
-                and current.info["type"] in AST_TYPES 
-                and AST_TYPES[current.info["type"]]["statement"]):
+            if (current.info and isinstance(current.info, dict)
+                    and current.info.get("type")
+                    and current.info["type"] in AST_TYPES
+                    and AST_TYPES[current.info["type"]]["statement"]):
                 return current
             current = current.parent
         return None
