@@ -67,3 +67,12 @@ author = 299513
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "rm -rf dist build *.egg-info && python  setup.py sdist bdist_wheel"
+
+[[workflows.workflow]]
+name = "tests"
+mode = "sequential"
+author = 299513
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pytest /tests | tee scripts/tests.log 2>&1"

@@ -4,6 +4,7 @@ from rich.style import Style as RichStyle
 
 from src.tree_interval import Leaf, Position
 from src.tree_interval.rich_printer import RichPrintConfig
+from tree_interval.core.interval_core import LeafStyle
 
 
 def test_node_styling():
@@ -43,25 +44,28 @@ def test_printer_config():
     assert config.leaf_style.color == "yellow"
 
 
-if __name__ == "__main__":
-    pytest.main([__file__])
 def test_leaf_style_creation():
     """Test LeafStyle creation and defaults."""
     style = LeafStyle(color="#FF0000")
     assert style.color == "#FF0000"
     assert style.bold is False
 
-    style_bold = LeafStyle(color="#00FF00", bold=True) 
+    style_bold = LeafStyle(color="#00FF00", bold=True)
     assert style_bold.color == "#00FF00"
     assert style_bold.bold is True
+
 
 def test_leaf_style_inheritance():
     """Test style inheritance through tree hierarchy."""
     parent = Leaf(Position(0, 100))
     child = Leaf(Position(10, 50))
-    
+
     parent.add_child(child)
     parent.style = LeafStyle(color="#FF0000", bold=True)
-    
+
     assert parent.style.color == "#FF0000"
     assert parent.style.bold is True
+
+
+if __name__ == "__main__":
+    pytest.main([__file__])
