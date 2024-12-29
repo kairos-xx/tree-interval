@@ -209,6 +209,8 @@ class AstTreeBuilder:
 
             if best_match:
                 best_match.add_child(leaf)
+                if not best_match.parent:
+                    result_tree.add_leaf(best_match)
             else:
                 result_tree.add_leaf(leaf)
         return result_tree
