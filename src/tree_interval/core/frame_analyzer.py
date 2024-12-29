@@ -112,3 +112,8 @@ class FrameAnalyzer:
                             parent_node.add_child(current_node) #Adds current node as a child of the parent node
                             break #Break out of the loop after adding the child
         return self.tree #Return the tree
+
+from inspect import currentframe
+analyzer = FrameAnalyzer(currentframe())
+node = analyzer.find_current_node()  # Get current execution point
+tree = analyzer.build_tree()         # Build full AST representation
