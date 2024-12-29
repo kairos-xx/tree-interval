@@ -420,6 +420,22 @@ class Leaf:
         self.position.selected = value
 
     @property
+    def next_attribute(self) -> Optional["Leaf"]:
+        """Find the next attribute in a chained attribute access.
+        Example: obj.attr1.attr2 -> for attr1 node, returns attr2 node
+        Returns None if this is not part of an attribute chain or is the last attribute.
+        """
+        if not self.info or self.info.get("type") != "Attribute":
+            return None
+            
+        current = self.parent
+        while current:
+            if current.info and current.info.get("type") == "Attribute":
+                return current
+            current = current.parent
+        return None
+
+    @property
     def top_statement(self) -> Optional["Leaf"]:
         """Find the closest parent node that is a statement according to AST_TYPES."""
         current = self

@@ -74,6 +74,21 @@ def test_top_statement_complex() -> None:
     assert call.top_statement == assign
 
 
+def test_next_attribute() -> None:
+    """Test next_attribute property for chained attribute access"""
+    # Create: obj.attr1.attr2
+    attr1 = Leaf(Position(0, 10), {"type": "Attribute"})
+    attr2 = Leaf(Position(11, 20), {"type": "Attribute"})
+    name = Leaf(Position(5, 8), {"type": "Name"})
+    
+    attr1.add_child(name)
+    attr2.add_child(attr1)
+    
+    assert attr1.next_attribute == attr2
+    assert attr2.next_attribute is None
+    assert name.next_attribute is None
+
+
 if __name__ == "__main__":
     pytest.main([__file__])
 
