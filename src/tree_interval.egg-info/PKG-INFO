@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: tree-interval
-Version: 0.1.8
+Version: 0.1.9
 Summary: A Python package for managing and visualizing interval tree structures
 Home-page: https://github.com/kairos-xx/tree-interval
 Author: Joao Lopes

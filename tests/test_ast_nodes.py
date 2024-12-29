@@ -1,4 +1,5 @@
 """Tests for AST node information access"""
+import pytest
 
 from tree_interval import AstTreeBuilder
 
@@ -38,3 +39,7 @@ def test_ast_node_fields() -> None:
     assert "_fields" in dir(found_node.ast_node)
     assert "name" in found_node.ast_node._fields
     assert found_node.ast_node.name == "test"
+
+
+if __name__ == "__main__":
+    pytest.main([__file__])
