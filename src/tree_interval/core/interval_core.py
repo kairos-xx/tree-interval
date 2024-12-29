@@ -18,7 +18,11 @@ from ..visualizer import TreeVisualizer, VisualizationConfig
 # Type variable for generic tree operations
 T = TypeVar('T')
 
-class Tree:
+from typing import TypeVar, Generic
+
+T = TypeVar('T')
+
+class Tree(Generic[T]):
     """A tree structure that manages interval-based nodes.
     
     Attributes:
