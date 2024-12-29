@@ -419,7 +419,7 @@ class Leaf:
         self.position.selected = value
 
     @property
-    def to_statement(self) -> Optional["Leaf"]:
+    def top_statement(self) -> Optional["Leaf"]:
         """Find the closest parent node that is a statement according to AST_TYPES."""
         current = self
         while current:
