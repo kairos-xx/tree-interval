@@ -30,7 +30,7 @@ author = 299513
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "python scripts/pypi_upload.py | tee scripts/pypi_upload.log 2>&1"
+args = "python scripts/pypi_upload.py | tee logs/pypi_upload.log 2>&1"
 
 [[workflows.workflow]]
 name = "Ruff"
@@ -75,4 +75,4 @@ author = 299513
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "pytest /tests | tee scripts/tests.log 2>&1"
+args = "pytest ./tests | tee logs/tests.log 2>&1"
