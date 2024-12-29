@@ -367,3 +367,18 @@ class Leaf:
                 return current
             current = current.parent
         return None
+
+    def match(self, other: Any) -> bool:
+        """Compare two nodes for equality.
+        
+        Args:
+            other: Node to compare with
+            
+        Returns:
+            bool: True if nodes match, False otherwise
+        """
+        if not isinstance(other, Leaf):
+            return False
+        return (self.start == other.start and 
+                self.end == other.end and 
+                self.info == other.info)
