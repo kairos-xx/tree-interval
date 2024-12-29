@@ -32,3 +32,5 @@ __all__ = [
     "TreeVisualizer",
     "VisualizationConfig",
 ]
+
+__version__ = '0.1.0'
