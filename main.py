@@ -261,6 +261,11 @@ def demonstrate_frame_analyzer():
         current_node = analyzer.find_current_node()
         print("Current Node Information:")
         print(f"Node: {current_node if current_node else None}")
+        
+        # Show top statement for current node
+        if current_node:
+            top_stmt = current_node.top_statement
+            print(f"Top Statement: {top_stmt.info['type'] if top_stmt and top_stmt.info else None}")
 
         tree = analyzer.build_tree()
 
