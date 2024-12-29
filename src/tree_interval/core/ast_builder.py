@@ -1,4 +1,3 @@
-
 """
 AST Tree Builder module.
 
@@ -17,10 +16,10 @@ from .interval_core import Leaf, Position, Tree
 class AstTreeBuilder:
     """
     Builds tree structures from Python Abstract Syntax Trees (AST).
-    
+
     This class handles the conversion of Python source code or frame objects into
-    tree structures with precise position tracking. It manages source code 
-    preprocessing, AST parsing, and tree construction with positional information.
+    tree structures with position tracking. It manages source code preprocessing,
+    AST parsing, and tree construction with positional information.
 
     Attributes:
         source (Optional[str]): The source code to analyze
@@ -39,7 +38,7 @@ class AstTreeBuilder:
     def __init__(self, source: Union[FrameType, str]) -> None:
         """
         Initialize the AST builder with source code or a frame.
-        
+
         Args:
             source: Either a string containing source code or a frame object
                    from which source code can be extracted
@@ -59,13 +58,13 @@ class AstTreeBuilder:
     def _get_source(self) -> None:
         """
         Extract and process source code from the input source.
-        
+
         This method handles:
         - Source code extraction from frames
         - Common indentation detection
         - Line number offset calculation
         - Source code normalization
-        
+
         Implementation Details:
         - Removes common indentation from all lines
         - Preserves empty lines

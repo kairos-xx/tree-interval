@@ -1,6 +1,4 @@
-
 """Examples of tree styling capabilities."""
-import pytest
 from tree_interval import Leaf, Position, LeafStyle
 
 def test_styling():
@@ -13,4 +11,5 @@ def test_styling():
     assert node.style.bold is True
 
 if __name__ == "__main__":
+    import pytest
     pytest.main([__file__])
