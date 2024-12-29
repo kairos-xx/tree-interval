@@ -1,6 +1,8 @@
 """Tests for AST node information access"""
+import pytest
 
 from tree_interval import AstTreeBuilder
+from tree_interval.core.interval_core import Leaf, Position, Tree
 
 
 def test_ast_node_access() -> None:
@@ -19,6 +21,7 @@ def test_ast_node_access() -> None:
         raise AssertionError("Node not found or ast_node is None")
     assert hasattr(found_node.ast_node, "targets")
     assert hasattr(found_node.ast_node, "value")
+
 
 
 def test_ast_node_fields() -> None:
@@ -69,3 +72,11 @@ def test_top_statement_complex() -> None:
     assert attr2.top_statement == assign
     assert attr1.top_statement == assign
     assert call.top_statement == assign
+
+
+if __name__ == "__main__":
+    pytest.main([__file__])
+
+
+
+

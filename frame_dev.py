@@ -1,9 +1,8 @@
-from ast import unparse
-from inspect import currentframe
+from ast import AST, unparse
+from inspect import stack
 
 from tree_interval.core.frame_analyzer import FrameAnalyzer
 from tree_interval.core.interval_core import LeafStyle
-from tree_interval.rich_printer.printer import RichTreePrinter
 
 
 class Nested:
@@ -11,28 +10,34 @@ class Nested:
     def __getattr__(self, name):
         new = type(self)()
         setattr(self, name, new)
-        analyzer = FrameAnalyzer(currentframe().f_back)
-        current_node = analyzer.find_current_node()
-        top_statement = current_node.top_statement  # Returns closest parent that is a statement
 
-        print(top_statement)
-        print(f"Current node: {unparse(current_node.ast_node)} | attribute name: {name}")
-        
-        tree = analyzer.build_tree()
-        if tree:
-            flat_nodes = tree.flatten()
-            for node in flat_nodes:
-                if node.match(current_node):
-                    node.style = LeafStyle(color="#ff0000", bold=False)
-                
-            tree.visualize()
-        
+        analyzer = FrameAnalyzer(stack()[1].frame)
+        current_node = analyzer.find_current_node()
+        if current_node and hasattr(current_node, "ast_node"):
+            top_statement = current_node.top_statement 
+
+            ast_node = getattr(current_node, "ast_node", None)
+            if isinstance(ast_node, AST):
+                print(top_statement)
+                print(
+                    f"Current node: {unparse(ast_node)} | attribute name: {name}"
+                )
+
+            tree = analyzer.build_tree()
+            if tree:
+                flat_nodes = tree.flatten()
+                for node in flat_nodes:
+                    if node.match(current_node):
+                        node.style = LeafStyle(color="#ff0000", bold=False)
+
+                tree.visualize()
+
         return new
 
 
 def analyze_this():
     a = Nested()
-    a.b.c.d = 3 
+    a.b.c.d = 3
     # analyzer = FrameAnalyzer(currentframe())
 
     # current_node = analyzer.find_current_node()

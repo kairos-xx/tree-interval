@@ -272,7 +272,8 @@ def demonstrate_frame_analyzer():
         if current_node:
             top_stmt = current_node.top_statement
             print(
-                f"Top Statement: {top_stmt.info['type'] if top_stmt and top_stmt.info else None}"
+                "Top Statement: " +
+                f"{top_stmt.info['type'] if top_stmt and top_stmt.info else None}"
             )
 
         tree = analyzer.build_tree()
