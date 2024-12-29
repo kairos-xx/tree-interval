@@ -1,4 +1,25 @@
-"""Rich-based tree printer implementation."""
+"""
+Rich-based Tree Visualization Implementation.
+
+This module provides advanced tree visualization capabilities using the Rich library.
+It supports customizable styling, node decoration, and complex tree representations.
+
+Key Features:
+    - Customizable node styling with Rich styles
+    - Support for selected node highlighting
+    - Configurable display formats for node information
+    - Position and size information display options
+    - Type-based automatic styling for AST nodes
+
+Technical Details:
+    - Uses Rich's tree and style components
+    - Supports hierarchical structure visualization
+    - Handles custom styling through style objects
+    - Provides flexible configuration options
+    
+The RichTreePrinter class serves as the main entry point for tree visualization,
+offering both basic and advanced formatting options through the Rich library.
+"""
 from typing import Optional
 
 from rich.console import Console

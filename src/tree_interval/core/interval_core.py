@@ -1,7 +1,25 @@
 """
-Core tree data structures.
+Core tree data structures and position handling functionality.
 
-This module contains the core Tree and Leaf classes used across the project.
+This module provides the foundational classes for managing tree structures with 
+interval-based positioning. It includes three main classes:
+
+- Position: Handles position tracking with line numbers and column offsets
+- Leaf: Represents nodes in the tree with position information
+- Tree: Manages the overall tree structure and node relationships
+
+Key Features:
+    - Precise position tracking with line/column information
+    - Parent-child relationship management
+    - Tree traversal and node search capabilities
+    - JSON serialization support
+    - Rich visualization integration
+    
+Technical Details:
+    - Positions can be created from frame objects, tuples, or direct values
+    - Nodes maintain bidirectional parent-child relationships
+    - The tree structure supports generic typing for flexible data storage
+    - All position calculations handle both absolute and relative positions
 """
 
 from dis import Positions as disposition
