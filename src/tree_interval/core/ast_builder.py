@@ -80,7 +80,7 @@ class AstTreeBuilder:
             if not lines:
                 return
 
-            # Find common indentation
+            # Find common indentation only for non-empty lines
             indented_lines = [line for line in lines if line.strip()]
             if not indented_lines:
                 return
@@ -88,13 +88,14 @@ class AstTreeBuilder:
             common_indent = min(
                 len(line) - len(line.lstrip()) for line in indented_lines)
 
-            # Remove common indentation and join lines
+            # Remove common indentation and preserve all lines
             self.source = "\n".join(
-                line[common_indent:] if line.strip() else line
+                line[common_indent:] if line.strip() else ""
                 for line in lines)
             
             self.indent_offset = common_indent
-            self.line_offset = self.frame_firstlineno - 1
+            # Don't adjust line offset since we want to keep all lines
+            self.line_offset = 0
         except (SyntaxError, TypeError, ValueError):
             pass
 
@@ -117,15 +118,10 @@ class AstTreeBuilder:
             if lineno is None:
                 return None
 
-            # Adjust line numbers for frame context
-            if hasattr(self, "line_offset"):
-                start_line = lineno - 1  # + self.line_offset
-                end_lineno = getattr(node, "end_lineno", lineno)
-                end_line = end_lineno - 1  # + self.line_offset
-            else:
-                start_line = lineno - 1
-                end_lineno = getattr(node, "end_lineno", lineno)
-                end_line = end_lineno - 1
+            # Always use absolute line numbers from the AST
+            start_line = lineno - 1
+            end_lineno = getattr(node, "end_lineno", lineno)
+            end_line = end_lineno - 1
 
             # Adjust column offsets for dedentation
             col_offset = getattr(node, "col_offset", 0)
