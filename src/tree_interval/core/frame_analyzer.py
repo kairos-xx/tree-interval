@@ -1,4 +1,3 @@
-
 """
 Frame Analysis Module.
 
@@ -66,8 +65,7 @@ class FrameAnalyzer:
         if self.current_node is None:
             # Find best match for the current frame position
             self.current_node = self.tree.find_best_match(
-                self.frame_position.start, self.frame_position.end
-            )
+                self.frame_position.start, self.frame_position.end)
         return self.current_node
 
     def build_tree(self) -> Optional[Tree]:
@@ -90,7 +88,8 @@ class FrameAnalyzer:
 
             # First pass: Update all node positions
             for node in self.tree.flatten():
-                if hasattr(node, "ast_node") and isinstance(node.ast_node, AST):
+                if hasattr(node, "ast_node") and isinstance(
+                        node.ast_node, AST):
                     pos = self.ast_builder._get_node_position(
                         cast(AST, node.ast_node), line_positions)
                     if pos:
@@ -99,8 +98,8 @@ class FrameAnalyzer:
                         nodes_by_pos[(pos.start, pos.end)] = node
 
             # Second pass: Build parent-child relationships
-            sorted_positions = sorted(
-                nodes_by_pos.keys(), key=lambda x: (x[0], -x[1]))
+            sorted_positions = sorted(nodes_by_pos.keys(),
+                                      key=lambda x: (x[0], -x[1]))
 
             for start, end in sorted_positions:
                 current_node = nodes_by_pos[(start, end)]
@@ -110,12 +109,12 @@ class FrameAnalyzer:
 
                 # Find smallest containing interval for parent-child relationships
                 for parent_start, parent_end in sorted_positions:
-                    if (parent_start <= start and parent_end >= end and
-                            (parent_start, parent_end) != (start, end)):
+                    if (parent_start <= start and parent_end >= end
+                            and (parent_start, parent_end) != (start, end)):
                         parent_node = nodes_by_pos[(parent_start, parent_end)]
                         # Check if parent doesn't have a containing ancestor
                         if not any(p for p in parent_node.get_ancestors()
-                                 if p.start <= start and p.end >= end):
+                                   if p.start <= start and p.end >= end):
                             parent_node.add_child(current_node)
                             break
 
