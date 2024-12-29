@@ -187,18 +187,25 @@ class AstTreeBuilder:
         # Sort nodes by position and size to ensure proper nesting
         nodes_with_positions.sort(key=lambda x: (x[0], -(x[1] - x[0])))
         
+        # Track processed nodes to prevent cycles
+        processed = set()
+        
         # Add nodes to tree maintaining proper hierarchy
         for _, _, leaf in nodes_with_positions:
             if not result_tree.root:
                 result_tree.root = leaf
+                processed.add(leaf)
                 continue
 
+            if leaf in processed:
+                continue
+                
             # Find immediate parent for current leaf
             best_match = None
             smallest_size = float('inf')
             
             for start, end, potential_parent in nodes_with_positions:
-                if potential_parent == leaf:
+                if potential_parent == leaf or potential_parent in leaf.get_ancestors():
                     continue
                     
                 if (start <= leaf.start and end >= leaf.end):
@@ -207,12 +214,15 @@ class AstTreeBuilder:
                         best_match = potential_parent
                         smallest_size = size
 
-            if best_match:
+            if best_match and best_match not in processed:
                 best_match.add_child(leaf)
+                processed.add(leaf)
                 if not best_match.parent:
                     result_tree.add_leaf(best_match)
+                    processed.add(best_match)
             else:
                 result_tree.add_leaf(leaf)
+                processed.add(leaf)
         return result_tree
 
     def _line_col_to_pos(self, lineno: int, col_offset: int) -> Optional[int]:
