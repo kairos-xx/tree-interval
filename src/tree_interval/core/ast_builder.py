@@ -191,26 +191,23 @@ class AstTreeBuilder:
         for _, _, leaf in nodes_with_positions:
             if not result_tree.root:
                 result_tree.root = leaf
+                continue
+
+            # Find best parent for current leaf
+            best_match = None
+            smallest_size = float('inf')
+            
+            for start, end, potential_parent in nodes_with_positions:
+                size = end - start
+                if (start <= leaf.start and end >= leaf.end and 
+                    potential_parent != leaf and size < smallest_size):
+                    best_match = potential_parent
+                    smallest_size = size
+
+            if best_match:
+                best_match.add_child(leaf)
             else:
-                # Find the innermost containing node
-                
-                best_match = None
-                for start, end, potential_parent in nodes_with_positions:
-                    if (start <= leaf.start and end >= leaf.end
-                            and potential_parent != leaf and
-                        (not best_match or
-                         (end - start) < (best_match.end - best_match.start))):
-                        best_match = potential_parent
-
-
-                print(f"leaf: {leaf.info} | best_match: {bool(best_match)}")
-                if best_match:
-                    best_match.add_child(leaf)
-                else:
-                    result_tree.add_leaf(leaf)
-                
-
-        print(result_tree.flatten())
+                result_tree.add_leaf(leaf)
         return result_tree
 
     def _line_col_to_pos(self, lineno: int, col_offset: int) -> Optional[int]:
