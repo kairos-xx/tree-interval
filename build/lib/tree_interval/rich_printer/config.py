@@ -1,4 +1,23 @@
-"""Configuration for Rich tree printer."""
+"""
+Rich Tree Printer Configuration Module.
+
+This module provides configuration options for the Rich-based tree visualization.
+It defines styles and display preferences for different node types and components
+of the tree visualization.
+
+Key Features:
+    - Customizable node styling
+    - Different styles for root, nodes, and leaves
+    - Information display toggles
+    - Guide style customization
+    - Selected node highlighting
+
+Technical Details:
+    - Uses Rich Style objects for formatting
+    - Supports ANSI color codes
+    - Configurable indentation
+    - Toggle-based information display
+"""
 
 from dataclasses import dataclass
 

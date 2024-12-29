@@ -1,8 +1,23 @@
 """
-Tree Visualizer package.
+Tree Visualization Core Module.
 
-A Python package for building and visualizing tree structures
-with support for AST analysis.
+This module provides the core visualization functionality for tree structures,
+offering multiple visualization formats and configuration options.
+
+Key Components:
+    - TreeVisualizer: Main class for tree visualization
+    - VisualizationConfig: Configuration class for customizing output
+    - Multiple output formats: Supports various display styles
+    - Position format handling: Flexible position display options
+
+Technical Details:
+    - Supports ASCII and Rich-based visualization
+    - Configurable node formatting and styling
+    - Position and size information display
+    - Integration with Rich printer for enhanced output
+    
+The module acts as a facade for various visualization implementations,
+providing a consistent interface for different visualization needs.
 """
 
 from typing import Optional
@@ -13,6 +28,12 @@ DEFAULT_CONFIG = VisualizationConfig()
 
 
 class TreeVisualizer:
+    """
+    Main class for visualizing tree structures.
+
+    Provides methods for customizing the visualization process,
+    including node formatting, position representation, and styling.
+    """
     # ANSI color codes
     BLUE = "\033[94m"
     GREEN = "\033[92m"
@@ -21,7 +42,14 @@ class TreeVisualizer:
 
     @staticmethod
     def visualize(tree, config: Optional[VisualizationConfig] = None):
-        """Visualize a tree structure with customizable formatting options."""
+        """
+        Visualize a tree structure with customizable formatting options.
+
+        Args:
+            tree: The tree structure to visualize.
+            config: An optional VisualizationConfig object for customizing the output.
+                If None, uses the default configuration.
+        """
         if config is None:
             config = DEFAULT_CONFIG
 
@@ -30,6 +58,7 @@ class TreeVisualizer:
             return
 
         def format_position(node) -> str:
+            """Format the position information of a node according to the configuration."""
             if config.position_format == "position":
                 return (f"Position(start={node.start}, end={node.end}, "
                         f"lineno={node.lineno}, end_lineno={node.end_lineno}, "
@@ -41,6 +70,7 @@ class TreeVisualizer:
             return f"({node.start}, {node.end})"
 
         def get_terminal_width() -> int:
+            """Get the width of the terminal window."""
             try:
                 import shutil
 
@@ -50,6 +80,7 @@ class TreeVisualizer:
                 return 80  # Default fallback width
 
         def format_node_info(node, level: int = 0) -> str:
+            """Format additional information about a node for display."""
             parts = []
             prefix_len = level * 4 + 4  # Basic indentation + connector length
             terminal_width = get_terminal_width()
@@ -83,6 +114,7 @@ class TreeVisualizer:
             return " ".join(parts)
 
         def _print_node(node, prefix="", is_last=True, level=0):
+            """Recursively print the tree structure."""
             position_str = format_position(node)
             info_str = format_node_info(node)
             prefix_spaces = "" if level == 0 else prefix
