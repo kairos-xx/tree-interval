@@ -18,14 +18,73 @@ author_id = get_repl_author() or 299513  # Fallback to existing ID if API fails
 
 
 # Define workflows to check
-required_workflows = [{
-    'name': '[Format] ruff',
-    'mode': 'sequential',
-    'author': author_id,
-    'tasks': [{
-        'task': 'shell.exec',
-        'args': 'ruff format'
-    }]
+required_workflows = [
+    {
+        'name': '————————————————',
+        'mode': 'sequential',
+        'author': author_id,
+        'tasks': [{'task': 'shell.exec', 'args': ''}]
+    },
+    {
+        'name': '[Util] create zip',
+        'mode': 'sequential',
+        'author': author_id,
+        'tasks': [{'task': 'shell.exec', 'args': 'python scripts/create_zip.py'}]
+    },
+    {
+        'name': '[Util] build',
+        'mode': 'sequential',
+        'author': author_id,
+        'tasks': [{'task': 'shell.exec', 'args': 'rm -rf dist build *.egg-info && python  setup.py sdist bdist_wheel'}]
+    },
+    {
+        'name': '[Util] tests',
+        'mode': 'sequential',
+        'author': author_id,
+        'tasks': [{'task': 'shell.exec', 'args': 'pytest ./tests | tee logs/tests.log 2>&1'}]
+    },
+    {
+        'name': '[Util] update workflows',
+        'mode': 'sequential',
+        'author': author_id,
+        'tasks': [{'task': 'shell.exec', 'args': 'python scripts/update_workflows.py | tee logs/update_worflows.log 2>&1'}]
+    },
+    {
+        'name': '————————————————',
+        'mode': 'sequential',
+        'author': author_id,
+        'tasks': [{'task': 'shell.exec', 'args': ''}]
+    },
+    {
+        'name': '[Format] ruff',
+        'mode': 'sequential',
+        'author': author_id,
+        'tasks': [{'task': 'shell.exec', 'args': 'ruff format'}]
+    },
+    {
+        'name': '————————————————',
+        'mode': 'sequential',
+        'author': author_id,
+        'tasks': [{'task': 'shell.exec', 'args': ''}]
+    },
+    {
+        'name': '[Report] pyright',
+        'mode': 'sequential',
+        'author': author_id,
+        'tasks': [{'task': 'shell.exec', 'args': 'pyright --warnings | tee logs/pyright.log 2>&1'}]
+    },
+    {
+        'name': '[Report] flake8',
+        'mode': 'sequential',
+        'author': author_id,
+        'tasks': [{'task': 'shell.exec', 'args': 'flake8 --exclude */. --exclude ./build  | tee logs/flake8.log 2>&1'}]
+    },
+    {
+        'name': '[Report] ruff',
+        'mode': 'sequential',
+        'author': author_id,
+        'tasks': [{'task': 'shell.exec', 'args': 'ruff check ./src  | tee logs/ruff.log 2>&1'}]
+    }
 }, {
     'name':
     '[Util] create zip',
