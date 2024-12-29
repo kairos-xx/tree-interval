@@ -17,6 +17,90 @@ from typing import (Any, Callable, Dict, Iterator, List, Optional, Set, Tuple,
 # Type variable for generic tree operations
 T = TypeVar('T')
 
+class Tree:
+    """A tree structure that manages interval-based nodes.
+    
+    Attributes:
+        source (str): Source identifier for the tree
+        root (Optional[Leaf]): Root node of the tree
+        start_lineno (int): Starting line number
+        indent_size (int): Indentation size for visualization
+    """
+    
+    def __init__(self, source: str = "", start_lineno: int = 1, indent_size: int = 4):
+        self.source = source
+        self.root: Optional[Leaf] = None
+        self.start_lineno = start_lineno
+        self.indent_size = indent_size
+
+    def add_leaf(self, leaf: Leaf) -> None:
+        """Add a leaf to the tree under the root."""
+        if self.root:
+            self.root.add_child(leaf)
+            
+    def find_best_match(self, start: int, end: int) -> Optional[Leaf]:
+        """Find the best matching node for given interval."""
+        if not self.root:
+            return None
+        return self._find_best_match(self.root, start, end)
+        
+    def _find_best_match(self, node: Leaf, start: int, end: int) -> Optional[Leaf]:
+        """Recursively find best matching node."""
+        best_match = None
+        if node.start <= start and node.end >= end:
+            best_match = node
+            for child in node.children:
+                child_match = self._find_best_match(child, start, end)
+                if child_match:
+                    best_match = child_match
+        return best_match
+
+    def flatten(self) -> List[Leaf]:
+        """Return flattened list of all nodes."""
+        if not self.root:
+            return []
+        return self._flatten_helper(self.root, [])
+        
+    def _flatten_helper(self, node: Leaf, result: List[Leaf]) -> List[Leaf]:
+        """Helper for flatten operation."""
+        result.append(node)
+        for child in node.children:
+            self._flatten_helper(child, result)
+        return result
+
+    def to_json(self) -> str:
+        """Convert tree to JSON string."""
+        if not self.root:
+            return "{}"
+        return json.dumps(self._node_to_dict(self.root))
+        
+    @staticmethod
+    def from_json(json_str: str) -> 'Tree':
+        """Create tree from JSON string."""
+        tree = Tree()
+        if json_str != "{}":
+            data = json.loads(json_str)
+            tree.root = Tree._dict_to_node(data)
+        return tree
+
+    def _node_to_dict(self, node: Leaf) -> Dict:
+        """Convert node to dictionary."""
+        return {
+            "start": node.start,
+            "end": node.end,
+            "info": node.info,
+            "children": [self._node_to_dict(child) for child in node.children]
+        }
+
+    @staticmethod
+    def _dict_to_node(data: Dict) -> Leaf:
+        """Create node from dictionary."""
+        node = Leaf(Position(data["start"], data["end"]), data["info"])
+        for child_data in data["children"]:
+            child = Tree._dict_to_node(child_data)
+            node.add_child(child)
+        return node
+
 @dataclass
 class Position:
     """Represents a position in source code with both absolute and line-based coordinates.
