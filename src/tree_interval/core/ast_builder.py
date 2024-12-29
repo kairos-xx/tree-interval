@@ -193,17 +193,19 @@ class AstTreeBuilder:
                 result_tree.root = leaf
                 continue
 
-            # Find best parent for current leaf
+            # Find immediate parent for current leaf
             best_match = None
             smallest_size = float('inf')
             
             for start, end, potential_parent in nodes_with_positions:
-                size = end - start
-                if (start <= leaf.start and end >= leaf.end and 
-                    potential_parent != leaf and size < smallest_size):
-                    best_match = potential_parent
-                    result_tree.root.add_child(best_match)
-                    smallest_size = size
+                if potential_parent == leaf:
+                    continue
+                    
+                if (start <= leaf.start and end >= leaf.end):
+                    size = end - start
+                    if size < smallest_size:
+                        best_match = potential_parent
+                        smallest_size = size
 
             if best_match:
                 best_match.add_child(leaf)
