@@ -1,9 +1,7 @@
 
 """Examples demonstrating styling capabilities."""
 
-from rich.style import Style as RichStyle
-from tree_interval import Leaf, Position, Tree, LeafStyle
-
+from tree_interval import Leaf, Position, LeafStyle
 
 def test_styling():
     """Test basic styling functionality."""
@@ -13,7 +11,5 @@ def test_styling():
     assert node.style.color == "#FF0000"
     assert node.style.bold is True
 
-
 if __name__ == "__main__":
     test_styling()
-

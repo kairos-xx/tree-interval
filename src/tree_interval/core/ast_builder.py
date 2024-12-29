@@ -17,8 +17,8 @@ class AstTreeBuilder:
     """
     Builds tree structures from Python Abstract Syntax Trees (AST).
 
-    This class handles the conversion of Python source code or frame objects into
-    tree structures with position tracking. It manages source code preprocessing,
+    This class handles the conversion of Python source code or frame objects
+    into tree structures with position tracking. It manages preprocessing,
     AST parsing, and tree construction with positional information.
 
     Attributes:
