@@ -33,10 +33,17 @@ from typing import (
     Dict,
     Generic,
     List,
+    NamedTuple,
     Optional,
     TypeVar,
     Union,
 )
+
+
+class LeafStyle(NamedTuple):
+    """Style configuration for leaf nodes."""
+    color: str
+    bold: bool = False
 
 if TYPE_CHECKING:
     from ..visualizer.config import VisualizationConfig
