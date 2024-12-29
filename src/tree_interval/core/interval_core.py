@@ -249,6 +249,22 @@ class Leaf:
             child.parent = None
             self.children.remove(child)
 
+    def find_sibling(self, criteria: Callable[["Leaf"], bool]) -> Optional["Leaf"]:
+        """Find first sibling that matches the criteria.
+        
+        Args:
+            criteria: Function that takes a Leaf node and returns bool
+            
+        Returns:
+            Matching sibling node or None if not found
+        """
+        if not self.parent:
+            return None
+        for child in self.parent.children:
+            if child != self and criteria(child):
+                return child
+        return None
+
     def find_child(self, criteria: Callable[["Leaf"], bool]) -> Optional["Leaf"]:
         """Find first child node that matches the given criteria.
         
