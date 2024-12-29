@@ -2,9 +2,8 @@
 import pytest
 from rich.style import Style as RichStyle
 
-from src.tree_interval import Leaf, Position
-from src.tree_interval.rich_printer import RichPrintConfig
-from tree_interval.core.interval_core import LeafStyle
+from tree_interval import Leaf, Position, LeafStyle
+from tree_interval.rich_printer import RichPrintConfig
 
 
 def test_node_styling():
