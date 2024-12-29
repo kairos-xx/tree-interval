@@ -249,6 +249,23 @@ class Leaf:
             child.parent = None
             self.children.remove(child)
 
+    def find_child(self, criteria: Callable[["Leaf"], bool]) -> Optional["Leaf"]:
+        """Find first child node that matches the given criteria.
+        
+        Args:
+            criteria: Function that takes a Leaf node and returns bool
+            
+        Returns:
+            Matching child node or None if not found
+        """
+        for child in self.children:
+            if criteria(child):
+                return child
+            result = child.find_child(criteria)
+            if result:
+                return result
+        return None
+
     def find_parent(self, criteria: Callable[["Leaf"], bool]) -> Optional["Leaf"]:
         """Find first parent that matches the criteria.
         
