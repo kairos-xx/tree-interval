@@ -382,3 +382,16 @@ class Leaf:
         return (self.start == other.start and 
                 self.end == other.end and 
                 self.info == other.info)
+
+    def get_ancestors(self) -> List['Leaf']:
+        """Get list of ancestor nodes from parent to root.
+        
+        Returns:
+            List[Leaf]: List of ancestor nodes
+        """
+        ancestors = []
+        current = self.parent
+        while current:
+            ancestors.append(current)
+            current = current.parent
+        return ancestors
