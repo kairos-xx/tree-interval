@@ -1,15 +1,25 @@
-
 """
-AST Tree Builder module.
+AST Tree Builder Module.
 
-This module provides functionality to build tree structures from Python
-Abstract Syntax Trees.
+This module provides functionality for converting Python source code into tree structures
+by analyzing the Abstract Syntax Tree (AST). It handles source code parsing, position
+tracking, and tree construction with detailed node information.
+
+Key Features:
+    - Source code parsing and AST generation
+    - Position tracking with line and column information
+    - Tree structure building from AST nodes
+    - Support for frame-based source extraction
+    - Indentation and line position handling
+
+Technical Details:
+    - Uses Python's built-in ast module
+    - Maintains source code position awareness
+    - Handles nested AST node relationships
+    - Supports both string and frame input sources
 """
 
-from ast import AST, parse, unparse, walk
-from inspect import getsource
-from types import FrameType
-from typing import Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 from .interval_core import Leaf, Position, Tree
 
@@ -17,14 +27,14 @@ from .interval_core import Leaf, Position, Tree
 class AstTreeBuilder:
     """
     Builds tree structures from Python Abstract Syntax Trees (AST).
-    
+
     This class handles the conversion of Python source code or frame objects into
-    tree structures with precise position tracking. It manages source code 
-    preprocessing, AST parsing, and tree construction with positional information.
+    tree structures with precise position tracking. It manages source code preprocessing,
+    AST parsing, and tree construction.
 
     Attributes:
-        source (Optional[str]): The source code to analyze
-        indent_offset (int): Number of spaces in common indentation
+        source (Optional[str]): Source code to analyze
+        indent_offset (int): Common indentation spaces count
         line_offset (int): Line number offset for frame sources
         frame_firstlineno (Optional[int]): First line number in frame
 
@@ -33,7 +43,6 @@ class AstTreeBuilder:
         - Maintains source code position awareness
         - Processes indentation for accurate positioning
         - Supports AST node position mapping
-        - Builds hierarchical tree structures
     """
 
     def __init__(self, source: Union[FrameType, str]) -> None:
