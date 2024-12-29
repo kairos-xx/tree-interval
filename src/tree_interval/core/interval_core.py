@@ -45,6 +45,31 @@ T = TypeVar("T")
 
 
 class Position:
+    """
+    Represents a position in source code with line and column tracking.
+    
+    This class handles different types of position inputs and normalizes them into
+    a consistent format with start/end positions and line/column information.
+    
+    Attributes:
+        start (int): Starting position in the source
+        end (int): Ending position in the source
+        info (Any): Additional information about the position
+        selected (bool): Whether this position is currently selected
+        _lineno (int): Line number in source code
+        _end_lineno (int): Ending line number
+        _col_offset (int): Column offset from line start
+        _end_col_offset (int): Ending column offset
+        parent (Optional[Leaf]): Parent node in tree structure
+        children (List[Leaf]): Child nodes in tree structure
+        
+    Implementation Details:
+        - Handles frame objects for runtime position tracking
+        - Supports position objects from Python's dis module
+        - Maintains both absolute and line-relative positions
+        - Calculates proper indentation offsets
+        - Preserves parent-child relationships
+    """
 
     def __init__(
         self,
@@ -54,6 +79,19 @@ class Position:
         info: Optional[Any] = None,
         selected: bool = False,
     ):
+        """
+        Initialize a Position object.
+        
+        Args:
+            start: Starting position, frame object, or disposition object
+            end: Ending position (optional if start contains full position info)
+            source: Source code string or metadata dictionary
+            info: Additional position information
+            selected: Selection state of this position
+            
+        Raises:
+            ValueError: If both start and end are None for direct position init
+        """
         self.info = info
         self.selected = selected
         self._lineno: Optional[int] = None
@@ -603,7 +641,29 @@ class Leaf:
 
 
 class Tree(Generic[T]):
-    """A tree structure containing nodes with position information."""
+    """
+    A tree structure containing nodes with position information.
+    
+    This class implements a generic tree data structure where each node maintains
+    position information and parent-child relationships. It supports JSON 
+    serialization, visualization, and efficient tree traversal operations.
+    
+    Type Parameters:
+        T: Type of source data stored in the tree
+        
+    Attributes:
+        source (T): Source data associated with the tree
+        start_lineno (Optional[int]): Starting line number in source
+        indent_size (int): Number of spaces per indentation level
+        root (Optional[Leaf]): Root node of the tree
+        
+    Implementation Details:
+        - Maintains hierarchical node structure
+        - Supports position-based node matching
+        - Provides tree traversal methods
+        - Handles serialization/deserialization
+        - Integrates with visualization system
+    """
 
     def __init__(self,
                  source: T,
