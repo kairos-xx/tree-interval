@@ -1,7 +1,7 @@
 """
 Core tree data structures and position handling functionality.
 
-This module provides the foundational classes for managing tree structures with 
+This module provides foundational classes for managing tree structures with 
 interval-based positioning. It includes three main classes:
 
 - Position: Handles position tracking with line numbers and column offsets
@@ -11,15 +11,15 @@ interval-based positioning. It includes three main classes:
 Key Features:
     - Precise position tracking with line/column information
     - Parent-child relationship management
-    - Tree traversal and node search capabilities
+    - Tree traversal capabilities
     - JSON serialization support
-    - Rich visualization integration
+    - Rich visualization
     
 Technical Details:
-    - Positions can be created from frame objects, tuples, or direct values
-    - Nodes maintain bidirectional parent-child relationships
-    - The tree structure supports generic typing for flexible data storage
-    - All position calculations handle both absolute and relative positions
+    - Support for frame objects, tuples, or direct values
+    - Bidirectional parent-child relationships
+    - Generic typing for flexible data storage
+    - Handles absolute and relative positions
 """
 
 from dis import Positions as disposition
@@ -61,8 +61,8 @@ class Position:
     """
     Represents a position in source code with line and column tracking.
     
-    This class handles different types of position inputs and normalizes them into
-    a consistent format with start/end positions and line/column information.
+    Handles different types of position inputs and normalizes them into
+    a consistent format with start/end positions and line/column info.
     
     Attributes:
         start (int): Starting position in the source
@@ -76,12 +76,12 @@ class Position:
         parent (Optional[Leaf]): Parent node in tree structure
         children (List[Leaf]): Child nodes in tree structure
         
-    Implementation Details:
-        - Handles frame objects for runtime position tracking
-        - Supports position objects from Python's dis module
-        - Maintains both absolute and line-relative positions
-        - Calculates proper indentation offsets
-        - Preserves parent-child relationships
+    Implementation:
+        - Handles frame objects for runtime tracking
+        - Supports position objects from dis module
+        - Maintains absolute and line-relative positions
+        - Calculates indentation offsets
+        - Preserves parent-child links
     """
 
     def __init__(
@@ -661,9 +661,8 @@ class Tree(Generic[T]):
     """
     A tree structure containing nodes with position information.
     
-    This class implements a generic tree data structure where each node maintains
-    position information and parent-child relationships. It supports JSON 
-    serialization, visualization, and efficient tree traversal operations.
+    Implements a generic tree where each node maintains position info and 
+    parent-child relationships. Supports JSON serialization and visualization.
     
     Type Parameters:
         T: Type of source data stored in the tree
@@ -674,12 +673,12 @@ class Tree(Generic[T]):
         indent_size (int): Number of spaces per indentation level
         root (Optional[Leaf]): Root node of the tree
         
-    Implementation Details:
-        - Maintains hierarchical node structure
-        - Supports position-based node matching
-        - Provides tree traversal methods
-        - Handles serialization/deserialization
-        - Integrates with visualization system
+    Features:
+        - Hierarchical node structure
+        - Position-based node matching
+        - Tree traversal methods
+        - JSON serialization
+        - Visualization support
     """
 
     def __init__(self,
