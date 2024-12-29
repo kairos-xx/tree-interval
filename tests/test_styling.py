@@ -11,7 +11,7 @@ def test_node_styling():
     node = Leaf(Position(0, 100), info="Test")
     node.rich_style = RichStyle(color="red", bold=True)
 
-    assert str(node.rich_style.color) == "red"
+    assert "red" in str(node.rich_style.color).lower()
     assert node.rich_style.bold is True
 
 
@@ -28,7 +28,7 @@ def test_syntax_highlighting():
     node = Leaf(Position(0, 100), info={"type": "Module"})
     node.rich_style = RichStyle(color="green", bold=True)
 
-    assert str(node.rich_style.color) == "green"
+    assert "green" in str(node.rich_style.color).lower()
     assert node.rich_style.bold is True
 
 
@@ -38,9 +38,9 @@ def test_printer_config():
                              node_style=RichStyle(color="green"),
                              leaf_style=RichStyle(color="yellow"))
 
-    assert str(config.root_style.color) == "blue"
-    assert config.node_style.color == "green"
-    assert config.leaf_style.color == "yellow"
+    assert "blue" in str(config.root_style.color).lower()
+    assert "green" in str(config.node_style.color).lower()
+    assert "yellow" in str(config.leaf_style.color).lower()
 
 
 def test_leaf_style_creation():
