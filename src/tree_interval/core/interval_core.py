@@ -418,6 +418,20 @@ class Leaf:
     def selected(self, value: bool) -> None:
         self.position.selected = value
 
+    @property
+    def to_statement(self) -> Optional["Leaf"]:
+        """Find the closest parent node that is a statement according to AST_TYPES."""
+        current = self
+        while current:
+            if (current.info 
+                and isinstance(current.info, dict) 
+                and current.info.get("type") 
+                and current.info["type"] in AST_TYPES 
+                and AST_TYPES[current.info["type"]]["statement"]):
+                return current
+            current = current.parent
+        return None
+
     def add_child(self, child: "Leaf") -> None:
         """Add a child node to this leaf."""
         child.parent = self
