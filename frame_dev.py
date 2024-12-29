@@ -38,13 +38,11 @@ class Nested:
 
             tree = analyzer.build_tree()
             if tree:
-                # Mark the current node in red
-                current_node.style = LeafStyle(color="#ff0000", bold=False)
-                # Find and mark all parent nodes up to root to ensure visibility
-                parent = current_node.parent
-                while parent:
-                    parent.style = LeafStyle(color="#888888", bold=False)
-                    parent = parent.parent
+                flat_nodes = tree.flatten()
+                for node in flat_nodes:
+                    if node.match(current_node):
+                        node.style = LeafStyle(color="#ff0000", bold=False)
+
                 tree.visualize()
 
         return new

@@ -92,6 +92,7 @@ class AstTreeBuilder:
             self.source = "\n".join(
                 line[common_indent:] if line.strip() else line
                 for line in lines)
+            
             self.indent_offset = common_indent
             self.line_offset = self.frame_firstlineno - 1
         except (SyntaxError, TypeError, ValueError):
