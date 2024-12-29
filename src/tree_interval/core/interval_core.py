@@ -303,3 +303,31 @@ class Leaf:
                 return current
             current = current.parent
         return None
+
+    def find_common_ancestor(self, other: "Leaf") -> Optional["Leaf"]:
+        """Find the common ancestor between this node and another node.
+        
+        Args:
+            other: Another Leaf node to find common ancestor with
+            
+        Returns:
+            Common ancestor node or None if not found
+        """
+        if not other:
+            return None
+            
+        # Get path to root for current node
+        current_path = set()
+        current = self
+        while current:
+            current_path.add(current)
+            current = current.parent
+            
+        # Check other's ancestors against current path
+        current = other
+        while current:
+            if current in current_path:
+                return current
+            current = current.parent
+            
+        return None
