@@ -13,12 +13,7 @@ class FrameAnalyzer:
 
     def __init__(self, frame) -> None:
         self.frame = frame
-        # Initialize position with frame line number info
-        lineno = frame.f_lineno if frame else 1
-        # Assuming each line is roughly 100 chars wide for position calculation
-        self.frame_position = Position((lineno - 1) * 100, lineno * 100)
-        self.frame_position.lineno = lineno
-        self.frame_position.end_lineno = lineno
+        self.frame_position = Position(self.frame)
         self.ast_builder = AstTreeBuilder(frame)
         self.tree = None
         self.current_node = None

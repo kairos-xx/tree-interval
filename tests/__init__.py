@@ -10,8 +10,7 @@ def run_tests():
             "tests/test_tree_core.py",
             "tests/test_rich_printer.py",
             "tests/test_ast_nodes.py",
-            "tests/test_ast_nodes.py",
-            "tests/test_styling.py",        ]
+        ]
     )
 
 
