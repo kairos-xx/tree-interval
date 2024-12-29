@@ -1,13 +1,10 @@
-examples/./styling_examples.py:6:1: E302 expected 2 blank lines, found 1
-examples/./styling_examples.py:15:1: E305 expected 2 blank lines after class or function definition, found 1
+examples/./styling_examples.py:4:1: E302 expected 2 blank lines, found 1
+examples/./styling_examples.py:13:1: E305 expected 2 blank lines after class or function definition, found 1
+examples/./styling_examples.py:15:28: W292 no newline at end of file
 src/./tree_interval/__init__.py:36:22: W292 no newline at end of file
-src/./tree_interval/core/ast_builder.py:20:1: W293 blank line contains whitespace
+src/./tree_interval/core/ast_builder.py:20:80: E501 line too long (81 > 79 characters)
 src/./tree_interval/core/ast_builder.py:21:80: E501 line too long (81 > 79 characters)
-src/./tree_interval/core/ast_builder.py:22:75: W291 trailing whitespace
-src/./tree_interval/core/ast_builder.py:23:80: E501 line too long (82 > 79 characters)
-src/./tree_interval/core/ast_builder.py:42:1: W293 blank line contains whitespace
-src/./tree_interval/core/ast_builder.py:62:1: W293 blank line contains whitespace
-src/./tree_interval/core/ast_builder.py:68:1: W293 blank line contains whitespace
+src/./tree_interval/core/ast_builder.py:220:19: W292 no newline at end of file
 src/./tree_interval/core/frame_analyzer.py:4:80: E501 line too long (88 > 79 characters)
 src/./tree_interval/core/frame_analyzer.py:5:80: E501 line too long (85 > 79 characters)
 src/./tree_interval/core/frame_analyzer.py:33:80: E501 line too long (96 > 79 characters)
