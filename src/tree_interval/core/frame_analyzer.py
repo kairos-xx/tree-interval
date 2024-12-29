@@ -1,20 +1,8 @@
 """
 Frame Analysis Module.
 
-This module provides functionality for analyzing Python stack frames and converting
-them into tree structures. It bridges runtime execution context with static code
-analysis.
-
-Key Components:
-    - FrameAnalyzer: Main class for converting stack frames to tree structures
-    - Frame position tracking: Maps runtime positions to source code
-    - AST integration: Connects frame analysis with abstract syntax trees
-
-Technical Details:
-    - Uses inspect module for frame introspection
-    - Maintains source code position awareness
-    - Integrates with AST analysis for deeper code understanding
-    - Provides runtime context for visualization
+This module provides functionality for analyzing Python stack frames and converting 
+them into tree structures. It bridges runtime execution with static code analysis.
 """
 
 from ast import AST
