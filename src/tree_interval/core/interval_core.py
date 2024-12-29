@@ -843,3 +843,39 @@ class NestedAttributes:
 
     def __str__(self) -> str:
         return repr(self)
+def best_match(self, start: Optional[int] = None, end: Optional[int] = None, info: Optional[Dict] = None) -> Optional['Leaf']:
+    """
+    Find the best matching node in the tree based on position and info.
+    
+    Args:
+        start: Start position to match
+        end: End position to match
+        info: Node info to match
+        
+    Returns:
+        The best matching leaf node or None
+    """
+    if not self.root:
+        return None
+        
+    best = None
+    smallest_size = float('inf')
+    
+    for node in self.flatten():
+        if start is not None and end is not None:
+            # Position must contain target range
+            if not (node.start <= start and node.end >= end):
+                continue
+                
+        if info is not None:
+            # Info must match if specified
+            if not node.info == info:
+                continue
+                
+        # Find smallest containing node
+        size = node.end - node.start
+        if size < smallest_size:
+            best = node
+            smallest_size = size
+            
+    return best
