@@ -50,6 +50,7 @@ class LeafStyle(NamedTuple):
     color: str
     bold: bool = False
 
+
 if TYPE_CHECKING:
     from ..visualizer.config import VisualizationConfig
 
@@ -276,7 +277,8 @@ class Position:
         """Display position with specific format."""
         if position_format == "position":
             col_offset = self.col_offset if self.col_offset is not None else 0
-            end_col_offset = (self.end_col_offset if self.end_col_offset is not None else 0)
+            end_col_offset = (self.end_col_offset
+                              if self.end_col_offset is not None else 0)
             return (
                 f"Position(start={self.start}, end={self.end}, "
                 f"lineno={self.lineno}, end_lineno={self.end_lineno}, "
@@ -362,7 +364,8 @@ class Leaf:
         self.rich_style = rich_style
 
         # Initialize end_col_offset if not set
-        if (self.position._end_col_offset is None and self.position._col_offset is not None):
+        if (self.position._end_col_offset is None
+                and self.position._col_offset is not None):
             self.position._end_col_offset = self.position._col_offset + 20
 
         self.parent: Optional[Leaf] = None
@@ -571,18 +574,20 @@ class Leaf:
     def position_as(self, position_format: str = "default") -> str:
         """Display node with specific position format."""
         if position_format == "position":
-            return (
-                f"Position(start={self.start}, end={self.end}, "
-                f"lineno={self.lineno}, end_lineno={self.end_lineno}, "
-                f"col_offset={self.col_offset}, "+f"end_col_offset={self.end_col_offset}, "
-                f"size={self.size})")
+            return (f"Position(start={self.start}, end={self.end}, "
+                    f"lineno={self.lineno}, end_lineno={self.end_lineno}, "
+                    f"col_offset={self.col_offset}, " +
+                    f"end_col_offset={self.end_col_offset}, "
+                    f"size={self.size})")
         elif position_format == "tuple":
             return (
                 f"({self.start}, {self.end}, {self.lineno}, "
                 f"{self.end_lineno}, {self.col_offset}, {self.end_col_offset})"
             )
         else:
-            return (f"Position(start={self.start}, end={self.end}, size={self.size})")
+            return (
+                f"Position(start={self.start}, end={self.end}, size={self.size})"
+            )
 
     def _get_parent(self) -> Optional["Leaf"]:
         """Safe accessor for parent property."""
