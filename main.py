@@ -6,17 +6,13 @@ from rich.style import Style as RichStyle
 from src.tree_interval import (
     FrameAnalyzer,
     Leaf,
+    LeafStyle,
     Position,
     Tree,
     TreeVisualizer,
     VisualizationConfig,
 )
 from src.tree_interval.rich_printer import RichPrintConfig, RichTreePrinter
-
-
-class LeafStyle(NamedTuple):
-    color: str
-    bold: bool = False
 
 
 # ANSI Colors
