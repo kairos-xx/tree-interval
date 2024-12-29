@@ -14,6 +14,8 @@ from dataclasses import dataclass, field
 from typing import (Any, Callable, Dict, Iterator, List, Optional, Set, Tuple,
                    TypeVar, Union)
 
+from ..visualizer import TreeVisualizer, VisualizationConfig
+
 # Type variable for generic tree operations
 T = TypeVar('T')
 
