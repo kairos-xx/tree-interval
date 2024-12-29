@@ -59,45 +59,51 @@ def demonstrate_positions():
     print("Tuple format:", pos4.position_as("tuple"))
     print("Default format:", pos4.position_as())
 
+
 def demonstrate_tree_styling():
     """Example showcasing rich tree styling capabilities."""
     print_header("Tree Styling Demo", CYAN)
-    
+
     tree = Tree("Styled Tree Example")
-    
+
     # Create nodes with different styles
     root = Leaf(Position(0, 100), info={"type": "Project", "name": "MyApp"})
     root.rich_style = RichStyle(color="#60A5FA", bold=True)  # Blue
     root.style = LeafStyle(color="#60A5FA", bold=True)  # Blue
-    
+
     module1 = Leaf(Position(10, 40), info={"type": "Module", "name": "auth"})
     module1.rich_style = RichStyle(color="#F472B6", bold=True)  # Pink
     module1.style = LeafStyle(color="#F472B6", bold=True)  # Pink
-    
+
     module2 = Leaf(Position(50, 90), info={"type": "Module", "name": "api"})
     module2.rich_style = RichStyle(color="#F472B6", bold=True)  # Pink
     module2.style = LeafStyle(color="#F472B6", bold=True)  # Pink
-    
+
     func1 = Leaf(Position(15, 35), info={"type": "Function", "name": "login"})
     func1.rich_style = RichStyle(color="#34D399")  # Green
     func1.style = LeafStyle(color="#34D399")  # Green
     func1.selected = True  # Highlight this node
-    
-    func2 = Leaf(Position(55, 85), info={"type": "Function", "name": "getData"})
+
+    func2 = Leaf(Position(55, 85),
+                 info={
+                     "type": "Function",
+                     "name": "getData"
+                 })
     func2.rich_style = RichStyle(color="#34D399")  # Green
     func2.style = LeafStyle(color="#34D399")  # Green
-    
+
     # Build tree structure
     tree.root = root
     tree.add_leaf(module1)
     tree.add_leaf(module2)
     module1.add_child(func1)
     module2.add_child(func2)
-    
+
     # Print using rich printer
     printer = RichTreePrinter(RichPrintConfig(show_position=True))
     printer.print_tree(tree)
     tree.visualize()
+
 
 def demonstrate_find_nodes():
     print_header("Find Nodes Example", YELLOW)
@@ -261,11 +267,13 @@ def demonstrate_frame_analyzer():
         current_node = analyzer.find_current_node()
         print("Current Node Information:")
         print(f"Node: {current_node if current_node else None}")
-        
+
         # Show top statement for current node
         if current_node:
             top_stmt = current_node.top_statement
-            print(f"Top Statement: {top_stmt.info['type'] if top_stmt and top_stmt.info else None}")
+            print(
+                f"Top Statement: {top_stmt.info['type'] if top_stmt and top_stmt.info else None}"
+            )
 
         tree = analyzer.build_tree()
 
@@ -556,25 +564,3 @@ def main():
     demonstrate_find_method()
     demonstrate_leaf_navigation()
     demonstrate_node_navigation()
-
-
-def demonstrate_top_statement_example():
-    """Shows usage of top_statement property"""
-    print_header("Top Statement Example", CYAN)
-    
-    # Create a complex expression tree
-    assign = Leaf(Position(0, 50), {"type": "Assign"})
-    call = Leaf(Position(10, 40), {"type": "Call"})
-    attr = Leaf(Position(15, 35), {"type": "Attribute"})
-    
-    # Build relationships
-    assign.add_child(call)
-    call.add_child(attr)
-    
-    # Demonstrate top_statement
-    print(f"Attribute's top statement: {attr.top_statement.info['type'] if attr.top_statement else None}")
-    print(f"Call's top statement: {call.top_statement.info['type'] if call.top_statement else None}")
-
-if __name__ == "__main__":
-    main()
-    demonstrate_top_statement_example()
