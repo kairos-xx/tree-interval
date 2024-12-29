@@ -457,35 +457,29 @@ class Leaf:
     def find_best_match(
         self,
         start: int,
-        end: int,
-        best_match_distance: Optional[Union[int, float]] = None,
-    ) -> Optional["Leaf"]:
+        end: int) -> Optional["Leaf"]:
         """Find the leaf that best matches the given range."""
         if self.start is None or self.end is None:
             return None
-
-        def calc_distance(leaf: "Leaf") -> int:
-            leaf_start = leaf.start or 0
-            leaf_end = leaf.end or 0
-            return ((start - leaf_start) if start > leaf_start else
-                    (leaf_start - start)) + (
-                        (end - leaf_end) if end > leaf_end else
-                        (leaf_end - end))
-
-        best_match_distance = float(
-            "inf") if best_match_distance is None else best_match_distance
-        distance = calc_distance(self)
-        if distance < best_match_distance:
-            best_match_distance = distance
-        best_match = self
+            
+        best_match = None
+        smallest_size = float('inf')
+        
+        # Check if current node contains target range
+        if self.start <= start and self.end >= end:
+            size = self.end - self.start
+            if size < smallest_size:
+                best_match = self
+                smallest_size = size
+                
+        # Check children
         for child in self.children:
-            child_match = child.find_best_match(start, end,
-                                                best_match_distance)
-            if child_match is not None:
-                distance = calc_distance(child_match)
-                if distance < best_match_distance:
-                    best_match_distance = distance
-                    best_match = child_match
+            if child.start <= start and child.end >= end:
+                size = child.end - child.start
+                if size < smallest_size:
+                    best_match = child
+                    smallest_size = size
+                    
         return best_match
 
     def find_common_ancestor(self, other: "Leaf") -> Optional["Leaf"]:
