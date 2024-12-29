@@ -202,6 +202,7 @@ class AstTreeBuilder:
                 if (start <= leaf.start and end >= leaf.end and 
                     potential_parent != leaf and size < smallest_size):
                     best_match = potential_parent
+                    result_tree.root.add_child(best_match)
                     smallest_size = size
 
             if best_match:
