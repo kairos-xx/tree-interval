@@ -745,11 +745,21 @@ class Tree(Generic[T]):
                 result.extend(self._flatten_helper(child))
         return result
 
-    def _flatten_helper(self, leaf: Leaf) -> List[Leaf]:
+    def _flatten_helper(self, leaf: Leaf, visited: Optional[set] = None) -> List[Leaf]:
         """Helper method for flatten()."""
+        if visited is None:
+            visited = set()
+            
+        if leaf in visited:
+            return []
+            
+        visited.add(leaf)
         result = [leaf]
+        
         for child in leaf.children:
-            result.extend(self._flatten_helper(child))
+            if child not in visited:
+                result.extend(self._flatten_helper(child, visited))
+                
         return result
 
     def to_json(self) -> str:
