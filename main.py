@@ -271,9 +271,14 @@ def demonstrate_frame_analyzer():
         # Show top statement for current node
         if current_node:
             top_stmt = current_node.top_statement
+            next_attr = current_node.next_attribute
             print(
                 "Top Statement: " +
                 f"{top_stmt.info['type'] if top_stmt and top_stmt.info else None}"
+            )
+            print(
+                "Next Attribute: " +
+                f"{next_attr.info['type'] if next_attr and next_attr.info else None}"
             )
 
         tree = analyzer.build_tree()
