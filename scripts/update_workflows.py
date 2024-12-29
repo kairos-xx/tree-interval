@@ -69,8 +69,8 @@ required_workflows = [{
     'tasks': [{
         'task':
         'shell.exec',
-        'args':
-        'python scripts/update_workflows.py | tee logs/update_worflows.log 2>&1'
+        'args': ('python scripts/update_workflows.py ' +
+                 '| tee logs/update_worflows.log 2>&1')
     }]
 }, {
     'name': '————————————————',

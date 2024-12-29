@@ -1,7 +1,1 @@
-/home/runner/treeinterval/frame_dev.py
-  /home/runner/treeinterval/frame_dev.py:21:26 - error: "LeafStyle" is not defined (reportUndefinedVariable)
-  /home/runner/treeinterval/frame_dev.py:28:30 - error: "LeafStyle" is not defined (reportUndefinedVariable)
-  /home/runner/treeinterval/frame_dev.py:35:34 - error: "LeafStyle" is not defined (reportUndefinedVariable)
-  /home/runner/treeinterval/frame_dev.py:38:34 - error: "LeafStyle" is not defined (reportUndefinedVariable)
-  /home/runner/treeinterval/frame_dev.py:40:19 - error: "RichTreePrinter" is not defined (reportUndefinedVariable)
-5 errors, 0 warnings, 0 informations 
+0 errors, 0 warnings, 0 informations 
