@@ -1,4 +1,3 @@
-
 """Core module containing fundamental interval tree data structures and operations.
 
 This module provides the foundational classes and utilities for creating and 
@@ -211,10 +210,30 @@ class Leaf:
         """Get end position."""
         return self.position.end
 
-    @property 
+    @property
     def size(self) -> int:
         """Calculate node size including children."""
         return self.end - self.start
+
+    @property
+    def lineno(self) -> Optional[int]:
+        """Get line number."""
+        return self.position.lineno if hasattr(self.position, 'lineno') else None
+
+    @property
+    def end_lineno(self) -> Optional[int]:
+        """Get end line number."""
+        return self.position.end_lineno if hasattr(self.position, 'end_lineno') else None
+
+    @property
+    def col_offset(self) -> Optional[int]:
+        """Get column offset."""
+        return self.position.col_offset if hasattr(self.position, 'col_offset') else None
+
+    @property
+    def end_col_offset(self) -> Optional[int]:
+        """Get end column offset."""
+        return self.position.end_col_offset if hasattr(self.position, 'end_col_offset') else None
 
     @property
     def next(self) -> Optional[Leaf]:
