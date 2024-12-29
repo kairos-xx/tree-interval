@@ -13,6 +13,9 @@ class Nested:
         setattr(self, name, new)
         analyzer = FrameAnalyzer(currentframe().f_back)
         current_node = analyzer.find_current_node()
+        top_statement = current_node.top_statement  # Returns closest parent that is a statement
+
+        print(top_statement)
         print(f"Current node: {unparse(current_node.ast_node)} | attribute name: {name}")
         
         tree = analyzer.build_tree()
