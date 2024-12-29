@@ -296,8 +296,7 @@ def demonstrate_ast_parsing():
 
 
 def demonstrate_node_navigation():
-    print("\n=== Node Navigation Examples ===")
-
+    """Demonstrates navigation between different types of nodes in the tree including top_statement."""
     # Create test nodes
     root = Leaf(Position(0, 100), "Root")
     child1 = Leaf(Position(10, 40), "Child 1")

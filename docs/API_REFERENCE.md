@@ -102,3 +102,16 @@ Parameters:
 - `show_size` (`bool`): Whether to show node sizes
 - `show_children_count` (`bool`): Whether to show children count
 - `position_format` (`str`): Format for position display
+### Top Statement Property
+
+The `top_statement` property allows finding the closest parent node that represents a complete statement according to AST_TYPES. This is particularly useful when working with complex expressions and needing to find their containing statement.
+
+```python
+# Example: result = obj.method().value
+attribute_node.top_statement  # Returns the Assign node
+```
+
+Properties:
+- Returns the nearest parent node that is marked as a statement in AST_TYPES
+- Returns None if no statement parent is found
+- The node itself is returned if it is a statement

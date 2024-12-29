@@ -553,5 +553,23 @@ def main():
     demonstrate_node_navigation()
 
 
+def demonstrate_top_statement_example():
+    """Shows usage of top_statement property"""
+    print_header("Top Statement Example", CYAN)
+    
+    # Create a complex expression tree
+    assign = Leaf(Position(0, 50), {"type": "Assign"})
+    call = Leaf(Position(10, 40), {"type": "Call"})
+    attr = Leaf(Position(15, 35), {"type": "Attribute"})
+    
+    # Build relationships
+    assign.add_child(call)
+    call.add_child(attr)
+    
+    # Demonstrate top_statement
+    print(f"Attribute's top statement: {attr.top_statement.info['type'] if attr.top_statement else None}")
+    print(f"Call's top statement: {call.top_statement.info['type'] if call.top_statement else None}")
+
 if __name__ == "__main__":
     main()
+    demonstrate_top_statement_example()
