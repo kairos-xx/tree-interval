@@ -41,7 +41,12 @@ from typing import (
 
 
 class LeafStyle(NamedTuple):
-    """Style configuration for leaf nodes."""
+    """Style configuration for leaf nodes.
+    
+    Attributes:
+        color (str): Color in hex format (#RRGGBB) or named color
+        bold (bool): Whether text should be bold, defaults to False
+    """
     color: str
     bold: bool = False
 

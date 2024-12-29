@@ -45,3 +45,23 @@ def test_printer_config():
 
 if __name__ == "__main__":
     pytest.main([__file__])
+def test_leaf_style_creation():
+    """Test LeafStyle creation and defaults."""
+    style = LeafStyle(color="#FF0000")
+    assert style.color == "#FF0000"
+    assert style.bold is False
+
+    style_bold = LeafStyle(color="#00FF00", bold=True) 
+    assert style_bold.color == "#00FF00"
+    assert style_bold.bold is True
+
+def test_leaf_style_inheritance():
+    """Test style inheritance through tree hierarchy."""
+    parent = Leaf(Position(0, 100))
+    child = Leaf(Position(10, 50))
+    
+    parent.add_child(child)
+    parent.style = LeafStyle(color="#FF0000", bold=True)
+    
+    assert parent.style.color == "#FF0000"
+    assert parent.style.bold is True

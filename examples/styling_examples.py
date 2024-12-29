@@ -1,9 +1,10 @@
+
 """Examples demonstrating tree node styling capabilities."""
 from typing import Dict
 
 from rich.style import Style as RichStyle
 
-from src.tree_interval import Leaf, Position, Tree
+from src.tree_interval import Leaf, Position, Tree, LeafStyle
 from src.tree_interval.rich_printer import RichPrintConfig, RichTreePrinter
 
 
@@ -13,11 +14,7 @@ def example_syntax_highlighting():
 
     # Create nodes with different types
     root = Leaf(Position(0, 100), info={"type": "Module", "name": "main"})
-    func_def = Leaf(Position(10, 90),
-                    info={
-                        "type": "FunctionDef",
-                        "name": "process_data"
-                    })
+    func_def = Leaf(Position(10, 90), info={"type": "FunctionDef", "name": "process_data"})
     args = Leaf(Position(20, 30), info={"type": "Arguments"})
 
     # Build tree structure
@@ -25,17 +22,17 @@ def example_syntax_highlighting():
     tree.add_leaf(func_def)
     func_def.add_child(args)
 
-    # Apply syntax highlighting styles
+    # Apply syntax highlighting styles using LeafStyle
     def apply_syntax_styles(node: Leaf) -> None:
         """Apply syntax highlighting based on node type."""
         if isinstance(node.info, Dict):
             node_type = node.info.get('type', '')
             if node_type == 'Module':
-                node.rich_style = RichStyle(color="green", bold=True)
+                node.style = LeafStyle(color="#4CAF50", bold=True)  # Green
             elif node_type == 'FunctionDef':
-                node.rich_style = RichStyle(color="blue", bold=False)
+                node.style = LeafStyle(color="#2196F3", bold=False)  # Blue
             elif node_type == 'Arguments':
-                node.rich_style = RichStyle(color="yellow", bold=False)
+                node.style = LeafStyle(color="#FFC107", bold=False)  # Yellow
 
     # Apply styles to all nodes
     for node in tree.flatten():
@@ -58,9 +55,10 @@ def example_selected_node():
     tree.add_leaf(child1)
     tree.add_leaf(child2)
 
-    # Mark node as selected
+    # Mark node as selected and style it
     child1.selected = True
-    child1.rich_style = RichStyle(color="red", bold=True)
+    child1.style = LeafStyle(color="#F44336", bold=True)  # Red
+    child2.style = LeafStyle(color="#9E9E9E", bold=False)  # Gray
 
     printer = RichTreePrinter()
     print("\nTree with Selected Node:")
