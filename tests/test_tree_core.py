@@ -6,7 +6,7 @@ from src.tree_interval import Leaf, Position, Tree
 
 
 def test_position_creation():
-    pos = Position(0, 100)
+    pos = Position(0, 100, info="Test")
     assert pos.start == 0
     assert pos.end == 100
     assert pos.info == "Test"
@@ -14,7 +14,7 @@ def test_position_creation():
 
 
 def test_position_line_info():
-    pos = Position(0, 100)
+    pos = Position(0, 100, info="Test")
     pos.lineno = 1
     pos.end_lineno = 5
     assert pos.lineno == 1
@@ -22,7 +22,7 @@ def test_position_line_info():
 
 
 def test_leaf_creation():
-    pos = Position(0, 100)
+    pos = Position(0, 100, info="Test")
     leaf = Leaf(pos, "Root")
     assert leaf.start == 0
     assert leaf.end == 100
@@ -177,7 +177,7 @@ def test_tree_serialization():
 
 def test_position_format():
     # Create root position
-    root_pos = Position(0, 100)
+    root_pos = Position(0, 100, info="Test")
     root_pos.lineno = 1
     root_pos.end_lineno = 10
     root_pos.col_offset = 0
