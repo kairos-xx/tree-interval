@@ -8,9 +8,9 @@ from src.tree_interval import (
     Leaf,
     Position,
     Tree,
-    TreeVisualizer,
     VisualizationConfig,
 )
+from src.tree_interval.visualizer import TreeVisualizer
 from src.tree_interval.rich_printer import RichPrintConfig, RichTreePrinter
 
 

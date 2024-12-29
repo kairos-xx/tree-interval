@@ -101,6 +101,10 @@ class Tree:
             node.add_child(child)
         return node
 
+    def visualize(self, config: Optional[VisualizationConfig] = None) -> None:
+        """Visualize the tree structure using TreeVisualizer."""
+        TreeVisualizer.visualize(self, config)
+
 @dataclass
 class Position:
     """Represents a position in source code with both absolute and line-based coordinates.
