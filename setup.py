@@ -1,4 +1,3 @@
-
 from setuptools import find_packages, setup
 
 with open("README.md", "r") as fh:
@@ -9,7 +8,8 @@ setup(
     version="0.1.11",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
-    description="A Python package for managing and visualizing interval tree structures",
+    description="""A Python package for managing and
+    visualizing interval tree structures""",
     long_description=readme,
     long_description_content_type="text/markdown",
     author="Joao Lopes",

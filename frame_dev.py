@@ -1,4 +1,5 @@
 from inspect import currentframe
+
 from tree_interval.core.frame_analyzer import FrameAnalyzer
 
 

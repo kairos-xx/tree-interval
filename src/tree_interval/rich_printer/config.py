@@ -1,9 +1,10 @@
 """
 Rich Tree Printer Configuration Module.
 
-This module provides configuration options for the Rich-based tree visualization.
-It defines styles and display preferences for different node types and components
-of the tree visualization.
+This module provides configuration options for the Rich-based
+tree visualization.
+It defines styles and display preferences for different node types
+and components of the tree visualization.
 
 Key Features:
     - Customizable node styling

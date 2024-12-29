@@ -114,6 +114,7 @@ class FrameAnalyzer:
         return self.tree #Return the tree
 
 from inspect import currentframe
+
 analyzer = FrameAnalyzer(currentframe())
 node = analyzer.find_current_node()  # Get current execution point
 tree = analyzer.build_tree()         # Build full AST representation

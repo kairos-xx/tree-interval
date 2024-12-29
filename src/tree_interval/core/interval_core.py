@@ -1,7 +1,7 @@
 """
 Core tree data structures and position handling functionality.
 
-This module provides foundational classes for managing tree structures with 
+This module provides foundational classes for managing tree structures with
 interval-based positioning. It includes three main classes:
 
 - Position: Handles position tracking with line numbers and column offsets
@@ -14,7 +14,7 @@ Key Features:
     - Tree traversal capabilities
     - JSON serialization support
     - Rich visualization
-    
+
 Technical Details:
     - Support for frame objects, tuples, or direct values
     - Bidirectional parent-child relationships
@@ -42,7 +42,7 @@ from typing import (
 
 class LeafStyle(NamedTuple):
     """Style configuration for leaf nodes.
-    
+
     Attributes:
         color (str): Color in hex format (#RRGGBB) or named color
         bold (bool): Whether text should be bold, defaults to False
@@ -60,10 +60,10 @@ T = TypeVar("T")
 class Position:
     """
     Represents a position in source code with line and column tracking.
-    
+
     Handles different types of position inputs and normalizes them into
     a consistent format with start/end positions and line/column info.
-    
+
     Attributes:
         start (int): Starting position in the source
         end (int): Ending position in the source
@@ -75,7 +75,7 @@ class Position:
         _end_col_offset (int): Ending column offset
         parent (Optional[Leaf]): Parent node in tree structure
         children (List[Leaf]): Child nodes in tree structure
-        
+
     Implementation:
         - Handles frame objects for runtime tracking
         - Supports position objects from dis module
@@ -94,14 +94,15 @@ class Position:
     ):
         """
         Initialize a Position object.
-        
+
         Args:
             start: Starting position, frame object, or disposition object
-            end: Ending position (optional if start contains full position info)
+            end: Ending position
+                (optional if start contains full position info)
             source: Source code string or metadata dictionary
             info: Additional position information
             selected: Selection state of this position
-            
+
         Raises:
             ValueError: If both start and end are None for direct position init
         """
@@ -585,9 +586,8 @@ class Leaf:
                 f"{self.end_lineno}, {self.col_offset}, {self.end_col_offset})"
             )
         else:
-            return (
-                f"Position(start={self.start}, end={self.end}, size={self.size})"
-            )
+            return (f"Position(start={self.start}, " +
+                    f"end={self.end}, size={self.size})")
 
     def _get_parent(self) -> Optional["Leaf"]:
         """Safe accessor for parent property."""
@@ -654,25 +654,27 @@ class Leaf:
         """Compare two nodes for equality."""
         if not isinstance(other, Leaf):
             return False
-        return self.position == other.position and self.info == other.info and self.start == other.start and self.end == other.end
+        return (self.position == other.position and self.info == other.info
+                and self.start == other.start and self.end == other.end)
 
 
 class Tree(Generic[T]):
     """
     A tree structure containing nodes with position information.
-    
-    Implements a generic tree where each node maintains position info and 
-    parent-child relationships. Supports JSON serialization and visualization.
-    
+
+    Implements a generic tree where each node maintains position info and
+    parent-child relationships. Supports JSON serialization and
+    visualization.
+
     Type Parameters:
         T: Type of source data stored in the tree
-        
+
     Attributes:
         source (T): Source data associated with the tree
         start_lineno (Optional[int]): Starting line number in source
         indent_size (int): Number of spaces per indentation level
         root (Optional[Leaf]): Root node of the tree
-        
+
     Features:
         - Hierarchical node structure
         - Position-based node matching

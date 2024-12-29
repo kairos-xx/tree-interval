@@ -1,8 +1,9 @@
 """
 Frame Analysis Module.
 
-This module provides functionality for analyzing Python stack frames and converting 
-them into tree structures. It bridges runtime execution with static code analysis.
+This module provides functionality for analyzing Python stack frames
+and converting them into tree structures.
+It bridges runtime execution with static code analysis.
 """
 
 from ast import AST
@@ -61,7 +62,8 @@ class FrameAnalyzer:
         Builds a complete AST tree from the frame's AST.
 
         Returns:
-            Optional[Tree]: The complete AST tree, or None if construction fails.
+            Optional[Tree]: The complete AST tree, or None if
+                            construction fails.
         """
         # Builds the tree using the ast_builder
         self.tree = self.ast_builder.build_from_frame()
@@ -95,7 +97,8 @@ class FrameAnalyzer:
                 if current_node.match(self.current_node):
                     current_node.selected = True
 
-                # Find smallest containing interval for parent-child relationships
+                # Find smallest containing interval for
+                # parent-child relationships
                 for parent_start, parent_end in sorted_positions:
                     if (parent_start <= start and parent_end >= end
                             and (parent_start, parent_end) != (start, end)):

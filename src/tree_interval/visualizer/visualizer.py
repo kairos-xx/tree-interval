@@ -15,7 +15,7 @@ Technical Details:
     - Configurable node formatting and styling
     - Position and size information display
     - Integration with Rich printer for enhanced output
-    
+
 The module acts as a facade for various visualization implementations,
 providing a consistent interface for different visualization needs.
 """
@@ -47,8 +47,9 @@ class TreeVisualizer:
 
         Args:
             tree: The tree structure to visualize.
-            config: An optional VisualizationConfig object for customizing the output.
-                If None, uses the default configuration.
+            config: An optional VisualizationConfig object for
+                    customizing the output. If None, uses the
+                    default configuration.
         """
         if config is None:
             config = DEFAULT_CONFIG
@@ -58,7 +59,10 @@ class TreeVisualizer:
             return
 
         def format_position(node) -> str:
-            """Format the position information of a node according to the configuration."""
+            """
+            Format the position information of a node according
+            to the configuration.
+            """
             if config.position_format == "position":
                 return (f"Position(start={node.start}, end={node.end}, "
                         f"lineno={node.lineno}, end_lineno={node.end_lineno}, "

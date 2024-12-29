@@ -1,5 +1,4 @@
 from inspect import currentframe
-from typing import NamedTuple
 
 from rich.style import Style as RichStyle
 
@@ -13,7 +12,6 @@ from src.tree_interval import (
     VisualizationConfig,
 )
 from src.tree_interval.rich_printer import RichPrintConfig, RichTreePrinter
-
 
 # ANSI Colors
 RED = "\033[91m"

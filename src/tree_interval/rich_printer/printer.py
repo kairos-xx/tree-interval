@@ -1,8 +1,10 @@
 """
 Rich-based Tree Visualization Implementation.
 
-This module provides advanced tree visualization capabilities using the Rich library.
-It supports customizable styling, node decoration, and complex tree representations.
+This module provides advanced tree visualization capabilities
+using the Rich library.
+It supports customizable styling, node decoration, and complex
+tree representations.
 
 Key Features:
     - Customizable node styling with Rich styles
@@ -16,9 +18,10 @@ Technical Details:
     - Supports hierarchical structure visualization
     - Handles custom styling through style objects
     - Provides flexible configuration options
-    
-The RichTreePrinter class serves as the main entry point for tree visualization,
-offering both basic and advanced formatting options through the Rich library.
+
+The RichTreePrinter class serves as the main entry point for
+tree visualization, offering both basic and advanced formatting
+options through the Rich library.
 """
 from typing import Optional
 
@@ -54,7 +57,8 @@ class RichTreePrinter:
 
     def _format_node(self, node: Leaf, is_root: bool = False) -> str:
         """Format node information."""
-        # Determine style priority: rich_style > selected > type-based > default
+        # Determine style priority:
+        # rich_style > selected > type-based > default
         style = None
 
         # Check for custom rich_style or selected state
