@@ -331,3 +331,16 @@ class Leaf:
             current = current.parent
             
         return None
+
+    def find_first_multi_child_ancestor(self) -> Optional["Leaf"]:
+        """Find the first ancestor that has multiple children.
+        
+        Returns:
+            First ancestor with multiple children or None if not found
+        """
+        current = self.parent
+        while current:
+            if len(current.children) > 1:
+                return current
+            current = current.parent
+        return None
