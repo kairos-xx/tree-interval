@@ -1,0 +1,122 @@
+examples/./styling_examples.py:5:1: F401 'rich.style.Style as RichStyle' imported but unused
+examples/./styling_examples.py:17:80: E501 line too long (91 > 79 characters)
+src/./tree_interval/__init__.py:34:2: W292 no newline at end of file
+src/./tree_interval/core/ast_builder.py:20:1: W293 blank line contains whitespace
+src/./tree_interval/core/ast_builder.py:21:80: E501 line too long (81 > 79 characters)
+src/./tree_interval/core/ast_builder.py:22:75: W291 trailing whitespace
+src/./tree_interval/core/ast_builder.py:23:80: E501 line too long (82 > 79 characters)
+src/./tree_interval/core/ast_builder.py:42:1: W293 blank line contains whitespace
+src/./tree_interval/core/ast_builder.py:62:1: W293 blank line contains whitespace
+src/./tree_interval/core/ast_builder.py:68:1: W293 blank line contains whitespace
+src/./tree_interval/core/frame_analyzer.py:4:80: E501 line too long (88 > 79 characters)
+src/./tree_interval/core/frame_analyzer.py:5:80: E501 line too long (85 > 79 characters)
+src/./tree_interval/core/frame_analyzer.py:33:80: E501 line too long (96 > 79 characters)
+src/./tree_interval/core/frame_analyzer.py:37:80: E501 line too long (94 > 79 characters)
+src/./tree_interval/core/frame_analyzer.py:46:51: E261 at least two spaces before inline comment
+src/./tree_interval/core/frame_analyzer.py:46:52: E262 inline comment should start with '# '
+src/./tree_interval/core/frame_analyzer.py:46:80: E501 line too long (92 > 79 characters)
+src/./tree_interval/core/frame_analyzer.py:47:49: E261 at least two spaces before inline comment
+src/./tree_interval/core/frame_analyzer.py:47:50: E262 inline comment should start with '# '
+src/./tree_interval/core/frame_analyzer.py:47:80: E501 line too long (83 > 79 characters)
+src/./tree_interval/core/frame_analyzer.py:48:25: E261 at least two spaces before inline comment
+src/./tree_interval/core/frame_analyzer.py:49:33: E261 at least two spaces before inline comment
+src/./tree_interval/core/frame_analyzer.py:56:80: E501 line too long (93 > 79 characters)
+src/./tree_interval/core/frame_analyzer.py:60:9: E265 block comment should start with '# '
+src/./tree_interval/core/frame_analyzer.py:63:9: E265 block comment should start with '# '
+src/./tree_interval/core/frame_analyzer.py:66:68: E261 at least two spaces before inline comment
+src/./tree_interval/core/frame_analyzer.py:66:69: E262 inline comment should start with '# '
+src/./tree_interval/core/frame_analyzer.py:66:80: E501 line too long (115 > 79 characters)
+src/./tree_interval/core/frame_analyzer.py:67:33: E261 at least two spaces before inline comment
+src/./tree_interval/core/frame_analyzer.py:67:34: E262 inline comment should start with '# '
+src/./tree_interval/core/frame_analyzer.py:74:80: E501 line too long (81 > 79 characters)
+src/./tree_interval/core/frame_analyzer.py:80:9: E265 block comment should start with '# '
+src/./tree_interval/core/frame_analyzer.py:82:74: E261 at least two spaces before inline comment
+src/./tree_interval/core/frame_analyzer.py:82:80: E501 line too long (111 > 79 characters)
+src/./tree_interval/core/frame_analyzer.py:83:30: E261 at least two spaces before inline comment
+src/./tree_interval/core/frame_analyzer.py:85:45: E261 at least two spaces before inline comment
+src/./tree_interval/core/frame_analyzer.py:85:46: E262 inline comment should start with '# '
+src/./tree_interval/core/frame_analyzer.py:85:80: E501 line too long (83 > 79 characters)
+src/./tree_interval/core/frame_analyzer.py:87:45: E261 at least two spaces before inline comment
+src/./tree_interval/core/frame_analyzer.py:87:46: E262 inline comment should start with '# '
+src/./tree_interval/core/frame_analyzer.py:87:80: E501 line too long (116 > 79 characters)
+src/./tree_interval/core/frame_analyzer.py:89:66: E261 at least two spaces before inline comment
+src/./tree_interval/core/frame_analyzer.py:89:67: E262 inline comment should start with '# '
+src/./tree_interval/core/frame_analyzer.py:89:80: E501 line too long (103 > 79 characters)
+src/./tree_interval/core/frame_analyzer.py:90:28: E261 at least two spaces before inline comment
+src/./tree_interval/core/frame_analyzer.py:90:29: E262 inline comment should start with '# '
+src/./tree_interval/core/frame_analyzer.py:91:53: E261 at least two spaces before inline comment
+src/./tree_interval/core/frame_analyzer.py:91:54: E262 inline comment should start with '# '
+src/./tree_interval/core/frame_analyzer.py:91:80: E501 line too long (93 > 79 characters)
+src/./tree_interval/core/frame_analyzer.py:92:44: E261 at least two spaces before inline comment
+src/./tree_interval/core/frame_analyzer.py:92:45: E262 inline comment should start with '# '
+src/./tree_interval/core/frame_analyzer.py:93:66: E261 at least two spaces before inline comment
+src/./tree_interval/core/frame_analyzer.py:93:67: E262 inline comment should start with '# '
+src/./tree_interval/core/frame_analyzer.py:93:80: E501 line too long (94 > 79 characters)
+src/./tree_interval/core/frame_analyzer.py:97:67: E261 at least two spaces before inline comment
+src/./tree_interval/core/frame_analyzer.py:97:68: E262 inline comment should start with '# '
+src/./tree_interval/core/frame_analyzer.py:97:80: E501 line too long (100 > 79 characters)
+src/./tree_interval/core/frame_analyzer.py:98:48: E261 at least two spaces before inline comment
+src/./tree_interval/core/frame_analyzer.py:98:49: E262 inline comment should start with '# '
+src/./tree_interval/core/frame_analyzer.py:98:80: E501 line too long (81 > 79 characters)
+src/./tree_interval/core/frame_analyzer.py:99:58: E261 at least two spaces before inline comment
+src/./tree_interval/core/frame_analyzer.py:99:59: E262 inline comment should start with '# '
+src/./tree_interval/core/frame_analyzer.py:99:80: E501 line too long (92 > 79 characters)
+src/./tree_interval/core/frame_analyzer.py:100:17: E265 block comment should start with '# '
+src/./tree_interval/core/frame_analyzer.py:102:49: E261 at least two spaces before inline comment
+src/./tree_interval/core/frame_analyzer.py:102:50: E262 inline comment should start with '# '
+src/./tree_interval/core/frame_analyzer.py:102:80: E501 line too long (93 > 79 characters)
+src/./tree_interval/core/frame_analyzer.py:104:66: E261 at least two spaces before inline comment
+src/./tree_interval/core/frame_analyzer.py:104:67: E262 inline comment should start with '# '
+src/./tree_interval/core/frame_analyzer.py:104:80: E501 line too long (99 > 79 characters)
+src/./tree_interval/core/frame_analyzer.py:105:21: E265 block comment should start with '# '
+src/./tree_interval/core/frame_analyzer.py:105:80: E501 line too long (83 > 79 characters)
+src/./tree_interval/core/frame_analyzer.py:108:79: E261 at least two spaces before inline comment
+src/./tree_interval/core/frame_analyzer.py:108:80: E501 line too long (112 > 79 characters)
+src/./tree_interval/core/frame_analyzer.py:108:80: E262 inline comment should start with '# '
+src/./tree_interval/core/frame_analyzer.py:109:25: E265 block comment should start with '# '
+src/./tree_interval/core/frame_analyzer.py:109:80: E501 line too long (111 > 79 characters)
+src/./tree_interval/core/frame_analyzer.py:112:64: E261 at least two spaces before inline comment
+src/./tree_interval/core/frame_analyzer.py:112:65: E262 inline comment should start with '# '
+src/./tree_interval/core/frame_analyzer.py:112:80: E501 line too long (112 > 79 characters)
+src/./tree_interval/core/frame_analyzer.py:113:34: E261 at least two spaces before inline comment
+src/./tree_interval/core/frame_analyzer.py:113:35: E262 inline comment should start with '# '
+src/./tree_interval/core/frame_analyzer.py:114:25: E261 at least two spaces before inline comment
+src/./tree_interval/core/frame_analyzer.py:114:26: E262 inline comment should start with '# '
+src/./tree_interval/core/frame_analyzer.py:116:1: E305 expected 2 blank lines after class or function definition, found 1
+src/./tree_interval/core/frame_analyzer.py:116:1: E402 module level import not at top of file
+src/./tree_interval/core/frame_analyzer.py:119:69: W292 no newline at end of file
+src/./tree_interval/core/interval_core.py:4:80: W291 trailing whitespace
+src/./tree_interval/core/interval_core.py:17:1: W293 blank line contains whitespace
+src/./tree_interval/core/interval_core.py:45:1: W293 blank line contains whitespace
+src/./tree_interval/core/interval_core.py:53:1: E305 expected 2 blank lines after class or function definition, found 1
+src/./tree_interval/core/interval_core.py:62:1: W293 blank line contains whitespace
+src/./tree_interval/core/interval_core.py:63:80: E501 line too long (82 > 79 characters)
+src/./tree_interval/core/interval_core.py:65:1: W293 blank line contains whitespace
+src/./tree_interval/core/interval_core.py:77:1: W293 blank line contains whitespace
+src/./tree_interval/core/interval_core.py:96:1: W293 blank line contains whitespace
+src/./tree_interval/core/interval_core.py:99:80: E501 line too long (80 > 79 characters)
+src/./tree_interval/core/interval_core.py:103:1: W293 blank line contains whitespace
+src/./tree_interval/core/interval_core.py:279:80: E501 line too long (92 > 79 characters)
+src/./tree_interval/core/interval_core.py:365:80: E501 line too long (93 > 79 characters)
+src/./tree_interval/core/interval_core.py:577:80: E501 line too long (91 > 79 characters)
+src/./tree_interval/core/interval_core.py:585:80: E501 line too long (86 > 79 characters)
+src/./tree_interval/core/interval_core.py:652:80: E501 line too long (130 > 79 characters)
+src/./tree_interval/core/interval_core.py:658:1: W293 blank line contains whitespace
+src/./tree_interval/core/interval_core.py:659:80: E501 line too long (81 > 79 characters)
+src/./tree_interval/core/interval_core.py:660:74: W291 trailing whitespace
+src/./tree_interval/core/interval_core.py:662:1: W293 blank line contains whitespace
+src/./tree_interval/core/interval_core.py:665:1: W293 blank line contains whitespace
+src/./tree_interval/core/interval_core.py:671:1: W293 blank line contains whitespace
+src/./tree_interval/rich_printer/config.py:4:80: E501 line too long (81 > 79 characters)
+src/./tree_interval/rich_printer/config.py:5:80: E501 line too long (81 > 79 characters)
+src/./tree_interval/rich_printer/printer.py:4:80: E501 line too long (85 > 79 characters)
+src/./tree_interval/rich_printer/printer.py:5:80: E501 line too long (84 > 79 characters)
+src/./tree_interval/rich_printer/printer.py:19:1: W293 blank line contains whitespace
+src/./tree_interval/rich_printer/printer.py:20:80: E501 line too long (80 > 79 characters)
+src/./tree_interval/rich_printer/printer.py:59:80: E501 line too long (80 > 79 characters)
+src/./tree_interval/rich_printer/printer.py:142:50: W292 no newline at end of file
+src/./tree_interval/visualizer/config.py:40:70: W292 no newline at end of file
+src/./tree_interval/visualizer/visualizer.py:18:1: W293 blank line contains whitespace
+src/./tree_interval/visualizer/visualizer.py:50:80: E501 line too long (86 > 79 characters)
+src/./tree_interval/visualizer/visualizer.py:61:80: E501 line too long (91 > 79 characters)
+src/./tree_interval/visualizer/visualizer.py:151:52: W292 no newline at end of file

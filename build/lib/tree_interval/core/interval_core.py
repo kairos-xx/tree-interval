@@ -33,10 +33,22 @@ from typing import (
     Dict,
     Generic,
     List,
+    NamedTuple,
     Optional,
     TypeVar,
     Union,
 )
+
+
+class LeafStyle(NamedTuple):
+    """Style configuration for leaf nodes.
+    
+    Attributes:
+        color (str): Color in hex format (#RRGGBB) or named color
+        bold (bool): Whether text should be bold, defaults to False
+    """
+    color: str
+    bold: bool = False
 
 if TYPE_CHECKING:
     from ..visualizer.config import VisualizationConfig
@@ -217,9 +229,9 @@ class Position:
         self.children: List["Leaf"] = []
 
     @property
-    def lineno(self) -> int:
-        """Get line number with fallback to 1."""
-        return self._lineno if self._lineno is not None else 1
+    def lineno(self) -> Optional[int]:
+        """Get line number."""
+        return self._lineno
 
     @lineno.setter
     def lineno(self, value: Optional[int]) -> None:

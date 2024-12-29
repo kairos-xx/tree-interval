@@ -2,7 +2,7 @@
 import pytest
 from rich.style import Style as RichStyle
 
-from tree_interval import Leaf, Position, LeafStyle
+from tree_interval import Leaf, LeafStyle, Position
 from tree_interval.rich_printer import RichPrintConfig
 
 

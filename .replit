@@ -76,3 +76,21 @@ author = 299513
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "pytest ./tests | tee logs/tests.log 2>&1"
+
+[[workflows.workflow]]
+name = "[Report] pyright"
+mode = "sequential"
+author = 299513
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pyright --warnings | tee logs/pyright.log 2>&1"
+
+[[workflows.workflow]]
+name = "[Report] flake8"
+mode = "sequential"
+author = 299513
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "flake8 --exclude */. --exclude ./build  | tee logs/flake8.log 2>&1"

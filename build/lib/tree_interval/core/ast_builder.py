@@ -177,7 +177,8 @@ class AstTreeBuilder:
                 leaf = Leaf(
                     position,
                     info={
-                        "name": node.__class__.__name__,
+                        "type": node.__class__.__name__,
+                        "name": getattr(node, 'name', node.__class__.__name__),
                         "source": unparse(node)
                     },
                 )
