@@ -513,6 +513,25 @@ class Leaf:
             current = current.parent
         return None
 
+    @property 
+    def previous_attribute(self) -> Optional["Leaf"]:
+        """Find the previous attribute in a chained attribute access.
+        Example: obj.attr1.attr2 -> for attr2 node, returns attr1 node"""
+        if not self.info or self.info.get("type") != "Attribute":
+            return None
+        
+        def is_direct_child(parent: "Leaf", child: "Leaf") -> bool:
+            return child in parent.children
+            
+        current = self
+        while current.parent:
+            if (current.parent.info and 
+                current.parent.info.get("type") == "Attribute" and
+                is_direct_child(current.parent, current)):
+                return current.parent
+            current = current.parent
+        return None
+
     @property
     def top_statement(self) -> Optional["Leaf"]:
         """Find the closest parent node that is a statement according to AST_TYPES."""
