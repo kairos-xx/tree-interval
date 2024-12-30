@@ -1,13 +1,13 @@
 from ast import AST, unparse
 from inspect import stack
+from typing import Any
 
 from tree_interval.core.frame_analyzer import FrameAnalyzer
 from tree_interval.core.interval_core import LeafStyle
 
 
-from typing import Any
-
 class Nested:
+
     def __init__(self) -> None:
         self.__dict__: dict[str, Any] = {}
 
@@ -40,7 +40,8 @@ class Nested:
                       next_attribute_ast_node, AST) else 'None'))
 
             previous_attribute = current_node.previous_attribute
-            previous_attribute_ast_node = getattr(previous_attribute, "ast_node", None)
+            previous_attribute_ast_node = getattr(previous_attribute,
+                                                  "ast_node", None)
             print("Previous attribute node: " +
                   (unparse(previous_attribute_ast_node) if isinstance(
                       previous_attribute_ast_node, AST) else 'None'))
@@ -48,13 +49,18 @@ class Nested:
             # Show statement with different marker styles
             print("\nDefault markers:")
             print(current_node.statement.text)
-            
+
             print("\nCustom markers:")
-            print(current_node.statement.as_text(top_marker="#", chain_marker="-", current_marker="@"))
-            print(current_node.statement.as_text(top_marker="$", chain_marker=".", current_marker="*"))
+            print(
+                current_node.statement.as_text(top_marker="#",
+                                               chain_marker="-",
+                                               current_marker="@"))
+            print(
+                current_node.statement.as_text(top_marker="$",
+                                               chain_marker=".",
+                                               current_marker="*"))
             print(current_node.statement.as_text(top_marker="#"))
 
-            
             #print(current_node.statement)
             flat_nodes = tree.flatten()
             for node in flat_nodes:
@@ -71,7 +77,7 @@ class Nested:
         print(
             f"\nThe chain continues: {continues} | At the end is a set: {is_set}"
         )
-        
+
         if is_set:
             new = type(self)()
             setattr(self, name, new)
@@ -82,7 +88,7 @@ class Nested:
 
 def test():
     a = Nested()
-    a.b.c=3
+    a.b.c = 3
     print(a.b.d.e.f.g)
     #print(a.b.c.e)
 
