@@ -421,6 +421,16 @@ class Leaf:
         self.position.selected = value
 
     @property
+    def is_set(self) -> bool:
+        """Check if this node represents a set operation based on AST type."""
+        if not self.info or not isinstance(self.info, dict):
+            return False
+        node_type = self.info.get("type")
+        if not node_type:
+            return False
+        return AST_TYPES.get(node_type, {}).get("is_set", False)
+
+    @property
     def next_attribute(self) -> Optional["Leaf"]:
         """Find the next attribute in a chained attribute access.
         Example: obj.attr1.attr2 -> for attr1 node, returns attr2 node
