@@ -90,9 +90,8 @@ class AstTreeBuilder:
 
             # Remove common indentation and preserve all lines
             self.source = "\n".join(
-                line[common_indent:] if line.strip() else ""
-                for line in lines)
-            
+                line[common_indent:] if line.strip() else "" for line in lines)
+
             self.indent_offset = common_indent
             # Don't adjust line offset since we want to keep all lines
             self.line_offset = 0
@@ -148,7 +147,7 @@ class AstTreeBuilder:
     def build(self) -> Optional[Tree]:
         if not self.source:
             raise ValueError("No source code available")
-        
+
         tree = parse(self.source)
         return self._build_tree_from_ast(tree)
 
@@ -162,7 +161,7 @@ class AstTreeBuilder:
         if not self.source:
             raise ValueError("No source code available")
         result_tree = Tree[str](self.source)
-        
+
         root_pos = Position(0, len(self.source), "Module")
         result_tree.root = Leaf(root_pos)
 
@@ -186,40 +185,38 @@ class AstTreeBuilder:
 
         # Sort nodes by position and size to ensure proper nesting
         nodes_with_positions.sort(key=lambda x: (x[0], -(x[1] - x[0])))
-        
-        # Track processed nodes to prevent cycles
         processed = set()
-        
         # Add nodes to tree maintaining proper hierarchy
         for _, _, leaf in nodes_with_positions:
             if not result_tree.root:
                 result_tree.root = leaf
                 processed.add(leaf)
                 continue
-
             if leaf in processed:
                 continue
-                
-            # Find immediate parent for current leaf
+
+            # Find best parent for current leaf
             best_match = None
             smallest_size = float('inf')
-            
+
             for start, end, potential_parent in nodes_with_positions:
-                if potential_parent == leaf or potential_parent in leaf.get_ancestors():
+                if potential_parent == leaf or potential_parent in leaf.get_ancestors(
+                ):
                     continue
-                    
+
                 if (start <= leaf.start and end >= leaf.end):
                     size = end - start
                     if size < smallest_size:
                         best_match = potential_parent
                         smallest_size = size
 
-            if best_match and best_match not in processed:
+            if best_match:
                 best_match.add_child(leaf)
-                processed.add(leaf)
-                if not best_match.parent:
-                    result_tree.add_leaf(best_match)
-                    processed.add(best_match)
+                if best_match not in processed:
+                    processed.add(leaf)
+                    if not best_match.parent:
+                        result_tree.add_leaf(best_match)
+                        processed.add(best_match)
             else:
                 result_tree.add_leaf(leaf)
                 processed.add(leaf)

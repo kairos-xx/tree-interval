@@ -10,47 +10,44 @@ class Nested:
     def __getattr__(self, name):
         new = type(self)()
         setattr(self, name, new)
+        print(f'\n{"#"*50}')
         print(f"attribute name: {name}")
-
-        frame=stack()[1].frame
-        print(f"frame: {frame}")
-        analyzer = FrameAnalyzer(frame)
+        analyzer = FrameAnalyzer(stack()[1].frame)
         current_node = analyzer.find_current_node()
-        if current_node and hasattr(current_node, "ast_node"):
-            top_statement = current_node.top_statement 
-            next_attribute = current_node.next_attribute
-
+        tree = analyzer.build_tree()
+        if current_node and tree:
             current_node_ast_node = getattr(current_node, "ast_node", None)
-            if isinstance(current_node_ast_node, AST):
-                print(
-                    f"Current node: {unparse(current_node_ast_node)}"
-                )
+            print("Current attribute node: " +
+                  (unparse(current_node_ast_node) if isinstance(
+                      current_node_ast_node, AST) else 'None'))
+            top_statement = current_node.top_statement
             top_statement_ast_node = getattr(top_statement, "ast_node", None)
-            if isinstance(top_statement_ast_node, AST):
-                print(
-                    f"Top statement node: {unparse(top_statement_ast_node)}"
-                )
+            print("Top attribute node: " +
+                  (unparse(top_statement_ast_node) if isinstance(
+                      top_statement_ast_node, AST) else 'None'))
+            next_attribute = current_node.next_attribute
             next_attribute_ast_node = getattr(next_attribute, "ast_node", None)
-            if isinstance(next_attribute_ast_node, AST):
-                print(
-                    f"Next attribute node: {unparse(next_attribute_ast_node)}"
-                )
-
-            tree = analyzer.build_tree()
-            if tree:
-                flat_nodes = tree.flatten()
-                for node in flat_nodes:
-                    if node.match(current_node):
-                        node.style = LeafStyle(color="#ff0000", bold=False)
-
-                tree.visualize()
-
+            print("Next attribute node: " +
+                  (unparse(next_attribute_ast_node) if isinstance(
+                      next_attribute_ast_node, AST) else 'None'))
+            flat_nodes = tree.flatten()
+            for node in flat_nodes:
+                if node.match(current_node):
+                    node.style = LeafStyle(color="#ff0000", bold=True)
+                elif node.match(top_statement):
+                    node.style = LeafStyle(color="#00ff00", bold=False)
+                elif node.match(next_attribute):
+                    node.style = LeafStyle(color="#0000ff", bold=False)
+                else:
+                    node.style = LeafStyle(color="#cccccc", bold=False)
+            tree.visualize()
         return new
 
 
 def analyze_this():
     a = Nested()
-    print(a.b.c.d)
+    a.b.c.d = 1
+    print(a.b.c.e)
     # analyzer = FrameAnalyzer(currentframe())
 
     # current_node = analyzer.find_current_node()

@@ -457,29 +457,35 @@ class Leaf:
     def find_best_match(
         self,
         start: int,
-        end: int) -> Optional["Leaf"]:
+        end: int,
+        best_match_distance: Optional[Union[int, float]] = None,
+    ) -> Optional["Leaf"]:
         """Find the leaf that best matches the given range."""
         if self.start is None or self.end is None:
             return None
-            
-        best_match = None
-        smallest_size = float('inf')
-        
-        # Check if current node contains target range
-        if self.start <= start and self.end >= end:
-            size = self.end - self.start
-            if size < smallest_size:
-                best_match = self
-                smallest_size = size
-                
-        # Check children
+
+        def calc_distance(leaf: "Leaf") -> int:
+            leaf_start = leaf.start or 0
+            leaf_end = leaf.end or 0
+            return ((start - leaf_start) if start > leaf_start else
+                    (leaf_start - start)) + (
+                        (end - leaf_end) if end > leaf_end else
+                        (leaf_end - end))
+
+        best_match_distance = float(
+            "inf") if best_match_distance is None else best_match_distance
+        distance = calc_distance(self)
+        if distance < best_match_distance:
+            best_match_distance = distance
+        best_match = self
         for child in self.children:
-            if child.start <= start and child.end >= end:
-                size = child.end - child.start
-                if size < smallest_size:
-                    best_match = child
-                    smallest_size = size
-                    
+            child_match = child.find_best_match(start, end,
+                                                best_match_distance)
+            if child_match is not None:
+                distance = calc_distance(child_match)
+                if distance < best_match_distance:
+                    best_match_distance = distance
+                    best_match = child_match
         return best_match
 
     def find_common_ancestor(self, other: "Leaf") -> Optional["Leaf"]:
@@ -745,21 +751,11 @@ class Tree(Generic[T]):
                 result.extend(self._flatten_helper(child))
         return result
 
-    def _flatten_helper(self, leaf: Leaf, visited: Optional[set] = None) -> List[Leaf]:
+    def _flatten_helper(self, leaf: Leaf) -> List[Leaf]:
         """Helper method for flatten()."""
-        if visited is None:
-            visited = set()
-            
-        if leaf in visited:
-            return []
-            
-        visited.add(leaf)
         result = [leaf]
-        
         for child in leaf.children:
-            if child not in visited:
-                result.extend(self._flatten_helper(child, visited))
-                
+            result.extend(self._flatten_helper(child))
         return result
 
     def to_json(self) -> str:
@@ -847,39 +843,3 @@ class NestedAttributes:
 
     def __str__(self) -> str:
         return repr(self)
-def best_match(self, start: Optional[int] = None, end: Optional[int] = None, info: Optional[Dict] = None) -> Optional['Leaf']:
-    """
-    Find the best matching node in the tree based on position and info.
-    
-    Args:
-        start: Start position to match
-        end: End position to match
-        info: Node info to match
-        
-    Returns:
-        The best matching leaf node or None
-    """
-    if not self.root:
-        return None
-        
-    best = None
-    smallest_size = float('inf')
-    
-    for node in self.flatten():
-        if start is not None and end is not None:
-            # Position must contain target range
-            if not (node.start <= start and node.end >= end):
-                continue
-                
-        if info is not None:
-            # Info must match if specified
-            if not node.info == info:
-                continue
-                
-        # Find smallest containing node
-        size = node.end - node.start
-        if size < smallest_size:
-            best = node
-            smallest_size = size
-            
-    return best
