@@ -73,14 +73,18 @@ class Statement:
     with customizable markers underneath the code.
 
     Attributes:
-        top (PartStatement): Contains the before/after parts of the top-level statement
+        top (PartStatement): Contains the before/after parts of the top-level
+                             statement
         before (str): Text preceding the current attribute/expression
         self (str): The current attribute/expression text
         after (str): Text following the current attribute/expression
-        top_marker (str): Character used to mark top-level statement parts (default: '^')
-        chain_marker (str): Character used to mark chained attributes (default: '~')
-        current_marker (str): Character used to mark current attribute (default: '*')
-    
+        top_marker (str): Character used to mark top-level statement parts
+                          (default: '^')
+        chain_marker (str): Character used to mark chained attributes
+                            (default: '~')
+        current_marker (str): Character used to mark current attribute
+                              (default: '*')
+
     Example:
         For a statement like 'print(a.b.c)', it can generate:
         print(a.b.c)
@@ -112,47 +116,44 @@ class Statement:
         top_marker = top_marker or self.top_marker
         chain_marker = chain_marker or self.chain_marker
         current_marker = current_marker or self.current_marker
-        output_lines = []
 
-        # Split the top.before into individual lines
-        top_before_lines = self.top.before.split("\n")
+        def lines_with_markers(text: str, marker_char: str):
+            return [
+                (line,
+                 "".join([ch if ch.isspace() else marker_char for ch in line]))
+                for line in text.split("\n")
+            ]
 
-        # Process all lines except the last one
-        for line in top_before_lines[:-1]:
-            output_lines.append(line)
-            # Create an underline by replacing
-            # non-space characters with top_marker
-            underline = "".join(top_marker if not c.isspace() else " "
-                                for c in line)
-            output_lines.append(underline)
+        def merge_lines(pairs_a, pairs_b):
+            if not pairs_a:
+                return pairs_b
+            if not pairs_b:
+                return pairs_a
 
-        # Process the last line of top.before
-        last_line_indent = top_before_lines[-1]  # e.g., '            '
+            last_text_a, last_mark_a = pairs_a[-1]
+            first_text_b, first_mark_b = pairs_b[0]
+            return (pairs_a[:-1] + [
+                (last_text_a + first_text_b, last_mark_a + first_mark_b)
+            ] + pairs_b[1:])
 
-        # Combine the self parts
-        combined_statement = (f"{self.before}{self.self}" +
-                              f"{self.after}{self.top.after}")
-
-        # Create the full line with indentation
-        full_line = f"{last_line_indent}{combined_statement}"
-        output_lines.append(full_line)
-
-        # Calculate lengths of each part for markers
-        before_length = len(self.before)
-        self_length = len(self.self)
-        after_length = len(self.after)
-        top_after_length = len(self.top.after)
-
-        # Create the markers line
-        markers = (chain_marker * before_length +
-                   current_marker * self_length + chain_marker * after_length +
-                   top_marker * top_after_length)
-
-        # Ensure the markers line has the same indentation
-        markers_line = f"{last_line_indent}{markers}"
-        output_lines.append(markers_line)
-
-        return "\n".join(output_lines)
+        return "\n".join(
+            sum(
+                [[text_line, marker_line]
+                 for text_line, marker_line in merge_lines(
+                     merge_lines(
+                         lines_with_markers(self.top.before, top_marker),
+                         merge_lines(
+                             merge_lines(
+                                 lines_with_markers(self.before, chain_marker),
+                                 lines_with_markers(self.self, current_marker),
+                             ),
+                             lines_with_markers(self.after, chain_marker),
+                         ),
+                     ),
+                     lines_with_markers(self.top.after, top_marker),
+                 )],
+                [],
+            ))
 
     @property
     def text(self) -> str:

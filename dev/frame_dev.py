@@ -51,8 +51,7 @@ class Nested:
 
             # Show statement with different marker styles
             print("\nDefault markers:")
-            print(current_node.statement.text)
-            print(current_node.statement)
+            print(current_node.statement.as_text())
 
             # print(current_node.statement)
             flat_nodes = tree.flatten()
@@ -81,7 +80,10 @@ class Nested:
 def test():
     a = Nested()
     a.b.c = 3
-    print((a.b.d.e.f.g))
+    print(
+        (a.b.
+         d.e.f.g)
+    )
     # print(a.b.c.e)
 
 
