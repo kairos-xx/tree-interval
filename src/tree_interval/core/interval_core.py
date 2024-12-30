@@ -65,7 +65,27 @@ class PartStatement:
 
 @dataclass
 class Statement:
-    """Represents a complete statement breakdown"""
+    """Represents a complete statement breakdown with marker annotations.
+
+    This class handles the representation of code statements, particularly for
+    displaying attribute chains and nested expressions with visual markers.
+    It breaks down a statement into parts and provides methods to format them
+    with customizable markers underneath the code.
+
+    Attributes:
+        top (PartStatement): Contains the before/after parts of the top-level statement
+        before (str): Text preceding the current attribute/expression
+        self (str): The current attribute/expression text
+        after (str): Text following the current attribute/expression
+        top_marker (str): Character used to mark top-level statement parts (default: '^')
+        chain_marker (str): Character used to mark chained attributes (default: '~')
+        current_marker (str): Character used to mark current attribute (default: '*')
+    
+    Example:
+        For a statement like 'print(a.b.c)', it can generate:
+        print(a.b.c)
+        ^^^^^~~~~*~~
+    """
 
     top: PartStatement
     before: str
@@ -79,6 +99,16 @@ class Statement:
                 top_marker=None,
                 chain_marker=None,
                 current_marker=None) -> str:
+        """Format the statement with marker annotations.
+
+        Args:
+            top_marker (str, optional): Override default top marker
+            chain_marker (str, optional): Override default chain marker
+            current_marker (str, optional): Override default current marker
+
+        Returns:
+            str: Formatted text with markers aligned under the code
+        """
         top_marker = top_marker or self.top_marker
         chain_marker = chain_marker or self.chain_marker
         current_marker = current_marker or self.current_marker
