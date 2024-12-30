@@ -35,7 +35,7 @@ class Nested:
                   (unparse(next_attribute_ast_node) if isinstance(
                       next_attribute_ast_node, AST) else 'None'))
 
-            previous_attribute = current_node.previous
+            previous_attribute = current_node.previous_attribute
             previous_attribute_ast_node = getattr(previous_attribute, "ast_node", None)
             print("Previous attribute node: " +
                   (unparse(previous_attribute_ast_node) if isinstance(
