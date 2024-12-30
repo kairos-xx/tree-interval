@@ -562,6 +562,45 @@ def demonstrate_node_navigation():
 
     program.add_child(class_def)
     program.add_child(function_def)
+
+
+def demonstrate_custom_styling():
+    """Demonstrates custom styling for tree nodes with different types."""
+    print_header("Custom Node Styling", BLUE)
+    tree = Tree("Custom Styled Tree")
+
+    # Create nodes with different types and styles
+    root = Leaf(Position(0, 100), info={"type": "Component", "name": "App"})
+    root.style = LeafStyle(color="#FF6B6B", bold=True)  # Coral red
+
+    router = Leaf(Position(10, 40), info={"type": "Router", "name": "MainRouter"})
+    router.style = LeafStyle(color="#4ECDC4", bold=True)  # Turquoise
+
+    view1 = Leaf(Position(15, 25), info={"type": "View", "name": "HomeView"})
+    view1.style = LeafStyle(color="#45B7D1", bold=False)  # Light blue
+    
+    view2 = Leaf(Position(30, 40), info={"type": "View", "name": "AboutView"})
+    view2.style = LeafStyle(color="#45B7D1", bold=False)  # Light blue
+
+    service = Leaf(Position(50, 90), info={"type": "Service", "name": "DataService"})
+    service.style = LeafStyle(color="#96CEB4", bold=True)  # Sage green
+
+    # Build tree structure
+    tree.root = root
+    tree.add_leaf(router)
+    tree.add_leaf(service)
+    router.add_child(view1)
+    router.add_child(view2)
+
+    # Visualize with different configurations
+    print("\nDefault tree visualization:")
+    tree.visualize()
+
+    print("\nRich tree visualization:")
+    printer = RichTreePrinter(RichPrintConfig(show_info=True))
+    printer.print_tree(tree)
+
+
     class_def.add_child(method1)
     class_def.add_child(method2)
     function_def.add_child(param1)
@@ -596,3 +635,4 @@ def main():
     demonstrate_find_method()
     demonstrate_leaf_navigation()
     demonstrate_node_navigation()
+    demonstrate_custom_styling()
