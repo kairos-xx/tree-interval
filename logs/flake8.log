@@ -1,0 +1,16 @@
+dev/./frame_dev.py:84:10: E114 indentation is not a multiple of 4 (comment)
+dev/./frame_dev.py:86:11: E114 indentation is not a multiple of 4 (comment)
+dev/./frame_dev.py:93:10: E114 indentation is not a multiple of 4 (comment)
+dev/./frame_dev.py:94:13: E265 block comment should start with '# '
+dev/./frame_dev.py:95:15: E114 indentation is not a multiple of 4 (comment)
+dev/./frame_dev.py:95:15: E116 unexpected indentation (comment)
+dev/./frame_dev.py:96:15: E114 indentation is not a multiple of 4 (comment)
+dev/./frame_dev.py:96:15: E116 unexpected indentation (comment)
+dev/./frame_dev.py:98:15: E114 indentation is not a multiple of 4 (comment)
+dev/./frame_dev.py:98:15: E116 unexpected indentation (comment)
+dev/./frame_dev_min.py:25:31: E231 missing whitespace after ','
+dev/./frame_dev_min.py:27:26: E225 missing whitespace around operator
+dev/./frame_dev_min.py:28:19: E225 missing whitespace around operator
+dev/./frame_dev_min.py:59:1: E265 block comment should start with '# '
+dev/./frame_dev_min.py:60:7: F541 f-string is missing placeholders
+dev/./frame_dev_min.py:65:1: E265 block comment should start with '# '

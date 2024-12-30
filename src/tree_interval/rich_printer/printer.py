@@ -47,7 +47,7 @@ class RichTreePrinter:
     def print_tree(self, tree: Tree, root: Optional[Leaf] = None) -> None:
         """
         Print tree using Rich formatting.
-        
+
         Args:
             tree: The tree to print
             root: Optional root Leaf to start printing from.

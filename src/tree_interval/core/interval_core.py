@@ -1028,7 +1028,7 @@ class Tree(Generic[T]):
                   root: Optional["Leaf"] = None) -> None:
         """
         Visualize the tree structure.
-        
+
         Args:
             config: Optional visualization configuration
             root: Optional root node to start visualization from
