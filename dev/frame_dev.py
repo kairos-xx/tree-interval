@@ -81,13 +81,17 @@ class Nested:
         else:
             import sys
             caller = stack()[1]
+            original_limit = sys.tracebacklimit
             sys.tracebacklimit = 0  # Suppress traceback
-            raise AttributeError(
-                f"Attribute \033[1m{name}\033[0m not found in " +
-                f"\033[1m{before}\033[0m\n" +
-                f"   File \"{caller.filename}\"," +
-                f"line {caller.lineno}, in {caller.function}\n" +
-                f"{indent(underline_text,'   ')}")
+            try:
+                raise AttributeError(
+                    f"Attribute \033[1m{name}\033[0m not found in " +
+                    f"\033[1m{before}\033[0m\n" +
+                    f"   File \"{caller.filename}\"," +
+                    f"line {caller.lineno}, in {caller.function}\n" +
+                    f"{indent(underline_text,'   ')}")
+            finally:
+                sys.tracebacklimit = original_limit
 
 
 def test():
