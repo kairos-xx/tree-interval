@@ -458,8 +458,9 @@ class Leaf:
             after_paren = ")" if ")" in after_text else ""
         top_part = PartStatement(before=before_paren + "(", after=after_paren)
 
-        # Get the current node's source
-        current_source = self.info.get("source", "") if self.info else ""
+        # Get the current node's source using position
+        full_source = self.info.get("source", "") if self.info else ""
+        current_source = full_source[self.start - self.parent.start:self.end - self.parent.start] if self.parent else full_source
         
         # Find preceding attribute nodes
         before = ""
@@ -469,10 +470,9 @@ class Leaf:
             while current.parent and current.parent.info and current.parent.info.get("type") == "Attribute":
                 current = current.parent
             
-            # Extract the 'before' part
-            first_attr_source = current.info.get("source", "")
-            if current_source in first_attr_source:
-                before = first_attr_source[:first_attr_source.index(current_source)]
+            # Get position-based before part
+            first_attr = current.children[0] if current.children else current
+            before = current.info.get("source", "")[:first_attr.start - current.start] if current.info else ""
         
         # Find remaining attributes in chain for 'after' part
         after = ""
