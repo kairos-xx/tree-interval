@@ -51,9 +51,19 @@ class Nested:
                       previous_attribute_ast_node, AST) else 'None'))
 
             # Show statement with different marker styles
+            # Show statement with proper chain formatting
+            statement = Statement(
+                top=PartStatement(before='', after=''),
+                before='a.',
+                self='b',
+                after='.c',
+                top_marker='^',
+                chain_marker='~',
+                current_marker='*'
+            )
             print("\nDefault markers:")
-            print(current_node.statement)
-            print(current_node.statement.text)
+            print(statement)
+            print(statement.text)
 
             
 
