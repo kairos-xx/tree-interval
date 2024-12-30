@@ -58,8 +58,8 @@ class TreeVisualizer:
         if config is None:
             config = DEFAULT_CONFIG
 
-        root_node = root if root is not None else tree.root
-        if not root_node:
+        display_root = root if root is not None else tree.root
+        if not display_root:
             print("Empty tree")
             return
 
@@ -152,7 +152,7 @@ class TreeVisualizer:
                 _print_node(child, new_prefix, i == len(children) - 1,
                             level + 1)
 
-        _print_node(tree.root)
+        _print_node(display_root)
 
 
 __version__ = "0.1.0"
