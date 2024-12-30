@@ -12,6 +12,7 @@ from src.tree_interval import (
     VisualizationConfig,
 )
 from src.tree_interval.rich_printer import RichTreePrinter
+from tree_interval.core.interval_core import PartStatement, Statement
 
 
 def demonstrate_positions():
@@ -315,20 +316,6 @@ def demonstrate_node_navigation():
     print(f"Child 1's next sibling: {next_info}")
     print(f"Child 2's previous sibling: {prev_info}")
 
-
-if __name__ == "__main__":
-    print("=== Tree Interval Package Demo ===")
-    demonstrate_positions()
-    demonstrate_leaves()
-    demonstrate_tree_operations()
-    example_basic_tree()
-    example_custom_visualization()
-    example_json_serialization()
-    demonstrate_line_positions()
-    demonstrate_dot_notation()
-    demonstrate_ast_parsing()
-    demonstrate_node_navigation()
-
 def demonstrate_statements():
     """Demonstrates Statement functionality"""
     print("\n=== Statement Examples ===")
@@ -343,5 +330,17 @@ def demonstrate_statements():
     print("\nCustom markers:")
     print(stmt.as_text(top_marker="#", chain_marker="-", current_marker="@"))
 
+
 if __name__ == "__main__":
+    print("=== Tree Interval Package Demo ===")
+    demonstrate_positions()
+    demonstrate_leaves()
+    demonstrate_tree_operations()
+    example_basic_tree()
+    example_custom_visualization()
+    example_json_serialization()
+    demonstrate_line_positions()
+    demonstrate_dot_notation()
+    demonstrate_ast_parsing()
+    demonstrate_node_navigation()
     demonstrate_statements()

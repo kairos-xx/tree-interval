@@ -12,6 +12,7 @@ from src.tree_interval import (
     VisualizationConfig,
 )
 from src.tree_interval.rich_printer import RichPrintConfig, RichTreePrinter
+from tree_interval.core.interval_core import PartStatement, Statement
 
 # ANSI Colors
 RED = "\033[91m"
@@ -104,6 +105,20 @@ def demonstrate_tree_styling():
     printer.print_tree(tree)
     tree.visualize()
 
+def demonstrate_statements():
+    """Demonstrates Statement functionality"""
+    print_header("Statement Examples", MAGENTA)
+    
+    # Basic statement
+    part = PartStatement(before="print(", after=")")
+    stmt = Statement(top=part, before="a.b.", self="d", after=".e")
+    
+    print("Default markers:")
+    print(stmt.text)
+    
+    print("\nCustom markers:")
+    print(stmt.as_text(top_marker="#", chain_marker="-", current_marker="@"))
+    print(stmt.as_text(top_marker="$", chain_marker=".", current_marker="*"))
 
 def demonstrate_find_nodes():
     print_header("Find Nodes Example", YELLOW)
@@ -563,20 +578,6 @@ def demonstrate_node_navigation():
         f" {function_def.children[0].info if function_def.children else None}")
 
 
-def demonstrate_statements():
-    """Demonstrates Statement functionality"""
-    print_header("Statement Examples", MAGENTA)
-    
-    # Basic statement
-    part = PartStatement(before="print(", after=")")
-    stmt = Statement(top=part, before="a.b.", self="d", after=".e")
-    
-    print("Default markers:")
-    print(stmt.text)
-    
-    print("\nCustom markers:")
-    print(stmt.as_text(top_marker="#", chain_marker="-", current_marker="@"))
-    print(stmt.as_text(top_marker="$", chain_marker=".", current_marker="*"))
 
 def main():
     print_header("Tree Interval Package Demo", BLUE)

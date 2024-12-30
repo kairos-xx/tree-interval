@@ -2,7 +2,7 @@
 import pytest
 
 from tree_interval import AstTreeBuilder
-from tree_interval.core.interval_core import Leaf, Position, Tree
+from tree_interval.core.interval_core import Leaf, PartStatement, Position, Statement, Tree
 
 
 def test_ast_node_access() -> None:
@@ -88,13 +88,6 @@ def test_next_attribute() -> None:
     assert attr2.next_attribute is None
     assert name.next_attribute is None
 
-
-if __name__ == "__main__":
-    pytest.main([__file__])
-
-
-
-
 def test_statement_markers():
     """Test Statement marker customization"""
     part = PartStatement(before="print(", after=")")
@@ -106,3 +99,10 @@ def test_statement_markers():
     # Test custom markers 
     custom = stmt.as_text(top_marker="#", chain_marker="-", current_marker="@")
     assert custom == "print(a.b.d.e)\n#####---@--#"
+
+if __name__ == "__main__":
+    pytest.main([__file__])
+
+
+
+
