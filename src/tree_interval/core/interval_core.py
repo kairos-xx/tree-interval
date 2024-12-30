@@ -520,12 +520,12 @@ class Leaf:
         if not self.info or self.info.get("type") != "Attribute":
             return None
 
-        # Get parent chain until we find an attribute
+        # Get parent chain until we find an attribute that is part of the same chain
         current = self
         while current.parent:
             if (current.parent.info and 
                 current.parent.info.get("type") == "Attribute" and
-                current.parent.source != self.info.get("source")):
+                current.parent.info.get("source") != self.info.get("source")):
                 return current.parent
             current = current.parent
             
