@@ -519,17 +519,16 @@ class Leaf:
         Example: obj.attr1.attr2 -> for attr2 node, returns attr1 node"""
         if not self.info or self.info.get("type") != "Attribute":
             return None
-        
-        def is_direct_child(parent: "Leaf", child: "Leaf") -> bool:
-            return child in parent.children
             
+        # Get full source path
         current = self
-        while current.parent:
-            if (current.parent.info and 
-                current.parent.info.get("type") == "Attribute" and
-                is_direct_child(current.parent, current)):
-                return current.parent
+        while current.parent and current.parent.info and current.parent.info.get("type") == "Attribute":
             current = current.parent
+            
+        # Return the direct parent if it's an Attribute
+        if current and current != self and current.info and current.info.get("type") == "Attribute":
+            return current
+            
         return None
 
     @property
