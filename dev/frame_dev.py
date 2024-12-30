@@ -81,7 +81,7 @@ class Nested:
         else:
             import sys
             caller = stack()[1]
-            original_limit = sys.tracebacklimit
+            original_limit = getattr(sys, 'tracebacklimit', None)
             sys.tracebacklimit = 0  # Suppress traceback
             try:
                 raise AttributeError(
@@ -91,7 +91,10 @@ class Nested:
                     f"line {caller.lineno}, in {caller.function}\n" +
                     f"{indent(underline_text,'   ')}")
             finally:
-                sys.tracebacklimit = original_limit
+                if original_limit is not None:
+                    sys.tracebacklimit = original_limit
+                else:
+                    delattr(sys, 'tracebacklimit')
 
 
 def test():
