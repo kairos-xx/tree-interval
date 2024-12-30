@@ -3,7 +3,7 @@ from inspect import stack
 from typing import Any
 
 from tree_interval.core.frame_analyzer import FrameAnalyzer
-from tree_interval.core.interval_core import LeafStyle
+from tree_interval.core.interval_core import LeafStyle, Statement, PartStatement
 
 
 class Nested:
