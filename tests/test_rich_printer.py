@@ -83,12 +83,14 @@ def test_custom_root_visualization(basic_tree):
     """Test visualization from custom root node."""
     child = basic_tree.root.children[0]
     printer = RichTreePrinter()
-
-    console = Console(record=True)
+    
+    # Test that the tree is printed starting from the child node
+    console = Console(record=True, force_terminal=True)
     with console.capture() as capture:
         printer.print_tree(basic_tree, root=child)
     output = capture.get()
-    assert "[10-50]" in output
+    assert "Child" in output
+    assert "10-50" in output
 
 
 if __name__ == "__main__":
