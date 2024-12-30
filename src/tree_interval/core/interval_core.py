@@ -519,15 +519,15 @@ class Leaf:
         Example: obj.attr1.attr2 -> for attr2 node, returns attr1 node"""
         if not self.info or self.info.get("type") != "Attribute":
             return None
-            
-        # Get full source path
+
+        # Get parent chain until we find an attribute
         current = self
-        while current.parent and current.parent.info and current.parent.info.get("type") == "Attribute":
+        while current.parent:
+            if (current.parent.info and 
+                current.parent.info.get("type") == "Attribute" and
+                current.parent.source != self.info.get("source")):
+                return current.parent
             current = current.parent
-            
-        # Return the direct parent if it's an Attribute
-        if current and current != self and current.info and current.info.get("type") == "Attribute":
-            return current
             
         return None
 
