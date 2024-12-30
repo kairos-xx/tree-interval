@@ -84,31 +84,24 @@ class Statement:
             current_marker: Override default current marker
 
         Example:
-            print(a.b.d.e)
-            ^^^^^^~~~~*~~
+            a.b.c
+            ~~*~~
         """
         tm = top_marker or self.top_marker
         cm = chain_marker or self.chain_marker
         cum = current_marker or self.current_marker
 
-        full_text = (f"{self.top.before}{self.before}{self.self}" +
-                     f"{self.after}{self.top.after}")
+        full_text = f"{self.before}{self.self}{self.after}"
         markers = ""
 
-        # Mark the opening part (e.g. 'print(')
-        markers += tm * len(self.top.before)
-
-        # Mark the before part (e.g. 'a.b.')
+        # Mark the chain before the current attribute (e.g. 'a.b.')
         markers += cm * len(self.before)
 
-        # Mark the current attribute
+        # Mark the current attribute (e.g. 'c')
         markers += cum * len(self.self)
 
-        # Mark the after part (e.g. '.e')
+        # Mark the chain after the current attribute (e.g. '.d')
         markers += cm * len(self.after)
-
-        # Mark the closing part (e.g. ')')
-        markers += tm * len(self.top.after)
 
         return f"{full_text}\n{markers}"
 
