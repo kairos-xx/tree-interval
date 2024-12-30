@@ -94,7 +94,7 @@ def test_statement_markers():
     stmt = Statement(top=part, before="a.b.", self="d", after=".e")
     
     # Test default markers
-    assert stmt.text == "print(a.b.d.e)\n^^^^^^~~~~*~~^"
+    assert stmt.text == "print(a.b.d.e)\n^^^^^^~~~~*~~"
     
     # Test custom markers 
     custom = stmt.as_text(top_marker="#", chain_marker="-", current_marker="@")

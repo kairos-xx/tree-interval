@@ -107,7 +107,7 @@ class Statement:
         markers += cm * len(self.after)
 
         # Mark the closing part (e.g. ')')
-        markers += tm * (len(self.top.after) - 1) if self.top.after else ""
+        markers += tm * len(self.top.after)
 
         return f"{full_text}\n{markers}"
 
