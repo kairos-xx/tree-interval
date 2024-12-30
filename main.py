@@ -266,6 +266,15 @@ def demonstrate_tree_operations():
     print(f"\n{GREEN}=== Final Tree State ==={RESET}")
     tree.visualize()
 
+    # Demonstrate visualization from custom root
+    print(f"\n{GREEN}=== Visualization from Custom Root ==={RESET}")
+    print("\nVisualize from child1:")
+    tree.visualize(root=child1)
+
+    print("\nUsing RichTreePrinter from child2:")
+    printer = RichTreePrinter(RichPrintConfig(show_info=True))
+    printer.print_tree(tree, root=child2)
+
     return tree
 
 
