@@ -2,7 +2,7 @@
 **/.DS_Strore
 .coverage
 /zip
-/logs
+logs/**
 /.*
 /.ruff_cache
 /attached_assets
