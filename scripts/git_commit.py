@@ -104,7 +104,10 @@ def commit_changes():
 
         subprocess.run(["git", "add", "."], check=True)
         message = "Auto commit:" + f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
-        subprocess.run(["git", "commit", "-m", message], check=True)
+        subprocess.run(
+            ["git", "commit", "-m", message],
+            check=True
+        )
         subprocess.run(["git", "push", "origin", "main"], check=True)
         print("✅ Changes committed and pushed")
     except Exception as e:

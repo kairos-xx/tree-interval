@@ -27,7 +27,10 @@ required_workflows = [
         "name": "[Util] create zip",
         "mode": "sequential",
         "author": author_id,
-        "tasks": [{"task": "shell.exec", "args": "python scripts/create_zip.py"}],
+        "tasks": [{
+            "task": "shell.exec",
+            "args": "python scripts/create_zip.py"
+        }],
     },
     {
         "name": "[Util] build",
@@ -36,7 +39,10 @@ required_workflows = [
         "tasks": [
             {
                 "task": "shell.exec",
-                "args": "rm -rf dist build *.egg-info && python setup.py sdist bdist_wheel",
+                "args": (
+                    "rm -rf dist build *.egg-info && "
+                    "python setup.py sdist bdist_wheel"
+                ),
             }
         ],
     },
@@ -45,7 +51,10 @@ required_workflows = [
         "mode": "sequential",
         "author": author_id,
         "tasks": [
-            {"task": "shell.exec", "args": "pytest ./tests | tee logs/tests.log 2>&1"}
+            {
+                "task": "shell.exec",
+                "args": "pytest ./tests | tee logs/tests.log 2>&1"
+            }
         ],
     },
     {
@@ -98,7 +107,10 @@ required_workflows = [
         "tasks": [
             {
                 "task": "shell.exec",
-                "args": "flake8 --exclude */. --exclude ./build | tee logs/flake8.log 2>&1",
+                "args": (
+                    "flake8 --exclude */. --exclude ./build | "
+                    "tee logs/flake8.log 2>&1"
+                ),
             }
         ],
     },
@@ -107,7 +119,10 @@ required_workflows = [
         "mode": "sequential",
         "author": author_id,
         "tasks": [
-            {"task": "shell.exec", "args": "ruff check ./src | tee logs/ruff.log 2>&1"}
+            {
+                "task": "shell.exec",
+                "args": "ruff check ./src | tee logs/ruff.log 2>&1"
+            }
         ],
     },
 ]

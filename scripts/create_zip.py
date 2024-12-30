@@ -11,7 +11,9 @@ def get_files_to_zip() -> List[str]:
     files = []
     for root, dirs, filenames in os.walk("."):
         # Skip directories that start with '.' or are in CUSTOM_IGNORE
-        dirs[:] = [d for d in dirs if not d.startswith(".") and d not in CUSTOM_IGNORE]
+        dirs[:] = [
+            d for d in dirs if not d.startswith(".") and d not in CUSTOM_IGNORE
+        ]
 
         # Filter filenames
         for filename in filenames:
