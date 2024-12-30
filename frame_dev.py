@@ -1,23 +1,21 @@
 from ast import AST, unparse
 from inspect import stack
-from typing import Any, Protocol
+from typing import Any
 
 from tree_interval.core.frame_analyzer import FrameAnalyzer
 from tree_interval.core.interval_core import LeafStyle
 
 
-class NestedProtocol(Protocol):
-    def __getattr__(self, name: str) -> 'NestedProtocol': ...
-
-
 class Nested:
+
     def __init__(self) -> None:
-        self.__dict__: dict[str, Any] = {}
+        # Tell type checker that this is a dynamic class
+        self.__dict__: dict[str, "Nested"] = {}
 
-    def __class_getitem__(cls, _: Any) -> Any:
-        return Nested
+    def __setattr__(self, name: str, value: Any) -> None:
+        self.__dict__[name] = value
 
-    def __getattr__(self, name):
+    def __getattr__(self, name: str) -> "Nested":
 
         print(f'\n{"#"*50}')
         print(f"attribute name: {name}")
