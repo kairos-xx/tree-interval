@@ -91,17 +91,24 @@ class Statement:
         cm = chain_marker or self.chain_marker
         cum = current_marker or self.current_marker
 
-        full_text = f"{self.before}{self.self}{self.after}"
+        # Build the full statement text
+        full_text = f"{self.top.before}{self.before}{self.self}{self.after}{self.top.after}"
         markers = ""
 
-        # Mark the chain before the current attribute (e.g. 'a.b.')
+        # Mark top statement prefix
+        markers += tm * len(self.top.before)
+        
+        # Mark the chain before current attribute
         markers += cm * len(self.before)
 
-        # Mark the current attribute (e.g. 'c')
+        # Mark the current attribute
         markers += cum * len(self.self)
 
-        # Mark the chain after the current attribute (e.g. '.d')
+        # Mark the remaining chain
         markers += cm * len(self.after)
+
+        # Mark top statement suffix
+        markers += tm * len(self.top.after)
 
         return f"{full_text}\n{markers}"
 
