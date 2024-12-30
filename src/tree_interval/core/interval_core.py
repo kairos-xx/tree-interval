@@ -77,12 +77,12 @@ class Statement:
                 chain_marker=None,
                 current_marker=None) -> str:
         """Generate a text representation of the statement with markers.
-        
+
         Args:
             top_marker: Override default top marker
             chain_marker: Override default chain marker
             current_marker: Override default current marker
-            
+
         Example:
             print(a.b.d.e)
             ^^^^^^~~~~*~~
@@ -91,7 +91,8 @@ class Statement:
         cm = chain_marker or self.chain_marker
         cum = current_marker or self.current_marker
 
-        full_text = f"{self.top.before}{self.before}{self.self}{self.after}{self.top.after}"
+        full_text = (f"{self.top.before}{self.before}{self.self}" +
+                     f"{self.after}{self.top.after}")
         markers = ""
 
         # Mark the opening part (e.g. 'print(')
@@ -537,7 +538,8 @@ class Leaf:
     def next_attribute(self) -> Optional["Leaf"]:
         """Find the next attribute in a chained attribute access.
         Example: obj.attr1.attr2 -> for attr1 node, returns attr2 node
-        Returns None if this is not part of an attribute chain or is the last attribute.
+        Returns None if this is not part of an attribute chain or is
+                the last attribute.
         """
         if not self.info or self.info.get("type") != "Attribute":
             return None
@@ -566,7 +568,10 @@ class Leaf:
 
     @property
     def top_statement(self) -> Optional["Leaf"]:
-        """Find the closest parent node that is a statement according to AST_TYPES."""
+        """
+        Find the closest parent node that is a statement according
+        to AST_TYPES.
+        """
         current = self
         while current:
             if (current.info and isinstance(current.info, dict)

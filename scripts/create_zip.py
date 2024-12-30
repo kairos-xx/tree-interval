@@ -29,11 +29,12 @@ def get_files_to_zip() -> List[str]:
 def create_zip() -> None:
     """Create a zip file with all non-ignored files."""
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    output_folder = './zip'
     output_filename = f'tree_interval_{timestamp}.zip'
     files = get_files_to_zip()
 
     try:
-        with zipfile.ZipFile(output_filename, 'w',
+        with zipfile.ZipFile(f"{output_folder}/{output_filename}", 'w',
                              zipfile.ZIP_DEFLATED) as zipf:
             for file in files:
                 zipf.write(file)

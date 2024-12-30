@@ -1,4 +1,3 @@
-
 AST_TYPES = {
     # Module level
     "Module": {
@@ -23,7 +22,7 @@ AST_TYPES = {
         "is_set": False
     },
     "AsyncFunctionDef": {
-        "description": "Async function definition", 
+        "description": "Async function definition",
         "statement": True,
         "is_set": False
     },
@@ -60,7 +59,7 @@ AST_TYPES = {
     },
     "AugAssign": {
         "description": "Augmented assignment (+=, -=, |=, etc)",
-        "statement": True, 
+        "statement": True,
         "is_set": True
     },
     "Name": {

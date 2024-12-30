@@ -298,7 +298,10 @@ def demonstrate_ast_parsing():
 
 
 def demonstrate_node_navigation():
-    """Demonstrates navigation between different types of nodes in the tree including top_statement."""
+    """
+    Demonstrates navigation between different types of
+    nodes in the tree including top_statement.
+    """
     # Create test nodes
     root = Leaf(Position(0, 100), "Root")
     child1 = Leaf(Position(10, 40), "Child 1")
@@ -317,17 +320,18 @@ def demonstrate_node_navigation():
     print(f"Child 1's next sibling: {next_info}")
     print(f"Child 2's previous sibling: {prev_info}")
 
+
 def demonstrate_statements():
     """Demonstrates Statement functionality"""
     print("\n=== Statement Examples ===")
-    
+
     # Basic statement
     part = PartStatement(before="print(", after=")")
     stmt = Statement(top=part, before="a.b.", self="d", after=".e")
-    
+
     print("Default markers:")
     print(stmt.text)
-    
+
     print("\nCustom markers:")
     print(stmt.as_text(top_marker="#", chain_marker="-", current_marker="@"))
 

@@ -200,8 +200,8 @@ class AstTreeBuilder:
             smallest_size = float('inf')
 
             for start, end, potential_parent in nodes_with_positions:
-                if potential_parent == leaf or potential_parent in leaf.get_ancestors(
-                ):
+                if (potential_parent == leaf
+                        or potential_parent in leaf.get_ancestors()):
                     continue
 
                 if (start <= leaf.start and end >= leaf.end):
