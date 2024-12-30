@@ -41,6 +41,8 @@ class Nested:
                   (unparse(previous_attribute_ast_node) if isinstance(
                       previous_attribute_ast_node, AST) else 'None'))
 
+            print(current_node.statement)
+
 
             
             #print(current_node.statement)
