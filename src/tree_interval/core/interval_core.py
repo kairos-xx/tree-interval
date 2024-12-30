@@ -1031,7 +1031,15 @@ class Tree(Generic[T]):
 
         Args:
             config: Optional visualization configuration
-            root: Optional root node to start visualization from
+            root: Optional root node to start visualization from. If provided,
+                 visualization will start from this node instead of tree.root
+        
+        Example:
+            # Visualize full tree
+            tree.visualize()
+            
+            # Visualize from specific node
+            tree.visualize(root=some_leaf)
         """
         from ..visualizer import TreeVisualizer
 

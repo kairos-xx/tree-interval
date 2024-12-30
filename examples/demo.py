@@ -353,3 +353,23 @@ def run_demo():
 
 if __name__ == "__main__":
     run_demo()
+def example_custom_root_visualization():
+    """Demonstrate visualization from different root nodes."""
+    tree = Tree("Custom Root Example")
+    root = Leaf(Position(0, 100), info="Root")
+    child = Leaf(Position(10, 50), info="Child")
+    grandchild = Leaf(Position(20, 30), info="Grandchild")
+    
+    tree.root = root
+    tree.add_leaf(child)
+    child.add_child(grandchild)
+    
+    print("\nVisualize from Root:")
+    tree.visualize()
+    
+    print("\nVisualize from Child:")
+    tree.visualize(root=child)
+    
+    print("\nRich visualization from Child:")
+    printer = RichTreePrinter()
+    printer.print_tree(tree, root=child)
