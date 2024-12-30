@@ -77,7 +77,12 @@ class Nested:
             setattr(self, name, new)
             return new
         else:
-            raise AttributeError(f"Attribute {name} not found in {before}")
+            import sys
+            msg = f"Attribute {name} not found in {before}"
+            caller = stack()[1]
+            full_msg = f"{msg}\nFile \"{caller.filename}\", line {caller.lineno}, in {caller.function}\n{caller.code_context[0].strip()}"
+            sys.tracebacklimit = 0  # Suppress traceback
+            raise AttributeError(full_msg)
 
 
 def test():
