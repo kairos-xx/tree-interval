@@ -25,6 +25,10 @@ class Nested:
             print("Top attribute node: " +
                   (unparse(top_statement_ast_node) if isinstance(
                       top_statement_ast_node, AST) else 'None'))
+            if isinstance(top_statement_ast_node, AST):
+                node_type = top_statement_ast_node.__class__.__name__
+                is_set = AST_TYPES.get(node_type, {}).get('is_set', False)
+                print(f"Is set operation: {is_set}")
             next_attribute = current_node.next_attribute
             next_attribute_ast_node = getattr(next_attribute, "ast_node", None)
             print("Next attribute node: " +
