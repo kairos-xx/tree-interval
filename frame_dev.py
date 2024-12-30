@@ -3,19 +3,19 @@ from inspect import stack
 
 from tree_interval.core.frame_analyzer import FrameAnalyzer
 from tree_interval.core.interval_core import LeafStyle
-from tree_interval.core.ast_types import AST_TYPES
 
 
 class Nested:
 
     def __getattr__(self, name):
-        new = type(self)()
-        setattr(self, name, new)
+
         print(f'\n{"#"*50}')
         print(f"attribute name: {name}")
         analyzer = FrameAnalyzer(stack()[1].frame)
         current_node = analyzer.find_current_node()
         tree = analyzer.build_tree()
+        continues = False
+        is_set = False
         if current_node and tree:
             current_node_ast_node = getattr(current_node, "ast_node", None)
             print("Current attribute node: " +
@@ -26,11 +26,10 @@ class Nested:
             print("Top attribute node: " +
                   (unparse(top_statement_ast_node) if isinstance(
                       top_statement_ast_node, AST) else 'None'))
-            if isinstance(top_statement_ast_node, AST):
-                node_type = top_statement_ast_node.__class__.__name__
-                is_set = AST_TYPES.get(node_type, {}).get('is_set', False)
-                print(f"Is set operation: {is_set}")
+            is_set = top_statement.is_set if top_statement else False
+            print(f"Is set operation: {is_set}")
             next_attribute = current_node.next_attribute
+            continues = bool(next_attribute)
             next_attribute_ast_node = getattr(next_attribute, "ast_node", None)
             print("Next attribute node: " +
                   (unparse(next_attribute_ast_node) if isinstance(
@@ -46,50 +45,24 @@ class Nested:
                 else:
                     node.style = LeafStyle(color="#cccccc", bold=False)
             tree.visualize()
-        return new
+
+        print(
+            f"\nThe chain continues: {continues} | At the end is a set: {is_set}"
+        )
+        
+        if is_set:
+            new = type(self)()
+            setattr(self, name, new)
+            return new
+        else:
+            raise AttributeError(f"Attribute {name} not found")
 
 
-def analyze_this():
+def test():
     a = Nested()
-    a.b.c.d = 1
-    print(a.b.c.e)
-    # analyzer = FrameAnalyzer(currentframe())
-
-    # current_node = analyzer.find_current_node()
-    # print("Current Node Information:")
-    # print(f"Node: {current_node if current_node else None}")
-
-    # tree = analyzer.build_tree()
-
-    # if current_node and tree and tree.root:
-    #     print("\nFull AST Tree:")
-    #     # Color nodes based on type and mark current node
-    #     flat_nodes = tree.flatten()
-    #     for node in flat_nodes:
-    #         # Basic style for all nodes
-
-    #         node.style = LeafStyle(color="#888888", bold=False)
-
-    #         # Check if this is the current node by matching position and info
-    #         if (node.start == current_node.start
-    #                 and node.end == current_node.end
-    #                 and str(node.info) == str(current_node.info)):
-
-    #             node.style = LeafStyle(color="#ff0000", bold=True)
-    #             node.selected = True
-    #         # Check node type from info
-    #         elif hasattr(node, "info") and isinstance(node.info, dict):
-    #             node_type = node.info.get("name")
-    #             if node_type == "Call":
-
-    #                 node.style = LeafStyle(color="#00ff00", bold=True)
-    #             elif node_type == "FunctionDef":
-
-    #                 node.style = LeafStyle(color="#0000ff", bold=False)
-
-    #     printer = RichTreePrinter()
-    #     printer.print_tree(tree)
-    #     tree.visualize()
+    a.b.c=3
+    print(a.b.d.e.f.g)
+    #print(a.b.c.e)
 
 
-analyze_this()
+test()
