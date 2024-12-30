@@ -1,0 +1,116 @@
+=== Tree Interval Package Demo ===
+
+=== Position Examples ===
+Basic position: start=0, end=100
+Position with lines: lineno=1, end_lineno=5
+Position with columns: col_offset=4, end_col_offset=8
+Absolute positions: absolute_start=30, absolute_end=70
+Position format: Position(start=30, end=70, lineno=None, end_lineno=1, col_offset=0, end_col_offset=40)
+Tuple format: (30, 70, None, 1, 0, 40)
+Default format: Position(start=30, end=70)
+
+=== Leaf Examples ===
+Leaf from Position: Leaf(start=0, end=100, info='Using Position')
+Leaf from tuple: Leaf(start=10, end=50, info='Using Tuple')
+Leaf from args: Leaf(start=60, end=90, info='Using Args')
+
+=== Tree Operations ===
+
+=== Styling Examples ===
+[1;32mModule [0-100] size=100 info=Info(type='Module')[0m
+└── [34mFunctionDef [10-50] size=40 info=Info(type='FunctionDef')[0m
+Tree created with source: Example Code
+Basic Tree:
+[94m(0, 100) size=100 info='Root'[0m
+├── [92m(10, 40) size=30 info='Child 1'[0m
+    │   └── [93m(15, 35) size=20 info='Grandchild'[0m
+└── [93m(50, 90) size=40 info='Child 2'[0m
+
+Default visualization:
+[94m(0, 100) size=100 info='Root'[0m
+├── [93m(10, 40) size=30 info='Child 1'[0m
+└── [93m(50, 90) size=40 info='Child 2'[0m
+
+With position objects:
+[94mPosition(start=0, end=100, lineno=None, end_lineno=None, col_offset=None, end_col_offset=100, size=100) size=100 info='Root'[0m
+├── [93mPosition(start=10, end=40, lineno=None, end_lineno=None, col_offset=None, end_col_offset=30, size=30) size=30 info='Child 1'[0m
+└── [93mPosition(start=50, end=90, lineno=None, end_lineno=None, col_offset=None, end_col_offset=40, size=40) size=40 info='Child 2'[0m
+
+With tuples and children count:
+[94m(0, 100) info='Root' children=2[0m
+├── [93m(10, 40) info='Child 1' children=0[0m
+└── [93m(50, 90) info='Child 2' children=0[0m
+JSON representation: {"source": "Serialization Example", "start_lineno": null, "indent_size": 4, "root": {"start": 0, "end": 100, "info": "Root", "children": [{"start": 10, "end": 50, "info": "Child", "children": [], "style": null, "rich_style": null}], "style": null, "rich_style": null}}
+
+Deserialized tree:
+[94m(0, 100) size=100 info='Root'[0m
+└── [93m(10, 50) size=40 info='Child'[0m
+
+=== Line Position Examples ===
+
+Default view:
+[94m(0, 100) size=100 info='Function'[0m
+└── [93m(20, 60) size=40 info='If Block'[0m
+
+Detailed position view:
+[94mPosition(start=0, end=100, lineno=1, end_lineno=10, col_offset=0, end_col_offset=4, size=100) size=100 info='Function'[0m
+└── [93mPosition(start=20, end=60, lineno=3, end_lineno=5, col_offset=4, end_col_offset=8, size=40) size=40 info='If Block'[0m
+
+=== Dot Notation Examples ===
+Parent: {}
+Child: {}
+Sibling: {}
+
+=== AST Examples ===
+=== AST Node Info Example ===
+Class name: MyClass
+Fields: ('name', 'bases', 'keywords', 'body', 'decorator_list')
+Info dict: {'type': 'ClassDef', 'name': 'MyClass', 'source': "class MyClass:\n\n    def hello(self):\n        return 'world'"}
+Child 1's parent: Root
+Child 1's next sibling: Child 2
+Child 2's previous sibling: Child 1
+
+=== Statement Examples ===
+Default markers:
+print(a.b.d.e)
+^^^^^^~~~~*~~^
+
+Custom markers:
+print(a.b.d.e)
+######----@--#
+=== Rich Printer Examples ===
+
+Basic Tree:
+[1;32mRoot Node [0-100] size=100 info=Root Node[0m
+├── [36mFirst Child [10-40] size=30 info=First Child[0m
+└── [36mSecond Child [50-90] size=40 info=Second Child[0m
+
+Styled Tree:
+[1;31m(Main) [0-100] info=Info(name='Main')[0m
+└── [36m(Sub) [10-50] info=Info(name='Sub')[0m
+
+Default visualization:
+[94m(0, 100) size=100 info='Root'[0m
+├── [93m(10, 40) size=30 info='Child 1'[0m
+└── [93m(50, 90) size=40 info='Child 2'[0m
+
+With position objects:
+[94mPosition(start=0, end=100, lineno=None, end_lineno=None, col_offset=None, end_col_offset=100, size=100) size=100 info='Root'[0m
+├── [93mPosition(start=10, end=40, lineno=None, end_lineno=None, col_offset=None, end_col_offset=30, size=30) size=30 info='Child 1'[0m
+└── [93mPosition(start=50, end=90, lineno=None, end_lineno=None, col_offset=None, end_col_offset=40, size=40) size=40 info='Child 2'[0m
+
+With tuples and children count:
+[94m(0, 100) info='Root' children=2[0m
+├── [93m(10, 40) info='Child 1' children=0[0m
+└── [93m(50, 90) info='Child 2' children=0[0m
+JSON representation: {"source": "Serialization Example", "start_lineno": null, "indent_size": 4, "root": {"start": 0, "end": 100, "info": "Root", "children": [{"start": 10, "end": 50, "info": "Child", "children": [], "style": null, "rich_style": null}], "style": null, "rich_style": null}}
+
+Deserialized tree:
+[94m(0, 100) size=100 info='Root'[0m
+└── [93m(10, 50) size=40 info='Child'[0m
+
+AST Tree:
+[1;32mModule size=100 info=Info(type='Module')[0m
+└── [34mFunctionDef(example) size=80 info=Info(type='FunctionDef', name='example')[0m
+    └── [38;5;249mArguments size=10 info=Info(type='Arguments')[0m
+=== Rich Styling Examples ===

@@ -52,18 +52,10 @@ class Nested:
 
             # Show statement with different marker styles
             print("\nDefault markers:")
+            print(current_node.statement)
             print(current_node.statement.text)
 
-            print("\nCustom markers:")
-            print(
-                current_node.statement.as_text(top_marker="#",
-                                               chain_marker="-",
-                                               current_marker="@"))
-            print(
-                current_node.statement.as_text(top_marker="$",
-                                               chain_marker=".",
-                                               current_marker="*"))
-            print(current_node.statement.as_text(top_marker="#"))
+            
 
             #print(current_node.statement)
             flat_nodes = tree.flatten()

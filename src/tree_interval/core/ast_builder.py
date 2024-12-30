@@ -25,7 +25,7 @@ class AstTreeBuilder:
         source (Optional[str]): The source code to analyze
         indent_offset (int): Number of spaces in common indentation
         line_offset (int): Line number offset for frame sources
-        frame_firstlineno (Optional[int]): First line number in frame
+        frame_firstlineno (int): First line number in frame
 
     Technical Details:
         - Handles both string and frame input sources
@@ -46,14 +46,14 @@ class AstTreeBuilder:
         self.source: Optional[str] = None
         self.indent_offset: int = 0
         self.line_offset: int = 0
-        self.frame_firstlineno: Optional[int] = None
+        self.frame_firstlineno: int = 1
 
         if isinstance(source, str):
             self.source = source
         else:
             self.frame_firstlineno = source.f_code.co_firstlineno
             self.source = getsource(source)
-            self._get_source()
+        self._get_source()
 
     def _get_source(self) -> None:
         """
@@ -74,8 +74,7 @@ class AstTreeBuilder:
         try:
             if self.source is None or not isinstance(self.source, str):
                 return
-            if not self.frame_firstlineno:
-                return
+  
             lines = self.source.splitlines()
             if not lines:
                 return
