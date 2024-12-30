@@ -94,25 +94,44 @@ class Statement:
         # Build the full statement text
         full_text = (f"{self.top.before}{self.before}" +
                      f"{self.self}{self.after}{self.top.after}")
-        print(full_text)
+        
+        # Handle multiline text by aligning markers with the last line
+        lines = full_text.split('\n')
+        last_line = lines[-1] if lines else ""
+        
         markers = ""
-
-        # Mark top statement prefix
-        markers += tm * len(self.top.before)
-
-        # Mark the chain before current attribute
-        markers += cm * len(self.before)
-
+        
+        # Calculate markers for the last line
+        current_pos = 0
+        
+        # Mark top statement prefix if it's in the last line
+        top_before_lines = self.top.before.split('\n')
+        if len(top_before_lines) == len(lines):
+            markers += tm * len(top_before_lines[-1])
+            current_pos += len(top_before_lines[-1])
+        
+        # Mark the chain before
+        before_lines = self.before.split('\n')
+        if len(before_lines) == 1:
+            markers += cm * len(self.before)
+            current_pos += len(self.before)
+            
         # Mark the current attribute
         markers += cum * len(self.self)
-
+        current_pos += len(self.self)
+        
         # Mark the remaining chain
-        markers += cm * len(self.after)
-
-        # Mark top statement suffix
-        markers += tm * len(self.top.after)
-
-        return f"{full_text}\n{markers}"
+        after_lines = self.after.split('\n')
+        if len(after_lines) == 1:
+            markers += cm * len(self.after)
+            current_pos += len(self.after)
+        
+        # Mark top statement suffix if it's in the last line
+        top_after_lines = self.top.after.split('\n')
+        if len(top_after_lines) == 1:
+            markers += tm * len(self.top.after)
+        
+        return f"{full_text}\n{' ' * (len(last_line) - len(markers))}{markers}"
 
     @property
     def text(self) -> str:
