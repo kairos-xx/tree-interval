@@ -589,6 +589,31 @@ def demonstrate_node_navigation():
 
 
 
+def demonstrate_custom_root_visualization():
+    """Demonstrates visualizing trees from different root nodes."""
+    print_header("Custom Root Visualization", YELLOW)
+    
+    tree = Tree("Root Example")
+    root = Leaf(Position(0, 100), info="Root")
+    child1 = Leaf(Position(10, 50), info="Child 1")
+    child2 = Leaf(Position(60, 90), info="Child 2")
+    grandchild = Leaf(Position(20, 40), info="Grandchild")
+    
+    tree.root = root
+    tree.add_leaf(child1)
+    tree.add_leaf(child2)
+    child1.add_child(grandchild)
+    
+    print("\nFull tree visualization:")
+    tree.visualize()
+    
+    print("\nVisualization from Child 1:")
+    tree.visualize(root=child1)
+    
+    print("\nRich visualization from Child 2:")
+    printer = RichTreePrinter()
+    printer.print_tree(tree, root=child2)
+
 def demonstrate_custom_styling():
     """Demonstrates custom styling for tree nodes with different types."""
     print_header("Custom Node Styling", BLUE)
@@ -644,6 +669,7 @@ def main():
     demonstrate_find_method()
     demonstrate_leaf_navigation()
     demonstrate_node_navigation()
+    demonstrate_custom_root_visualization()
     demonstrate_custom_styling()
 
 main()
