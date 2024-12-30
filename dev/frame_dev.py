@@ -67,9 +67,8 @@ class Nested:
                     node.style = LeafStyle(color="#cccccc", bold=False)
             tree.visualize()
 
-        print(
-            f"\nThe chain continues: {continues} | At the end is a set: {is_set}"
-        )
+        print(f"\nThe chain continues: {continues} |" +
+              f" At the end is a set: {is_set}")
 
         if is_set:
             new = type(self)()
@@ -82,9 +81,7 @@ class Nested:
 def test():
     a = Nested()
     a.b.c = 3
-    print(
-        (
-            a.b.d.e.f.g))
+    print((a.b.d.e.f.g))
     # print(a.b.c.e)
 
 
