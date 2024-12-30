@@ -449,7 +449,7 @@ class Leaf:
         """Get statement information for this node using AST traversal."""
         top = self.top_statement
         top_source = top.info.get("source", "") if top and top.info else ""
-        
+
         # Split top statement into before/after parts
         before_paren = ""
         after_paren = ""
@@ -460,33 +460,42 @@ class Leaf:
 
         # Get the current node's source using position
         full_source = self.info.get("source", "") if self.info else ""
-        current_source = full_source[self.start - self.parent.start:self.end - self.parent.start] if self.parent else full_source
-        
+        next = self.next_attribute
+        start = self.start or 0
+        next_end = (next.end if next else start) or 0
+        size = self.size or 0
+        trim_end = abs(size - (next_end - start))
+        #print(trim_end, self.previous)
+        current_source = full_source[:
+                                     -trim_end]  #if self.parent else full_source
+
         # Find preceding attribute nodes
         before = ""
         if self.info and self.info.get("type") == "Attribute":
             # Go up to find the first attribute in chain
             current = self
-            while current.parent and current.parent.info and current.parent.info.get("type") == "Attribute":
+            while current.parent and current.parent.info and current.parent.info.get(
+                    "type") == "Attribute":
                 current = current.parent
-            
+
             # Get position-based before part
             first_attr = current.children[0] if current.children else current
-            before = current.info.get("source", "")[:first_attr.start - current.start] if current.info else ""
-        
+            before = current.info.get(
+                "source", "")[:first_attr.start -
+                              current.start] if current.info else ""
+
         # Find remaining attributes in chain for 'after' part
         after = ""
         if self.info and self.info.get("type") == "Attribute":
             full_chain = self.info.get("source", "")
             if current_source in full_chain:
-                after = full_chain[full_chain.index(current_source) + len(current_source):]
-        
-        return Statement(
-            top=top_part,
-            before=before,
-            self=current_source,
-            after=after
-        )
+                after = full_chain[full_chain.index(current_source) +
+                                   len(current_source):]
+
+        return Statement(top=top_part,
+                         before=before,
+                         self=current_source,
+                         after=after)
 
     @property
     def next_attribute(self) -> Optional["Leaf"]:

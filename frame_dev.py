@@ -34,7 +34,16 @@ class Nested:
             print("Next attribute node: " +
                   (unparse(next_attribute_ast_node) if isinstance(
                       next_attribute_ast_node, AST) else 'None'))
-            print(current_node.statement)
+
+            previous_attribute = current_node.previous
+            previous_attribute_ast_node = getattr(previous_attribute, "ast_node", None)
+            print("Previous attribute node: " +
+                  (unparse(previous_attribute_ast_node) if isinstance(
+                      previous_attribute_ast_node, AST) else 'None'))
+
+
+            
+            #print(current_node.statement)
             flat_nodes = tree.flatten()
             for node in flat_nodes:
                 if node.match(current_node):
