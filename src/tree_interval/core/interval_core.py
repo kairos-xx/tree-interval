@@ -70,6 +70,9 @@ class Statement:
     before: str
     self: str
     after: str
+    top_marker: str = "^"
+    chain_marker: str = "~"
+    current_marker: str = "*"
 
     @property
     def as_text(self) -> str:
@@ -84,23 +87,23 @@ class Statement:
         pos = 0
 
         # Mark the opening part (e.g. 'print(')
-        markers += "^" * len(self.top.before)
+        markers += self.top_marker * len(self.top.before)
         pos += len(self.top.before)
 
         # Mark the before part (e.g. 'a.b.')
-        markers += "~" * len(self.before)
+        markers += self.chain_marker * len(self.before)
         pos += len(self.before)
 
         # Mark the current attribute
-        markers += "*" * len(self.self)
+        markers += self.current_marker * len(self.self)
         pos += len(self.self)
 
         # Mark the after part (e.g. '.e')
-        markers += "~" * len(self.after)
+        markers += self.chain_marker * len(self.after)
         pos += len(self.after)
 
         # Mark the closing part (e.g. ')')
-        markers += "^" * len(self.top.after)
+        markers += self.top_marker * len(self.top.after)
 
         return f"{full_text}\n{markers}"
 
