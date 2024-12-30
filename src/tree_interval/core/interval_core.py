@@ -131,18 +131,22 @@ class Statement:
         for line in parts:
             result.append(line)
             indent = len(line) - len(line.lstrip())
-            spaces = " " * indent
-            markers = ""
-            
-            # Figure out what kind of marker to use for each part
-            if line in self.top.before.splitlines() or line in self.top.after.splitlines():
-                markers = spaces + ''.join(tm if not c.isspace() else ' ' for c in line.lstrip())
-            elif line in self.before.splitlines() or line in self.after.splitlines():
-                markers = spaces + ''.join(cm if not c.isspace() else ' ' for c in line.lstrip())
-            elif line in self.self.splitlines():
-                markers = spaces + ''.join(cum if not c.isspace() else ' ' for c in line.lstrip())
-            
-            if markers.strip():  # Only add marker line if it contains markers
+            markers = " " * indent
+
+            # Get stripped line for comparison
+            stripped = line.strip()
+            if not stripped:  # Skip empty lines
+                continue
+
+            # Match exact parts to determine marker type
+            if line.strip() in self.top.before.splitlines() or line.strip() in self.top.after.splitlines():
+                markers += ''.join(tm if not c.isspace() else ' ' for c in line.strip())
+            elif line.strip() in self.before.splitlines() or line.strip() in self.after.splitlines():
+                markers += ''.join(cm if not c.isspace() else ' ' for c in line.strip())
+            elif line.strip() in self.self.splitlines():
+                markers += ''.join(cum if not c.isspace() else ' ' for c in line.strip())
+
+            if markers.strip():  # Only add non-empty marker lines
                 result.append(markers)
 
         return '\n'.join(result)
