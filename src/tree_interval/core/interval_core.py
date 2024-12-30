@@ -65,30 +65,42 @@ class PartStatement:
 
 @dataclass
 class Statement:
-    """Represents a complete statement breakdown with marker annotations.
+    """A complete breakdown of a code statement with marker annotations.
 
-    This class handles the representation of code statements, particularly for
-    displaying attribute chains and nested expressions with visual markers.
-    It breaks down a statement into parts and provides methods to format them
-    with customizable markers underneath the code.
+    This class provides functionality to represent and format code statements,
+    particularly focusing on attribute chains and nested expressions. It supports
+    customizable visual markers for different parts of the statement.
+
+    The statement is broken down into several components:
+    - Top-level statement parts (marked with '^' by default)
+    - Chain/attribute parts (marked with '~' by default)
+    - Current attribute/expression (marked with '*' by default)
+
+    Each component can be formatted with different markers to visualize the
+    structure of complex statements, especially useful for debugging and
+    code analysis.
 
     Attributes:
-        top (PartStatement): Contains the before/after parts of the top-level
-                             statement
-        before (str): Text preceding the current attribute/expression
-        self (str): The current attribute/expression text
+        top (PartStatement): The top-level statement containing before/after parts
+            Example: In 'print(obj.attr)', 'print(' is before, ')' is after
+        before (str): Text before the current attribute/expression
+            Example: In 'obj.attr1.attr2', 'obj.attr1.' is before
+        self (str): The current attribute or expression text
+            Example: In 'obj.attr1.attr2', if focused on 'attr1', that's self
         after (str): Text following the current attribute/expression
-        top_marker (str): Character used to mark top-level statement parts
-                          (default: '^')
-        chain_marker (str): Character used to mark chained attributes
-                            (default: '~')
-        current_marker (str): Character used to mark current attribute
-                              (default: '*')
+            Example: In 'obj.attr1.attr2', '.attr2' is after
+        top_marker (str): Marker for top-level statement parts (default: '^')
+        chain_marker (str): Marker for attribute chains (default: '~')
+        current_marker (str): Marker for current attribute (default: '*')
 
     Example:
-        For a statement like 'print(a.b.c)', it can generate:
-        print(a.b.c)
-        ^^^^^~~~~*~~
+        >>> stmt = Statement(
+        ...     top=PartStatement(before="print(", after=")"),
+        ...     before="obj.", self="attr1", after=".attr2"
+        ... )
+        >>> print(stmt.as_text())
+        print(obj.attr1.attr2)
+        ^^^^^~~~~***~~~~~~^
     """
 
     top: PartStatement
@@ -103,15 +115,26 @@ class Statement:
                 top_marker=None,
                 chain_marker=None,
                 current_marker=None) -> str:
-        """Format the statement with marker annotations.
+        """Format the statement with visual marker annotations.
+
+        Creates a two-line representation of the statement where the first line
+        shows the actual code and the second line shows markers indicating the
+        role of each part. The markers are aligned directly under their
+        corresponding code parts.
 
         Args:
-            top_marker (str, optional): Override default top marker
-            chain_marker (str, optional): Override default chain marker
-            current_marker (str, optional): Override default current marker
+            top_marker (str, optional): Character for marking top-level parts.
+                Defaults to self.top_marker if None.
+            chain_marker (str, optional): Character for marking attribute chains.
+                Defaults to self.chain_marker if None.
+            current_marker (str, optional): Character for marking current attribute.
+                Defaults to self.current_marker if None.
 
         Returns:
-            str: Formatted text with markers aligned under the code
+            str: A multi-line string with the code and aligned markers.
+                Example:
+                    print(obj.attr.value)
+                    ^^^^^~~~~***~~~~~^
         """
         top_marker = top_marker or self.top_marker
         chain_marker = chain_marker or self.chain_marker
