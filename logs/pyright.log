@@ -1,4 +1,1 @@
-/home/runner/treeinterval/frame_dev.py
-  /home/runner/treeinterval/frame_dev.py:81:9 - error: Cannot assign to attribute "c" for class "Nested"
-    Attribute "c" is unknown (reportAttributeAccessIssue)
-1 error, 0 warnings, 0 informations 
+0 errors, 0 warnings, 0 informations 

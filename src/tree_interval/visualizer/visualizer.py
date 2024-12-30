@@ -83,10 +83,13 @@ class TreeVisualizer:
             except Exception:
                 return 80  # Default fallback width
 
-        def format_node_info(node, level: int = 0) -> str:
+        def format_node_info(node,
+                             level: int = 0,
+                             prefix: Optional[str] = None) -> str:
             """Format additional information about a node for display."""
             parts = []
-            prefix_len = level * 4 + 4  # Basic indentation + connector length
+            prefix_len = level * 4 + (4 if prefix is None else len(prefix)
+                                      )  # Basic indentation + connector length
             terminal_width = get_terminal_width()
             available_width = terminal_width - prefix_len
 
@@ -120,8 +123,8 @@ class TreeVisualizer:
         def _print_node(node, prefix="", is_last=True, level=0):
             """Recursively print the tree structure."""
             position_str = format_position(node)
-            info_str = format_node_info(node)
-            prefix_spaces = "" if level == 0 else prefix
+            info_str = format_node_info(node, level, prefix)
+            prefix_spaces = "" if level < 2 else prefix
             connector = "" if level == 0 else ("└── " if is_last else "├── ")
 
             # Custom styling takes precedence
@@ -138,10 +141,8 @@ class TreeVisualizer:
                     TreeVisualizer.GREEN
                     if node.children else TreeVisualizer.YELLOW)
             style_suffix = TreeVisualizer.RESET
-
             print(f"{prefix_spaces}{connector}{style_prefix}{position_str} " +
                   f"{info_str}{style_suffix}")
-
             children = node.children
             for i, child in enumerate(children):
                 new_prefix = prefix + ("    " if is_last else "│   ")
