@@ -939,6 +939,12 @@ class Tree(Generic[T]):
         if leaf.start is None or leaf.end is None:
             return
 
+        # Check for duplicates in flattened tree
+        existing_leaves = self.flatten()
+        for existing_leaf in existing_leaves:
+            if existing_leaf.match(leaf):
+                return  # Skip adding duplicate leaf
+
         best_match = self.root.find_best_match(leaf.start, leaf.end)
         if best_match:
             best_match.add_child(leaf)
