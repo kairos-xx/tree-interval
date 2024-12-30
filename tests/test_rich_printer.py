@@ -86,7 +86,7 @@ def test_custom_root_visualization(basic_tree):
     
     # Test that the tree is printed starting from the child node
     console = Console(record=True, force_terminal=True)
-    with console.capture() as capture:
+    with console.capture_stderr() as capture:
         printer.print_tree(basic_tree, root=child)
     output = capture.get()
     assert "Child" in output
