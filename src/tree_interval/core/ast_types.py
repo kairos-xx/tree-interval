@@ -59,8 +59,8 @@ AST_TYPES = {
         "is_set": True
     },
     "AugAssign": {
-        "description": "Augmented assignment (+=, -=, etc)",
-        "statement": True,
+        "description": "Augmented assignment (+=, -=, |=, etc)",
+        "statement": True, 
         "is_set": True
     },
     "Name": {

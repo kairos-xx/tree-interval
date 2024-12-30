@@ -51,8 +51,9 @@ class Nested:
 
 def analyze_this():
     a = Nested()
-    a.b.c.d = 1
-    print(a.b.c.e)
+    a.b.c = set()  # Initialize as set
+    a.b.c |= {"d": 3}  # Set update operation
+    print(a.b.c)  # Should show the updated set
     # analyzer = FrameAnalyzer(currentframe())
 
     # current_node = analyzer.find_current_node()
