@@ -66,6 +66,39 @@ class Statement(NamedTuple):
     self: str
     after: str
 
+    @property
+    def as_text(self) -> str:
+        """Generate a text representation of the statement with carets and tildes.
+        
+        Example:
+            print(a.b.d.e)
+            ^^^^^^~~~~*~~
+        """
+        full_text = f"{self.top.before}{self.before}{self.self}{self.after}{self.top.after}"
+        markers = ""
+        pos = 0
+        
+        # Mark the opening part (e.g. 'print(')
+        markers += "^" * len(self.top.before)
+        pos += len(self.top.before)
+        
+        # Mark the before part (e.g. 'a.b.')
+        markers += "~" * len(self.before)
+        pos += len(self.before)
+        
+        # Mark the current attribute
+        markers += "*" * len(self.self)
+        pos += len(self.self)
+        
+        # Mark the after part (e.g. '.e')
+        markers += "~" * len(self.after)
+        pos += len(self.after)
+        
+        # Mark the closing part (e.g. ')')
+        markers += "^" * len(self.top.after)
+        
+        return f"{full_text}\n{markers}"
+
 
 if TYPE_CHECKING:
     from ..visualizer.config import VisualizationConfig
