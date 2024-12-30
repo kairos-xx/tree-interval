@@ -86,10 +86,10 @@ def test_custom_root_visualization(basic_tree, tmp_path):
     
     # Test that the tree is printed starting from the child node
     output_file = tmp_path / "output.txt"
-    console = Console(record=True, force_terminal=True, file=open(output_file, 'w'))
-    printer.print_tree(basic_tree, root=child)
-    console.file.close()
-    
+    with open(output_file, 'w') as f:
+        console = Console(record=True, force_terminal=True, file=f)
+        printer.print_tree(basic_tree, root=child)
+        
     output = output_file.read_text()
     assert "Child" in output
     assert "10-50" in output
