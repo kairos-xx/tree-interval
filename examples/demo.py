@@ -15,6 +15,7 @@ from src.tree_interval.rich_printer import RichTreePrinter
 from tree_interval.core.interval_core import PartStatement, Statement
 
 
+# All demonstrate functions in order of execution
 def demonstrate_positions():
     print("\n=== Position Examples ===")
     # Basic Position
