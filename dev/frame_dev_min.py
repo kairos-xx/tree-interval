@@ -34,7 +34,7 @@ class Nested:
                     node.style = LeafStyle(color="#00ff00", bold=True)
                 if node.match(current_node):
                     node.style = LeafStyle(color="#ff0000", bold=True)
-            tree.visualize()
+            tree.visualize(root=top_statement)
             is_set = getattr(top_statement, "is_set", False)
             statement = current_node.statement
             underline_text = statement.text

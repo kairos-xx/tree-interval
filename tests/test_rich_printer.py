@@ -79,15 +79,17 @@ def test_rich_printer_custom_styles(basic_tree, console):
     assert output.strip() != ""
 
 
-if __name__ == "__main__":
-    pytest.main([__file__])
 def test_custom_root_visualization(basic_tree):
     """Test visualization from custom root node."""
     child = basic_tree.root.children[0]
     printer = RichTreePrinter()
-    
+
     console = Console(record=True)
     with console.capture() as capture:
         printer.print_tree(basic_tree, root=child)
     output = capture.get()
     assert "[10-50]" in output
+
+
+if __name__ == "__main__":
+    pytest.main([__file__])

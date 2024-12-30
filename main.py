@@ -689,4 +689,5 @@ def main():
     demonstrate_custom_styling()
 
 
-main()
+if __name__ == "__main__":
+    main()

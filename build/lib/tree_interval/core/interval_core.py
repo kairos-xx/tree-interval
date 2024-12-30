@@ -939,6 +939,12 @@ class Tree(Generic[T]):
         if leaf.start is None or leaf.end is None:
             return
 
+        # Check for duplicates in flattened tree
+        existing_leaves = self.flatten()
+        for existing_leaf in existing_leaves:
+            if existing_leaf.match(leaf):
+                return  # Skip adding duplicate leaf
+
         best_match = self.root.find_best_match(leaf.start, leaf.end)
         if best_match:
             best_match.add_child(leaf)
@@ -1018,11 +1024,26 @@ class Tree(Generic[T]):
         return node
 
     def visualize(self,
-                  config: Optional["VisualizationConfig"] = None) -> None:
-        """Visualize the tree structure."""
+                  config: Optional["VisualizationConfig"] = None,
+                  root: Optional["Leaf"] = None) -> None:
+        """
+        Visualize the tree structure.
+
+        Args:
+            config: Optional visualization configuration
+            root: Optional root node to start visualization from. If provided,
+                 visualization will start from this node instead of tree.root
+
+        Example:
+            # Visualize full tree
+            tree.visualize()
+
+            # Visualize from specific node
+            tree.visualize(root=some_leaf)
+        """
         from ..visualizer import TreeVisualizer
 
-        TreeVisualizer.visualize(self, config)
+        TreeVisualizer.visualize(self, config, root)
 
 
 class NestedAttributes:
