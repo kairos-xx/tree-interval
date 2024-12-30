@@ -546,6 +546,7 @@ def demonstrate_leaf_navigation():
     )
 
 
+
 def demonstrate_node_navigation():
     """Demonstrates navigation between different types of nodes in the tree."""
     print_header("Node Navigation Examples", MAGENTA)
@@ -562,6 +563,21 @@ def demonstrate_node_navigation():
 
     program.add_child(class_def)
     program.add_child(function_def)
+    class_def.add_child(method1)
+    class_def.add_child(method2)
+    function_def.add_child(param1)
+    function_def.add_child(param2)
+
+    print("First method's parent: " +
+          f"{method1.parent.info if method1.parent else None}")
+    print("First method's next sibling: " +
+          f"{method1.next.info if method1.next else None}")
+    print("Second method's previous sibling: " +
+          f"{method2.previous.info if method2.previous else None}")
+    print(
+        "Function's first parameter:" +
+        f" {function_def.children[0].info if function_def.children else None}")
+
 
 
 def demonstrate_custom_styling():
@@ -600,23 +616,7 @@ def demonstrate_custom_styling():
     printer = RichTreePrinter(RichPrintConfig(show_info=True))
     printer.print_tree(tree)
 
-
-    class_def.add_child(method1)
-    class_def.add_child(method2)
-    function_def.add_child(param1)
-    function_def.add_child(param2)
-
-    print("First method's parent: " +
-          f"{method1.parent.info if method1.parent else None}")
-    print("First method's next sibling: " +
-          f"{method1.next.info if method1.next else None}")
-    print("Second method's previous sibling: " +
-          f"{method2.previous.info if method2.previous else None}")
-    print(
-        "Function's first parameter:" +
-        f" {function_def.children[0].info if function_def.children else None}")
-
-
+    
 
 def main():
     print_header("Tree Interval Package Demo", BLUE)
@@ -636,3 +636,5 @@ def main():
     demonstrate_leaf_navigation()
     demonstrate_node_navigation()
     demonstrate_custom_styling()
+
+main()
