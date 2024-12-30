@@ -3,7 +3,7 @@ from inspect import stack
 from typing import Any
 
 from tree_interval.core.frame_analyzer import FrameAnalyzer
-from tree_interval.core.interval_core import LeafStyle, Statement, PartStatement
+from tree_interval.core.interval_core import LeafStyle
 
 
 class Nested:
@@ -51,19 +51,9 @@ class Nested:
                       previous_attribute_ast_node, AST) else 'None'))
 
             # Show statement with different marker styles
-            # Show statement with proper chain formatting
-            statement = Statement(
-                top=PartStatement(before='', after=''),
-                before='a.',
-                self='b',
-                after='.c',
-                top_marker='^',
-                chain_marker='~',
-                current_marker='*'
-            )
             print("\nDefault markers:")
-            print(statement)
-            print(statement.text)
+            print(current_node.statement)
+            print(current_node.statement.text)
 
             
 
