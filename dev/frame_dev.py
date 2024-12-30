@@ -54,7 +54,7 @@ class Nested:
             # Show statement with different marker styles
             print("\nDefault markers:", current_node.statement)
             underline_text = current_node.statement.as_text()
-            before = current_node.statement.before.removesuffix(".")
+            before = current_node.statement.before.removesuffix("")
 
             # print(current_node.statement)
             flat_nodes = tree.flatten()
@@ -77,7 +77,8 @@ class Nested:
             setattr(self, name, new)
             return new
         else:
-            raise AttributeError(f"Attribute '{name}' not found")
+            raise AttributeError(
+                f"Attribute {name} not found in {before}\n{underline_text}")
 
 
 def test():
