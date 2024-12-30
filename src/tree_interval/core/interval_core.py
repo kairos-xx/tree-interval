@@ -460,37 +460,23 @@ class Leaf:
 
         # Get the current node's source using position
         full_source = self.info.get("source", "") if self.info else ""
-        next = self.next_attribute
-        start = self.start or 0
-        next_end = (next.end if next else start) or 0
-        size = self.size or 0
-        trim_end = abs(size - (next_end - start))
-        #print(trim_end, self.previous)
-        current_source = full_source[:
-                                     -trim_end]  #if self.parent else full_source
+        next_attr = self.next_attribute
+        prev_attr = self.previous_attribute
+
+        # Handle current attribute
+        current_source = ""
+        if self.info and self.info.get("type") == "Attribute":
+            current_source = self.info.get("name", "")
 
         # Find preceding attribute nodes
         before = ""
-        if self.info and self.info.get("type") == "Attribute":
-            # Go up to find the first attribute in chain
-            current = self
-            while current.parent and current.parent.info and current.parent.info.get(
-                    "type") == "Attribute":
-                current = current.parent
-
-            # Get position-based before part
-            first_attr = current.children[0] if current.children else current
-            before = current.info.get(
-                "source", "")[:first_attr.start -
-                              current.start] if current.info else ""
+        if prev_attr and prev_attr.info:
+            before = prev_attr.info.get("source", "") + "."
 
         # Find remaining attributes in chain for 'after' part
         after = ""
-        if self.info and self.info.get("type") == "Attribute":
-            full_chain = self.info.get("source", "")
-            if current_source in full_chain:
-                after = full_chain[full_chain.index(current_source) +
-                                   len(current_source):]
+        if next_attr and next_attr.info:
+            after = "." + next_attr.info.get("source", "").split(".")[-1]
 
         return Statement(top=top_part,
                          before=before,
