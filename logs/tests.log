@@ -12,7 +12,7 @@ tests/test_tree_core.py ..............                                   [100%]
 =================================== FAILURES ===================================
 ________________________ test_custom_root_visualization ________________________
 
-basic_tree = <src.tree_interval.core.interval_core.Tree object at 0x7f01349fdbd0>
+basic_tree = <src.tree_interval.core.interval_core.Tree object at 0x7f4dd32be110>
 
     def test_custom_root_visualization(basic_tree):
         """Test visualization from custom root node."""
@@ -21,10 +21,15 @@ basic_tree = <src.tree_interval.core.interval_core.Tree object at 0x7f01349fdbd0
     
         # Test that the tree is printed starting from the child node
         console = Console(record=True, force_terminal=True)
->       with console.capture_stderr() as capture:
-E       AttributeError: 'Console' object has no attribute 'capture_stderr'
+        with console.capture() as capture:
+            printer.print_tree(basic_tree, root=child)
+        output = capture.get()
+>       assert "Child" in output
+E       AssertionError: assert 'Child' in ''
 
-tests/test_rich_printer.py:89: AttributeError
+tests/test_rich_printer.py:92: AssertionError
+----------------------------- Captured stdout call -----------------------------
+[1;32mChild [10-50] size=40 info=Child[0m
 =========================== short test summary info ============================
-FAILED tests/test_rich_printer.py::test_custom_root_visualization - Attribute...
+FAILED tests/test_rich_printer.py::test_custom_root_visualization - Assertion...
 ========================= 1 failed, 30 passed in 0.12s =========================
