@@ -1024,11 +1024,18 @@ class Tree(Generic[T]):
         return node
 
     def visualize(self,
-                  config: Optional["VisualizationConfig"] = None) -> None:
-        """Visualize the tree structure."""
+                  config: Optional["VisualizationConfig"] = None,
+                  root: Optional["Leaf"] = None) -> None:
+        """
+        Visualize the tree structure.
+        
+        Args:
+            config: Optional visualization configuration
+            root: Optional root node to start visualization from
+        """
         from ..visualizer import TreeVisualizer
 
-        TreeVisualizer.visualize(self, config)
+        TreeVisualizer.visualize(self, config, root)
 
 
 class NestedAttributes:
