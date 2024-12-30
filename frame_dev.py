@@ -42,7 +42,7 @@ class Nested:
                       previous_attribute_ast_node, AST) else 'None'))
 
             print(current_node.statement.text)  # or print(current_node.statement.as_text())
-
+            print(current_node.statement.as_text(top_marker="#"))
 
             
             #print(current_node.statement)
