@@ -12,5 +12,10 @@ def test_styling():
     assert node.style.bold is True
 
 
-if __name__ == "__main__":
+def run_demo():
+    print("=== Rich Styling Examples ===")
     test_styling()
+
+
+if __name__ == "__main__":
+    run_demo()

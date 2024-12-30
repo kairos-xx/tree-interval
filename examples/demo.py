@@ -335,8 +335,7 @@ def demonstrate_statements():
     print("\nCustom markers:")
     print(stmt.as_text(top_marker="#", chain_marker="-", current_marker="@"))
 
-
-if __name__ == "__main__":
+def run_demo():
     print("=== Tree Interval Package Demo ===")
     demonstrate_positions()
     demonstrate_leaves()
@@ -349,3 +348,6 @@ if __name__ == "__main__":
     demonstrate_ast_parsing()
     demonstrate_node_navigation()
     demonstrate_statements()
+
+if __name__ == "__main__":
+    run_demo()

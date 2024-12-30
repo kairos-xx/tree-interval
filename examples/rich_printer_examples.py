@@ -107,10 +107,14 @@ def example_ast_tree():
     printer.print_tree(tree)
 
 
-if __name__ == "__main__":
+def run_demo():
     print("=== Rich Printer Examples ===")
     example_basic()
     example_custom_styles()
     example_custom_visualization()
     example_json_serialization()
     example_ast_tree()
+
+
+if __name__ == "__main__":
+    run_demo()

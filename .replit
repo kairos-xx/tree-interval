@@ -75,6 +75,15 @@ task = "shell.exec"
 args = "pytest ./tests | tee logs/tests.log 2>&1"
 
 [[workflows.workflow]]
+name = "[Util] demo"
+mode = "sequential"
+author = 299513
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python ./examples | tee logs/demo.log 2>&1"
+
+[[workflows.workflow]]
 name = "[Util] update workflows"
 mode = "sequential"
 author = 299513
