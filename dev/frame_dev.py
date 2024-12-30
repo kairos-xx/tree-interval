@@ -77,8 +77,21 @@ class Nested:
             setattr(self, name, new)
             return new
         else:
-            raise AttributeError(
-                f"Attribute {name} not found in {before}\n{underline_text}")
+            import sys
+            exc_type = AttributeError
+            exc_value = AttributeError(f"Attribute {name} not found in {before}")
+            exc_tb = sys.exc_info()[2]
+            
+            # Get only the last frame
+            if exc_tb:
+                while exc_tb.tb_next:
+                    exc_tb = exc_tb.tb_next
+            
+            # Format minimal traceback
+            import traceback
+            tb_lines = traceback.format_exception(exc_type, exc_value, exc_tb)
+            minimal_tb = f"{str(exc_value)}\n{''.join(tb_lines[-1])}"
+            raise AttributeError(minimal_tb).with_traceback(exc_tb)
 
 
 def test():
