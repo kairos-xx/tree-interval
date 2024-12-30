@@ -74,38 +74,46 @@ class Statement:
     chain_marker: str = "~"
     current_marker: str = "*"
 
-    @property
-    def as_text(self) -> str:
-        """Generate a text representation of the statement with carets and tildes.
+    def as_text(self, top_marker=None, chain_marker=None, current_marker=None) -> str:
+        """Generate a text representation of the statement with markers.
         
+        Args:
+            top_marker: Override default top marker
+            chain_marker: Override default chain marker
+            current_marker: Override default current marker
+            
         Example:
             print(a.b.d.e)
             ^^^^^^~~~~*~~
         """
+        tm = top_marker or self.top_marker
+        cm = chain_marker or self.chain_marker
+        cum = current_marker or self.current_marker
+        
         full_text = f"{self.top.before}{self.before}{self.self}{self.after}{self.top.after}"
         markers = ""
-        pos = 0
 
         # Mark the opening part (e.g. 'print(')
-        markers += self.top_marker * len(self.top.before)
-        pos += len(self.top.before)
+        markers += tm * len(self.top.before)
 
         # Mark the before part (e.g. 'a.b.')
-        markers += self.chain_marker * len(self.before)
-        pos += len(self.before)
+        markers += cm * len(self.before)
 
         # Mark the current attribute
-        markers += self.current_marker * len(self.self)
-        pos += len(self.self)
+        markers += cum * len(self.self)
 
         # Mark the after part (e.g. '.e')
-        markers += self.chain_marker * len(self.after)
-        pos += len(self.after)
+        markers += cm * len(self.after)
 
         # Mark the closing part (e.g. ')')
-        markers += self.top_marker * len(self.top.after)
+        markers += tm * len(self.top.after)
 
         return f"{full_text}\n{markers}"
+
+    @property
+    def text(self) -> str:
+        """Property access for default markers."""
+        return self.as_text()
 
 
 if TYPE_CHECKING:
