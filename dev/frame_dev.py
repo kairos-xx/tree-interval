@@ -23,6 +23,8 @@ class Nested:
         tree = analyzer.build_tree()
         continues = False
         is_set = False
+        underline_text = ""
+        before = ""
         if current_node and tree:
             current_node_ast_node = getattr(current_node, "ast_node", None)
             print("Current attribute node: " +
@@ -50,8 +52,9 @@ class Nested:
                       previous_attribute_ast_node, AST) else "None"))
 
             # Show statement with different marker styles
-            print("\nDefault markers:")
-            print(current_node.statement.as_text())
+            print("\nDefault markers:", current_node.statement)
+            underline_text = current_node.statement.as_text()
+            before = current_node.statement.before.removesuffix(".")
 
             # print(current_node.statement)
             flat_nodes = tree.flatten()
@@ -74,16 +77,14 @@ class Nested:
             setattr(self, name, new)
             return new
         else:
-            raise AttributeError(f"Attribute {name} not found")
+            raise AttributeError(
+                f"Attribute {name} not found in {before}\n{underline_text}")
 
 
 def test():
     a = Nested()
     a.b.c = 3
-    print(
-        (a.b.
-         d.e.f.g)
-    )
+    print((a.b.d.e.f.g))
     # print(a.b.c.e)
 
 
