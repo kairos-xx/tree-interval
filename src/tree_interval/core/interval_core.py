@@ -446,33 +446,40 @@ class Leaf:
 
     @property
     def statement(self) -> Statement:
-        """Get statement information for this node."""
+        """Get statement information for this node using AST traversal."""
         top = self.top_statement
         top_source = top.info.get("source", "") if top and top.info else ""
         
         # Split top statement into before/after parts
+        before_paren = ""
+        after_paren = ""
         if "(" in top_source:
-            before, after = top_source.split("(", 1)
-            top_part = PartStatement(before=before + "(", after=")" if ")" in after else "")
-        else:
-            top_part = PartStatement(before="", after="")
+            before_paren, after_text = top_source.split("(", 1)
+            after_paren = ")" if ")" in after_text else ""
+        top_part = PartStatement(before=before_paren + "(", after=after_paren)
 
-        # Get source of this node and its path
+        # Get the current node's source
         current_source = self.info.get("source", "") if self.info else ""
         
-        # Find the full path by traversing up to the relevant parent
-        path_parts = []
-        current = self
-        while current and current != top:
-            if current.info and current.info.get("source"):
-                path_parts.append(current.info["source"])
-            current = current.parent
+        # Find preceding attribute nodes
+        before = ""
+        if self.info and self.info.get("type") == "Attribute":
+            # Go up to find the first attribute in chain
+            current = self
+            while current.parent and current.parent.info and current.parent.info.get("type") == "Attribute":
+                current = current.parent
             
-        # Process path parts to get clean before/after parts
-        full_path = ".".join(reversed(path_parts))
-        if current_source in full_path:
-            before = full_path[:full_path.index(current_source)]
-            after = full_path[full_path.index(current_source) + len(current_source):]
+            # Extract the 'before' part
+            first_attr_source = current.info.get("source", "")
+            if current_source in first_attr_source:
+                before = first_attr_source[:first_attr_source.index(current_source)]
+        
+        # Find remaining attributes in chain for 'after' part
+        after = ""
+        if self.info and self.info.get("type") == "Attribute":
+            full_chain = self.info.get("source", "")
+            if current_source in full_chain:
+                after = full_chain[full_chain.index(current_source) + len(current_source):]
         
         return Statement(
             top=top_part,
