@@ -9,6 +9,7 @@ src/tree_interval.egg-info/dependency_links.txt
 src/tree_interval.egg-info/top_level.txt
 src/tree_interval/core/__init__.py
 src/tree_interval/core/ast_builder.py
+src/tree_interval/core/ast_types.py
 src/tree_interval/core/frame_analyzer.py
 src/tree_interval/core/interval_core.py
 src/tree_interval/rich_printer/__init__.py

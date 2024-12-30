@@ -81,7 +81,7 @@ author = 299513
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "python ./examples | tee logs/demo.log 2>&1"
+args = "python -m examples | tee logs/demo.log 2>&1"
 
 [[workflows.workflow]]
 name = "[Util] update workflows"

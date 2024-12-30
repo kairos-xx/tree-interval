@@ -1,7 +1,7 @@
 """
 Core tree data structures and position handling functionality.
 
-This module provides the foundational classes for managing tree structures with 
+This module provides foundational classes for managing tree structures with
 interval-based positioning. It includes three main classes:
 
 - Position: Handles position tracking with line numbers and column offsets
@@ -11,17 +11,18 @@ interval-based positioning. It includes three main classes:
 Key Features:
     - Precise position tracking with line/column information
     - Parent-child relationship management
-    - Tree traversal and node search capabilities
+    - Tree traversal capabilities
     - JSON serialization support
-    - Rich visualization integration
-    
+    - Rich visualization
+
 Technical Details:
-    - Positions can be created from frame objects, tuples, or direct values
-    - Nodes maintain bidirectional parent-child relationships
-    - The tree structure supports generic typing for flexible data storage
-    - All position calculations handle both absolute and relative positions
+    - Support for frame objects, tuples, or direct values
+    - Bidirectional parent-child relationships
+    - Generic typing for flexible data storage
+    - Handles absolute and relative positions
 """
 
+from dataclasses import dataclass
 from dis import Positions as disposition
 from inspect import getframeinfo, getsource
 from json import dumps, loads
@@ -39,16 +40,153 @@ from typing import (
     Union,
 )
 
+from .ast_types import AST_TYPES
+
 
 class LeafStyle(NamedTuple):
     """Style configuration for leaf nodes.
-    
+
     Attributes:
         color (str): Color in hex format (#RRGGBB) or named color
         bold (bool): Whether text should be bold, defaults to False
     """
+
     color: str
     bold: bool = False
+
+
+@dataclass
+class PartStatement:
+    """Represents a statement part with before and after text"""
+
+    before: str
+    after: str
+
+
+@dataclass
+class Statement:
+    """A complete breakdown of a code statement with marker annotations.
+
+    This class provides functionality to represent and format code statements,
+    particularly focusing on attribute chains and nested expressions.
+    It supports customizable visual markers for different parts of
+    the statement.
+
+    The statement is broken down into several components:
+    - Top-level statement parts (marked with '^' by default)
+    - Chain/attribute parts (marked with '~' by default)
+    - Current attribute/expression (marked with '*' by default)
+
+    Each component can be formatted with different markers to visualize the
+    structure of complex statements, especially useful for debugging and
+    code analysis.
+
+    Attributes:
+        top (PartStatement): The top-level statement containing
+            before/after parts
+            Example: In 'print(obj.attr)', 'print(' is before, ')' is after
+        before (str): Text before the current attribute/expression
+            Example: In 'obj.attr1.attr2', 'obj.attr1.' is before
+        self (str): The current attribute or expression text
+            Example: In 'obj.attr1.attr2', if focused on 'attr1', that's self
+        after (str): Text following the current attribute/expression
+            Example: In 'obj.attr1.attr2', '.attr2' is after
+        top_marker (str): Marker for top-level statement parts (default: '^')
+        chain_marker (str): Marker for attribute chains (default: '~')
+        current_marker (str): Marker for current attribute (default: '*')
+
+    Example:
+        >>> stmt = Statement(
+        ...     top=PartStatement(before="print(", after=")"),
+        ...     before="obj.", self="attr1", after=".attr2"
+        ... )
+        >>> print(stmt.as_text())
+        print(obj.attr1.attr2)
+        ^^^^^~~~~***~~~~~~^
+    """
+
+    top: PartStatement
+    before: str
+    self: str
+    after: str
+    top_marker: str = "~"
+    chain_marker: str = "^"
+    current_marker: str = "▲"
+
+    def as_text(self,
+                top_marker=None,
+                chain_marker=None,
+                current_marker=None) -> str:
+        """Format the statement with visual marker annotations.
+
+        Creates a two-line representation of the statement where the first line
+        shows the actual code and the second line shows markers indicating the
+        role of each part. The markers are aligned directly under their
+        corresponding code parts.
+
+        Args:
+            top_marker (str, optional): Character for marking top-level parts.
+                Defaults to self.top_marker if None.
+            chain_marker (str, optional): Character for marking
+                attribute chains.
+                Defaults to self.chain_marker if None.
+            current_marker (str, optional): Character for marking current
+                attribute.
+                Defaults to self.current_marker if None.
+
+        Returns:
+            str: A multi-line string with the code and aligned markers.
+                Example:
+                    print(obj.attr.value)
+                    ^^^^^~~~~***~~~~~^
+        """
+        top_marker = top_marker or self.top_marker
+        chain_marker = chain_marker or self.chain_marker
+        current_marker = current_marker or self.current_marker
+
+        def lines_with_markers(text: str, marker_char: str):
+            return [
+                (line,
+                 "".join([ch if ch.isspace() else marker_char for ch in line]))
+                for line in text.split("\n")
+            ]
+
+        def merge_lines(pairs_a, pairs_b):
+            if not pairs_a:
+                return pairs_b
+            if not pairs_b:
+                return pairs_a
+
+            last_text_a, last_mark_a = pairs_a[-1]
+            first_text_b, first_mark_b = pairs_b[0]
+            return (pairs_a[:-1] + [
+                (last_text_a + first_text_b, last_mark_a + first_mark_b)
+            ] + pairs_b[1:])
+
+        return "\n".join(
+            sum(
+                [[text_line, marker_line]
+                 for text_line, marker_line in merge_lines(
+                     merge_lines(
+                         lines_with_markers(self.top.before, top_marker),
+                         merge_lines(
+                             merge_lines(
+                                 lines_with_markers(self.before, chain_marker),
+                                 lines_with_markers(self.self, current_marker),
+                             ),
+                             lines_with_markers(self.after, chain_marker),
+                         ),
+                     ),
+                     lines_with_markers(self.top.after, top_marker),
+                 )],
+                [],
+            ))
+
+    @property
+    def text(self) -> str:
+        """Property access for default markers."""
+        return self.as_text()
+
 
 if TYPE_CHECKING:
     from ..visualizer.config import VisualizationConfig
@@ -59,10 +197,10 @@ T = TypeVar("T")
 class Position:
     """
     Represents a position in source code with line and column tracking.
-    
-    This class handles different types of position inputs and normalizes them into
-    a consistent format with start/end positions and line/column information.
-    
+
+    Handles different types of position inputs and normalizes them into
+    a consistent format with start/end positions and line/column info.
+
     Attributes:
         start (int): Starting position in the source
         end (int): Ending position in the source
@@ -74,13 +212,13 @@ class Position:
         _end_col_offset (int): Ending column offset
         parent (Optional[Leaf]): Parent node in tree structure
         children (List[Leaf]): Child nodes in tree structure
-        
-    Implementation Details:
-        - Handles frame objects for runtime position tracking
-        - Supports position objects from Python's dis module
-        - Maintains both absolute and line-relative positions
-        - Calculates proper indentation offsets
-        - Preserves parent-child relationships
+
+    Implementation:
+        - Handles frame objects for runtime tracking
+        - Supports position objects from dis module
+        - Maintains absolute and line-relative positions
+        - Calculates indentation offsets
+        - Preserves parent-child links
     """
 
     def __init__(
@@ -93,14 +231,15 @@ class Position:
     ):
         """
         Initialize a Position object.
-        
+
         Args:
             start: Starting position, frame object, or disposition object
-            end: Ending position (optional if start contains full position info)
+            end: Ending position
+                (optional if start contains full position info)
             source: Source code string or metadata dictionary
             info: Additional position information
             selected: Selection state of this position
-            
+
         Raises:
             ValueError: If both start and end are None for direct position init
         """
@@ -141,12 +280,12 @@ class Position:
                     pos, "end_col_offset") else None)
                 if source is not None and isinstance(source, str):
                     lines = source.split("\n")
-                    line_offset_val = int(line_offset) if isinstance(
-                        line_offset, int) else 0
+                    line_offset_val = (int(line_offset) if isinstance(
+                        line_offset, int) else 0)
                     if (self._lineno is not None
                             and self._col_offset is not None and lines):
-                        adjusted_lineno = int(self._lineno) if isinstance(
-                            self._lineno, int) else 1
+                        adjusted_lineno = (int(self._lineno) if isinstance(
+                            self._lineno, int) else 1)
                         line_idx = max(0,
                                        adjusted_lineno - line_offset_val - 1)
                         pos_start = (sum(
@@ -177,11 +316,11 @@ class Position:
 
             elif pos and hasattr(pos, "col_offset") and hasattr(
                     pos, "end_col_offset"):
-                self.start = pos.col_offset if hasattr(
-                    pos, "col_offset") and pos.col_offset is not None else 0
-                self.end = pos.end_col_offset if hasattr(
-                    pos,
-                    "end_col_offset") and pos.end_col_offset is not None else 0
+                self.start = (pos.col_offset if hasattr(pos, "col_offset")
+                              and pos.col_offset is not None else 0)
+                self.end = (pos.end_col_offset
+                            if hasattr(pos, "end_col_offset")
+                            and pos.end_col_offset is not None else 0)
             else:
                 self.start = 0
                 self.end = 0
@@ -202,12 +341,12 @@ class Position:
                     end_col_offset = int(
                         getattr(dis_pos, "end_col_offset", col_offset))
 
-                    pos_start = sum(
-                        len(line) + 1
-                        for line in lines[:lineno - 1]) + col_offset
-                    pos_end = sum(
-                        len(line) + 1
-                        for line in lines[:end_lineno - 1]) + end_col_offset
+                    pos_start = (
+                        sum(len(line) + 1
+                            for line in lines[:lineno - 1]) + col_offset)
+                    pos_end = (
+                        sum(len(line) + 1 for line in lines[:end_lineno - 1]) +
+                        end_col_offset)
                     self.start = pos_start
                     self.end = pos_end
                 else:
@@ -276,7 +415,8 @@ class Position:
         """Display position with specific format."""
         if position_format == "position":
             col_offset = self.col_offset if self.col_offset is not None else 0
-            end_col_offset = (self.end_col_offset if self.end_col_offset is not None else 0)
+            end_col_offset = (self.end_col_offset
+                              if self.end_col_offset is not None else 0)
             return (
                 f"Position(start={self.start}, end={self.end}, "
                 f"lineno={self.lineno}, end_lineno={self.end_lineno}, "
@@ -362,7 +502,8 @@ class Leaf:
         self.rich_style = rich_style
 
         # Initialize end_col_offset if not set
-        if (self.position._end_col_offset is None and self.position._col_offset is not None):
+        if (self.position._end_col_offset is None
+                and self.position._col_offset is not None):
             self.position._end_col_offset = self.position._col_offset + 20
 
         self.parent: Optional[Leaf] = None
@@ -414,6 +555,106 @@ class Leaf:
     def selected(self, value: bool) -> None:
         self.position.selected = value
 
+    @property
+    def is_set(self) -> bool:
+        """Check if this node represents a set operation based on AST type."""
+        if not self.info or not isinstance(self.info, dict):
+            return False
+        node_type = self.info.get("type")
+        if not node_type:
+            return False
+        return AST_TYPES.get(node_type, {}).get("is_set", False)
+
+    @property
+    def statement(self) -> Statement:
+        """Get statement information for this node using AST traversal."""
+        top = self.top_statement
+        if (self.parent and self.parent.ast_node is getattr(
+                top.ast_node, "targets", [top.ast_node])[0] if top else None):
+            top = None
+        next_attr = self
+        while True:
+            next_attr_candidate = getattr(next_attr, "next_attribute", None)
+            if next_attr_candidate is not None:
+                next_attr = next_attr_candidate
+            else:
+                break
+
+        # Handle current attribute
+        value = getattr(self.ast_node, "cleaned_value", "")
+
+        # Find remaining attributes in chain for 'after' part
+        top_source = getattr(top, "info", {}).get("source", "")
+        top_start = (top.end if top else 0) or 0
+        top_part = PartStatement(
+            before=top_source[:(self.start or 0) - top_start],
+            after=top_source[((next_attr.end if next_attr else 0) or 0) -
+                             top_start:],
+        )
+        source = self.info.get("source", "") if self.info else ""
+        return Statement(
+            top=top_part,
+            before=source.removesuffix(value),
+            self=value,
+            after=getattr(next_attr, "info", {}).get("source",
+                                                     "").removeprefix(source),
+        )
+
+    @property
+    def next_attribute(self) -> Optional["Leaf"]:
+        """Find the next attribute in a chained attribute access.
+        Example: obj.attr1.attr2 -> for attr1 node, returns attr2 node
+        Returns None if this is not part of an attribute chain or is
+                the last attribute.
+        """
+        check = {"Attribute", "Name"}
+        if not self.info or self.info.get("type") not in check:
+            return None
+
+        # If we're a Name node inside an attribute chain,
+        # we shouldn't have a next
+        if self.info.get("type") == "Name":
+            return None
+
+        current = self.parent
+        while current:
+            if current.info and current.info.get("type") in check:
+                return current
+            current = current.parent
+        return None
+
+    @property
+    def previous_attribute(self) -> Optional["Leaf"]:
+        """Find the previous attribute in a chained attribute access.
+        Example: obj.attr1.attr2 -> for attr2 node, returns attr1 node"""
+        check = {"Attribute", "Name"}
+        if not self.info or self.info.get("type") not in check:
+            return None
+
+        # For attributes, look at children to find the previous one
+        if self.children:
+            for child in self.children:
+                if child.info and child.info.get("type") in check:
+                    return child
+
+        return None
+
+    @property
+    def top_statement(self) -> Optional["Leaf"]:
+        """
+        Find the closest parent node that is a statement according
+        to AST_TYPES.
+        """
+        current = self
+        while current:
+            if (current.info and isinstance(current.info, dict)
+                    and current.info.get("type")
+                    and current.info["type"] in AST_TYPES
+                    and AST_TYPES[current.info["type"]]["statement"]):
+                return current
+            current = current.parent
+        return None
+
     def add_child(self, child: "Leaf") -> None:
         """Add a child node to this leaf."""
         child.parent = self
@@ -437,8 +678,8 @@ class Leaf:
                         (end - leaf_end) if end > leaf_end else
                         (leaf_end - end))
 
-        best_match_distance = float(
-            "inf") if best_match_distance is None else best_match_distance
+        best_match_distance = (float("inf") if best_match_distance is None else
+                               best_match_distance)
         distance = calc_distance(self)
         if distance < best_match_distance:
             best_match_distance = distance
@@ -571,18 +812,19 @@ class Leaf:
     def position_as(self, position_format: str = "default") -> str:
         """Display node with specific position format."""
         if position_format == "position":
-            return (
-                f"Position(start={self.start}, end={self.end}, "
-                f"lineno={self.lineno}, end_lineno={self.end_lineno}, "
-                f"col_offset={self.col_offset}, "+f"end_col_offset={self.end_col_offset}, "
-                f"size={self.size})")
+            return (f"Position(start={self.start}, end={self.end}, "
+                    f"lineno={self.lineno}, end_lineno={self.end_lineno}, "
+                    f"col_offset={self.col_offset}, " +
+                    f"end_col_offset={self.end_col_offset}, "
+                    f"size={self.size})")
         elif position_format == "tuple":
             return (
                 f"({self.start}, {self.end}, {self.lineno}, "
                 f"{self.end_lineno}, {self.col_offset}, {self.end_col_offset})"
             )
         else:
-            return (f"Position(start={self.start}, end={self.end}, size={self.size})")
+            return (f"Position(start={self.start}, " +
+                    f"end={self.end}, size={self.size})")
 
     def _get_parent(self) -> Optional["Leaf"]:
         """Safe accessor for parent property."""
@@ -639,8 +881,9 @@ class Leaf:
 
     def __repr__(self) -> str:
         if isinstance(self._info, dict):
-            info_str = "Info(" + ", ".join(
-                f"{k}={repr(v)}" for k, v in self._info.items()) + ")"
+            info_str = ("Info(" + ", ".join(f"{k}={repr(v)}"
+                                            for k, v in self._info.items()) +
+                        ")")
         else:
             info_str = repr(self._info)
         return f"Leaf(start={self.start}, end={self.end}, info={info_str})"
@@ -649,32 +892,33 @@ class Leaf:
         """Compare two nodes for equality."""
         if not isinstance(other, Leaf):
             return False
-        return self.position == other.position and self.info == other.info and self.start == other.start and self.end == other.end
+        return (self.position == other.position and self.info == other.info
+                and self.start == other.start and self.end == other.end)
 
 
 class Tree(Generic[T]):
     """
     A tree structure containing nodes with position information.
-    
-    This class implements a generic tree data structure where each node maintains
-    position information and parent-child relationships. It supports JSON 
-    serialization, visualization, and efficient tree traversal operations.
-    
+
+    Implements a generic tree where each node maintains position info and
+    parent-child relationships. Supports JSON serialization and
+    visualization.
+
     Type Parameters:
         T: Type of source data stored in the tree
-        
+
     Attributes:
         source (T): Source data associated with the tree
         start_lineno (Optional[int]): Starting line number in source
         indent_size (int): Number of spaces per indentation level
         root (Optional[Leaf]): Root node of the tree
-        
-    Implementation Details:
-        - Maintains hierarchical node structure
-        - Supports position-based node matching
-        - Provides tree traversal methods
-        - Handles serialization/deserialization
-        - Integrates with visualization system
+
+    Features:
+        - Hierarchical node structure
+        - Position-based node matching
+        - Tree traversal methods
+        - JSON serialization
+        - Visualization support
     """
 
     def __init__(self,
@@ -761,11 +1005,13 @@ class Tree(Generic[T]):
         """Create a node from a dictionary."""
         start = int(data["start"]) if data["start"] is not None else None
         end = int(data["end"]) if data["end"] is not None else None
-        node = Leaf(start,
-                    data["info"],
-                    end,
-                    style=data.get("style"),
-                    rich_style=data.get("rich_style"))
+        node = Leaf(
+            start,
+            data["info"],
+            end,
+            style=data.get("style"),
+            rich_style=data.get("rich_style"),
+        )
         for child_data in data["children"]:
             child = Tree._dict_to_node(child_data)
             node.add_child(child)

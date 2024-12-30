@@ -65,7 +65,7 @@ Sibling: {}
 === AST Node Info Example ===
 Class name: MyClass
 Fields: ('name', 'bases', 'keywords', 'body', 'decorator_list')
-Info dict: {'type': 'ClassDef', 'name': 'MyClass', 'source': "class MyClass:\n\n    def hello(self):\n        return 'world'"}
+Info dict: {'type': 'ClassDef', 'name': 'MyClass', 'source': 'class MyClass:\n    def hello(self):\n        return "world"'}
 Child 1's parent: Root
 Child 1's next sibling: Child 2
 Child 2's previous sibling: Child 1
@@ -73,7 +73,7 @@ Child 2's previous sibling: Child 1
 === Statement Examples ===
 Default markers:
 print(a.b.d.e)
-^^^^^^~~~~*~~^
+~~~~~~^^^^▲^^~
 
 Custom markers:
 print(a.b.d.e)
@@ -111,6 +111,7 @@ Deserialized tree:
 
 AST Tree:
 [1;32mModule size=100 info=Info(type='Module')[0m
-└── [34mFunctionDef(example) size=80 info=Info(type='FunctionDef', name='example')[0m
+└── [34mFunctionDef(example) size=80 info=Info(type='FunctionDef', 
+    name='example')[0m
     └── [38;5;249mArguments size=10 info=Info(type='Arguments')[0m
 === Rich Styling Examples ===
