@@ -105,7 +105,14 @@ class Statement:
         current_pos = 0
         
         # Mark top statement prefix if it's in the last line
-        top_before_lines = self.top.before.split('\n')
+        top_before_lines = self.top.before.split('\n')[::-1]
+        
+        for k,v in enumerate(top_before_lines.copy()):
+            top_before_lines.append( tm * len(v))
+        top_before_lines=top_before_lines[::-1]
+        print(top_before_lines)
+            
+        
         if len(top_before_lines) == len(lines):
             markers += tm * len(top_before_lines[-1])
             current_pos += len(top_before_lines[-1])
