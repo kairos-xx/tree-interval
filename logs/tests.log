@@ -2,30 +2,31 @@
 platform linux -- Python 3.11.10, pytest-8.3.4, pluggy-1.5.0
 rootdir: /home/runner/treeinterval
 configfile: pyproject.toml
-collected 26 items
+collected 30 items
 
-tests/test_ast_nodes.py ..                                               [  7%]
-tests/test_rich_printer.py ....                                          [ 23%]
-tests/test_styling.py ..F...                                             [ 46%]
+tests/test_ast_nodes.py .....F                                           [ 20%]
+tests/test_rich_printer.py ....                                          [ 33%]
+tests/test_styling.py ......                                             [ 53%]
 tests/test_tree_core.py ..............                                   [100%]
 
 =================================== FAILURES ===================================
-___________________________ test_syntax_highlighting ___________________________
+____________________________ test_statement_markers ____________________________
 
-    def test_syntax_highlighting():
-        """Test syntax highlighting based on node type."""
-        node = Leaf(Position(0, 100), info={"type": "Module"})
-        node.rich_style = RichStyle(color="green", bold=True)
+    def test_statement_markers():
+        """Test Statement marker customization"""
+        part = PartStatement(before="print(", after=")")
+        stmt = Statement(top=part, before="a.b.", self="d", after=".e")
     
->       assert "greens" in str(node.rich_style.color).lower()
-E       assert 'greens' in "color('green', colortype.standard, number=2)"
-E        +  where "color('green', colortype.standard, number=2)" = <built-in method lower of str object at 0x7f77df29d6b0>()
-E        +    where <built-in method lower of str object at 0x7f77df29d6b0> = "Color('green', ColorType.STANDARD, number=2)".lower
-E        +      where "Color('green', ColorType.STANDARD, number=2)" = str(Color('green', ColorType.STANDARD, number=2))
-E        +        where Color('green', ColorType.STANDARD, number=2) = Style(color=Color('green', ColorType.STANDARD, number=2), bold=True).color
-E        +          where Style(color=Color('green', ColorType.STANDARD, number=2), bold=True) = Leaf(start=0, end=100, info=Info(type='Module')).rich_style
+        # Test default markers
+>       assert stmt.text == "print(a.b.d.e)\n^^^^^^~~~~*~~"
+E       AssertionError: assert 'print(a.b.d....^^^^^~~~~*~~^' == 'print(a.b.d....^^^^^^~~~~*~~'
+E         
+E           print(a.b.d.e)
+E         - ^^^^^^~~~~*~~
+E         + ^^^^^^~~~~*~~^
+E         ?              +
 
-tests/test_styling.py:31: AssertionError
+tests/test_ast_nodes.py:97: AssertionError
 =========================== short test summary info ============================
-FAILED tests/test_styling.py::test_syntax_highlighting - assert 'greens' in "...
-========================= 1 failed, 25 passed in 0.21s =========================
+FAILED tests/test_ast_nodes.py::test_statement_markers - AssertionError: asse...
+========================= 1 failed, 29 passed in 0.27s =========================
