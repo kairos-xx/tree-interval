@@ -113,54 +113,39 @@ class Statement:
         # self_lines = self.self.split("\n")
         # after_lines = self.after.split("\n")
 
-        lines = self.top.before.splitlines()
-        result = []
-        for line in lines:
-            result.append(line)
-            # Create an underline by replacing non-space characters with '^'
-            underline = ''.join(tm if not c.isspace() else ' ' for c in line)
-            result.append(underline)
-        top_before_lines = "\n".join(result)
-        
-        lines = self.top.after.splitlines()
-        result = []
-        for line in lines:
-            result.append(line)
-            # Create an underline by replacing non-space characters with tm
-            underline = ''.join(tm if not c.isspace() else ' ' for c in line)
-            result.append(underline)
-    
-           
-        top_after_lines = "\n".join(result)
+        # Build the full text first
+        parts = []
+        if self.top.before:
+            parts.extend(self.top.before.splitlines())
+        if self.before:
+            parts.extend(self.before.splitlines())
+        if self.self:
+            parts.extend(self.self.splitlines())
+        if self.after:
+            parts.extend(self.after.splitlines())
+        if self.top.after:
+            parts.extend(self.top.after.splitlines())
 
-        lines = self.before.splitlines()
+        # Build the result with markers
         result = []
-        for line in lines:
+        for line in parts:
             result.append(line)
-            # Create an underline by replacing non-space characters with tm
-            underline = ''.join(cm if not c.isspace() else ' ' for c in line)
-            result.append(underline)
-        before_lines = "\n".join(result)
+            indent = len(line) - len(line.lstrip())
+            spaces = " " * indent
+            markers = ""
+            
+            # Figure out what kind of marker to use for each part
+            if line in self.top.before.splitlines() or line in self.top.after.splitlines():
+                markers = spaces + ''.join(tm if not c.isspace() else ' ' for c in line.lstrip())
+            elif line in self.before.splitlines() or line in self.after.splitlines():
+                markers = spaces + ''.join(cm if not c.isspace() else ' ' for c in line.lstrip())
+            elif line in self.self.splitlines():
+                markers = spaces + ''.join(cum if not c.isspace() else ' ' for c in line.lstrip())
+            
+            if markers.strip():  # Only add marker line if it contains markers
+                result.append(markers)
 
-        lines = self.after.splitlines()
-        result = []
-        for line in lines:
-            result.append(line)
-            # Create an underline by replacing non-space characters with cm
-            underline = ''.join(cm if not c.isspace() else ' ' for c in line)
-            result.append(underline)
-        after_lines = "\n".join(result)
-
-        lines = self.self.splitlines()
-        result = []
-        for line in lines:
-            result.append(line)
-            # Create an underline by replacing non-space characters with tm
-            underline = ''.join(cum if not c.isspace() else ' ' for c in line)
-            result.append(underline)
-        self_lines = "\n".join(result)
-
-        return top_before_lines+before_lines+self_lines+after_lines+top_after_lines
+        return '\n'.join(result)
 
 
         # # top_before_lines=top_before_lines[::-1]
