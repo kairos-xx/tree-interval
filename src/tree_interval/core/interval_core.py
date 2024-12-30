@@ -22,6 +22,7 @@ Technical Details:
     - Handles absolute and relative positions
 """
 
+from dataclasses import dataclass
 from dis import Positions as disposition
 from inspect import getframeinfo, getsource
 from json import dumps, loads
@@ -53,9 +54,6 @@ class LeafStyle(NamedTuple):
     bold: bool = False
 
 
-from dataclasses import dataclass
-
-
 @dataclass
 class PartStatement:
     """Represents a statement part with before and after text"""
@@ -74,7 +72,10 @@ class Statement:
     chain_marker: str = "~"
     current_marker: str = "*"
 
-    def as_text(self, top_marker=None, chain_marker=None, current_marker=None) -> str:
+    def as_text(self,
+                top_marker=None,
+                chain_marker=None,
+                current_marker=None) -> str:
         """Generate a text representation of the statement with markers.
         
         Args:
@@ -89,7 +90,7 @@ class Statement:
         tm = top_marker or self.top_marker
         cm = chain_marker or self.chain_marker
         cum = current_marker or self.current_marker
-        
+
         full_text = f"{self.top.before}{self.before}{self.self}{self.after}{self.top.after}"
         markers = ""
 
