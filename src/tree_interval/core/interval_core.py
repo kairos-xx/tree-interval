@@ -53,13 +53,18 @@ class LeafStyle(NamedTuple):
     bold: bool = False
 
 
-class PartStatement(NamedTuple):
+from dataclasses import dataclass
+
+
+@dataclass
+class PartStatement:
     """Represents a statement part with before and after text"""
     before: str
     after: str
 
 
-class Statement(NamedTuple):
+@dataclass
+class Statement:
     """Represents a complete statement breakdown"""
     top: PartStatement
     before: str
@@ -77,26 +82,26 @@ class Statement(NamedTuple):
         full_text = f"{self.top.before}{self.before}{self.self}{self.after}{self.top.after}"
         markers = ""
         pos = 0
-        
+
         # Mark the opening part (e.g. 'print(')
         markers += "^" * len(self.top.before)
         pos += len(self.top.before)
-        
+
         # Mark the before part (e.g. 'a.b.')
         markers += "~" * len(self.before)
         pos += len(self.before)
-        
+
         # Mark the current attribute
         markers += "*" * len(self.self)
         pos += len(self.self)
-        
+
         # Mark the after part (e.g. '.e')
         markers += "~" * len(self.after)
         pos += len(self.after)
-        
+
         # Mark the closing part (e.g. ')')
         markers += "^" * len(self.top.after)
-        
+
         return f"{full_text}\n{markers}"
 
 
