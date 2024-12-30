@@ -77,8 +77,9 @@ class Nested:
             setattr(self, name, new)
             return new
         else:
+            caller = stack()[1]
             raise AttributeError(
-                f"Attribute {name} not found in {before}\n{underline_text}")
+                f"Attribute '{name}' not found (called from {caller.filename}, line {caller.lineno}, in {caller.function})")
 
 
 def test():
