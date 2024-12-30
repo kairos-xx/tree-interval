@@ -1,3 +1,4 @@
+
 """
 Tree Visualization Core Module.
 
@@ -20,7 +21,7 @@ The module acts as a facade for various visualization implementations,
 providing a consistent interface for different visualization needs.
 """
 
-from typing import Optional
+from typing import Any, Optional, Union
 
 from .config import VisualizationConfig
 
@@ -41,7 +42,7 @@ class TreeVisualizer:
     RESET = "\033[0m"
 
     @staticmethod
-    def visualize(tree, config: Optional[VisualizationConfig] = None):
+    def visualize(tree: Any, config: Optional[VisualizationConfig] = None) -> None:
         """
         Visualize a tree structure with customizable formatting options.
 
@@ -58,7 +59,7 @@ class TreeVisualizer:
             print("Empty tree")
             return
 
-        def format_position(node) -> str:
+        def format_position(node: Any) -> str:
             """
             Format the position information of a node according
             to the configuration.
@@ -83,13 +84,12 @@ class TreeVisualizer:
             except Exception:
                 return 80  # Default fallback width
 
-        def format_node_info(node,
-                             level: int = 0,
-                             prefix: Optional[str] = None) -> str:
+        def format_node_info(node: Any,
+                           level: int = 0,
+                           prefix: Optional[str] = None) -> str:
             """Format additional information about a node for display."""
-            parts = []
-            prefix_len = level * 4 + (4 if prefix is None else len(prefix)
-                                      )  # Basic indentation + connector length
+            parts: list[str] = []
+            prefix_len = level * 4 + (4 if prefix is None else len(prefix))
             terminal_width = get_terminal_width()
             available_width = terminal_width - prefix_len
 
@@ -99,44 +99,43 @@ class TreeVisualizer:
             if config.show_info and node.info:
                 if isinstance(node.info, dict):
                     info_str = ("Info(" +
-                                ", ".join(f"{k}={repr(v)}"
-                                          for k, v in node.info.items()) + ")")
+                              ", ".join(f"{k}={repr(v)}"
+                                      for k, v in node.info.items()) + ")")
                 else:
                     info_str = repr(node.info)
 
-                # Calculate total length including existing parts
                 current_length = len(" ".join(parts))
                 remaining_width = available_width - current_length - 1
-                # -1 for space
 
                 if len(info_str) > remaining_width:
                     parts.append("info=...")
                 else:
                     parts.append(info_str if isinstance(node.info, dict) else
-                                 f"info={info_str}")
+                               f"info={info_str}")
 
             if config.show_children_count:
                 parts.append(f"children={len(node.children)}")
 
             return " ".join(parts)
 
-        def _print_node(node, prefix="", is_last=True, level=0):
+        def _print_node(node: Any,
+                       prefix: str = "",
+                       is_last: bool = True,
+                       level: int = 0) -> None:
             """Recursively print the tree structure."""
             position_str = format_position(node)
             info_str = format_node_info(node, level, prefix)
             prefix_spaces = "" if level < 2 else prefix
             connector = "" if level == 0 else ("└── " if is_last else "├── ")
 
-            # Custom styling takes precedence
             if hasattr(node, 'style') and node.style:
                 color = node.style.color.lstrip('#')
                 style_prefix = (f"\033[38;2;{int(color[:2], 16)};" +
-                                f"{int(color[2:4], 16)};" +
-                                f"{int(color[4:], 16)}m")
+                              f"{int(color[2:4], 16)};" +
+                              f"{int(color[4:], 16)}m")
                 if node.style.bold:
                     style_prefix = "\033[1m" + style_prefix
             else:
-                # Default styling
                 style_prefix = TreeVisualizer.BLUE if level == 0 else (
                     TreeVisualizer.GREEN
                     if node.children else TreeVisualizer.YELLOW)
@@ -147,7 +146,7 @@ class TreeVisualizer:
             for i, child in enumerate(children):
                 new_prefix = prefix + ("    " if is_last else "│   ")
                 _print_node(child, new_prefix, i == len(children) - 1,
-                            level + 1)
+                          level + 1)
 
         _print_node(tree.root)
 
