@@ -457,20 +457,22 @@ class Leaf:
         else:
             top_part = PartStatement(before="", after="")
 
-        # Get full source up to this node
-        current = self
-        parts = []
-        while current:
-            if current.info and current.info.get("source"):
-                parts.append(current.info["source"])
-            current = current.parent
-        
-        full_source = "".join(reversed(parts))
+        # Get source of this node and its path
         current_source = self.info.get("source", "") if self.info else ""
         
-        # Split into before and after parts
-        before = full_source[:-len(current_source)] if current_source in full_source else ""
-        after = full_source[len(before) + len(current_source):] if current_source else ""
+        # Find the full path by traversing up to the relevant parent
+        path_parts = []
+        current = self
+        while current and current != top:
+            if current.info and current.info.get("source"):
+                path_parts.append(current.info["source"])
+            current = current.parent
+            
+        # Process path parts to get clean before/after parts
+        full_path = ".".join(reversed(path_parts))
+        if current_source in full_path:
+            before = full_path[:full_path.index(current_source)]
+            after = full_path[full_path.index(current_source) + len(current_source):]
         
         return Statement(
             top=top_part,
