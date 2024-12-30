@@ -115,3 +115,35 @@ Properties:
 - Returns the nearest parent node that is marked as a statement in AST_TYPES
 - Returns None if no statement parent is found
 - The node itself is returned if it is a statement
+## Statement API
+
+### PartStatement
+```python
+@dataclass
+class PartStatement:
+    before: str  # Text before a statement part
+    after: str   # Text after a statement part
+```
+
+### Statement
+```python
+@dataclass
+class Statement:
+    top: PartStatement     # Top level statement parts (e.g. print())
+    before: str           # Text before current node (e.g. a.b.)
+    self: str            # Current node text (e.g. d)
+    after: str           # Text after current node (e.g. .e)
+    
+    # Marker characters
+    top_marker: str = "^"      # For top statement parts
+    chain_marker: str = "~"    # For chained parts
+    current_marker: str = "*"  # For current node
+    
+    @property
+    def text(self) -> str:
+        """Get statement text with default markers"""
+        return self.as_text()
+        
+    def as_text(self, top_marker=None, chain_marker=None, current_marker=None) -> str:
+        """Get statement text with custom markers"""
+```

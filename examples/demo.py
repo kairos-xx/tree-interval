@@ -328,3 +328,20 @@ if __name__ == "__main__":
     demonstrate_dot_notation()
     demonstrate_ast_parsing()
     demonstrate_node_navigation()
+
+def demonstrate_statements():
+    """Demonstrates Statement functionality"""
+    print("\n=== Statement Examples ===")
+    
+    # Basic statement
+    part = PartStatement(before="print(", after=")")
+    stmt = Statement(top=part, before="a.b.", self="d", after=".e")
+    
+    print("Default markers:")
+    print(stmt.text)
+    
+    print("\nCustom markers:")
+    print(stmt.as_text(top_marker="#", chain_marker="-", current_marker="@"))
+
+if __name__ == "__main__":
+    demonstrate_statements()

@@ -95,3 +95,14 @@ if __name__ == "__main__":
 
 
 
+def test_statement_markers():
+    """Test Statement marker customization"""
+    part = PartStatement(before="print(", after=")")
+    stmt = Statement(top=part, before="a.b.", self="d", after=".e")
+    
+    # Test default markers
+    assert stmt.text == "print(a.b.d.e)\n^^^^^^~~~~*~~"
+    
+    # Test custom markers 
+    custom = stmt.as_text(top_marker="#", chain_marker="-", current_marker="@")
+    assert custom == "print(a.b.d.e)\n#####---@--#"

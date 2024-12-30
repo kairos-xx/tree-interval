@@ -41,7 +41,13 @@ class Nested:
                   (unparse(previous_attribute_ast_node) if isinstance(
                       previous_attribute_ast_node, AST) else 'None'))
 
-            print(current_node.statement.text)  # or print(current_node.statement.as_text())
+            # Show statement with different marker styles
+            print("\nDefault markers:")
+            print(current_node.statement.text)
+            
+            print("\nCustom markers:")
+            print(current_node.statement.as_text(top_marker="#", chain_marker="-", current_marker="@"))
+            print(current_node.statement.as_text(top_marker="$", chain_marker=".", current_marker="*"))
             print(current_node.statement.as_text(top_marker="#"))
 
             
