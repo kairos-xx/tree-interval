@@ -53,6 +53,20 @@ class LeafStyle(NamedTuple):
     bold: bool = False
 
 
+class PartStatement(NamedTuple):
+    """Represents a statement part with before and after text"""
+    before: str
+    after: str
+
+
+class Statement(NamedTuple):
+    """Represents a complete statement breakdown"""
+    top: PartStatement
+    before: str
+    self: str
+    after: str
+
+
 if TYPE_CHECKING:
     from ..visualizer.config import VisualizationConfig
 
@@ -429,6 +443,41 @@ class Leaf:
         if not node_type:
             return False
         return AST_TYPES.get(node_type, {}).get("is_set", False)
+
+    @property
+    def statement(self) -> Statement:
+        """Get statement information for this node."""
+        top = self.top_statement
+        top_source = top.info.get("source", "") if top and top.info else ""
+        
+        # Split top statement into before/after parts
+        if "(" in top_source:
+            before, after = top_source.split("(", 1)
+            top_part = PartStatement(before=before + "(", after=")" if ")" in after else "")
+        else:
+            top_part = PartStatement(before="", after="")
+
+        # Get full source up to this node
+        current = self
+        parts = []
+        while current:
+            if current.info and current.info.get("source"):
+                parts.append(current.info["source"])
+            current = current.parent
+        
+        full_source = "".join(reversed(parts))
+        current_source = self.info.get("source", "") if self.info else ""
+        
+        # Split into before and after parts
+        before = full_source[:-len(current_source)] if current_source in full_source else ""
+        after = full_source[len(before) + len(current_source):] if current_source else ""
+        
+        return Statement(
+            top=top_part,
+            before=before,
+            self=current_source,
+            after=after
+        )
 
     @property
     def next_attribute(self) -> Optional["Leaf"]:
