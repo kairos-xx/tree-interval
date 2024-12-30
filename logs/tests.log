@@ -1,0 +1,34 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.10, pytest-8.3.4, pluggy-1.5.0
+rootdir: /home/runner/treeinterval
+configfile: pyproject.toml
+collected 30 items
+
+tests/test_ast_nodes.py ....F.                                           [ 20%]
+tests/test_rich_printer.py ....                                          [ 33%]
+tests/test_styling.py ......                                             [ 53%]
+tests/test_tree_core.py ..............                                   [100%]
+
+=================================== FAILURES ===================================
+_____________________________ test_next_attribute ______________________________
+
+    def test_next_attribute() -> None:
+        """Test next_attribute property for chained attribute access"""
+        # Create: obj.attr1.attr2
+        attr1 = Leaf(Position(0, 10), {"type": "Attribute"})
+        attr2 = Leaf(Position(11, 20), {"type": "Attribute"})
+        name = Leaf(Position(5, 8), {"type": "Name"})
+    
+        attr1.add_child(name)
+        attr2.add_child(attr1)
+    
+        assert attr1.next_attribute == attr2
+        assert attr2.next_attribute is None
+>       assert name.next_attribute is None
+E       AssertionError: assert Leaf(start=0, end=10, info=Info(type='Attribute')) is None
+E        +  where Leaf(start=0, end=10, info=Info(type='Attribute')) = Leaf(start=5, end=8, info=Info(type='Name')).next_attribute
+
+tests/test_ast_nodes.py:92: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_ast_nodes.py::test_next_attribute - AssertionError: assert ...
+========================= 1 failed, 29 passed in 0.13s =========================

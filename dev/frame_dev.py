@@ -1,5 +1,6 @@
 from ast import AST, unparse
 from inspect import stack
+from textwrap import indent
 from typing import Any
 
 from tree_interval.core.frame_analyzer import FrameAnalyzer
@@ -54,7 +55,8 @@ class Nested:
             # Show statement with different marker styles
             print("\nDefault markers:", current_node.statement)
             underline_text = current_node.statement.as_text()
-            before = current_node.statement.before.removesuffix(".")
+            before = current_node.statement.before.replace(" ", "").replace(
+                "\n", "").removesuffix(".")
 
             # print(current_node.statement)
             flat_nodes = tree.flatten()
@@ -78,17 +80,21 @@ class Nested:
             return new
         else:
             import sys
-            msg = f"Attribute {name} not found in {before}"
             caller = stack()[1]
-            full_msg = f"{msg}\nFile \"{caller.filename}\", line {caller.lineno}, in {caller.function}\n{caller.code_context[0].strip()}"
             sys.tracebacklimit = 0  # Suppress traceback
-            raise AttributeError(full_msg)
+            raise AttributeError(
+                f"Attribute \033[1m{name}\033[0m not found in " +
+                f"\033[1m{before}\033[0m\n" +
+                f"   File \"{caller.filename}\"," +
+                f"line {caller.lineno}, in {caller.function}\n" +
+                f"{indent(underline_text,'   ')}")
 
 
 def test():
     a = Nested()
     a.b.c = 3
-    print((a.b.d.e.f.g))
+    print((a.
+           b.d.e.f.g))
     # print(a.b.c.e)
 
 

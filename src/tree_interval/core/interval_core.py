@@ -68,8 +68,9 @@ class Statement:
     """A complete breakdown of a code statement with marker annotations.
 
     This class provides functionality to represent and format code statements,
-    particularly focusing on attribute chains and nested expressions. It supports
-    customizable visual markers for different parts of the statement.
+    particularly focusing on attribute chains and nested expressions.
+    It supports customizable visual markers for different parts of
+    the statement.
 
     The statement is broken down into several components:
     - Top-level statement parts (marked with '^' by default)
@@ -81,7 +82,8 @@ class Statement:
     code analysis.
 
     Attributes:
-        top (PartStatement): The top-level statement containing before/after parts
+        top (PartStatement): The top-level statement containing
+            before/after parts
             Example: In 'print(obj.attr)', 'print(' is before, ')' is after
         before (str): Text before the current attribute/expression
             Example: In 'obj.attr1.attr2', 'obj.attr1.' is before
@@ -107,9 +109,9 @@ class Statement:
     before: str
     self: str
     after: str
-    top_marker: str = "^"
-    chain_marker: str = "~"
-    current_marker: str = "*"
+    top_marker: str = "~"
+    chain_marker: str = "^"
+    current_marker: str = "▲"
 
     def as_text(self,
                 top_marker=None,
@@ -125,9 +127,11 @@ class Statement:
         Args:
             top_marker (str, optional): Character for marking top-level parts.
                 Defaults to self.top_marker if None.
-            chain_marker (str, optional): Character for marking attribute chains.
+            chain_marker (str, optional): Character for marking
+                attribute chains.
                 Defaults to self.chain_marker if None.
-            current_marker (str, optional): Character for marking current attribute.
+            current_marker (str, optional): Character for marking current
+                attribute.
                 Defaults to self.current_marker if None.
 
         Returns:
