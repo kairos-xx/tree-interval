@@ -95,44 +95,43 @@ class Statement:
         full_text = (f"{self.top.before}{self.before}" +
                      f"{self.self}{self.after}{self.top.after}")
         
-        # Handle multiline text with markers under each line
+        # Handle multiline text by aligning markers with the last line
         lines = full_text.split('\n')
-        result = []
+        last_line = lines[-1] if lines else ""
         
-        # Add each line of text
-        for line in lines:
-            result.append(line)
-            
-            # Generate markers for this line
-            markers = ""
-            line_pos = 0
-            
-            # Check if this line has top statement parts
-            if self.top.before in line:
-                markers += tm * len(self.top.before)
-                line_pos += len(self.top.before)
-            
-            # Check for chain parts
-            if self.before in line:
-                markers += cm * len(self.before)
-                line_pos += len(self.before)
-            
-            if self.self in line:
-                markers += cum * len(self.self)
-                line_pos += len(self.self)
-            
-            if self.after in line:
-                markers += cm * len(self.after)
-                line_pos += len(self.after)
-            
-            if self.top.after in line:
-                markers += tm * len(self.top.after)
-            
-            # Add markers if any were generated for this line
-            if markers:
-                result.append(" " * (len(line) - len(markers)) + markers)
+        markers = ""
         
-        return "\n".join(result)
+        # Calculate markers for the last line
+        current_pos = 0
+        
+        # Mark top statement prefix if it's in the last line
+        top_before_lines = self.top.before.split('\n')
+        if len(top_before_lines) == len(lines):
+            markers += tm * len(top_before_lines[-1])
+            current_pos += len(top_before_lines[-1])
+        
+        # Mark the chain before
+        before_lines = self.before.split('\n')
+        if len(before_lines) == 1:
+            markers += cm * len(self.before)
+            current_pos += len(self.before)
+            
+        # Mark the current attribute
+        markers += cum * len(self.self)
+        current_pos += len(self.self)
+        
+        # Mark the remaining chain
+        after_lines = self.after.split('\n')
+        if len(after_lines) == 1:
+            markers += cm * len(self.after)
+            current_pos += len(self.after)
+        
+        # Mark top statement suffix if it's in the last line
+        top_after_lines = self.top.after.split('\n')
+        if len(top_after_lines) == 1:
+            markers += tm * len(self.top.after)
+        
+        return f"{full_text}\n{' ' * (len(last_line) - len(markers))}{markers}"
 
     @property
     def text(self) -> str:
