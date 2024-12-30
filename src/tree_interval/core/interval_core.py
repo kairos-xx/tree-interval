@@ -451,15 +451,15 @@ class Leaf:
         top_source = top.info.get("source", "") if top and top.info else ""
 
         # Split top statement into before/after parts
-        before_paren = ""
-        after_paren = ""
+        before_parent = ""
+        after_parent = ""
         if "(" in top_source:
-            before_paren, after_text = top_source.split("(", 1)
-            after_paren = ")" if ")" in after_text else ""
-        top_part = PartStatement(before=before_paren + "(", after=after_paren)
+            before_parent, after_text = top_source.split("(", 1)
+            after_parent = ")" if ")" in after_text else ""
+        top_part = PartStatement(before=before_parent + "(",
+                                 after=after_parent)
 
         # Get the current node's source using position
-        full_source = self.info.get("source", "") if self.info else ""
         next_attr = self.next_attribute
         prev_attr = self.previous_attribute
 
@@ -499,7 +499,7 @@ class Leaf:
             current = current.parent
         return None
 
-    @property 
+    @property
     def previous_attribute(self) -> Optional["Leaf"]:
         """Find the previous attribute in a chained attribute access.
         Example: obj.attr1.attr2 -> for attr2 node, returns attr1 node"""
@@ -509,8 +509,7 @@ class Leaf:
         # For attributes, look at children to find the previous one
         if self.children:
             for child in self.children:
-                if (child.info and 
-                    child.info.get("type") == "Attribute"):
+                if (child.info and child.info.get("type") == "Attribute"):
                     return child
 
         return None
