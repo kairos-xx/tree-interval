@@ -92,12 +92,14 @@ class Statement:
         cum = current_marker or self.current_marker
 
         # Build the full statement text
-        full_text = f"{self.top.before}{self.before}{self.self}{self.after}{self.top.after}"
+        full_text = (f"{self.top.before}{self.before}" +
+                     f"{self.self}{self.after}{self.top.after}")
+        print(full_text)
         markers = ""
 
         # Mark top statement prefix
         markers += tm * len(self.top.before)
-        
+
         # Mark the chain before current attribute
         markers += cm * len(self.before)
 
@@ -499,40 +501,34 @@ class Leaf:
     def statement(self) -> Statement:
         """Get statement information for this node using AST traversal."""
         top = self.top_statement
-        top_source = top.info.get("source", "") if top and top.info else ""
-
-        # Split top statement into before/after parts
-        before_parent = ""
-        after_parent = ""
-        if "(" in top_source:
-            before_parent, after_text = top_source.split("(", 1)
-            after_parent = ")" if ")" in after_text else ""
-        top_part = PartStatement(before=before_parent + "(",
-                                 after=after_parent)
-
-        # Get the current node's source using position
-        next_attr = self.next_attribute
-        prev_attr = self.previous_attribute
+        if self.parent and self.parent.ast_node is getattr(
+                top.ast_node, "targets", [top.ast_node])[0] if top else None:
+            top = None
+        next_attr = self
+        while True:
+            next_attr_candidate = getattr(next_attr, "next_attribute", None)
+            if next_attr_candidate is not None:
+                next_attr = next_attr_candidate
+            else:
+                break
 
         # Handle current attribute
-        current_source = ""
-        if self.info and self.info.get("type") == "Attribute":
-            current_source = self.info.get("source", "").split(".")[-1]
-
-        # Find preceding attribute nodes
-        before = ""
-        if prev_attr and prev_attr.info:
-            before = prev_attr.info.get("source", "") + "."
+        value = getattr(self.ast_node, "cleaned_value", "")
 
         # Find remaining attributes in chain for 'after' part
-        after = ""
-        if next_attr and next_attr.info:
-            after = "." + next_attr.info.get("source", "").split(".")[-1]
-
+        top_source = getattr(top, "info", {}).get("source", "")
+        top_start = (top.end if top else 0) or 0
+        top_part = PartStatement(
+            before=top_source[:(self.start or 0) - top_start],
+            after=top_source[((next_attr.end if next_attr else 0) or 0) -
+                             top_start:])
+        source = self.info.get("source", "") if self.info else ""
         return Statement(top=top_part,
-                         before=before,
-                         self=current_source,
-                         after=after)
+                         before=source.removesuffix(value),
+                         self=value,
+                         after=getattr(next_attr, "info",
+                                       {}).get("source",
+                                               "").removeprefix(source))
 
     @property
     def next_attribute(self) -> Optional["Leaf"]:
@@ -541,12 +537,13 @@ class Leaf:
         Returns None if this is not part of an attribute chain or is
                 the last attribute.
         """
-        if not self.info or self.info.get("type") != "Attribute":
+        check = {"Attribute", "Name"}
+        if not self.info or self.info.get("type") not in check:
             return None
 
         current = self.parent
         while current:
-            if current.info and current.info.get("type") == "Attribute":
+            if current.info and current.info.get("type") in check:
                 return current
             current = current.parent
         return None
@@ -555,13 +552,14 @@ class Leaf:
     def previous_attribute(self) -> Optional["Leaf"]:
         """Find the previous attribute in a chained attribute access.
         Example: obj.attr1.attr2 -> for attr2 node, returns attr1 node"""
-        if not self.info or self.info.get("type") != "Attribute":
+        check = {"Attribute", "Name"}
+        if not self.info or self.info.get("type") not in check:
             return None
 
         # For attributes, look at children to find the previous one
         if self.children:
             for child in self.children:
-                if (child.info and child.info.get("type") == "Attribute"):
+                if (child.info and child.info.get("type") in check):
                     return child
 
         return None

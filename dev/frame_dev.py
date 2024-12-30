@@ -16,7 +16,6 @@ class Nested:
         self.__dict__[name] = value
 
     def __getattr__(self, name: str) -> "Nested":
-
         print(f'\n{"#"*50}')
         print(f"attribute name: {name}")
         analyzer = FrameAnalyzer(stack()[1].frame)
@@ -28,12 +27,12 @@ class Nested:
             current_node_ast_node = getattr(current_node, "ast_node", None)
             print("Current attribute node: " +
                   (unparse(current_node_ast_node) if isinstance(
-                      current_node_ast_node, AST) else 'None'))
+                      current_node_ast_node, AST) else "None"))
             top_statement = current_node.top_statement
             top_statement_ast_node = getattr(top_statement, "ast_node", None)
             print("Top attribute node: " +
                   (unparse(top_statement_ast_node) if isinstance(
-                      top_statement_ast_node, AST) else 'None'))
+                      top_statement_ast_node, AST) else "None"))
             is_set = top_statement.is_set if top_statement else False
             print(f"Is set operation: {is_set}")
             next_attribute = current_node.next_attribute
@@ -41,23 +40,20 @@ class Nested:
             next_attribute_ast_node = getattr(next_attribute, "ast_node", None)
             print("Next attribute node: " +
                   (unparse(next_attribute_ast_node) if isinstance(
-                      next_attribute_ast_node, AST) else 'None'))
+                      next_attribute_ast_node, AST) else "None"))
 
             previous_attribute = current_node.previous_attribute
             previous_attribute_ast_node = getattr(previous_attribute,
                                                   "ast_node", None)
             print("Previous attribute node: " +
                   (unparse(previous_attribute_ast_node) if isinstance(
-                      previous_attribute_ast_node, AST) else 'None'))
+                      previous_attribute_ast_node, AST) else "None"))
 
             # Show statement with different marker styles
             print("\nDefault markers:")
-            print(current_node.statement)
             print(current_node.statement.text)
 
-            
-
-            #print(current_node.statement)
+            # print(current_node.statement)
             flat_nodes = tree.flatten()
             for node in flat_nodes:
                 if node.match(current_node):
@@ -85,8 +81,10 @@ class Nested:
 def test():
     a = Nested()
     a.b.c = 3
-    print(a.b.d.e.f.g)
-    #print(a.b.c.e)
+    print(
+        (
+            a.b.d.e.f.g))
+    # print(a.b.c.e)
 
 
 test()

@@ -5,7 +5,7 @@ This module provides functionality to build tree structures from Python
 Abstract Syntax Trees.
 """
 
-from ast import AST, parse, unparse, walk
+from ast import AST, get_source_segment, parse, walk
 from inspect import getsource
 from types import FrameType
 from typing import Optional, Tuple, Union
@@ -43,6 +43,7 @@ class AstTreeBuilder:
             source: Either a string containing source code or a frame object
                    from which source code can be extracted
         """
+        self.cleaned_value_key = "cleaned_value"
         self.source: Optional[str] = None
         self.indent_offset: int = 0
         self.line_offset: int = 0
@@ -74,7 +75,7 @@ class AstTreeBuilder:
         try:
             if self.source is None or not isinstance(self.source, str):
                 return
-  
+
             lines = self.source.splitlines()
             if not lines:
                 return
@@ -156,6 +157,69 @@ class AstTreeBuilder:
         ast_tree = parse(self.source)
         return self._build_tree_from_ast(ast_tree)
 
+    def _get_node_value(self, node: AST) -> str:
+        """
+        Extracts a meaningful value from various AST node types.
+
+        Args:
+            node (ast.AST): The AST node to inspect.
+
+        Returns:
+            str: The extracted value based on the node type.
+
+        Raises:
+            ValueError: If the node type is unsupported.
+        """
+        import ast
+        if isinstance(node, ast.Attribute):
+            """
+            For Attribute nodes, return the last attribute in the chain
+            """
+            return node.attr
+        elif isinstance(node, ast.Call):
+            """
+            For Call nodes, extract the function name being called
+            """
+            return self._get_node_value(node.func)
+        elif isinstance(node, ast.Name):
+            """
+            For Name nodes, return the identifier
+            """
+            return node.id
+        elif isinstance(node, ast.Subscript):
+            """
+            For Subscript nodes (e.g., a[b]),
+            extract the value being subscripted
+            """
+            return self._get_node_value(node.value)
+        elif isinstance(node, ast.BinOp):
+            """
+            For Binary Operations, you might want to extract operator
+            or operands.  Here, we'll extract the operator as a string
+            """
+            return type(node.op).__name__
+        elif isinstance(node, ast.Num):
+            """
+            For numeric literals"""
+            return str(node.n)
+        elif isinstance(node, ast.Str):
+            """
+            For string literals (Python <3.8)
+            """
+            return node.s
+        elif isinstance(node, ast.Constant):
+            """
+            For constants (Python 3.8+)
+            """
+            return str(node.value)
+        elif isinstance(node, ast.Lambda):
+            """
+            For lambda expressions, return a placeholder or specific attribute
+            """
+            return "lambda"
+        else:
+            return ""
+
     def _build_tree_from_ast(self, ast_tree: AST) -> Optional[Tree]:
         if not self.source:
             raise ValueError("No source code available")
@@ -168,6 +232,7 @@ class AstTreeBuilder:
         nodes_with_positions = []
 
         for node in walk(ast_tree):
+
             position = self._get_node_position(node, line_positions)
             if position:
                 leaf = Leaf(
@@ -175,9 +240,12 @@ class AstTreeBuilder:
                     info={
                         "type": node.__class__.__name__,
                         "name": getattr(node, 'name', node.__class__.__name__),
-                        "source": unparse(node)
+                        "source": get_source_segment(self.source, node)
                     },
                 )
+
+                setattr(node, self.cleaned_value_key,
+                        self._get_node_value(node))
                 leaf.ast_node = node
                 nodes_with_positions.append(
                     (position.start, position.end, leaf))
