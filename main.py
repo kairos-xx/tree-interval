@@ -554,11 +554,27 @@ def demonstrate_node_navigation():
         f" {function_def.children[0].info if function_def.children else None}")
 
 
+def demonstrate_statements():
+    """Demonstrates Statement functionality"""
+    print_header("Statement Examples", MAGENTA)
+    
+    # Basic statement
+    part = PartStatement(before="print(", after=")")
+    stmt = Statement(top=part, before="a.b.", self="d", after=".e")
+    
+    print("Default markers:")
+    print(stmt.text)
+    
+    print("\nCustom markers:")
+    print(stmt.as_text(top_marker="#", chain_marker="-", current_marker="@"))
+    print(stmt.as_text(top_marker="$", chain_marker=".", current_marker="*"))
+
 def main():
     print_header("Tree Interval Package Demo", BLUE)
     demonstrate_positions()
     demonstrate_find_nodes()
     demonstrate_tree_styling()
+    demonstrate_statements()
     demonstrate_leaves()
     demonstrate_tree_operations()
     demonstrate_frame_analyzer()
