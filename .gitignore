@@ -1,3 +1,6 @@
 **/__pycache__
 **/.DS_Strore
 .coverage
+/zip
+/logs
+/.*
