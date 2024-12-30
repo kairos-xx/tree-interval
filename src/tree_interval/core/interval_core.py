@@ -611,6 +611,10 @@ class Leaf:
         if not self.info or self.info.get("type") not in check:
             return None
 
+        # If we're a Name node inside an attribute chain, we shouldn't have a next
+        if self.info.get("type") == "Name":
+            return None
+
         current = self.parent
         while current:
             if current.info and current.info.get("type") in check:
