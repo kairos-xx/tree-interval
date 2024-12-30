@@ -5,7 +5,11 @@ from tree_interval.core.frame_analyzer import FrameAnalyzer
 from tree_interval.core.interval_core import LeafStyle
 
 
+from typing import Any
+
 class Nested:
+    def __init__(self) -> None:
+        self.__dict__: dict[str, Any] = {}
 
     def __getattr__(self, name):
 
