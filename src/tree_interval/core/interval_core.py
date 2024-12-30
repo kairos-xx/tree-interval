@@ -466,7 +466,7 @@ class Leaf:
         # Handle current attribute
         current_source = ""
         if self.info and self.info.get("type") == "Attribute":
-            current_source = self.info.get("name", "")
+            current_source = self.info.get("source", "").split(".")[-1]
 
         # Find preceding attribute nodes
         before = ""
