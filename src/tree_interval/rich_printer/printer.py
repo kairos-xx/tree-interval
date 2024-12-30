@@ -44,15 +44,23 @@ class RichTreePrinter:
         self.config = config or RichPrintConfig()
         self.console = console or Console()
 
-    def print_tree(self, tree: Tree) -> None:
-        """Print tree using Rich formatting."""
-        if not tree.root:
+    def print_tree(self, tree: Tree, root: Optional[Leaf] = None) -> None:
+        """
+        Print tree using Rich formatting.
+        
+        Args:
+            tree: The tree to print
+            root: Optional root Leaf to start printing from.
+                 If None, uses tree.root.
+        """
+        root_node = root if root is not None else tree.root
+        if not root_node:
             self.console.print("[red]Empty tree")
             return
 
-        rich_tree = RichTree(self._format_node(tree.root, is_root=True),
+        rich_tree = RichTree(self._format_node(root_node, is_root=True),
                              guide_style=self.config.guide_style)
-        self._add_children(tree.root, rich_tree)
+        self._add_children(root_node, rich_tree)
         self.console.print(rich_tree)
 
     def _format_node(self, node: Leaf, is_root: bool = False) -> str:

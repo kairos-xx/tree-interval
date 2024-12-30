@@ -42,7 +42,8 @@ class TreeVisualizer:
 
     @staticmethod
     def visualize(tree: Any,
-                  config: Optional[VisualizationConfig] = None) -> None:
+                  config: Optional[VisualizationConfig] = None,
+                  root: Optional[Any] = None) -> None:
         """
         Visualize a tree structure with customizable formatting options.
 
@@ -51,11 +52,14 @@ class TreeVisualizer:
             config: An optional VisualizationConfig object for
                     customizing the output. If None, uses the
                     default configuration.
+            root: Optional root Leaf to start visualization from.
+                 If None, uses tree.root.
         """
         if config is None:
             config = DEFAULT_CONFIG
 
-        if not tree.root:
+        root_node = root if root is not None else tree.root
+        if not root_node:
             print("Empty tree")
             return
 
