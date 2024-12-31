@@ -72,8 +72,10 @@ class Nested:
             f"\033[1m{before}\033[0m\n" + indent(
                 f'File "{caller.filename}"' + f'line {caller.lineno}, in ' +
                 f'{caller.function}\n ' + f'{underline_text}', '   '))
+def xpto():
+    print("TEST")
+    a = Nested()
+    a.b = 3
+    print(a.c)
 
-print("TEST")
-a = Nested()
-a.b = 3
-print(a.c)
+xpto()
