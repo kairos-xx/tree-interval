@@ -52,24 +52,29 @@ class FrameAnalyzer:
             return None
         # If the current node is not found yet then we search for it
         if self.current_node is None:
-            # Find all nodes at the current line number with a more flexible matching
+            # Get indent offset from ast_builder
+            indent_offset = getattr(self.ast_builder, 'indent_offset', 0)
+            
+            # Find all nodes at the current line number
             matching_nodes = []
             for node in self.tree.flatten():
-                if (hasattr(node, 'position') and node.position and 
-                    node.position.lineno is not None and 
-                    self.frame_position.lineno is not None):
-                    # Allow for a small line number variation
-                    line_diff = abs(node.position.lineno - self.frame_position.lineno)
-                    if line_diff <= 1:  # Accept nodes within 1 line
-                        matching_nodes.append(node)
+                if hasattr(node, 'position') and node.position:
+                    # Get adjusted column offset considering indentation
+                    node_col = node.position.col_offset
+                    if node_col is not None:
+                        node_col = max(0, node_col - indent_offset)
+                        
+                    frame_col = self.frame_position.col_offset
+                    if frame_col is not None:
+                        frame_col = max(0, frame_col - indent_offset)
+                        
+                    if (node.position.lineno == self.frame_position.lineno and
+                        node_col is not None and frame_col is not None):
+                        matching_nodes.append((node, abs(node_col - frame_col)))
             
-            # Find node with closest position match
+            # Find the node with smallest column offset difference
             if matching_nodes:
-                self.current_node = min(
-                    matching_nodes,
-                    key=lambda n: abs(n.position.col_offset - self.frame_position.col_offset) + 
-                                abs(n.position.lineno - self.frame_position.lineno) * 2
-                )
+                self.current_node = min(matching_nodes, key=lambda x: x[1])[0]
         return self.current_node
 
     def build_tree(self) -> Optional[Tree]:
