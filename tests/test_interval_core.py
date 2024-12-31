@@ -1,5 +1,7 @@
 
 
+from src.tree_interval import Leaf, Position
+
 def test_leaf_statement_property():
     root = Leaf(Position(0, 100), info={"type": "Module"})
     child = Leaf(Position(10, 50), info={"type": "Call"})

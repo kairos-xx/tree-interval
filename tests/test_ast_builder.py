@@ -20,9 +20,10 @@ def test_build_from_source():
     builder = AstTreeBuilder(source)
     tree = builder.build()
     
-    assert tree is not None
+    assert tree is not None 
     assert tree.root is not None
-    assert tree.root.info["type"] == "Module"
+    assert isinstance(tree.root.info, dict)
+    assert tree.root.info.get("type") == "Module"
 
 def test_node_value_extraction():
     source = "x.y.z(1 + 2)"
