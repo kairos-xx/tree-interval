@@ -270,15 +270,10 @@ class Position:
             pos = frame_info.positions if frame_info else None
             if pos and frame and frame.f_code:
                 # Use frame's line number and positions' column offsets
-                self._lineno = pos.lineno if hasattr(
-                    pos, "lineno") else frame.f_lineno
-                self._end_lineno = pos.end_lineno if hasattr(
-                    pos, "end_lineno") else frame.f_lineno
-                self._col_offset = pos.col_offset if hasattr(
-                    pos, "col_offset") else 0
-                self._end_col_offset = pos.end_col_offset if hasattr(
-                    pos, "end_col_offset") else len(pos.co_code) if hasattr(
-                        pos, "co_code") else 0
+                self._lineno = pos.lineno if hasattr(pos, "lineno") else frame.f_lineno 
+                self._end_lineno = pos.end_lineno if hasattr(pos, "end_lineno") else frame.f_lineno
+                self._col_offset = pos.col_offset if hasattr(pos, "col_offset") else 0
+                self._end_col_offset = pos.end_col_offset if hasattr(pos, "end_col_offset") else len(pos.co_code) if hasattr(pos, "co_code") else 0
                 line_offset = frame.f_code.co_firstlineno - 1 if frame.f_code.co_firstlineno else 0
                 if source is not None and isinstance(source, str):
                     lines = source.split("\n")
@@ -470,7 +465,12 @@ class Position:
         return None
 
     def __eq__(self, other: Any) -> bool:
-        return self.start == other.start and self.end == other.end
+        if not isinstance(other, Position):
+            return False
+        return (self._lineno == other._lineno and 
+                self._end_lineno == other._end_lineno and
+                self._col_offset == other._col_offset and 
+                self._end_col_offset == other._end_col_offset)
 
 
 class Leaf:
