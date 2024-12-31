@@ -269,10 +269,11 @@ class Position:
                     source = None
             pos = frame_info.positions if frame_info else None
             if pos and frame and frame.f_code:
-                self._lineno = pos.lineno if hasattr(pos, "lineno") else frame.f_lineno
-                self._end_lineno = pos.end_lineno if hasattr(pos, "end_lineno") else self._lineno
+                # Use frame positions directly without modification
+                self._lineno = frame.f_lineno
+                self._end_lineno = frame.f_lineno  # Same line for frame positions
                 self._col_offset = pos.col_offset if hasattr(pos, "col_offset") else 0
-                self._end_col_offset = pos.end_col_offset if hasattr(pos, "end_col_offset") else 0
+                self._end_col_offset = pos.end_col_offset if hasattr(pos, "end_col_offset") else len(frame_info.code_context[0]) if frame_info.code_context else 0
                 line_offset = frame.f_code.co_firstlineno - 1 if frame.f_code.co_firstlineno else 0
                 if source is not None and isinstance(source, str):
                     lines = source.split("\n")
