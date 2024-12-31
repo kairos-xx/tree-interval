@@ -8,7 +8,7 @@ collected 45 items
 tests/test_ast_builder.py .FFF                                           [  8%]
 tests/test_ast_nodes.py ......                                           [ 22%]
 tests/test_frame_analyzer.py ...                                         [ 28%]
-tests/test_interval_core.py FFFF                                         [ 37%]
+tests/test_interval_core.py ....                                         [ 37%]
 tests/test_rich_printer.py .....                                         [ 48%]
 tests/test_styling.py ......                                             [ 62%]
 tests/test_tree_core.py ..............                                   [ 93%]
@@ -29,10 +29,13 @@ ____________________________ test_build_from_source ____________________________
     
         assert tree is not None
         assert tree.root is not None
->       assert tree.root.info["type"] == "Module"
-E       TypeError: 'NoneType' object is not subscriptable
+>       assert isinstance(tree.root.info, dict)
+E       assert False
+E        +  where False = isinstance(None, dict)
+E        +    where None = Leaf(start=0, end=34, info=None).info
+E        +      where Leaf(start=0, end=34, info=None) = <src.tree_interval.core.interval_core.Tree object at 0x7f6a069d6850>.root
 
-tests/test_ast_builder.py:25: TypeError
+tests/test_ast_builder.py:25: AssertionError
 __________________________ test_node_value_extraction __________________________
 
     def test_node_value_extraction():
@@ -44,15 +47,15 @@ __________________________ test_node_value_extraction __________________________
         nodes = tree.flatten()
 >       call_node = next(n for n in nodes if n.info["type"] == "Call")
 
-tests/test_ast_builder.py:34: 
+tests/test_ast_builder.py:35: 
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-.0 = <list_iterator object at 0x7fe435a737c0>
+.0 = <list_iterator object at 0x7f6a0660c2b0>
 
 >   call_node = next(n for n in nodes if n.info["type"] == "Call")
 E   TypeError: 'NoneType' object is not subscriptable
 
-tests/test_ast_builder.py:34: TypeError
+tests/test_ast_builder.py:35: TypeError
 ____________________________ test_position_tracking ____________________________
 
     def test_position_tracking():
@@ -66,49 +69,17 @@ ____________________________ test_position_tracking ____________________________
     
 >       func_node = next(n for n in tree.flatten() if n.info["type"] == "FunctionDef")
 
-tests/test_ast_builder.py:46: 
+tests/test_ast_builder.py:47: 
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-.0 = <list_iterator object at 0x7fe435a3b310>
+.0 = <list_iterator object at 0x7f6a06667ac0>
 
 >   func_node = next(n for n in tree.flatten() if n.info["type"] == "FunctionDef")
 E   TypeError: 'NoneType' object is not subscriptable
 
-tests/test_ast_builder.py:46: TypeError
-_________________________ test_leaf_statement_property _________________________
-
-    def test_leaf_statement_property():
->       root = Leaf(Position(0, 100), info={"type": "Module"})
-E       NameError: name 'Leaf' is not defined
-
-tests/test_interval_core.py:4: NameError
-__________________________ test_leaf_attribute_chain ___________________________
-
-    def test_leaf_attribute_chain():
->       root = Leaf(Position(0, 100), info={"type": "Attribute"})
-E       NameError: name 'Leaf' is not defined
-
-tests/test_interval_core.py:11: NameError
-____________________________ test_nested_attributes ____________________________
-
-    def test_nested_attributes():
->       leaf = Leaf(Position(0, 100), info={"type": "Module"})
-E       NameError: name 'Leaf' is not defined
-
-tests/test_interval_core.py:19: NameError
-___________________________ test_leaf_serialization ____________________________
-
-    def test_leaf_serialization():
->       leaf = Leaf(Position(0, 100), info={"name": "test"})
-E       NameError: name 'Leaf' is not defined
-
-tests/test_interval_core.py:28: NameError
+tests/test_ast_builder.py:47: TypeError
 =========================== short test summary info ============================
-FAILED tests/test_ast_builder.py::test_build_from_source - TypeError: 'NoneTy...
+FAILED tests/test_ast_builder.py::test_build_from_source - assert False
 FAILED tests/test_ast_builder.py::test_node_value_extraction - TypeError: 'No...
 FAILED tests/test_ast_builder.py::test_position_tracking - TypeError: 'NoneTy...
-FAILED tests/test_interval_core.py::test_leaf_statement_property - NameError:...
-FAILED tests/test_interval_core.py::test_leaf_attribute_chain - NameError: na...
-FAILED tests/test_interval_core.py::test_nested_attributes - NameError: name ...
-FAILED tests/test_interval_core.py::test_leaf_serialization - NameError: name...
-========================= 7 failed, 38 passed in 0.16s =========================
+========================= 3 failed, 42 passed in 0.17s =========================
