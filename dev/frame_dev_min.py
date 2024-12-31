@@ -21,7 +21,7 @@ class Nested:
         tree = analyzer.build_tree()
         print(
             caller.positions
-        )  # THIS POSITION SHOULD BE THE SAME AS THE FRAME POSITION BUT ITS: Positions(lineno=73, end_lineno=73, col_offset=0, end_col_offset=3)
+        )  # THIS POSITION SHOULD BE THE SAME AS THE FRAME POSITION BUT ITS: Positions(lineno=75, end_lineno=75, col_offset=6, end_col_offset=9)
         print(
             
             Positions(
@@ -30,7 +30,7 @@ class Nested:
                 current_node.position.col_offset,
                 current_node.position.end_col_offset,
             )
-        )  # THIS IS THE FRAME POSITION: Positions(lineno=71, end_lineno=71, col_offset=0, end_col_offset=5)
+        )  # THIS IS THE FRAME POSITION: Positions(lineno=73, end_lineno=73, col_offset=4, end_col_offset=10)
         if current_node and tree:
             new = None
             top_statement = current_node.top_statement
@@ -71,5 +71,5 @@ class Nested:
 
 print("TEST")
 a = Nested()
-a.b.c.d.e.f.g.g.g = 3
-print((a.b.c.e.f.g))
+a.b = 3
+print(a.c)
