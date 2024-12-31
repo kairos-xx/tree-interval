@@ -102,11 +102,32 @@ def commit_changes():
         # Clean merge conflicts in all files first
         clean_all_files()
 
-        subprocess.run(["git", "add", "."], check=True)
+        # First check if we're in a git repository
+        try:
+            subprocess.run(["git", "rev-parse", "--is-inside-work-tree"], check=True, capture_output=True)
+        except subprocess.CalledProcessError:
+            subprocess.run(["git", "init"], check=True)
+            
+        # Add all files
+        subprocess.run(["git", "add", "-A"], check=True)
+        
+        # Create commit message
         message = ("Auto commit:" +
                    f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        
+        # Configure git if needed
+        subprocess.run(["git", "config", "--global", "user.email", "noreply@replit.com"], check=True)
+        subprocess.run(["git", "config", "--global", "user.name", "Replit"], check=True)
+        
+        # Commit changes
         subprocess.run(["git", "commit", "-m", message], check=True)
-        subprocess.run(["git", "push", "origin", "replit"], check=True)
+        
+        # Push to main branch
+        try:
+            subprocess.run(["git", "push", "origin", "main"], check=True)
+        except subprocess.CalledProcessError:
+            # If main branch push fails, try master
+            subprocess.run(["git", "push", "origin", "master"], check=True)
         print("✅ Changes committed and pushed")
     except Exception as e:
         print(f"❌ Error in git operations: {e}")
