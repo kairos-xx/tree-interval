@@ -51,7 +51,7 @@ def clean_merge_conflicts(file_path: str) -> None:
             elif line.strip().startswith("======="):
                 skip_mode = True
                 continue
-            elif line.strip().startswith(">>>>>>> origin/main"):
+            elif line.strip().startswith(">>>>>>> origin/replit"):
                 skip_mode = False
                 continue
 
@@ -106,7 +106,7 @@ def commit_changes():
         message = ("Auto commit:" +
                    f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         subprocess.run(["git", "commit", "-m", message], check=True)
-        subprocess.run(["git", "push", "origin", "main"], check=True)
+        subprocess.run(["git", "push", "origin", "replit"], check=True)
         print("✅ Changes committed and pushed")
     except Exception as e:
         print(f"❌ Error in git operations: {e}")
