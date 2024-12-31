@@ -57,18 +57,23 @@ class FrameAnalyzer:
             
             # Find all nodes at the current line number
             matching_nodes = []
+            frame_first_lineno = self.frame.f_code.co_firstlineno
             for node in self.tree.flatten():
                 if hasattr(node, 'position') and node.position:
+                    # Adjust node line number relative to frame's first line
+                    node_lineno = node.position.lineno - frame_first_lineno + 1 if node.position.lineno else None
+                    frame_lineno = self.frame_position.lineno - frame_first_lineno + 1 if self.frame_position.lineno else None
+                    
                     # Get adjusted column offset considering indentation
                     node_col = node.position.col_offset
                     if node_col is not None:
                         node_col = max(0, node_col - indent_offset)
-                        
+                    
                     frame_col = self.frame_position.col_offset
                     if frame_col is not None:
                         frame_col = max(0, frame_col - indent_offset)
-                        
-                    if (node.position.lineno == self.frame_position.lineno and
+                    
+                    if (node_lineno == frame_lineno and
                         node_col is not None and frame_col is not None):
                         matching_nodes.append((node, abs(node_col - frame_col)))
             
