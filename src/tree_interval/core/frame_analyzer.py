@@ -60,20 +60,22 @@ class FrameAnalyzer:
             frame_first_lineno = self.frame.f_code.co_firstlineno
             for node in self.tree.flatten():
                 if hasattr(node, 'position') and node.position:
-                    # Adjust line numbers relative to frame's first line and normalize
+                    # Normalize line numbers using frame's first line
                     node_lineno = node.position.lineno
-                    if node_lineno is not None:
-                        node_lineno = node_lineno - frame_first_lineno + 1
-                    
                     frame_lineno = self.frame_position.lineno
-                    if frame_lineno is not None:
-                        frame_lineno = frame_lineno - frame_first_lineno + 1
                     
-                    # Adjust column offsets
+                    if node_lineno is not None and frame_lineno is not None:
+                        node_lineno = node_lineno - frame_first_lineno
+                        frame_lineno = frame_lineno - frame_first_lineno
+                    
+                    # Handle column offsets with proper boundary checks
                     node_col = node.position.col_offset
+                    node_end_col = node.position.end_col_offset
+                    
                     if node_col is not None:
                         node_col = max(0, node_col - indent_offset)
-                        node_end_col = (node.position.end_col_offset or node_col + 1) - indent_offset
+                        # Ensure node_end_col has a valid bounded value
+                        node_end_col = max(node_col + 1, (node_end_col or node_col + 1) - indent_offset)
                     
                     frame_col = self.frame_position.col_offset
                     frame_end_col = self.frame_position.end_col_offset
