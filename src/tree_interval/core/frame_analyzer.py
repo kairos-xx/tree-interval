@@ -52,9 +52,18 @@ class FrameAnalyzer:
             return None
         # If the current node is not found yet then we search for it
         if self.current_node is None:
-            # Find best match for the current frame position
-            self.current_node = self.tree.find_best_match(
-                self.frame_position.start, self.frame_position.end)
+            # Find all nodes at the current line number
+            matching_nodes = [
+                node for node in self.tree.flatten()
+                if hasattr(node, 'position') and 
+                node.position.lineno == self.frame_position.lineno
+            ]
+            # Find the node with closest column offset
+            if matching_nodes:
+                self.current_node = min(
+                    matching_nodes,
+                    key=lambda n: abs(n.position.col_offset - self.frame_position.col_offset)
+                )
         return self.current_node
 
     def build_tree(self) -> Optional[Tree]:
