@@ -17,20 +17,13 @@ class Nested:
         self.__dict__[name] = value
 
     def make_tree(self, name, caller, analyzer):
-        current_node = analyzer.find_current_node()
         tree = analyzer.build_tree()
-        print(
-            caller.positions
-        )  # THIS POSITION SHOULD BE THE SAME AS THE FRAME POSITION BUT ITS: Positions(lineno=75, end_lineno=75, col_offset=6, end_col_offset=9)
-        print(
-            
-            Positions(
-                current_node.position.lineno,
-                current_node.position.end_lineno,
-                current_node.position.col_offset,
-                current_node.position.end_col_offset,
-            )
-        )  # THIS IS THE FRAME POSITION: Positions(lineno=73, end_lineno=73, col_offset=4, end_col_offset=10)
+        # Ensure we use frame positions to find the node
+        analyzer.frame_position.lineno = caller.positions.lineno
+        analyzer.frame_position.end_lineno = caller.positions.end_lineno
+        analyzer.frame_position.col_offset = caller.positions.col_offset
+        analyzer.frame_position.end_col_offset = caller.positions.end_col_offset
+        current_node = analyzer.find_current_node()
         if current_node and tree:
             new = None
             top_statement = current_node.top_statement
