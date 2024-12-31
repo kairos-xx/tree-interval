@@ -26,6 +26,7 @@ from dataclasses import dataclass
 from dis import Positions as disposition
 from inspect import getframeinfo, getsource
 from json import dumps, loads
+from textwrap import dedent
 from types import FrameType
 from typing import (
     TYPE_CHECKING,
@@ -140,6 +141,7 @@ class Statement:
                     print(obj.attr.value)
                     ^^^^^~~~~***~~~~~^
         """
+
         top_marker = top_marker or self.top_marker
         chain_marker = chain_marker or self.chain_marker
         current_marker = current_marker or self.current_marker
@@ -251,79 +253,36 @@ class Position:
         self._end_col_offset: Optional[int] = None
         if isinstance(start, FrameType):
             frame = start
-            frame_info = getframeinfo(frame)
-            common_indent = 0
-            if source is None:
-                try:
-                    source = getsource(frame.f_code)
-                    # Calculate indentation
-                    lines = source.splitlines()
-                    common_indent = min(
-                        len(line) - len(line.lstrip()) for line in lines
-                        if line.strip())
-                    # Remove indentation and join
-                    source = "\n".join(
-                        line[common_indent:] if line.strip() else line
-                        for line in lines)
-                except (OSError, TypeError):
-                    source = None
-            pos = frame_info.positions if frame_info else None
-            if pos and frame and frame.f_code:
-                line_offset = (frame.f_code.co_firstlineno -
-                               1 if frame.f_code.co_firstlineno else 0)
-                self._lineno = pos.lineno if hasattr(pos, "lineno") else None
-                self._end_lineno = (pos.end_lineno if hasattr(
-                    pos, "end_lineno") else None)
-                self._col_offset = (pos.col_offset if hasattr(
-                    pos, "col_offset") else None)
-                self._end_col_offset = (pos.end_col_offset if hasattr(
-                    pos, "end_col_offset") else None)
-                if source is not None and isinstance(source, str):
-                    lines = source.split("\n")
-                    line_offset_val = (int(line_offset) if isinstance(
-                        line_offset, int) else 0)
-                    if (self._lineno is not None
-                            and self._col_offset is not None and lines):
-                        adjusted_lineno = (int(self._lineno) if isinstance(
-                            self._lineno, int) else 1)
-                        line_idx = max(0,
-                                       adjusted_lineno - line_offset_val - 1)
-                        pos_start = (sum(
-                            len(line) + 1 - common_indent
-                            for line in lines[:line_idx]) if lines else 0)
-                        pos_start = pos_start + (self._col_offset
-                                                 if self._col_offset
-                                                 is not None else 0)
-                        if (self._end_lineno is not None
-                                and self._end_col_offset is not None):
-                            end_line_idx = max(
-                                0,
-                                (int(self._end_lineno) if isinstance(
-                                    self._end_lineno, int) else 1) -
-                                line_offset_val - 1,
-                            )
-                            pos_end = (sum(
-                                len(line) + 1 - common_indent
-                                for line in lines[:end_line_idx])
-                                       if lines else pos_start)
-                            pos_end = pos_end + (self._end_col_offset
-                                                 if self._end_col_offset
-                                                 is not None else 0)
-                        else:
-                            pos_end = pos_start
-                        self.start = pos_start
-                        self.end = pos_end
 
-            elif pos and hasattr(pos, "col_offset") and hasattr(
-                    pos, "end_col_offset"):
-                self.start = (pos.col_offset if hasattr(pos, "col_offset")
-                              and pos.col_offset is not None else 0)
-                self.end = (pos.end_col_offset
-                            if hasattr(pos, "end_col_offset")
-                            and pos.end_col_offset is not None else 0)
-            else:
-                self.start = 0
-                self.end = 0
+            def split(source):
+                return source.splitlines(True)
+
+            source = getsource(frame)
+            source_lines = split(source)
+            indent_size = len(source_lines[0]) - len(split(dedent(source))[0])
+            first_line = frame.f_code.co_firstlineno or 1
+            frame_positions = getframeinfo(frame).positions
+            self.start, self.end = (
+                sum(
+                    len(source_lines[i]) + indent_size for i in range(
+                        (getattr(frame_positions, "lineno", 1) or 1) -
+                        (first_line or 1))) +
+                (getattr(frame_positions, "col_offset", 0) or 0),
+                sum(
+                    len(source_lines[i]) + indent_size for i in range(
+                        (getattr(frame_positions, "end_lineno", 1) or 1) -
+                        (first_line or 1))) +
+                (getattr(frame_positions, "end_col_offset", 0) or 0),
+            )
+            source_lines = split(source[self.start:self.end])
+            self._lineno = 1
+            self._end_lineno = len(source_lines)
+            self._col_offset = self.start
+            self._end_col_offset = (
+                self.end -
+                sum(len(source_lines[i])
+                    for i in range(self._end_lineno - 1)) - self.start)
+
         else:
             if isinstance(start, disposition):
                 if isinstance(end, str):
@@ -437,38 +396,13 @@ class Position:
     def __str__(self) -> str:
         return f"Position(start={self.start}, end={self.end})"
 
-    def find_parent(self, criteria: Callable[["Leaf"],
-                                             bool]) -> Optional["Leaf"]:
-        """Find first parent that matches the criteria."""
-        if not self.parent:
-            return None
-        if criteria(self.parent):
-            return self.parent
-        return self.parent.find_parent(criteria)
-
-    def find_child(self, criteria: Callable[["Leaf"],
-                                            bool]) -> Optional["Leaf"]:
-        """Find first child that matches the criteria."""
-        for child in self.children:
-            if criteria(child):
-                return child
-            result = child.find_child(criteria)
-            if result:
-                return result
-        return None
-
-    def find_sibling(self, criteria: Callable[["Leaf"],
-                                              bool]) -> Optional["Leaf"]:
-        """Find first sibling that matches the criteria."""
-        if not self.parent:
-            return None
-        for child in self.parent.children:
-            if child != self and criteria(child):
-                return child
-        return None
-
     def __eq__(self, other: Any) -> bool:
-        return self.start == other.start and self.end == other.end
+        if not isinstance(other, Position):
+            return False
+        return (self._lineno == other._lineno
+                and self._end_lineno == other._end_lineno
+                and self._col_offset == other._col_offset
+                and self._end_col_offset == other._end_col_offset)
 
 
 class Leaf:
@@ -569,9 +503,6 @@ class Leaf:
     def statement(self) -> Statement:
         """Get statement information for this node using AST traversal."""
         top = self.top_statement
-        if (self.parent and self.parent.ast_node is getattr(
-                top.ast_node, "targets", [top.ast_node])[0] if top else None):
-            top = None
         next_attr = self
         while True:
             next_attr_candidate = getattr(next_attr, "next_attribute", None)
@@ -585,6 +516,7 @@ class Leaf:
 
         # Find remaining attributes in chain for 'after' part
         top_source = getattr(top, "info", {}).get("source", "")
+        # print("---",top_source)
         top_start = (top.end if top else 0) or 0
         top_part = PartStatement(
             before=top_source[:(self.start or 0) - top_start],
@@ -681,7 +613,9 @@ class Leaf:
         best_match_distance = (float("inf") if best_match_distance is None else
                                best_match_distance)
         distance = calc_distance(self)
+
         if distance < best_match_distance:
+
             best_match_distance = distance
         best_match = self
         for child in self.children:
@@ -692,6 +626,7 @@ class Leaf:
                 if distance < best_match_distance:
                     best_match_distance = distance
                     best_match = child_match
+
         return best_match
 
     def find_common_ancestor(self, other: "Leaf") -> Optional["Leaf"]:

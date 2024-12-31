@@ -8,25 +8,11 @@ Abstract Syntax Trees.
 from ast import AST, get_source_segment, parse, walk
 from dis import Positions as disposition
 from inspect import getsource
+from textwrap import dedent
 from types import FrameType
 from typing import Optional, Union
 
 from .interval_core import Leaf, Position, Tree
-
-
-def node_positions(source, positions):
-
-    source_lines = source.splitlines(True)
-    return (
-        sum(
-            len(source_lines[i])
-            for i in range((getattr(positions, "lineno", 1) or 1) - 1)) +
-        (getattr(positions, "col_offset", 0) or 0),
-        sum(
-            len(source_lines[i])
-            for i in range((getattr(positions, "end_lineno", 1) or 1) - 1)) +
-        (getattr(positions, "end_col_offset", 0) or 0),
-    )
 
 
 class AstTreeBuilder:
@@ -107,13 +93,13 @@ class AstTreeBuilder:
         if not self.source:
             raise ValueError("No source code available")
 
-        tree = parse(self.source)
+        tree = parse(dedent(self.source))
         return self._build_tree_from_ast(tree)
 
     def build_from_frame(self) -> Optional[Tree]:
         if not self.source:
             return None
-        ast_tree = parse(self.source)
+        ast_tree = parse(dedent(self.source))
         return self._build_tree_from_ast(ast_tree)
 
     def _get_node_value(self, node: AST) -> str:
@@ -159,11 +145,12 @@ class AstTreeBuilder:
             or operands.  Here, we'll extract the operator as a string
             """
             return type(node.op).__name__
-        elif version_info < (3, 14) and isinstance(node, ast.Num):
+        elif version_info < (3, 8) and isinstance(node, ast.Num):
             """
-            For numeric literals"""
+            For numeric literals (Python <3.8)
+            """
             return str(node.n)
-        elif version_info < (3, 14) and isinstance(node, ast.Str):
+        elif version_info < (3, 8) and isinstance(node, ast.Str):
             """
             For string literals (Python <3.8)
             """
@@ -198,7 +185,7 @@ class AstTreeBuilder:
                     info={
                         "type": node.__class__.__name__,
                         "name": getattr(node, 'name', node.__class__.__name__),
-                        "source": get_source_segment(self.source, node)
+                        "source": get_source_segment(dedent(self.source), node)
                     },
                 )
 
@@ -246,13 +233,3 @@ class AstTreeBuilder:
                 result_tree.add_leaf(leaf)
                 processed.add(leaf)
         return result_tree
-
-    def _line_col_to_pos(self, lineno: int, col_offset: int) -> Optional[int]:
-        """Convert line and column to absolute position."""
-        if not self.source or not isinstance(self.source, str):
-            return None
-        lines = self.source.splitlines()
-        if not lines:
-            return None
-        pos = sum(len(line) + 1 for line in lines[:lineno - 1]) + col_offset
-        return pos

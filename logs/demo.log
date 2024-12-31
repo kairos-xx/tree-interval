@@ -17,8 +17,8 @@ Leaf from args: Leaf(start=60, end=90, info='Using Args')
 === Tree Operations ===
 
 === Styling Examples ===
-[1;32mModule [0-100] size=100 info=Info(type='Module')[0m
-└── [34mFunctionDef [10-50] size=40 info=Info(type='FunctionDef')[0m
+[1;32m[0-100] size=100 info=Info(type='Module')[0m
+└── [34m[10-50] size=40 info=Info(type='FunctionDef')[0m
 Tree created with source: Example Code
 Basic Tree:
 [94m(0, 100) size=100 info='Root'[0m
@@ -32,9 +32,9 @@ Default visualization:
 └── [93m(50, 90) size=40 info='Child 2'[0m
 
 With position objects:
-[94mPosition(start=0, end=100, lineno=None, end_lineno=None, col_offset=None, end_col_offset=100, size=100) size=100 info='Root'[0m
-├── [93mPosition(start=10, end=40, lineno=None, end_lineno=None, col_offset=None, end_col_offset=30, size=30) size=30 info='Child 1'[0m
-└── [93mPosition(start=50, end=90, lineno=None, end_lineno=None, col_offset=None, end_col_offset=40, size=40) size=40 info='Child 2'[0m
+[94mPosition(start=0, end=100, lineno=None, end_lineno=None, col_offset=None, end_col_offset=100, size=100) size=100 info=...[0m
+├── [93mPosition(start=10, end=40, lineno=None, end_lineno=None, col_offset=None, end_col_offset=30, size=30) size=30 info=...[0m
+└── [93mPosition(start=50, end=90, lineno=None, end_lineno=None, col_offset=None, end_col_offset=40, size=40) size=40 info=...[0m
 
 With tuples and children count:
 [94m(0, 100) info='Root' children=2[0m
@@ -53,8 +53,8 @@ Default view:
 └── [93m(20, 60) size=40 info='If Block'[0m
 
 Detailed position view:
-[94mPosition(start=0, end=100, lineno=1, end_lineno=10, col_offset=0, end_col_offset=4, size=100) size=100 info='Function'[0m
-└── [93mPosition(start=20, end=60, lineno=3, end_lineno=5, col_offset=4, end_col_offset=8, size=40) size=40 info='If Block'[0m
+[94mPosition(start=0, end=100, lineno=1, end_lineno=10, col_offset=0, end_col_offset=4, size=100) size=100 info=...[0m
+└── [93mPosition(start=20, end=60, lineno=3, end_lineno=5, col_offset=4, end_col_offset=8, size=40) size=40 info=...[0m
 
 === Dot Notation Examples ===
 Parent: {}
@@ -78,16 +78,29 @@ print(a.b.d.e)
 Custom markers:
 print(a.b.d.e)
 ######----@--#
+
+Visualize from Root:
+[94m(0, 100) size=100 info='Root'[0m
+└── [92m(10, 50) size=40 info='Child'[0m
+        └── [93m(20, 30) size=10 info='Grandchild'[0m
+
+Visualize from Child:
+[94m(10, 50) size=40 info='Child'[0m
+└── [93m(20, 30) size=10 info='Grandchild'[0m
+
+Rich visualization from Child:
+[1;32m[10-50] size=40 info=Child[0m
+└── [36m[20-30] size=10 info=Grandchild[0m
 === Rich Printer Examples ===
 
 Basic Tree:
-[1;32mRoot Node [0-100] size=100 info=Root Node[0m
-├── [36mFirst Child [10-40] size=30 info=First Child[0m
-└── [36mSecond Child [50-90] size=40 info=Second Child[0m
+[1;32m[0-100] size=100 info=Root Node[0m
+├── [36m[10-40] size=30 info=First Child[0m
+└── [36m[50-90] size=40 info=Second Child[0m
 
 Styled Tree:
-[1;31m(Main) [0-100] info=Info(name='Main')[0m
-└── [36m(Sub) [10-50] info=Info(name='Sub')[0m
+[1;31m[0-100] info=Info(name='Main')[0m
+└── [36m[10-50] info=Info(name='Sub')[0m
 
 Default visualization:
 [94m(0, 100) size=100 info='Root'[0m
@@ -95,9 +108,9 @@ Default visualization:
 └── [93m(50, 90) size=40 info='Child 2'[0m
 
 With position objects:
-[94mPosition(start=0, end=100, lineno=None, end_lineno=None, col_offset=None, end_col_offset=100, size=100) size=100 info='Root'[0m
-├── [93mPosition(start=10, end=40, lineno=None, end_lineno=None, col_offset=None, end_col_offset=30, size=30) size=30 info='Child 1'[0m
-└── [93mPosition(start=50, end=90, lineno=None, end_lineno=None, col_offset=None, end_col_offset=40, size=40) size=40 info='Child 2'[0m
+[94mPosition(start=0, end=100, lineno=None, end_lineno=None, col_offset=None, end_col_offset=100, size=100) size=100 info=...[0m
+├── [93mPosition(start=10, end=40, lineno=None, end_lineno=None, col_offset=None, end_col_offset=30, size=30) size=30 info=...[0m
+└── [93mPosition(start=50, end=90, lineno=None, end_lineno=None, col_offset=None, end_col_offset=40, size=40) size=40 info=...[0m
 
 With tuples and children count:
 [94m(0, 100) info='Root' children=2[0m
@@ -110,8 +123,6 @@ Deserialized tree:
 └── [93m(10, 50) size=40 info='Child'[0m
 
 AST Tree:
-[1;32mModule size=100 info=Info(type='Module')[0m
-└── [34mFunctionDef(example) size=80 info=Info(type='FunctionDef', 
-    name='example')[0m
-    └── [38;5;249mArguments size=10 info=Info(type='Arguments')[0m
-=== Rich Styling Examples ===
+[1;32msize=100 info=Info(type='Module')[0m
+└── [34msize=80 info=Info(type='FunctionDef', name='example')[0m
+    └── [38;5;249msize=10 info=Info(type='Arguments')[0m

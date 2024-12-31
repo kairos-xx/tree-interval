@@ -396,36 +396,6 @@ class Position:
     def __str__(self) -> str:
         return f"Position(start={self.start}, end={self.end})"
 
-    def find_parent(self, criteria: Callable[["Leaf"],
-                                             bool]) -> Optional["Leaf"]:
-        """Find first parent that matches the criteria."""
-        if not self.parent:
-            return None
-        if criteria(self.parent):
-            return self.parent
-        return self.parent.find_parent(criteria)
-
-    def find_child(self, criteria: Callable[["Leaf"],
-                                            bool]) -> Optional["Leaf"]:
-        """Find first child that matches the criteria."""
-        for child in self.children:
-            if criteria(child):
-                return child
-            result = child.find_child(criteria)
-            if result:
-                return result
-        return None
-
-    def find_sibling(self, criteria: Callable[["Leaf"],
-                                              bool]) -> Optional["Leaf"]:
-        """Find first sibling that matches the criteria."""
-        if not self.parent:
-            return None
-        for child in self.parent.children:
-            if child != self and criteria(child):
-                return child
-        return None
-
     def __eq__(self, other: Any) -> bool:
         if not isinstance(other, Position):
             return False

@@ -78,25 +78,13 @@ class TreeVisualizer:
                 return f"({node.start}, {node.end})"
             return f"({node.start}, {node.end})"
 
-        def get_terminal_width() -> int:
-            """Get the width of the terminal window."""
-            try:
-                import shutil
-
-                columns, _ = shutil.get_terminal_size()
-                return columns
-            except Exception:
-                return 80  # Default fallback width
-
         def format_node_info(node: Any,
                              level: int = 0,
-                             prefix: Optional[str] = None) -> str:
+                             info_len: int = 0) -> str:
             """Format additional information about a node for display."""
             parts: list[str] = []
-            prefix_len = level * 4 + (4 if prefix is None else len(prefix))
-            terminal_width = get_terminal_width()
-            available_width = terminal_width - prefix_len
-
+            terminal_width = config.terminal_size
+            available_width = terminal_width - info_len + ((level + 1) * 4) + 4
             if config.show_size:
                 parts.append(f"size={node.size}")
 
@@ -108,14 +96,14 @@ class TreeVisualizer:
                 else:
                     info_str = repr(node.info)
 
+                info_str = f"info={info_str}"
+
                 current_length = len(" ".join(parts))
                 remaining_width = available_width - current_length - 1
-
                 if len(info_str) > remaining_width:
                     parts.append("info=...")
                 else:
-                    parts.append(info_str if isinstance(node.info, dict) else
-                                 f"info={info_str}")
+                    parts.append(info_str)
 
             if config.show_children_count:
                 parts.append(f"children={len(node.children)}")
@@ -128,7 +116,7 @@ class TreeVisualizer:
                         level: int = 0) -> None:
             """Recursively print the tree structure."""
             position_str = format_position(node)
-            info_str = format_node_info(node, level, prefix)
+
             prefix_spaces = "" if level < 2 else prefix
             connector = "" if level == 0 else ("└── " if is_last else "├── ")
 
@@ -144,6 +132,10 @@ class TreeVisualizer:
                     TreeVisualizer.GREEN
                     if node.children else TreeVisualizer.YELLOW)
             style_suffix = TreeVisualizer.RESET
+            info_len = len(
+                f"{prefix_spaces}{connector}{style_prefix}{position_str} " +
+                f"{style_suffix}")
+            info_str = format_node_info(node, level, info_len)
             print(f"{prefix_spaces}{connector}{style_prefix}{position_str} " +
                   f"{info_str}{style_suffix}")
             children = node.children

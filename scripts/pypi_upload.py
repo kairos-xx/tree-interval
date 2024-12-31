@@ -3,6 +3,7 @@ import os
 import subprocess
 import sys
 import urllib.request
+from datetime import datetime
 from pathlib import Path
 
 from replit import info
@@ -32,18 +33,15 @@ def update_version_in_files(new_version):
             content.replace(
                 f'version = "{get_latest_version()}"',
                 f'version = "{new_version}"',
-            )
-        )
+            ))
 
     # Update setup.py
     with open("setup.py", "r") as f:
         content = f.read()
     with open("setup.py", "w") as f:
         f.write(
-            content.replace(
-                f'version="{get_latest_version()}"', f'version="{new_version}"'
-            )
-        )
+            content.replace(f'version="{get_latest_version()}"',
+                            f'version="{new_version}"'))
 
 
 def check_token():
@@ -102,6 +100,7 @@ def build_and_upload(project_dir=None):
 
 
 def main():
+    print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     # Install required packages
     subprocess.run(["pip", "install", "wheel", "twine", "build"], check=True)
 

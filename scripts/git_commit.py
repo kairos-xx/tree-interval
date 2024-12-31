@@ -114,6 +114,7 @@ def commit_changes():
 
 def main():
     """Run all operations."""
+    print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     print("🚀 Starting automated operations...")
     print("\nCleaning merge conflicts and committing changes...")
     commit_changes()

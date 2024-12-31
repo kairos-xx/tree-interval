@@ -48,5 +48,4 @@ def xpto():
     print(a.b.c.f.g)
 
 
-#print(a.c)
 xpto()
