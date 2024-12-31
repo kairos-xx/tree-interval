@@ -52,9 +52,18 @@ class FrameAnalyzer:
             return None
         # If the current node is not found yet then we search for it
         if self.current_node is None:
-            # Find best match for the current frame position
-            self.current_node = self.tree.find_best_match(
-                self.frame_position.start, self.frame_position.end)
+            # Find all nodes at the current line number
+            matching_nodes = []
+            for node in self.tree.flatten():
+                if hasattr(node, 'position') and node.position:
+                    # Normalize line numbers using frame's first line
+                    matching_nodes.append(
+                        (node,
+                         abs(node.position.start - self.frame_position.start) +
+                         abs(node.position.end - self.frame_position.end)))
+
+            if matching_nodes:
+                self.current_node = min(matching_nodes, key=lambda x: x[1])[0]
         return self.current_node
 
     def build_tree(self) -> Optional[Tree]:
@@ -72,7 +81,6 @@ class FrameAnalyzer:
 
         if self.tree and self.tree.root:
             # Calculates line positions for nodes
-            line_positions = self.ast_builder._calculate_line_positions()
             # Dictionary to store nodes by their positions
             nodes_by_pos = {}
 
@@ -81,7 +89,7 @@ class FrameAnalyzer:
                 if hasattr(node, "ast_node") and isinstance(
                         node.ast_node, AST):
                     pos = self.ast_builder._get_node_position(
-                        cast(AST, node.ast_node), line_positions)
+                        cast(AST, node.ast_node))
                     if pos:
                         pos.selected = node.selected
                         node.position = pos

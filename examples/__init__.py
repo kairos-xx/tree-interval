@@ -1,7 +1,5 @@
 """Demo for the tree-visualizer package."""
-from . import demo
-from . import rich_printer_examples
-from . import styling_examples
+from . import demo, rich_printer_examples, styling_examples
 
 
 def run_demos():

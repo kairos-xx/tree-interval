@@ -105,20 +105,22 @@ def demonstrate_tree_styling():
     printer.print_tree(tree)
     tree.visualize()
 
+
 def demonstrate_statements():
     """Demonstrates Statement functionality"""
     print_header("Statement Examples", MAGENTA)
-    
+
     # Basic statement
     part = PartStatement(before="print(", after=")")
     stmt = Statement(top=part, before="a.b.", self="d", after=".e")
-    
+
     print("Default markers:")
     print(stmt.text)
-    
+
     print("\nCustom markers:")
     print(stmt.as_text(top_marker="#", chain_marker="-", current_marker="@"))
     print(stmt.as_text(top_marker="$", chain_marker=".", current_marker="*"))
+
 
 def demonstrate_find_nodes():
     print_header("Find Nodes Example", YELLOW)
@@ -266,6 +268,15 @@ def demonstrate_tree_operations():
     print(f"\n{GREEN}=== Final Tree State ==={RESET}")
     tree.visualize()
 
+    # Demonstrate visualization from custom root
+    print(f"\n{GREEN}=== Visualization from Custom Root ==={RESET}")
+    print("\nVisualize from child1:")
+    tree.visualize(root=child1)
+
+    print("\nUsing RichTreePrinter from child2:")
+    printer = RichTreePrinter(RichPrintConfig(show_info=True))
+    printer.print_tree(tree, root=child2)
+
     return tree
 
 
@@ -300,12 +311,20 @@ def demonstrate_frame_analyzer():
             print("\nStatement Representation:")
             print("Default markers:")
             print(current_node.statement.text)
-            
             print("\nCustom markers:")
-            print(current_node.statement.as_text(top_marker="#", chain_marker="-", current_marker="@"))
-            print(current_node.statement.as_text(top_marker="$", chain_marker=".", current_marker="*"))
+            print(
+                current_node.statement.as_text(top_marker="#",
+                                               chain_marker="-",
+                                               current_marker="@"))
+            print(
+                current_node.statement.as_text(top_marker="$",
+                                               chain_marker=".",
+                                               current_marker="*"))
 
+    def build_tree():
+        analyzer = FrameAnalyzer(currentframe())
         tree = analyzer.build_tree()
+        current_node = analyzer.find_current_node()
 
         if current_node and tree and tree.root:
             print("\nFull AST Tree:")
@@ -335,9 +354,10 @@ def demonstrate_frame_analyzer():
 
             printer = RichTreePrinter()
             printer.print_tree(tree)
-            tree.visualize()
+            tree.visualize(root=current_node.parent)
 
     analyze_this()
+    build_tree()
 
 
 def demonstrate_line_positions():
@@ -578,6 +598,76 @@ def demonstrate_node_navigation():
         f" {function_def.children[0].info if function_def.children else None}")
 
 
+def demonstrate_custom_root_visualization():
+    """Demonstrates visualizing trees from different root nodes."""
+    print_header("Custom Root Visualization", YELLOW)
+
+    tree = Tree("Root Example")
+    root = Leaf(Position(0, 100), info="Root")
+    child1 = Leaf(Position(10, 50), info="Child 1")
+    child2 = Leaf(Position(60, 90), info="Child 2")
+    grandchild = Leaf(Position(20, 40), info="Grandchild")
+
+    tree.root = root
+    tree.add_leaf(child1)
+    tree.add_leaf(child2)
+    child1.add_child(grandchild)
+
+    print("\nFull tree visualization:")
+    tree.visualize()
+
+    print("\nVisualization from Child 1:")
+    tree.visualize(root=child1)
+
+    print("\nRich visualization from Child 2:")
+    printer = RichTreePrinter()
+    printer.print_tree(tree, root=child2)
+
+
+def demonstrate_custom_styling():
+    """Demonstrates custom styling for tree nodes with different types."""
+    print_header("Custom Node Styling", BLUE)
+    tree = Tree("Custom Styled Tree")
+
+    # Create nodes with different types and styles
+    root = Leaf(Position(0, 100), info={"type": "Component", "name": "App"})
+    root.style = LeafStyle(color="#FF6B6B", bold=True)  # Coral red
+
+    router = Leaf(Position(10, 40),
+                  info={
+                      "type": "Router",
+                      "name": "MainRouter"
+                  })
+    router.style = LeafStyle(color="#4ECDC4", bold=True)  # Turquoise
+
+    view1 = Leaf(Position(15, 25), info={"type": "View", "name": "HomeView"})
+    view1.style = LeafStyle(color="#45B7D1", bold=False)  # Light blue
+
+    view2 = Leaf(Position(30, 40), info={"type": "View", "name": "AboutView"})
+    view2.style = LeafStyle(color="#45B7D1", bold=False)  # Light blue
+
+    service = Leaf(Position(50, 90),
+                   info={
+                       "type": "Service",
+                       "name": "DataService"
+                   })
+    service.style = LeafStyle(color="#96CEB4", bold=True)  # Sage green
+
+    # Build tree structure
+    tree.root = root
+    tree.add_leaf(router)
+    tree.add_leaf(service)
+    router.add_child(view1)
+    router.add_child(view2)
+
+    # Visualize with different configurations
+    print("\nDefault tree visualization:")
+    tree.visualize()
+
+    print("\nRich tree visualization:")
+    printer = RichTreePrinter(RichPrintConfig(show_info=True))
+    printer.print_tree(tree)
+
 
 def main():
     print_header("Tree Interval Package Demo", BLUE)
@@ -596,3 +686,9 @@ def main():
     demonstrate_find_method()
     demonstrate_leaf_navigation()
     demonstrate_node_navigation()
+    demonstrate_custom_root_visualization()
+    demonstrate_custom_styling()
+
+
+if __name__ == "__main__":
+    main()
