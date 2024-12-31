@@ -1,6 +1,8 @@
-**/__pycache__
-**/.DS_Strore
-.coverage
-/zip
-/logs
 /.*
+!/.gitignore
+/__pycache__/
+*/__pycache__/
+/zip/
+/attached_assets/
+/logs/
+generated-icon.*
