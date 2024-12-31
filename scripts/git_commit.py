@@ -124,12 +124,21 @@ def commit_changes():
         # Commit changes
         subprocess.run(["git", "commit", "-m", message], check=True)
         
-        # Push to main branch
+        # Ensure we're on the right branch
+        subprocess.run(["git", "checkout", "-B", BRANCH], check=True)
+        
+        # Add remote if not exists
         try:
-            subprocess.run(["git", "push", "origin", BRANCH], check=True)
+            subprocess.run(["git", "remote", "add", "origin", "https://github.com/kairos-xx/tree-interval.git"], check=True)
         except subprocess.CalledProcessError:
-            # If main branch push fails, try master
-            subprocess.run(["git", "push", "origin", "master"], check=True)
+            pass
+            
+        # Push using SSH or token-based auth
+        try:
+            subprocess.run(["git", "push", "-u", "origin", BRANCH], check=True)
+        except subprocess.CalledProcessError:
+            print("❌ Push failed. Please ensure your GitHub credentials are configured in Replit.")
+            return
         print("✅ Changes committed and pushed")
     except Exception as e:
         print(f"❌ Error in git operations: {e}")
