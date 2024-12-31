@@ -83,7 +83,7 @@ def test_custom_root_visualization(basic_tree, console):
     """Test visualization from custom root node."""
     child = basic_tree.root.children[0]
     printer = RichTreePrinter()
-    
+
     with console.capture() as capture:
         printer.print_tree(basic_tree, root=child)
     output = capture.get()

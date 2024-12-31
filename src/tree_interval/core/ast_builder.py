@@ -6,11 +6,27 @@ Abstract Syntax Trees.
 """
 
 from ast import AST, get_source_segment, parse, walk
+from dis import Positions as disposition
 from inspect import getsource
 from types import FrameType
-from typing import Optional, Tuple, Union
+from typing import Optional, Union
 
 from .interval_core import Leaf, Position, Tree
+
+
+def node_positions(source, positions):
+
+    source_lines = source.splitlines(True)
+    return (
+        sum(
+            len(source_lines[i])
+            for i in range((getattr(positions, "lineno", 1) or 1) - 1)) +
+        (getattr(positions, "col_offset", 0) or 0),
+        sum(
+            len(source_lines[i])
+            for i in range((getattr(positions, "end_lineno", 1) or 1) - 1)) +
+        (getattr(positions, "end_col_offset", 0) or 0),
+    )
 
 
 class AstTreeBuilder:
@@ -54,92 +70,35 @@ class AstTreeBuilder:
         else:
             self.frame_firstlineno = source.f_code.co_firstlineno
             self.source = getsource(source)
-        self._get_source()
 
-    def _get_source(self) -> None:
-        """
-        Extract and process source code from the input source.
-
-        This method handles:
-        - Source code extraction from frames
-        - Common indentation detection
-        - Line number offset calculation
-        - Source code normalization
-
-        Implementation Details:
-        - Removes common indentation from all lines
-        - Preserves empty lines
-        - Adjusts line numbers based on frame context
-        - Handles potential extraction errors
-        """
+    def _get_node_position(self, node: AST) -> Optional[Position]:
         try:
-            if self.source is None or not isinstance(self.source, str):
-                return
 
-            lines = self.source.splitlines()
-            if not lines:
-                return
-
-            # Find common indentation only for non-empty lines
-            indented_lines = [line for line in lines if line.strip()]
-            if not indented_lines:
-                return
-
-            common_indent = min(
-                len(line) - len(line.lstrip()) for line in indented_lines)
-
-            # Remove common indentation and preserve all lines
-            self.source = "\n".join(
-                line[common_indent:] if line.strip() else "" for line in lines)
-
-            self.indent_offset = common_indent
-            # Don't adjust line offset since we want to keep all lines
-            self.line_offset = 0
-        except (SyntaxError, TypeError, ValueError):
-            pass
-
-    def _calculate_line_positions(self) -> list[Tuple[int, int]]:
-        if not self.source:
-            return []
-        positions = []
-        start = 0
-        lines = self.source.splitlines(keepends=True)
-        for line in lines:
-            positions.append((start, start + len(line)))
-            start += len(line)
-        return positions
-
-    def _get_node_position(
-            self, node: AST,
-            line_positions: list[Tuple[int, int]]) -> Optional[Position]:
-        try:
             lineno = getattr(node, "lineno", None)
             if lineno is None:
                 return None
+            source_lines = (self.source or "").splitlines(True)
+            dis_position = disposition(
+                lineno=lineno,
+                end_lineno=getattr(node, "end_lineno", lineno),
+                col_offset=getattr(node, "col_offset", 0),
+                end_col_offset=getattr(node, "end_col_offset",
+                                       len(source_lines[-1])))
+            position = Position(*(
+                sum(
+                    len(source_lines[i])
+                    for i in range((getattr(dis_position, "lineno", 1) or 1) -
+                                   1)) +
+                (getattr(dis_position, "col_offset", 0) or 0),
+                sum(
+                    len(source_lines[i]) for i in range(
+                        (getattr(dis_position, "end_lineno", 1) or 1) - 1)) +
+                (getattr(dis_position, "end_col_offset", 0) or 0),
+            ))
+            (position.lineno, position.end_lineno, position.col_offset,
+             position.end_col_offset) = tuple(dis_position)
 
-            # Always use absolute line numbers from the AST
-            start_line = lineno - 1
-            end_lineno = getattr(node, "end_lineno", lineno)
-            end_line = end_lineno - 1
-
-            # Adjust column offsets for dedentation
-            col_offset = getattr(node, "col_offset", 0)
-            if hasattr(self, "indent_offset"):
-                col_offset = max(0, col_offset - self.indent_offset)
-
-            end_col_offset = getattr(node, "end_col_offset", 0)
-            if hasattr(self, "indent_offset"):
-                end_col_offset = max(0, end_col_offset - self.indent_offset)
-
-            if 0 <= start_line < len(line_positions):
-                start_pos = line_positions[start_line][0] + col_offset
-                end_pos = line_positions[end_line][0] + end_col_offset
-                position = Position(start_pos, end_pos)
-                position.lineno = lineno + self.line_offset
-                position.end_lineno = end_lineno + self.line_offset
-                position.col_offset = col_offset
-                position.end_col_offset = end_col_offset
-                return position
+            return position
         except (IndexError, AttributeError):
             pass
         return None
@@ -171,6 +130,8 @@ class AstTreeBuilder:
             ValueError: If the node type is unsupported.
         """
         import ast
+        from sys import version_info
+
         if isinstance(node, ast.Attribute):
             """
             For Attribute nodes, return the last attribute in the chain
@@ -198,11 +159,11 @@ class AstTreeBuilder:
             or operands.  Here, we'll extract the operator as a string
             """
             return type(node.op).__name__
-        elif isinstance(node, ast.Num):
+        elif version_info < (3, 14) and isinstance(node, ast.Num):
             """
             For numeric literals"""
             return str(node.n)
-        elif isinstance(node, ast.Str):
+        elif version_info < (3, 14) and isinstance(node, ast.Str):
             """
             For string literals (Python <3.8)
             """
@@ -228,12 +189,9 @@ class AstTreeBuilder:
         root_pos = Position(0, len(self.source), "Module")
         result_tree.root = Leaf(root_pos)
 
-        line_positions = self._calculate_line_positions()
         nodes_with_positions = []
-
         for node in walk(ast_tree):
-
-            position = self._get_node_position(node, line_positions)
+            position = self._get_node_position(node)
             if position:
                 leaf = Leaf(
                     position,

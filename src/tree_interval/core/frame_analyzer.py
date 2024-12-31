@@ -52,39 +52,16 @@ class FrameAnalyzer:
             return None
         # If the current node is not found yet then we search for it
         if self.current_node is None:
-            # Get indent offset from ast_builder
-            indent_offset = getattr(self.ast_builder, 'indent_offset', 0)
-            
             # Find all nodes at the current line number
             matching_nodes = []
-            frame_first_lineno = self.frame.f_code.co_firstlineno
             for node in self.tree.flatten():
                 if hasattr(node, 'position') and node.position:
                     # Normalize line numbers using frame's first line
-                    node_lineno = node.position.lineno
-                    frame_lineno = self.frame_position.lineno
-                    
-                    if node_lineno is not None and frame_lineno is not None:
-                        node_lineno = node_lineno - frame_first_lineno
-                        frame_lineno = frame_lineno - frame_first_lineno
-                    
-                    # Handle column offsets with proper boundary checks
-                    node_col = node.position.col_offset
-                    node_end_col = node.position.end_col_offset
-                    
-                    if node_col is not None:
-                        node_col = max(0, node_col - indent_offset)
-                        # Ensure node_end_col has a valid bounded value
-                        node_end_col = max(node_col + 1, (node_end_col or node_col + 1) - indent_offset)
-                    
-                    frame_col = self.frame_position.col_offset
-                    frame_end_col = self.frame_position.end_col_offset
-                    
-                    if (node_lineno == frame_lineno and node_col is not None and frame_col is not None
-                        and node_col <= frame_col and (node_end_col >= frame_end_col if frame_end_col else True)):
-                        matching_nodes.append((node, abs(node_col - frame_col)))
-            
-            # Find the node with smallest column offset difference
+                    matching_nodes.append(
+                        (node,
+                         abs(node.position.start - self.frame_position.start) +
+                         abs(node.position.end - self.frame_position.end)))
+
             if matching_nodes:
                 self.current_node = min(matching_nodes, key=lambda x: x[1])[0]
         return self.current_node
@@ -104,7 +81,6 @@ class FrameAnalyzer:
 
         if self.tree and self.tree.root:
             # Calculates line positions for nodes
-            line_positions = self.ast_builder._calculate_line_positions()
             # Dictionary to store nodes by their positions
             nodes_by_pos = {}
 
@@ -113,7 +89,7 @@ class FrameAnalyzer:
                 if hasattr(node, "ast_node") and isinstance(
                         node.ast_node, AST):
                     pos = self.ast_builder._get_node_position(
-                        cast(AST, node.ast_node), line_positions)
+                        cast(AST, node.ast_node))
                     if pos:
                         pos.selected = node.selected
                         node.position = pos
