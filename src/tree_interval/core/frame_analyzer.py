@@ -55,7 +55,9 @@ class FrameAnalyzer:
             # Find all nodes at the current line number with a more flexible matching
             matching_nodes = []
             for node in self.tree.flatten():
-                if hasattr(node, 'position') and node.position:
+                if (hasattr(node, 'position') and node.position and 
+                    node.position.lineno is not None and 
+                    self.frame_position.lineno is not None):
                     # Allow for a small line number variation
                     line_diff = abs(node.position.lineno - self.frame_position.lineno)
                     if line_diff <= 1:  # Accept nodes within 1 line
