@@ -105,9 +105,6 @@ class AstTreeBuilder:
     def _get_node_value(self, node: AST) -> str:
         """
         Extracts a meaningful value from various AST node types.
-        """
-        if not node:
-            return ""
 
         Args:
             node (ast.AST): The AST node to inspect.
@@ -176,8 +173,8 @@ class AstTreeBuilder:
             raise ValueError("No source code available")
         result_tree = Tree[str](self.source)
 
-        root_pos = Position(0, len(self.source))
-        result_tree.root = Leaf(root_pos, info={"type": "Module"})
+        root_pos = Position(0, len(self.source), "Module")
+        result_tree.root = Leaf(root_pos)
 
         nodes_with_positions = []
         for node in walk(ast_tree):
