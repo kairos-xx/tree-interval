@@ -17,14 +17,15 @@ class Nested:
         self.__dict__[name] = value
 
     def make_tree(self, name, caller, analyzer):
-        # Synchronize analyzer position with frame position before finding node
-        analyzer.frame_position.lineno = caller.positions.lineno
-        analyzer.frame_position.end_lineno = caller.positions.end_lineno
-        analyzer.frame_position.col_offset = caller.positions.col_offset
-        analyzer.frame_position.end_col_offset = caller.positions.end_col_offset
-        
         tree = analyzer.build_tree()
-        current_node = analyzer.find_current_node()
+        
+        # Find the node closest to the frame position
+        for node in tree.flatten():
+            if (node.position.lineno == caller.positions.lineno and 
+                abs(node.position.col_offset - caller.positions.col_offset) <= 2):
+                node.selected = True
+                current_node = node
+                break
         
         # For debugging
         print("Frame position:", caller.positions)
