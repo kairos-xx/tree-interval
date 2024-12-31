@@ -37,6 +37,20 @@ config = RichPrintConfig(
 printer = RichTreePrinter(config)
 printer.print_tree(tree)
 ```
+## Custom Root Visualization
+
+Visualize tree from any node:
+
+```python
+# Using TreeVisualizer
+tree.visualize(root=some_leaf)
+
+# Using RichTreePrinter
+printer = RichTreePrinter()
+printer.print_tree(tree, root=some_leaf)
+```
+
+This allows viewing subtrees starting from any node in the tree structure.
 
 ## Customization Options
 
@@ -56,3 +70,4 @@ printer.print_tree(tree)
    - Bold/italic text
    - Guide line styles
    - Indentation control
+

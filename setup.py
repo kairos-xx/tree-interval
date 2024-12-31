@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="tree-interval",
-    version="0.1.12",
+    version="0.1.14",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     description="""A Python package for managing and

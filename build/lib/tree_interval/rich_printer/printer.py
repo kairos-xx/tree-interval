@@ -44,18 +44,31 @@ class RichTreePrinter:
         self.config = config or RichPrintConfig()
         self.console = console or Console()
 
-    def print_tree(self, tree: Tree) -> None:
-        """Print tree using Rich formatting."""
-        if not tree.root:
+    def print_tree(self, tree: Tree, root: Optional[Leaf] = None) -> None:
+        """
+        Print tree using Rich formatting.
+
+        Args:
+            tree: The tree to print
+            root: Optional root Leaf to start printing from.
+                 If None, uses tree.root.
+        """
+        root_node = root if root is not None else tree.root
+        if not root_node:
             self.console.print("[red]Empty tree")
             return
 
-        rich_tree = RichTree(self._format_node(tree.root, is_root=True),
+        rich_tree = RichTree(self._format_node(root_node,
+                                               is_root=True,
+                                               level=0),
                              guide_style=self.config.guide_style)
-        self._add_children(tree.root, rich_tree)
+        self._add_children(root_node, rich_tree, 1)
         self.console.print(rich_tree)
 
-    def _format_node(self, node: Leaf, is_root: bool = False) -> str:
+    def _format_node(self,
+                     node: Leaf,
+                     is_root: bool = False,
+                     level: int = 0) -> str:
         """Format node information."""
         # Determine style priority:
         # rich_style > selected > type-based > default
@@ -85,17 +98,6 @@ class RichTreePrinter:
 
         # Build display string
         parts = []
-        if isinstance(node.info, dict):
-            # For AST nodes, show type and name if available
-            node_type = node.info.get('type', '')
-            node_name = node.info.get('name', '')
-            if node_name:
-                parts.append(f"{node_type}({node_name})")
-            else:
-                parts.append(node_type)
-        else:
-            # For other nodes, show info directly
-            parts.append(str(node.info))
 
         if self.config.show_position:
             parts.append(f"[{node.start}-{node.end}]")
@@ -103,20 +105,10 @@ class RichTreePrinter:
         if self.config.show_size:
             parts.append(f"size={node.size}")
 
-        def get_terminal_width() -> int:
-            try:
-                import shutil
-
-                columns, _ = shutil.get_terminal_size()
-                return columns
-            except (OSError, ValueError):
-                return 80
-
         if self.config.show_info and node.info:
-            terminal_width = get_terminal_width()
-            current_width = (sum(len(p) for p in parts) + len(parts) * 1
-                             )  # Add spaces between parts
-
+            terminal_width = self.config.terminal_size
+            current_width = (sum(len(p) for p in parts) + len(parts) * 1) + (
+                (level + 1) * 4)  # Add spaces between parts
             if isinstance(node.info, dict):
                 info_str = ("Info(" +
                             ", ".join(f"{k}={repr(v)}"
@@ -124,21 +116,24 @@ class RichTreePrinter:
             else:
                 info_str = str(node.info)
 
-            available_width = (terminal_width - current_width - 10
+            available_width = (terminal_width - current_width
                                )  # Extra padding for rich formatting
 
-            if len(info_str) > available_width:
+            if len(f"info={info_str}") > available_width:
                 parts.append("info=...")
             else:
                 parts.append(f"info={info_str}")
 
         return style.render(" ".join(parts))
 
-    def _add_children(self, node: Leaf, rich_node: RichTree) -> None:
+    def _add_children(self,
+                      node: Leaf,
+                      rich_node: RichTree,
+                      level: int = 0) -> None:
         """Recursively add children to Rich tree."""
         for child in node.children:
             child_node = rich_node.add(
-                self._format_node(child),
+                self._format_node(child, level=level),
                 guide_style=self.config.guide_style,
             )
-            self._add_children(child, child_node)
+            self._add_children(child, child_node, level + 1)

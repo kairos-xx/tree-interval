@@ -14,7 +14,6 @@ def basic_tree():
     tree = Tree("Test")
     root = Leaf(Position(0, 100), "Root")
     child = Leaf(Position(10, 50), "Child")
-    child = Leaf(Position(15, 25), "Grandchild")
     tree.root = root
     tree.add_leaf(child)
     return tree
@@ -88,8 +87,8 @@ def test_custom_root_visualization(basic_tree, console):
     with console.capture() as capture:
         printer.print_tree(basic_tree, root=child)
     output = capture.get()
-    assert "Grandchild" in output
-    assert "15-25" in output
+    assert "Child" in output
+    assert "10-50" in output
 
 
 if __name__ == "__main__":

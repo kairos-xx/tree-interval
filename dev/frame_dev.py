@@ -81,7 +81,7 @@ class Nested:
         else:
             import sys
             caller = stack()[1]
-            sys.tracebacklimit = 0  # Suppress traceback
+            sys.tracebacklimit = 0
             raise AttributeError(
                 f"Attribute \033[1m{name}\033[0m not found in " +
                 f"\033[1m{before}\033[0m\n" +
@@ -93,8 +93,7 @@ class Nested:
 def test():
     a = Nested()
     a.b.c = 3
-    print((a.
-           b.d.e.f.g))
+    print((a.b.d.e.f.g))
     # print(a.b.c.e)
 
 
