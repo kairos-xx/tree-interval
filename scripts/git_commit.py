@@ -24,6 +24,8 @@ CUSTOM_IGNORE = [
     "generated-icon.png",
 ]
 
+BRANCH ="replit"
+
 
 def clean_merge_conflicts(file_path: str) -> None:
     """Remove merge conflict markers from a file."""
@@ -51,7 +53,7 @@ def clean_merge_conflicts(file_path: str) -> None:
             elif line.strip().startswith("======="):
                 skip_mode = True
                 continue
-            elif line.strip().startswith(">>>>>>> origin/replit"):
+            elif line.strip().startswith(f">>>>>>> origin/{BRANCH}"):
                 skip_mode = False
                 continue
 
@@ -94,9 +96,9 @@ def commit_changes():
         if not os.path.exists(".git"):
             subprocess.run(["git", "init"], check=True)
             subprocess.run(
-                ["git", "config", "user.email", "noreply@replit.com"],
+                ["git", "config", "user.email", "joaoslopes@gmail.com"],
                 check=True)
-            subprocess.run(["git", "config", "user.name", "Replit"],
+            subprocess.run(["git", "config", "user.name", "kairos-xx"],
                            check=True)
 
         # Clean merge conflicts in all files first
@@ -116,15 +118,15 @@ def commit_changes():
                    f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         
         # Configure git if needed
-        subprocess.run(["git", "config", "--global", "user.email", "noreply@replit.com"], check=True)
-        subprocess.run(["git", "config", "--global", "user.name", "Replit"], check=True)
+        subprocess.run(["git", "config", "--global", "user.email", "joaoslopes@gmail.com"], check=True)
+        subprocess.run(["git", "config", "--global", "user.name", "kairos-xx"], check=True)
         
         # Commit changes
         subprocess.run(["git", "commit", "-m", message], check=True)
         
         # Push to main branch
         try:
-            subprocess.run(["git", "push", "origin", "main"], check=True)
+            subprocess.run(["git", "push", "origin", BRANCH], check=True)
         except subprocess.CalledProcessError:
             # If main branch push fails, try master
             subprocess.run(["git", "push", "origin", "master"], check=True)
