@@ -2,11 +2,113 @@
 platform linux -- Python 3.11.10, pytest-8.3.4, pluggy-1.5.0
 rootdir: /home/runner/treeinterval
 configfile: pyproject.toml
-collected 31 items
+plugins: cov-6.0.0
+collected 45 items
 
-tests/test_ast_nodes.py ......                                           [ 19%]
-tests/test_rich_printer.py .....                                         [ 35%]
-tests/test_styling.py ......                                             [ 54%]
-tests/test_tree_core.py ..............                                   [100%]
+tests/test_ast_builder.py .FFF                                           [  8%]
+tests/test_ast_nodes.py ......                                           [ 22%]
+tests/test_frame_analyzer.py ...                                         [ 28%]
+tests/test_interval_core.py FFFF                                         [ 37%]
+tests/test_rich_printer.py .....                                         [ 48%]
+tests/test_styling.py ......                                             [ 62%]
+tests/test_tree_core.py ..............                                   [ 93%]
+tests/test_visualizer.py ...                                             [100%]
 
-============================== 31 passed in 0.10s ==============================
+=================================== FAILURES ===================================
+____________________________ test_build_from_source ____________________________
+
+    def test_build_from_source():
+        source = dedent("""
+        def test():
+            x = 1
+            return x
+        """).strip()
+    
+        builder = AstTreeBuilder(source)
+        tree = builder.build()
+    
+        assert tree is not None
+        assert tree.root is not None
+>       assert tree.root.info["type"] == "Module"
+E       TypeError: 'NoneType' object is not subscriptable
+
+tests/test_ast_builder.py:25: TypeError
+__________________________ test_node_value_extraction __________________________
+
+    def test_node_value_extraction():
+        source = "x.y.z(1 + 2)"
+        builder = AstTreeBuilder(source)
+        tree = builder.build()
+    
+        assert tree is not None
+        nodes = tree.flatten()
+>       call_node = next(n for n in nodes if n.info["type"] == "Call")
+
+tests/test_ast_builder.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x7fe435a737c0>
+
+>   call_node = next(n for n in nodes if n.info["type"] == "Call")
+E   TypeError: 'NoneType' object is not subscriptable
+
+tests/test_ast_builder.py:34: TypeError
+____________________________ test_position_tracking ____________________________
+
+    def test_position_tracking():
+        source = dedent("""
+        def func():
+            return 42
+        """).strip()
+    
+        builder = AstTreeBuilder(source)
+        tree = builder.build()
+    
+>       func_node = next(n for n in tree.flatten() if n.info["type"] == "FunctionDef")
+
+tests/test_ast_builder.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+.0 = <list_iterator object at 0x7fe435a3b310>
+
+>   func_node = next(n for n in tree.flatten() if n.info["type"] == "FunctionDef")
+E   TypeError: 'NoneType' object is not subscriptable
+
+tests/test_ast_builder.py:46: TypeError
+_________________________ test_leaf_statement_property _________________________
+
+    def test_leaf_statement_property():
+>       root = Leaf(Position(0, 100), info={"type": "Module"})
+E       NameError: name 'Leaf' is not defined
+
+tests/test_interval_core.py:4: NameError
+__________________________ test_leaf_attribute_chain ___________________________
+
+    def test_leaf_attribute_chain():
+>       root = Leaf(Position(0, 100), info={"type": "Attribute"})
+E       NameError: name 'Leaf' is not defined
+
+tests/test_interval_core.py:11: NameError
+____________________________ test_nested_attributes ____________________________
+
+    def test_nested_attributes():
+>       leaf = Leaf(Position(0, 100), info={"type": "Module"})
+E       NameError: name 'Leaf' is not defined
+
+tests/test_interval_core.py:19: NameError
+___________________________ test_leaf_serialization ____________________________
+
+    def test_leaf_serialization():
+>       leaf = Leaf(Position(0, 100), info={"name": "test"})
+E       NameError: name 'Leaf' is not defined
+
+tests/test_interval_core.py:28: NameError
+=========================== short test summary info ============================
+FAILED tests/test_ast_builder.py::test_build_from_source - TypeError: 'NoneTy...
+FAILED tests/test_ast_builder.py::test_node_value_extraction - TypeError: 'No...
+FAILED tests/test_ast_builder.py::test_position_tracking - TypeError: 'NoneTy...
+FAILED tests/test_interval_core.py::test_leaf_statement_property - NameError:...
+FAILED tests/test_interval_core.py::test_leaf_attribute_chain - NameError: na...
+FAILED tests/test_interval_core.py::test_nested_attributes - NameError: name ...
+FAILED tests/test_interval_core.py::test_leaf_serialization - NameError: name...
+========================= 7 failed, 38 passed in 0.16s =========================
