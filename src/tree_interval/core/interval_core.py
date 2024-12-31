@@ -683,7 +683,9 @@ class Leaf:
         best_match_distance = (float("inf") if best_match_distance is None else
                                best_match_distance)
         distance = calc_distance(self)
+        
         if distance < best_match_distance:
+            
             best_match_distance = distance
         best_match = self
         for child in self.children:
@@ -694,6 +696,7 @@ class Leaf:
                 if distance < best_match_distance:
                     best_match_distance = distance
                     best_match = child_match
+        
         return best_match
 
     def find_common_ancestor(self, other: "Leaf") -> Optional["Leaf"]:

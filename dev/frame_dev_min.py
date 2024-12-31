@@ -23,6 +23,7 @@ class Nested:
             caller.positions
         )  # THIS POSITION SHOULD BE THE SAME AS THE FRAME POSITION BUT ITS: Positions(lineno=73, end_lineno=73, col_offset=0, end_col_offset=3)
         print(
+            
             Positions(
                 current_node.position.lineno,
                 current_node.position.end_lineno,
