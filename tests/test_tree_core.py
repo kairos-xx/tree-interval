@@ -241,10 +241,6 @@ def test_position_format():
     assert len(child2.children) == 1
 
 
-if __name__ == "__main__":
-    pytest.main([__file__])
-
-
 def test_node_navigation():
     root = Leaf(Position(0, 100), "Root")
     child1 = Leaf(Position(10, 40), "Child1")
@@ -264,3 +260,7 @@ def test_node_navigation():
     # Test previous sibling
     assert child2.previous == child1
     assert child1.previous is None
+
+
+if __name__ == "__main__":
+    pytest.main([__file__])

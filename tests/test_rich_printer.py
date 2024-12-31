@@ -79,18 +79,14 @@ def test_rich_printer_custom_styles(basic_tree, console):
     assert output.strip() != ""
 
 
-def test_custom_root_visualization(basic_tree, tmp_path):
+def test_custom_root_visualization(basic_tree, console):
     """Test visualization from custom root node."""
     child = basic_tree.root.children[0]
     printer = RichTreePrinter()
     
-    # Test that the tree is printed starting from the child node
-    output_file = tmp_path / "output.txt"
-    with open(output_file, 'w') as f:
-        console = Console(record=True, force_terminal=True, file=f)
+    with console.capture() as capture:
         printer.print_tree(basic_tree, root=child)
-        
-    output = output_file.read_text()
+    output = capture.get()
     assert "Child" in output
     assert "10-50" in output
 
