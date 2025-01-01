@@ -40,3 +40,24 @@ def test_leaf_serialization():
 
 if __name__ == "__main__":
     pytest.main([__file__])
+def test_position_edge_cases():
+    pos = Position(None, None)
+    assert pos.absolute_start is None
+    assert pos.absolute_end is None
+
+def test_leaf_complex_operations():
+    leaf = Leaf(Position(0, 100))
+    leaf.selected = True
+    assert leaf.selected
+    assert leaf.size == 100
+    
+    # Test attribute chain
+    leaf.info = {"type": "Attribute"}
+    assert leaf.next_attribute is None
+    assert leaf.previous_attribute is None
+
+def test_tree_empty_operations():
+    tree = Tree("")
+    assert tree.flatten() == []
+    tree_json = tree.to_json()
+    assert Tree.from_json(tree_json).root is None

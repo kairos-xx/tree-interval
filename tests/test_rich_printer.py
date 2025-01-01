@@ -93,3 +93,13 @@ def test_custom_root_visualization(basic_tree, console):
 
 if __name__ == "__main__":
     pytest.main([__file__])
+def test_rich_printer_empty_config():
+    printer = RichTreePrinter()
+    with pytest.raises(AttributeError):
+        printer.print_tree(None)
+
+def test_format_node_custom_styles():
+    leaf = Leaf(Position(0, 100), info={"type": "Module"})
+    printer = RichTreePrinter()
+    formatted = printer._format_node(leaf, is_root=True)
+    assert formatted != ""
