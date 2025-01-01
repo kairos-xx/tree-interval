@@ -502,7 +502,7 @@ def test_position_complex_calcs():
     """Test complex position calculations"""
     pos = Position(0, 100)
     pos._lineno = None
-    assert pos.lineno is 1# Default fallback
+    assert pos.lineno == 1  # Default fallback
     pos._end_lineno = None 
     assert pos.end_lineno == 1  # Default fallback
 

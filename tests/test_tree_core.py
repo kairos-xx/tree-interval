@@ -9,7 +9,7 @@ def test_position_creation():
     pos = Position(0, 100)
     assert pos.start == 0
     assert pos.end == 100
-    assert pos.lineno is 1 # Default fallback
+    assert pos.lineno == 1  # Default fallback
 
 
 def test_position_line_info():
