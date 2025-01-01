@@ -1,61 +1,78 @@
 examples/./demo.py:7:30: W291 trailing whitespace
 examples/./demo.py:21:1: W293 blank line contains whitespace
-scripts/./create_zip.py:13:1: F401 'typing.List' imported but unused
-scripts/./create_zip.py:19:1: W293 blank line contains whitespace
-scripts/./create_zip.py:31:1: W293 blank line contains whitespace
-scripts/./create_zip.py:37:1: W293 blank line contains whitespace
-scripts/./create_zip.py:41:1: W293 blank line contains whitespace
-scripts/./create_zip.py:47:1: W293 blank line contains whitespace
-scripts/./create_zip.py:59:1: W293 blank line contains whitespace
-scripts/./get_author.py:14:1: W293 blank line contains whitespace
-scripts/./get_author.py:21:1: W293 blank line contains whitespace
-scripts/./get_author.py:35:1: W293 blank line contains whitespace
-scripts/./git_commit.py:16:1: W293 blank line contains whitespace
-scripts/./git_commit.py:20:1: W293 blank line contains whitespace
-scripts/./git_commit.py:43:1: W293 blank line contains whitespace
-scripts/./git_commit.py:47:1: W293 blank line contains whitespace
-scripts/./pypi_upload.py:16:1: W293 blank line contains whitespace
-scripts/./pypi_upload.py:20:1: W293 blank line contains whitespace
-scripts/./pypi_upload.py:43:1: W293 blank line contains whitespace
-scripts/./pypi_upload.py:49:1: W293 blank line contains whitespace
+scripts/./create_zip.py:13:1: E302 expected 2 blank lines, found 1
+scripts/./create_zip.py:15:1: W293 blank line contains whitespace
+scripts/./create_zip.py:30:1: E302 expected 2 blank lines, found 1
+scripts/./create_zip.py:32:1: W293 blank line contains whitespace
+scripts/./create_zip.py:39:1: W293 blank line contains whitespace
+scripts/./create_zip.py:43:1: W293 blank line contains whitespace
+scripts/./create_zip.py:45:1: W293 blank line contains whitespace
+scripts/./create_zip.py:51:1: W293 blank line contains whitespace
+scripts/./create_zip.py:56:1: W293 blank line contains whitespace
+scripts/./create_zip.py:60:1: E305 expected 2 blank lines after class or function definition, found 1
+scripts/./get_author.py:10:1: E302 expected 2 blank lines, found 1
+scripts/./get_author.py:12:1: W293 blank line contains whitespace
+scripts/./get_author.py:15:1: W293 blank line contains whitespace
+scripts/./get_author.py:23:1: W293 blank line contains whitespace
+scripts/./get_author.py:28:1: W293 blank line contains whitespace
+scripts/./get_author.py:31:1: E305 expected 2 blank lines after class or function definition, found 1
+scripts/./git_commit.py:12:1: E302 expected 2 blank lines, found 1
+scripts/./git_commit.py:14:1: W293 blank line contains whitespace
+scripts/./git_commit.py:17:1: W293 blank line contains whitespace
+scripts/./git_commit.py:49:1: E305 expected 2 blank lines after class or function definition, found 1
+scripts/./pypi_upload.py:12:1: E302 expected 2 blank lines, found 1
+scripts/./pypi_upload.py:14:1: W293 blank line contains whitespace
+scripts/./pypi_upload.py:18:1: W293 blank line contains whitespace
+scripts/./pypi_upload.py:23:1: W293 blank line contains whitespace
+scripts/./pypi_upload.py:36:1: E302 expected 2 blank lines, found 1
+scripts/./pypi_upload.py:38:1: W293 blank line contains whitespace
+scripts/./pypi_upload.py:47:1: W293 blank line contains whitespace
+scripts/./pypi_upload.py:50:1: W293 blank line contains whitespace
+scripts/./pypi_upload.py:54:1: E305 expected 2 blank lines after class or function definition, found 1
+scripts/./update_workflows.py:8:1: F401 'subprocess' imported but unused
+scripts/./update_workflows.py:13:1: E302 expected 2 blank lines, found 1
 scripts/./update_workflows.py:15:1: W293 blank line contains whitespace
-scripts/./update_workflows.py:19:1: W293 blank line contains whitespace
-scripts/./update_workflows.py:42:1: W293 blank line contains whitespace
-scripts/./update_workflows.py:55:1: W293 blank line contains whitespace
-scripts/./update_workflows.py:57:1: W293 blank line contains whitespace
+scripts/./update_workflows.py:50:1: E302 expected 2 blank lines, found 1
+scripts/./update_workflows.py:52:1: W293 blank line contains whitespace
+scripts/./update_workflows.py:62:1: W293 blank line contains whitespace
+scripts/./update_workflows.py:66:1: W293 blank line contains whitespace
+scripts/./update_workflows.py:72:1: E305 expected 2 blank lines after class or function definition, found 1
 src/./tree_interval/core/ast_builder.py:189:1: W293 blank line contains whitespace
 src/./tree_interval/core/ast_builder.py:190:80: E501 line too long (80 > 79 characters)
 src/./tree_interval/core/ast_builder.py:196:1: W293 blank line contains whitespace
 src/./tree_interval/core/ast_builder.py:203:1: W293 blank line contains whitespace
 src/./tree_interval/core/ast_builder.py:206:1: W293 blank line contains whitespace
 src/./tree_interval/core/ast_builder.py:209:1: W293 blank line contains whitespace
-src/./tree_interval/core/chain_analyzer.py:11:1: F401 'typing.Tuple' imported but unused
-src/./tree_interval/core/chain_analyzer.py:14:1: E302 expected 2 blank lines, found 1
-src/./tree_interval/core/chain_analyzer.py:17:1: W293 blank line contains whitespace
-src/./tree_interval/core/chain_analyzer.py:20:1: W293 blank line contains whitespace
-src/./tree_interval/core/chain_analyzer.py:30:1: E302 expected 2 blank lines, found 1
-src/./tree_interval/core/chain_analyzer.py:32:1: W293 blank line contains whitespace
-src/./tree_interval/core/chain_analyzer.py:37:1: W293 blank line contains whitespace
-src/./tree_interval/core/chain_analyzer.py:41:1: W293 blank line contains whitespace
-src/./tree_interval/core/chain_analyzer.py:47:1: W293 blank line contains whitespace
-src/./tree_interval/core/chain_analyzer.py:50:1: W293 blank line contains whitespace
-src/./tree_interval/core/chain_analyzer.py:53:1: W293 blank line contains whitespace
-src/./tree_interval/core/chain_analyzer.py:61:80: E501 line too long (93 > 79 characters)
-src/./tree_interval/core/chain_analyzer.py:62:1: W293 blank line contains whitespace
-src/./tree_interval/core/chain_analyzer.py:75:1: W293 blank line contains whitespace
-src/./tree_interval/core/chain_analyzer.py:87:1: W293 blank line contains whitespace
-src/./tree_interval/core/chain_analyzer.py:99:1: W293 blank line contains whitespace
-src/./tree_interval/core/chain_analyzer.py:100:9: E722 do not use bare 'except'
-src/./tree_interval/core/chain_analyzer.py:103:1: W293 blank line contains whitespace
-src/./tree_interval/core/chain_analyzer.py:105:1: W293 blank line contains whitespace
-src/./tree_interval/core/chain_analyzer.py:109:1: W293 blank line contains whitespace
-src/./tree_interval/core/chain_analyzer.py:112:1: W293 blank line contains whitespace
-src/./tree_interval/core/chain_analyzer.py:118:1: W293 blank line contains whitespace
-src/./tree_interval/core/chain_analyzer.py:122:1: W293 blank line contains whitespace
-src/./tree_interval/core/chain_analyzer.py:125:1: W293 blank line contains whitespace
-src/./tree_interval/core/chain_analyzer.py:131:1: W293 blank line contains whitespace
-src/./tree_interval/core/chain_analyzer.py:132:80: E501 line too long (80 > 79 characters)
-src/./tree_interval/core/chain_analyzer.py:135:1: W293 blank line contains whitespace
+src/./tree_interval/core/chain_analyzer.py:13:1: E302 expected 2 blank lines, found 1
+src/./tree_interval/core/chain_analyzer.py:16:1: W293 blank line contains whitespace
+src/./tree_interval/core/chain_analyzer.py:19:1: W293 blank line contains whitespace
+src/./tree_interval/core/chain_analyzer.py:29:1: E302 expected 2 blank lines, found 1
+src/./tree_interval/core/chain_analyzer.py:31:1: W293 blank line contains whitespace
+src/./tree_interval/core/chain_analyzer.py:36:1: W293 blank line contains whitespace
+src/./tree_interval/core/chain_analyzer.py:40:1: W293 blank line contains whitespace
+src/./tree_interval/core/chain_analyzer.py:46:1: W293 blank line contains whitespace
+src/./tree_interval/core/chain_analyzer.py:49:1: W293 blank line contains whitespace
+src/./tree_interval/core/chain_analyzer.py:52:1: W293 blank line contains whitespace
+src/./tree_interval/core/chain_analyzer.py:60:39: W291 trailing whitespace
+src/./tree_interval/core/chain_analyzer.py:61:20: E128 continuation line under-indented for visual indent
+src/./tree_interval/core/chain_analyzer.py:61:57: W291 trailing whitespace
+src/./tree_interval/core/chain_analyzer.py:62:20: E128 continuation line under-indented for visual indent
+src/./tree_interval/core/chain_analyzer.py:63:1: W293 blank line contains whitespace
+src/./tree_interval/core/chain_analyzer.py:76:1: W293 blank line contains whitespace
+src/./tree_interval/core/chain_analyzer.py:88:1: W293 blank line contains whitespace
+src/./tree_interval/core/chain_analyzer.py:100:1: W293 blank line contains whitespace
+src/./tree_interval/core/chain_analyzer.py:101:9: F841 local variable 'e' is assigned to but never used
+src/./tree_interval/core/chain_analyzer.py:104:1: W293 blank line contains whitespace
+src/./tree_interval/core/chain_analyzer.py:106:1: W293 blank line contains whitespace
+src/./tree_interval/core/chain_analyzer.py:110:1: W293 blank line contains whitespace
+src/./tree_interval/core/chain_analyzer.py:113:1: W293 blank line contains whitespace
+src/./tree_interval/core/chain_analyzer.py:119:1: W293 blank line contains whitespace
+src/./tree_interval/core/chain_analyzer.py:123:1: W293 blank line contains whitespace
+src/./tree_interval/core/chain_analyzer.py:126:1: W293 blank line contains whitespace
+src/./tree_interval/core/chain_analyzer.py:132:1: W293 blank line contains whitespace
+src/./tree_interval/core/chain_analyzer.py:133:80: E501 line too long (80 > 79 characters)
+src/./tree_interval/core/chain_analyzer.py:136:1: W293 blank line contains whitespace
+src/./tree_interval/core/chain_analyzer.py:137:21: W292 no newline at end of file
 src/./tree_interval/core/frame_analyzer.py:48:1: W293 blank line contains whitespace
 src/./tree_interval/core/frame_analyzer.py:54:1: W293 blank line contains whitespace
 src/./tree_interval/core/frame_analyzer.py:59:1: W293 blank line contains whitespace
@@ -106,8 +123,7 @@ src/./tree_interval/visualizer/visualizer.py:102:1: W293 blank line contains whi
 src/./tree_interval/visualizer/visualizer.py:107:1: W293 blank line contains whitespace
 tests/./__init__.py:4:80: E501 line too long (80 > 79 characters)
 tests/./__init__.py:8:36: W291 trailing whitespace
-tests/./__init__.py:18:1: E302 expected 2 blank lines, found 1
-tests/./__init__.py:20:1: W293 blank line contains whitespace
-tests/./__init__.py:25:27: W291 trailing whitespace
-tests/./__init__.py:35:35: W291 trailing whitespace
-tests/./__init__.py:45:1: E305 expected 2 blank lines after class or function definition, found 1
+tests/./__init__.py:21:1: W293 blank line contains whitespace
+tests/./__init__.py:26:27: W291 trailing whitespace
+tests/./__init__.py:36:35: W291 trailing whitespace
+tests/./__init__.py:46:1: E305 expected 2 blank lines after class or function definition, found 1
