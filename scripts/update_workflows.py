@@ -1,3 +1,4 @@
+
 """GitHub Actions workflow update script.
 
 Updates GitHub Actions workflow files with new configurations.
@@ -47,6 +48,7 @@ def load_workflow_config() -> Dict[str, Any]:
     }
     return config
 
+
 def update_workflows() -> None:
     """Update GitHub Actions workflow files.
     
@@ -56,7 +58,7 @@ def update_workflows() -> None:
     # Ensure directories exist
     os.makedirs(".github/workflows", exist_ok=True)
     os.makedirs("logs", exist_ok=True)
-
+    
     config = load_workflow_config()
     workflow_path = ".github/workflows/python-publish.yml"
     
@@ -68,6 +70,7 @@ def update_workflows() -> None:
     with open("logs/update_worflows.log", "a") as log:
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         log.write(f"\nWorkflow updated at {timestamp}\n")
+
 
 if __name__ == "__main__":
     update_workflows()

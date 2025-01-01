@@ -34,6 +34,7 @@ def run_command(command: List[str], log_file: str) -> None:
             log.write(f"Error:\n{e.output.decode()}\n")
             raise
 
+
 def upload_to_pypi() -> None:
     """Build and upload package to PyPI.
     
@@ -43,7 +44,7 @@ def upload_to_pypi() -> None:
     # Ensure logs directory exists
     if not os.path.exists("logs"):
         os.makedirs("logs")
-
+    
     log_file = "logs/pypi_upload.log"
     
     # Build distribution files
@@ -51,6 +52,7 @@ def upload_to_pypi() -> None:
     
     # Upload to PyPI
     run_command(["python", "-m", "twine", "upload", "dist/*"], log_file)
+
 
 if __name__ == "__main__":
     upload_to_pypi()
