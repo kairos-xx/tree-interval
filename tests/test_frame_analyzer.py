@@ -3,7 +3,7 @@ from inspect import currentframe
 import pytest
 
 from tree_interval import FrameAnalyzer
-from tree_interval.core.interval_core import Leaf, Tree
+from tree_interval.core.interval_core import Leaf, Position, Tree
 
 
 def test_frame_analyzer_initialization():
