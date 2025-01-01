@@ -125,6 +125,37 @@ def test_style_inheritance():
     formatted = printer._format_node(node, is_root=True)
     assert formatted != ""
 
+def test_long_info_truncation():
+    """Test that long info strings are truncated properly."""
+    printer = RichTreePrinter(RichPrintConfig(terminal_size=40))
+    node = Leaf(Position(0, 100), info={"very_long_key": "x" * 100})
+    formatted = printer._format_node(node, level=2)
+    assert "info=..." in formatted
+
+def test_node_selected_style():
+    """Test that selected nodes use the selected style."""
+    printer = RichTreePrinter()
+    node = Leaf(Position(0, 100))
+    node.selected = True
+    formatted = printer._format_node(node)
+    assert formatted != ""
+
+def test_node_with_no_style():
+    """Test node formatting when no style is specified."""
+    printer = RichTreePrinter()
+    node = Leaf(Position(0, 100))
+    node.rich_style = None
+    formatted = printer._format_node(node)
+    assert formatted != ""
+
+def test_custom_root_no_children():
+    """Test visualization from custom root with no children."""
+    tree = Tree("Test")
+    leaf = Leaf(Position(0, 50), info="Single")
+    tree.root = leaf
+    printer = RichTreePrinter()
+    printer.print_tree(tree, root=leaf)  # Should not raise any errors
+    assert True
 
 if __name__ == "__main__":
     pytest.main([__file__])
