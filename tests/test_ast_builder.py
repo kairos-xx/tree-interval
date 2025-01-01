@@ -159,11 +159,13 @@ def test_lambda_node_value():
                            if getattr(n, "info", {}).get("type") == "Lambda")
     assert lambda_node is not None
 
+
 def test_build_from_frame_no_source():
     builder = AstTreeBuilder("test")
     builder.source = None
     result = builder.build_from_frame()
     assert result is None
+
 
 def test_get_node_position_missing_lineno():
     import ast
@@ -171,6 +173,7 @@ def test_get_node_position_missing_lineno():
     node = ast.Name(id='x', ctx=ast.Load())
     # Node without lineno should return None
     assert builder._get_node_position(node) is None
+
 
 def test_node_with_invalid_source():
     builder = AstTreeBuilder("x = 1")
@@ -183,6 +186,7 @@ def test_node_with_invalid_source():
     node.end_col_offset = 1
     # Should handle invalid source gracefully
     assert builder._get_node_position(node) is None
+
 
 def test_build_tree_from_ast_empty_source():
     builder = AstTreeBuilder(" ")
@@ -211,7 +215,7 @@ def test_build_tree_with_duplicate_positions():
     builder = AstTreeBuilder(source)
     tree = builder.build()
     assert tree is not None
-    
+
     # Get all nodes with the same position
     nodes = [n for n in tree.flatten() if n.start == n.end]
     # Verify proper handling of duplicate positions
@@ -230,12 +234,15 @@ def outer():
     builder = AstTreeBuilder(source)
     tree = builder.build()
     assert tree is not None
-    
+
     # Find the innermost node
-    inner_nodes = [n for n in tree.flatten() 
-                  if getattr(n, "info", {}).get("type") == "FunctionDef" 
-                  and getattr(n, "info", {}).get("name") == "inner"]
+    inner_nodes = [
+        n for n in tree.flatten()
+        if getattr(n, "info", {}).get("type") == "FunctionDef"
+        and getattr(n, "info", {}).get("name") == "inner"
+    ]
     assert len(inner_nodes) > 0
+
 
 def test_node_position_empty_source_lines():
     """Test position calculation with empty source lines."""
@@ -250,6 +257,7 @@ def test_node_position_empty_source_lines():
     assert position is not None
     assert position.lineno == 3
 
+
 def test_build_tree_complex_hierarchy():
     """Test building tree with complex parent-child relationships."""
     source = """
@@ -263,11 +271,15 @@ class A:
     builder = AstTreeBuilder(source)
     tree = builder.build()
     assert tree is not None
-    
+
     # Test the hierarchy structure
     nodes = tree.flatten()
-    class_node = next(n for n in nodes if getattr(n, "info", {}).get("type") == "ClassDef")
-    assert any(child.info.get("type") == "FunctionDef" for child in class_node.children)
+    class_node = next(n for n in nodes
+                      if getattr(n, "info", {}).get("type") == "ClassDef")
+    assert any(
+        getattr(child, "info", {}).get("type") == "FunctionDef"
+        for child in class_node.children)
+
 
 def test_build_tree_duplicate_leaf():
     """Test handling of duplicate leaf additions."""
@@ -275,9 +287,12 @@ def test_build_tree_duplicate_leaf():
     builder = AstTreeBuilder(source)
     tree = builder.build()
     assert tree is not None
-    
+
     # Get all assignment targets
-    nodes = [n for n in tree.flatten() if getattr(n, "info", {}).get("type") == "Name"]
+    nodes = [
+        n for n in tree.flatten()
+        if getattr(n, "info", {}).get("type") == "Name"
+    ]
     assert len(nodes) > 0
 
 
