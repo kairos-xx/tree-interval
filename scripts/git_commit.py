@@ -1,54 +1,50 @@
-"""Script to automate Git commits.
 
-Handles staged changes in Git repository by creating commits
-with standardized messages and optional push to remote.
+"""Automated git commit script.
+
+Handles git add, commit, and push operations with logging.
 """
 
+import os
 import subprocess
 from datetime import datetime
-from pathlib import Path
 from typing import Optional
 
-
-def run_git_command(command: list[str], log_file: Path) -> Optional[str]:
-    """Run a Git command and log output.
+def git_commit(message: Optional[str] = None) -> None:
+    """Perform git commit and push operations.
     
     Args:
-        command: Git command as list of strings
-        log_file: Path to log file
-        
-    Returns:
-        str: Command output if successful, None otherwise
+        message: Optional commit message. Uses timestamp if not provided.
+    
+    Raises:
+        subprocess.CalledProcessError: If git commands fail
     """
-    try:
-        result = subprocess.run(
-            command,
-            capture_output=True,
-            text=True,
-            check=True
-        )
-        log_file.write_text(result.stdout)
-        return result.stdout
-    except subprocess.CalledProcessError as e:
-        log_file.write_text(f'Error: {e.stderr}')
-        return None
+    # Use timestamp as default commit message
+    if not message:
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        message = f"Auto commit: {timestamp}"
 
+    # Ensure logs directory exists
+    if not os.path.exists("logs"):
+        os.makedirs("logs")
 
-def main() -> None:
-    """Main entry point for Git commit automation."""
-    log_dir = Path('logs')
-    log_dir.mkdir(exist_ok=True)
-    log_file = log_dir / 'git_commit.log'
-    
-    # Generate commit message with timestamp
-    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    message = f'Auto commit: {timestamp}'
-    
-    # Run git commands
-    if (run_git_command(['git', 'add', '.'], log_file) and
-            run_git_command(['git', 'commit', '-m', message], log_file)):
-        run_git_command(['git', 'push'], log_file)
+    # Log git operations
+    with open("logs/git_commit.log", "a") as log:
+        try:
+            # Add all changes
+            subprocess.run(["git", "add", "."], check=True)
+            log.write(f"\nGit add completed at {datetime.now()}\n")
 
+            # Commit changes
+            subprocess.run(["git", "commit", "-m", message], check=True)
+            log.write(f"Git commit completed at {datetime.now()}\n")
 
-if __name__ == '__main__':
-    main()
+            # Push changes
+            subprocess.run(["git", "push"], check=True)
+            log.write(f"Git push completed at {datetime.now()}\n")
+
+        except subprocess.CalledProcessError as e:
+            log.write(f"Error during git operations: {str(e)}\n")
+            raise
+
+if __name__ == "__main__":
+    git_commit()

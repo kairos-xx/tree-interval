@@ -1,41 +1,33 @@
 
-"""Script to get Git author information.
+"""Get git author information.
 
-Retrieves the Git author name and email from local Git config
-or environment variables. Used for package metadata.
+Retrieves the git author name and email from git config.
 """
 
-import os
+import subprocess
 from typing import Tuple
 
-
 def get_git_author() -> Tuple[str, str]:
-    """Get Git author name and email.
+    """Get git author name and email.
     
     Returns:
         Tuple[str, str]: Author name and email
-    """
-    # Try environment variables first
-    name = os.environ.get('GIT_AUTHOR_NAME', '')
-    email = os.environ.get('GIT_AUTHOR_EMAIL', '')
     
-    if not name or not email:
-        # Fallback to git config
-        try:
-            import subprocess
-            name = subprocess.check_output(
-                ['git', 'config', 'user.name']
-            ).decode().strip()
-            email = subprocess.check_output(
-                ['git', 'config', 'user.email']
-            ).decode().strip()
-        except Exception:
-            name = 'Unknown'
-            email = 'unknown@example.com'
+    Raises:
+        subprocess.CalledProcessError: If git command fails
+    """
+    # Get author name
+    name = subprocess.check_output(
+        ["git", "config", "user.name"]
+    ).decode().strip()
+    
+    # Get author email
+    email = subprocess.check_output(
+        ["git", "config", "user.email"]
+    ).decode().strip()
     
     return name, email
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     author_name, author_email = get_git_author()
-    print(f'Author: {author_name} <{author_email}>')
+    print(f"Author: {author_name} <{author_email}>")

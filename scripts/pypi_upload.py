@@ -1,60 +1,55 @@
 
-"""Script to build and upload package to PyPI.
+"""PyPI package upload script.
 
-Handles the process of building Python package distributions
-and uploading them to PyPI using twine.
+Handles building and uploading package to PyPI with logging.
 """
 
 import os
 import subprocess
-from pathlib import Path
-from typing import Optional
+from datetime import datetime
+from typing import List
 
-
-def run_command(command: list[str], log_file: Path) -> Optional[str]:
-    """Run a shell command and log output.
+def run_command(command: List[str], log_file: str) -> None:
+    """Run shell command and log output.
     
     Args:
-        command: Command as list of strings
+        command: Command and arguments to execute
         log_file: Path to log file
         
-    Returns:
-        str: Command output if successful, None otherwise
+    Raises:
+        subprocess.CalledProcessError: If command fails
     """
-    try:
-        result = subprocess.run(
-            command,
-            capture_output=True,
-            text=True,
-            check=True
-        )
-        log_file.write_text(result.stdout)
-        return result.stdout
-    except subprocess.CalledProcessError as e:
-        log_file.write_text(f'Error: {e.stderr}')
-        return None
-
-
-def main() -> None:
-    """Main entry point for PyPI upload process."""
-    log_dir = Path('logs')
-    log_dir.mkdir(exist_ok=True)
-    log_file = log_dir / 'pypi_upload.log'
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    # Build distributions
-    if run_command(['python', '-m', 'build'], log_file):
-        # Upload to PyPI
-        username = os.environ.get('PYPI_USERNAME')
-        password = os.environ.get('PYPI_PASSWORD')
-        
-        if username and password:
-            run_command([
-                'twine', 'upload',
-                'dist/*',
-                '-u', username,
-                '-p', password
-            ], log_file)
+    with open(log_file, "a") as log:
+        try:
+            output = subprocess.check_output(command, stderr=subprocess.STDOUT)
+            log.write(f"\n=== Command executed at {timestamp} ===\n")
+            log.write(f"Command: {' '.join(command)}\n")
+            log.write(f"Output:\n{output.decode()}\n")
+        except subprocess.CalledProcessError as e:
+            log.write(f"\n=== Error at {timestamp} ===\n")
+            log.write(f"Command: {' '.join(command)}\n")
+            log.write(f"Error:\n{e.output.decode()}\n")
+            raise
 
+def upload_to_pypi() -> None:
+    """Build and upload package to PyPI.
+    
+    Builds distribution files and uploads to PyPI using twine.
+    Logs all operations to pypi_upload.log.
+    """
+    # Ensure logs directory exists
+    if not os.path.exists("logs"):
+        os.makedirs("logs")
 
-if __name__ == '__main__':
-    main()
+    log_file = "logs/pypi_upload.log"
+    
+    # Build distribution files
+    run_command(["python", "-m", "build"], log_file)
+    
+    # Upload to PyPI
+    run_command(["python", "-m", "twine", "upload", "dist/*"], log_file)
+
+if __name__ == "__main__":
+    upload_to_pypi()

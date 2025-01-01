@@ -1,65 +1,73 @@
 
-"""Script to update GitHub workflow files.
+"""GitHub Actions workflow update script.
 
-Updates GitHub Actions workflow files with current package
-version and other dynamic values.
+Updates GitHub Actions workflow files with new configurations.
 """
 
+import os
 import subprocess
-from pathlib import Path
-from typing import Optional
+from datetime import datetime
+from typing import Dict, Any
+import yaml
 
-
-def run_command(command: list[str], log_file: Path) -> Optional[str]:
-    """Run a shell command and log output.
+def load_workflow_config() -> Dict[str, Any]:
+    """Load workflow configuration from YAML.
     
-    Args:
-        command: Command as list of strings
-        log_file: Path to log file
-        
     Returns:
-        str: Command output if successful, None otherwise
+        Dict[str, Any]: Workflow configuration
     """
-    try:
-        result = subprocess.run(
-            command,
-            capture_output=True,
-            text=True,
-            check=True
-        )
-        log_file.write_text(result.stdout)
-        return result.stdout
-    except subprocess.CalledProcessError as e:
-        log_file.write_text(f'Error: {e.stderr}')
-        return None
+    config = {
+        'name': 'Python Package',
+        'on': ['push', 'pull_request'],
+        'jobs': {
+            'build': {
+                'runs-on': 'ubuntu-latest',
+                'steps': [
+                    {
+                        'uses': 'actions/checkout@v2'
+                    },
+                    {
+                        'name': 'Set up Python',
+                        'uses': 'actions/setup-python@v2',
+                        'with': {
+                            'python-version': '3.x'
+                        }
+                    },
+                    {
+                        'name': 'Install dependencies',
+                        'run': 'pip install -r requirements.txt'
+                    },
+                    {
+                        'name': 'Run tests',
+                        'run': 'pytest'
+                    }
+                ]
+            }
+        }
+    }
+    return config
 
-
-def update_workflow_files() -> None:
-    """Update GitHub workflow configuration files."""
-    workflows_dir = Path('.github/workflows')
-    if not workflows_dir.exists():
-        return
-        
-    for workflow in workflows_dir.glob('*.yml'):
-        # Update workflow file content as needed
-        content = workflow.read_text()
-        # Add workflow file update logic here
-        workflow.write_text(content)
-
-
-def main() -> None:
-    """Main entry point for workflow update process."""
-    log_dir = Path('logs')
-    log_dir.mkdir(exist_ok=True)
-    log_file = log_dir / 'update_workflows.log'
+def update_workflows() -> None:
+    """Update GitHub Actions workflow files.
     
-    update_workflow_files()
+    Creates or updates workflow files in .github/workflows directory.
+    Logs operations to update_workflows.log.
+    """
+    # Ensure directories exist
+    os.makedirs(".github/workflows", exist_ok=True)
+    os.makedirs("logs", exist_ok=True)
+
+    config = load_workflow_config()
+    workflow_path = ".github/workflows/python-publish.yml"
     
-    # Commit changes if any were made
-    run_command(['git', 'add', '.github/workflows/*.yml'], log_file)
-    run_command(['git', 'commit', '-m', 'Update workflows'], log_file)
-    run_command(['git', 'push'], log_file)
+    # Write updated workflow file
+    with open(workflow_path, "w") as f:
+        yaml.dump(config, f, default_flow_style=False)
+    
+    # Log update
+    with open("logs/update_worflows.log", "a") as log:
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        log.write(f"\nWorkflow updated at {timestamp}\n")
 
-
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    update_workflows()
