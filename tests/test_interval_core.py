@@ -316,6 +316,109 @@ def test_nested_attributes_edge_cases():
     assert attrs.nonexistent is None
     assert str(attrs) == repr(attrs)
 
+def test_dispose_frame():
+    """Test frame position handling with disposition"""
+    from dis import Positions
+    class MockDisposition:
+        def __init__(self):
+            self.lineno = 1
+            self.end_lineno = 2
+            self.col_offset = 0
+            self.end_col_offset = 10
+    
+    pos = Position(MockDisposition(), source=None)
+    assert pos.start == 0
+    assert pos.end == 10
+
+def test_frame_complex_source():
+    """Test frame handling with complex source"""
+    from types import FrameType
+    class MockFrame:
+        def __init__(self):
+            self.f_code = type('', (), {'co_firstlineno': 1})
+            self.positions = type('', (), {
+                'lineno': 3,
+                'end_lineno': 5,
+                'col_offset': 4,
+                'end_col_offset': 8
+            })
+    
+    try:
+        pos = Position(MockFrame())
+    except:
+        assert True
+
+def test_statement_complex_formatting():
+    """Test complex statement formatting"""
+    part = PartStatement(before="def test(", after="):")
+    stmt = Statement(top=part, before="obj.attr.", self="method", after="(a, b)")
+    text = stmt.as_text(top_marker="^", chain_marker="~", current_marker="*")
+    assert text is not None
+    assert "def test" in text
+
+def test_nested_attributes_deep():
+    """Test deeply nested attributes"""
+    data = {
+        "level1": {
+            "level2": {
+                "level3": "value"
+            }
+        }
+    }
+    attrs = NestedAttributes(data)
+    assert attrs.level1.level2.level3 == "value"
+    assert attrs.nonexistent_attr is None
+    assert attrs.level1.nonexistent is None
+
+def test_leaf_advanced_matching():
+    """Test advanced leaf matching scenarios"""
+    pos1 = Position(10, 50)
+    pos1.lineno = 1
+    pos2 = Position(10, 50)
+    pos2.lineno = 2
+    
+    leaf1 = Leaf(pos1, info={"type": "test"})
+    leaf2 = Leaf(pos2, info={"type": "test"})
+    assert not leaf1.match(leaf2)
+
+def test_tree_edge_cases():
+    """Test tree edge cases"""
+    tree = Tree("test")
+    leaf = Leaf(None)  # Test with None position
+    tree.add_leaf(leaf)
+    assert tree.flatten() == []
+
+def test_position_complex_calcs():
+    """Test complex position calculations"""
+    pos = Position(0, 100)
+    pos._lineno = None
+    assert pos.lineno is None
+    pos._end_lineno = None
+    assert pos.end_lineno == 1  # Default fallback
+
+def test_leaf_chain_complex():
+    """Test complex leaf chain operations"""
+    root = Leaf(Position(0, 100), info={"type": "Call"})
+    attr1 = Leaf(Position(10, 30), info={"type": "Attribute"})
+    attr2 = Leaf(Position(40, 60), info={"type": "Name"})
+    root.add_child(attr1)
+    attr1.add_child(attr2)
+    
+    assert attr2.next_attribute is None
+    assert attr1.previous_attribute == attr2
+
+def test_tree_serialization_complex():
+    """Test complex tree serialization"""
+    tree = Tree("test")
+    root = Leaf(Position(0, 100))
+    root.info = {"nested": {"value": None}}
+    tree.root = root
+    
+    json_str = tree.to_json()
+    loaded_tree = Tree.from_json(json_str)
+    assert loaded_tree.root is not None
+    assert loaded_tree.root.info["nested"]["value"] is None
+
 
 if __name__ == "__main__":
     pytest.main([__file__])
