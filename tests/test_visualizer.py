@@ -88,6 +88,21 @@ def test_terminal_width_fallback_attribute_error(monkeypatch):
     assert width == 80  # Check fallback value
 
 
+def test_show_children_count():
+    """Test visualization with children count display enabled."""
+    tree = Tree("Test")
+    root = Leaf(Position(0, 100))
+    child1 = Leaf(Position(10, 50))
+    child2 = Leaf(Position(60, 90))
+    tree.root = root
+    root.add_child(child1)
+    root.add_child(child2)
+
+    config = VisualizationConfig(show_children_count=True)
+    visualizer = TreeVisualizer()
+    TreeVisualizer.visualize(tree, config)
+    assert len(root.children) == 2
+
 def test_terminal_width_fallback():
     """Test terminal width fallback value."""
     from tree_interval.rich_printer.config import get_terminal_width
