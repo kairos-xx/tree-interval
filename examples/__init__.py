@@ -1,4 +1,5 @@
 """Demo for the tree-visualizer package."""
+
 from . import demo, rich_printer_examples, styling_examples
 
 

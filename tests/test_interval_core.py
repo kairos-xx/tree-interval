@@ -109,18 +109,14 @@ def test_position_overlaps():
 
 
 def test_leaf_statement():
-    root = Leaf(Position(0, 100),
-                info={
-                    "type": "Call",
-                    "source": "test()",
-                    "cleaned_value": "test"
-                })
-    child = Leaf(Position(10, 50),
-                 info={
-                     "type": "Name",
-                     "source": "test",
-                     "cleaned_value": "test"
-                 })
+    root = Leaf(
+        Position(0, 100),
+        info={"type": "Call", "source": "test()", "cleaned_value": "test"},
+    )
+    child = Leaf(
+        Position(10, 50),
+        info={"type": "Name", "source": "test", "cleaned_value": "test"},
+    )
     root.add_child(child)
     stmt = child.statement
     assert stmt.text is not None
@@ -200,28 +196,31 @@ def test_position_column_handling():
 def test_position_with_disposition():
     from dis import Positions
 
-    pos = Position(Positions(lineno=1,
-                             end_lineno=2,
-                             col_offset=0,
-                             end_col_offset=10),
-                   source="test\ncode")
+    pos = Position(
+        Positions(lineno=1, end_lineno=2, col_offset=0, end_col_offset=10),
+        source="test\ncode",
+    )
     assert pos.start is not None
     assert pos.end is not None
 
 
 def test_leaf_chain_operations():
-    root = Leaf(Position(0, 100),
-                info={
-                    "type": "Call",
-                    "source": "obj.method()",
-                    "cleaned_value": "obj"
-                })
-    attr = Leaf(Position(10, 50),
-                info={
-                    "type": "Attribute",
-                    "source": ".method",
-                    "cleaned_value": "method"
-                })
+    root = Leaf(
+        Position(0, 100),
+        info={
+            "type": "Call",
+            "source": "obj.method()",
+            "cleaned_value": "obj",
+        },
+    )
+    attr = Leaf(
+        Position(10, 50),
+        info={
+            "type": "Attribute",
+            "source": ".method",
+            "cleaned_value": "method",
+        },
+    )
     root.add_child(attr)
     assert attr.previous_attribute is None
     assert root.next_attribute is None
@@ -257,6 +256,7 @@ def test_nested_attributes_complex():
 
 def test_tree_serialization_with_styles():
     from rich.style import Style
+
     tree = Tree("test")
     root = Leaf(Position(0, 100))
     root.style = {"color": "red", "bold": True}
@@ -271,6 +271,7 @@ def test_tree_serialization_with_styles():
 
 def test_position_frame_handling():
     import types
+
     frame = types.FrameType
     try:
         _ = Position(frame)  # pyright: ignore
@@ -281,9 +282,9 @@ def test_position_frame_handling():
 def test_statement_formatting():
     part = PartStatement(before="test(", after=")")
     stmt = Statement(top=part, before="obj.", self="method", after="()")
-    formatted = stmt.as_text(top_marker="^",
-                             chain_marker="~",
-                             current_marker="*")
+    formatted = stmt.as_text(
+        top_marker="^", chain_marker="~", current_marker="*"
+    )
     assert "test" in formatted
     assert "method" in formatted
 
@@ -320,11 +321,10 @@ def test_dispose_frame():
     """Test frame position handling with disposition"""
     from dis import Positions
 
-    pos = Position(Positions(lineno=1,
-                             end_lineno=2,
-                             col_offset=0,
-                             end_col_offset=10),
-                   source=None)
+    pos = Position(
+        Positions(lineno=1, end_lineno=2, col_offset=0, end_col_offset=10),
+        source=None,
+    )
     assert pos.start == 0
     assert pos.end == 10
 
@@ -335,13 +335,17 @@ def test_frame_complex_source():
     class MockFrame:
 
         def __init__(self):
-            self.f_code = type('', (), {'co_firstlineno': 1})
-            self.positions = type('', (), {
-                'lineno': 3,
-                'end_lineno': 5,
-                'col_offset': 4,
-                'end_col_offset': 8
-            })
+            self.f_code = type("", (), {"co_firstlineno": 1})
+            self.positions = type(
+                "",
+                (),
+                {
+                    "lineno": 3,
+                    "end_lineno": 5,
+                    "col_offset": 4,
+                    "end_col_offset": 8,
+                },
+            )
 
     try:
         _ = Position(MockFrame())  # pyright: ignore
@@ -384,12 +388,10 @@ def test_tree_visualization_config():
 def test_leaf_statement_complex():
     """Test complex statement handling in leaf"""
     root = Leaf(Position(0, 100), info={"type": "Module"})
-    child = Leaf(Position(10, 50),
-                 info={
-                     "type": "Name",
-                     "source": "test",
-                     "cleaned_value": "test"
-                 })
+    child = Leaf(
+        Position(10, 50),
+        info={"type": "Name", "source": "test", "cleaned_value": "test"},
+    )
     root.add_child(child)
     stmt = child.statement
     assert stmt is not None
@@ -459,10 +461,9 @@ def test_leaf_find_edge_cases():
 def test_statement_complex_formatting():
     """Test complex statement formatting"""
     part = PartStatement(before="def test(", after="):")
-    stmt = Statement(top=part,
-                     before="obj.attr.",
-                     self="method",
-                     after="(a, b)")
+    stmt = Statement(
+        top=part, before="obj.attr.", self="method", after="(a, b)"
+    )
     text = stmt.as_text(top_marker="^", chain_marker="~", current_marker="*")
     assert text is not None
     assert "def test" in text
@@ -528,8 +529,12 @@ def test_tree_serialization_complex():
     json_str = tree.to_json()
     loaded_tree = Tree.from_json(json_str)
     assert loaded_tree.root is not None
-    assert getattr(loaded_tree.root, "info",
-                   {}).get("nested", {}).get("value", False) is None
+    assert (
+        getattr(loaded_tree.root, "info", {})
+        .get("nested", {})
+        .get("value", False)
+        is None
+    )
 
 
 if __name__ == "__main__":

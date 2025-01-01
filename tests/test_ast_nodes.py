@@ -1,4 +1,5 @@
 """Tests for AST node information access"""
+
 import pytest
 
 from tree_interval import AstTreeBuilder
@@ -21,7 +22,8 @@ def test_ast_node_access() -> None:
         raise AssertionError("Tree root is None")
 
     found_node = tree.root.find(
-        lambda n: (n.info is not None and n.info.get("type") == "Assign"))
+        lambda n: (n.info is not None and n.info.get("type") == "Assign")
+    )
     if not found_node or not found_node.ast_node:
         raise AssertionError("Node not found or ast_node is None")
     assert hasattr(found_node.ast_node, "targets")
@@ -38,7 +40,8 @@ def test_ast_node_fields() -> None:
         raise AssertionError("Tree root is None")
 
     found_node = tree.root.find(
-        lambda n: (n.info is not None and n.info.get("type") == "FunctionDef"))
+        lambda n: (n.info is not None and n.info.get("type") == "FunctionDef")
+    )
     if not found_node or not found_node.ast_node:
         raise AssertionError("Node not found or ast_node is None")
     assert "_fields" in dir(found_node.ast_node)

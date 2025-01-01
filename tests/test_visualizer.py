@@ -47,6 +47,7 @@ def test_empty_tree_visualization():
 
 def test_custom_style_visualization():
     from tree_interval import LeafStyle
+
     tree = Tree("")
     node = Leaf(Position(0, 100))
     node.style = LeafStyle(color="#FF0000", bold=True)
@@ -70,7 +71,7 @@ def test_terminal_width_fallback_monkey(monkeypatch):
     def mock_get_terminal_size():
         raise OSError("Terminal size not available")
 
-    monkeypatch.setattr('shutil.get_terminal_size', mock_get_terminal_size)
+    monkeypatch.setattr("shutil.get_terminal_size", mock_get_terminal_size)
     width = get_terminal_width()
     assert width == 80  # Check fallback value
 
@@ -86,7 +87,7 @@ def test_terminal_width_fallback_attribute_error(monkeypatch):
 
         return MockSize()  # No columns attribute
 
-    monkeypatch.setattr('shutil.get_terminal_size', mock_get_terminal_size)
+    monkeypatch.setattr("shutil.get_terminal_size", mock_get_terminal_size)
     width = get_terminal_width()
     assert width == 80  # Check fallback value
 
@@ -128,13 +129,13 @@ def test_terminal_width_success(monkeypatch):
 
     from tree_interval.visualizer.config import get_terminal_width
 
-    MockSize = namedtuple('MockSize', ['columns'])
+    MockSize = namedtuple("MockSize", ["columns"])
     mock_size = MockSize(columns=100)
 
     def mock_get_terminal_size():
         return mock_size
 
-    monkeypatch.setattr('shutil.get_terminal_size', mock_get_terminal_size)
+    monkeypatch.setattr("shutil.get_terminal_size", mock_get_terminal_size)
     width = get_terminal_width()
     assert width == 100
 

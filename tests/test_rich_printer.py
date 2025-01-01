@@ -119,6 +119,7 @@ def test_node_formatting():
 
 def test_style_inheritance():
     from rich.style import Style
+
     config = RichPrintConfig(root_style=Style(color="red"))
     printer = RichTreePrinter(config)
     node = Leaf(Position(0, 100))
@@ -166,7 +167,7 @@ def test_node_without_rich_style():
     """Test node formatting when rich_style attribute doesn't exist."""
     printer = RichTreePrinter()
     node = Leaf(Position(0, 100))
-    delattr(node, 'rich_style')  # Remove rich_style attribute
+    delattr(node, "rich_style")  # Remove rich_style attribute
     formatted = printer._format_node(node)
     assert formatted != ""
 
@@ -203,6 +204,7 @@ def test_format_node_long_info():
 def test_format_node_custom_style():
     """Test formatting node with custom style."""
     from rich.style import Style
+
     printer = RichTreePrinter()
     node = Leaf(Position(0, 10))
     node.rich_style = Style(color="red")
@@ -213,6 +215,7 @@ def test_format_node_custom_style():
 def test_function_def_style():
     """Test style assignment for FunctionDef nodes."""
     from rich.style import Style
+
     config = RichPrintConfig()
     printer = RichTreePrinter(config)
     node = Leaf(Position(0, 10))
@@ -224,6 +227,7 @@ def test_function_def_style():
 def test_default_style_fallback():
     """Test fallback to default node style."""
     from rich.style import Style
+
     config = RichPrintConfig()
     config.leaf_style = Style(color="green", bold=True)
     printer = RichTreePrinter(config)

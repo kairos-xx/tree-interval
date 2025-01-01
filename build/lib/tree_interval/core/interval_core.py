@@ -114,10 +114,9 @@ class Statement:
     chain_marker: str = "^"
     current_marker: str = "▲"
 
-    def as_text(self,
-                top_marker=None,
-                chain_marker=None,
-                current_marker=None) -> str:
+    def as_text(
+        self, top_marker=None, chain_marker=None, current_marker=None
+    ) -> str:
         """Format the statement with visual marker annotations.
 
         Creates a two-line representation of the statement where the first line
@@ -148,8 +147,12 @@ class Statement:
 
         def lines_with_markers(text: str, marker_char: str):
             return [
-                (line,
-                 "".join([ch if ch.isspace() else marker_char for ch in line]))
+                (
+                    line,
+                    "".join(
+                        [ch if ch.isspace() else marker_char for ch in line]
+                    ),
+                )
                 for line in text.split("\n")
             ]
 
@@ -161,28 +164,37 @@ class Statement:
 
             last_text_a, last_mark_a = pairs_a[-1]
             first_text_b, first_mark_b = pairs_b[0]
-            return (pairs_a[:-1] + [
-                (last_text_a + first_text_b, last_mark_a + first_mark_b)
-            ] + pairs_b[1:])
+            return (
+                pairs_a[:-1]
+                + [(last_text_a + first_text_b, last_mark_a + first_mark_b)]
+                + pairs_b[1:]
+            )
 
         return "\n".join(
             sum(
-                [[text_line, marker_line]
-                 for text_line, marker_line in merge_lines(
-                     merge_lines(
-                         lines_with_markers(self.top.before, top_marker),
-                         merge_lines(
-                             merge_lines(
-                                 lines_with_markers(self.before, chain_marker),
-                                 lines_with_markers(self.self, current_marker),
-                             ),
-                             lines_with_markers(self.after, chain_marker),
-                         ),
-                     ),
-                     lines_with_markers(self.top.after, top_marker),
-                 )],
+                [
+                    [text_line, marker_line]
+                    for text_line, marker_line in merge_lines(
+                        merge_lines(
+                            lines_with_markers(self.top.before, top_marker),
+                            merge_lines(
+                                merge_lines(
+                                    lines_with_markers(
+                                        self.before, chain_marker
+                                    ),
+                                    lines_with_markers(
+                                        self.self, current_marker
+                                    ),
+                                ),
+                                lines_with_markers(self.after, chain_marker),
+                            ),
+                        ),
+                        lines_with_markers(self.top.after, top_marker),
+                    )
+                ],
                 [],
-            ))
+            )
+        )
 
     @property
     def text(self) -> str:
@@ -265,24 +277,33 @@ class Position:
             frame_positions = getframeinfo(frame).positions
             self.start, self.end = (
                 sum(
-                    len(source_lines[i]) + indent_size for i in range(
-                        (getattr(frame_positions, "lineno", 1) or 1) -
-                        (first_line or 1))) +
-                (getattr(frame_positions, "col_offset", 0) or 0),
+                    len(source_lines[i]) + indent_size
+                    for i in range(
+                        (getattr(frame_positions, "lineno", 1) or 1)
+                        - (first_line or 1)
+                    )
+                )
+                + (getattr(frame_positions, "col_offset", 0) or 0),
                 sum(
-                    len(source_lines[i]) + indent_size for i in range(
-                        (getattr(frame_positions, "end_lineno", 1) or 1) -
-                        (first_line or 1))) +
-                (getattr(frame_positions, "end_col_offset", 0) or 0),
+                    len(source_lines[i]) + indent_size
+                    for i in range(
+                        (getattr(frame_positions, "end_lineno", 1) or 1)
+                        - (first_line or 1)
+                    )
+                )
+                + (getattr(frame_positions, "end_col_offset", 0) or 0),
             )
-            source_lines = split(source[self.start:self.end])
+            source_lines = split(source[self.start : self.end])
             self._lineno = 1
             self._end_lineno = len(source_lines)
             self._col_offset = self.start
             self._end_col_offset = (
-                self.end -
-                sum(len(source_lines[i])
-                    for i in range(self._end_lineno - 1)) - self.start)
+                self.end
+                - sum(
+                    len(source_lines[i]) for i in range(self._end_lineno - 1)
+                )
+                - self.start
+            )
 
         else:
             if isinstance(start, disposition):
@@ -299,23 +320,32 @@ class Position:
                     end_lineno = int(getattr(dis_pos, "end_lineno", lineno))
                     col_offset = int(getattr(dis_pos, "col_offset", 0))
                     end_col_offset = int(
-                        getattr(dis_pos, "end_col_offset", col_offset))
+                        getattr(dis_pos, "end_col_offset", col_offset)
+                    )
 
                     pos_start = (
-                        sum(len(line) + 1
-                            for line in lines[:lineno - 1]) + col_offset)
+                        sum(len(line) + 1 for line in lines[: lineno - 1])
+                        + col_offset
+                    )
                     pos_end = (
-                        sum(len(line) + 1 for line in lines[:end_lineno - 1]) +
-                        end_col_offset)
+                        sum(len(line) + 1 for line in lines[: end_lineno - 1])
+                        + end_col_offset
+                    )
                     self.start = pos_start
                     self.end = pos_end
                 else:
                     # Fallback to using line numbers as positions
                     # if no source provided
-                    self.start = (dis_pos.col_offset
-                                  if dis_pos.col_offset is not None else 0)
-                    self.end = (dis_pos.end_col_offset
-                                if dis_pos.end_col_offset is not None else 0)
+                    self.start = (
+                        dis_pos.col_offset
+                        if dis_pos.col_offset is not None
+                        else 0
+                    )
+                    self.end = (
+                        dis_pos.end_col_offset
+                        if dis_pos.end_col_offset is not None
+                        else 0
+                    )
             else:
                 if start is None or end is None:
                     raise ValueError("Position start and end must not be None")
@@ -375,12 +405,14 @@ class Position:
         """Display position with specific format."""
         if position_format == "position":
             col_offset = self.col_offset if self.col_offset is not None else 0
-            end_col_offset = (self.end_col_offset
-                              if self.end_col_offset is not None else 0)
+            end_col_offset = (
+                self.end_col_offset if self.end_col_offset is not None else 0
+            )
             return (
                 f"Position(start={self.start}, end={self.end}, "
                 f"lineno={self.lineno}, end_lineno={self.end_lineno}, "
-                f"col_offset={col_offset}, end_col_offset={end_col_offset})")
+                f"col_offset={col_offset}, end_col_offset={end_col_offset})"
+            )
         elif position_format == "tuple":
             values = [
                 self.start,
@@ -400,12 +432,14 @@ class Position:
     def __eq__(self, other: Any) -> bool:
         if not isinstance(other, Position):
             return False
-        return (self._lineno == other._lineno
-                and self._end_lineno == other._end_lineno
-                and self._col_offset == other._col_offset
-                and self._end_col_offset == other._end_col_offset)
+        return (
+            self._lineno == other._lineno
+            and self._end_lineno == other._end_lineno
+            and self._col_offset == other._col_offset
+            and self._end_col_offset == other._end_col_offset
+        )
 
-    def overlaps(self, other: 'Position') -> bool:
+    def overlaps(self, other: "Position") -> bool:
         # Returns True if the positions overlap
         return self.start <= other.end and self.end >= other.start
 
@@ -442,8 +476,10 @@ class Leaf:
         self.rich_style = rich_style
 
         # Initialize end_col_offset if not set
-        if (self.position._end_col_offset is None
-                and self.position._col_offset is not None):
+        if (
+            self.position._end_col_offset is None
+            and self.position._col_offset is not None
+        ):
             self.position._end_col_offset = self.position._col_offset + 20
 
         self.parent: Optional[Leaf] = None
@@ -529,17 +565,19 @@ class Leaf:
         # print("---",top_source)
         top_start = (top.end if top else 0) or 0
         top_part = PartStatement(
-            before=top_source[:(self.start or 0) - top_start],
-            after=top_source[((next_attr.end if next_attr else 0) or 0) -
-                             top_start:],
+            before=top_source[: (self.start or 0) - top_start],
+            after=top_source[
+                ((next_attr.end if next_attr else 0) or 0) - top_start :
+            ],
         )
         source = self.info.get("source", "") if self.info else ""
         return Statement(
             top=top_part,
             before=source.removesuffix(value),
             self=value,
-            after=getattr(next_attr, "info", {}).get("source",
-                                                     "").removeprefix(source),
+            after=getattr(next_attr, "info", {})
+            .get("source", "")
+            .removeprefix(source),
         )
 
     @property
@@ -589,10 +627,13 @@ class Leaf:
         """
         current = self
         while current:
-            if (current.info and isinstance(current.info, dict)
-                    and current.info.get("type")
-                    and current.info["type"] in AST_TYPES
-                    and AST_TYPES[current.info["type"]]["statement"]):
+            if (
+                current.info
+                and isinstance(current.info, dict)
+                and current.info.get("type")
+                and current.info["type"] in AST_TYPES
+                and AST_TYPES[current.info["type"]]["statement"]
+            ):
                 return current
             current = current.parent
         return None
@@ -615,13 +656,17 @@ class Leaf:
         def calc_distance(leaf: "Leaf") -> int:
             leaf_start = leaf.start or 0
             leaf_end = leaf.end or 0
-            return ((start - leaf_start) if start > leaf_start else
-                    (leaf_start - start)) + (
-                        (end - leaf_end) if end > leaf_end else
-                        (leaf_end - end))
+            return (
+                (start - leaf_start)
+                if start > leaf_start
+                else (leaf_start - start)
+            ) + ((end - leaf_end) if end > leaf_end else (leaf_end - end))
 
-        best_match_distance = (float("inf") if best_match_distance is None else
-                               best_match_distance)
+        best_match_distance = (
+            float("inf")
+            if best_match_distance is None
+            else best_match_distance
+        )
         distance = calc_distance(self)
 
         if distance < best_match_distance:
@@ -629,8 +674,9 @@ class Leaf:
             best_match_distance = distance
         best_match = self
         for child in self.children:
-            child_match = child.find_best_match(start, end,
-                                                best_match_distance)
+            child_match = child.find_best_match(
+                start, end, best_match_distance
+            )
             if child_match is not None:
                 distance = calc_distance(child_match)
                 if distance < best_match_distance:
@@ -666,8 +712,9 @@ class Leaf:
             current = current.parent
         return None
 
-    def find_parent(self, criteria: Callable[["Leaf"],
-                                             bool]) -> Optional["Leaf"]:
+    def find_parent(
+        self, criteria: Callable[["Leaf"], bool]
+    ) -> Optional["Leaf"]:
         """Find first parent node that matches the given criteria.
 
         Args:
@@ -683,8 +730,9 @@ class Leaf:
             current = current.parent
         return None
 
-    def find_child(self, criteria: Callable[["Leaf"],
-                                            bool]) -> Optional["Leaf"]:
+    def find_child(
+        self, criteria: Callable[["Leaf"], bool]
+    ) -> Optional["Leaf"]:
         """Find first child node that matches the given criteria.
 
         Args:
@@ -701,8 +749,9 @@ class Leaf:
                 return result
         return None
 
-    def find_sibling(self, criteria: Callable[["Leaf"],
-                                              bool]) -> Optional["Leaf"]:
+    def find_sibling(
+        self, criteria: Callable[["Leaf"], bool]
+    ) -> Optional["Leaf"]:
         """Find first sibling node that matches the given criteria.
 
         Args:
@@ -757,19 +806,23 @@ class Leaf:
     def position_as(self, position_format: str = "default") -> str:
         """Display node with specific position format."""
         if position_format == "position":
-            return (f"Position(start={self.start}, end={self.end}, "
-                    f"lineno={self.lineno}, end_lineno={self.end_lineno}, "
-                    f"col_offset={self.col_offset}, " +
-                    f"end_col_offset={self.end_col_offset}, "
-                    f"size={self.size})")
+            return (
+                f"Position(start={self.start}, end={self.end}, "
+                f"lineno={self.lineno}, end_lineno={self.end_lineno}, "
+                f"col_offset={self.col_offset}, "
+                + f"end_col_offset={self.end_col_offset}, "
+                f"size={self.size})"
+            )
         elif position_format == "tuple":
             return (
                 f"({self.start}, {self.end}, {self.lineno}, "
                 f"{self.end_lineno}, {self.col_offset}, {self.end_col_offset})"
             )
         else:
-            return (f"Position(start={self.start}, " +
-                    f"end={self.end}, size={self.size})")
+            return (
+                f"Position(start={self.start}, "
+                + f"end={self.end}, size={self.size})"
+            )
 
     def _get_parent(self) -> Optional["Leaf"]:
         """Safe accessor for parent property."""
@@ -826,9 +879,11 @@ class Leaf:
 
     def __repr__(self) -> str:
         if isinstance(self._info, dict):
-            info_str = ("Info(" + ", ".join(f"{k}={repr(v)}"
-                                            for k, v in self._info.items()) +
-                        ")")
+            info_str = (
+                "Info("
+                + ", ".join(f"{k}={repr(v)}" for k, v in self._info.items())
+                + ")"
+            )
         else:
             info_str = repr(self._info)
         return f"Leaf(start={self.start}, end={self.end}, info={info_str})"
@@ -837,8 +892,12 @@ class Leaf:
         """Compare two nodes for equality."""
         if not isinstance(other, Leaf):
             return False
-        return (self.position == other.position and self.info == other.info
-                and self.start == other.start and self.end == other.end)
+        return (
+            self.position == other.position
+            and self.info == other.info
+            and self.start == other.start
+            and self.end == other.end
+        )
 
 
 class Tree(Generic[T]):
@@ -866,10 +925,12 @@ class Tree(Generic[T]):
         - Visualization support
     """
 
-    def __init__(self,
-                 source: T,
-                 start_lineno: Optional[int] = None,
-                 indent_size: int = 4) -> None:
+    def __init__(
+        self,
+        source: T,
+        start_lineno: Optional[int] = None,
+        indent_size: int = 4,
+    ) -> None:
         self.source = source
         self.start_lineno = start_lineno
         self.indent_size = indent_size
@@ -969,9 +1030,11 @@ class Tree(Generic[T]):
             node.add_child(child)
         return node
 
-    def visualize(self,
-                  config: Optional["VisualizationConfig"] = None,
-                  root: Optional["Leaf"] = None) -> None:
+    def visualize(
+        self,
+        config: Optional["VisualizationConfig"] = None,
+        root: Optional["Leaf"] = None,
+    ) -> None:
         """
         Visualize the tree structure.
 
