@@ -25,19 +25,18 @@ scripts/./update_workflows.py:54:1: W293 blank line contains whitespace
 scripts/./update_workflows.py:61:1: W293 blank line contains whitespace
 scripts/./update_workflows.py:64:1: W293 blank line contains whitespace
 scripts/./update_workflows.py:68:1: W293 blank line contains whitespace
-src/./tree_interval/core/ast_builder.py:161:80: E501 line too long (80 > 79 characters)
-src/./tree_interval/core/ast_builder.py:196:80: E501 line too long (80 > 79 characters)
-src/./tree_interval/core/ast_builder.py:199:80: E501 line too long (81 > 79 characters)
-src/./tree_interval/core/ast_builder.py:201:80: E501 line too long (81 > 79 characters)
-src/./tree_interval/core/chain_analyzer.py:64:20: E128 continuation line under-indented for visual indent
-src/./tree_interval/core/frame_analyzer.py:48:1: W293 blank line contains whitespace
-src/./tree_interval/core/frame_analyzer.py:54:1: W293 blank line contains whitespace
-src/./tree_interval/core/frame_analyzer.py:59:1: W293 blank line contains whitespace
-src/./tree_interval/core/frame_analyzer.py:63:1: W293 blank line contains whitespace
-src/./tree_interval/core/frame_analyzer.py:85:80: E501 line too long (81 > 79 characters)
-src/./tree_interval/core/frame_analyzer.py:124:80: E501 line too long (81 > 79 characters)
-src/./tree_interval/core/frame_analyzer.py:135:80: E501 line too long (82 > 79 characters)
-src/./tree_interval/core/frame_analyzer.py:153:25: W292 no newline at end of file
+src/./tree_interval/core/ast_builder.py:160:80: E501 line too long (80 > 79 characters)
+src/./tree_interval/core/ast_builder.py:195:80: E501 line too long (80 > 79 characters)
+src/./tree_interval/core/ast_builder.py:198:80: E501 line too long (81 > 79 characters)
+src/./tree_interval/core/ast_builder.py:200:80: E501 line too long (81 > 79 characters)
+src/./tree_interval/core/ast_builder.py:242:27: W292 no newline at end of file
+src/./tree_interval/core/chain_analyzer.py:63:39: W291 trailing whitespace
+src/./tree_interval/core/chain_analyzer.py:64:22: E127 continuation line over-indented for visual indent
+src/./tree_interval/core/chain_analyzer.py:65:22: E127 continuation line over-indented for visual indent
+src/./tree_interval/core/frame_analyzer.py:82:80: E501 line too long (91 > 79 characters)
+src/./tree_interval/core/frame_analyzer.py:101:80: E501 line too long (81 > 79 characters)
+src/./tree_interval/core/frame_analyzer.py:112:80: E501 line too long (82 > 79 characters)
+src/./tree_interval/core/frame_analyzer.py:130:25: W292 no newline at end of file
 src/./tree_interval/core/future.py:39:1: W293 blank line contains whitespace
 src/./tree_interval/core/future.py:40:80: E501 line too long (80 > 79 characters)
 src/./tree_interval/core/future.py:45:1: W293 blank line contains whitespace
@@ -69,17 +68,12 @@ src/./tree_interval/core/interval_core.py:491:1: W293 blank line contains whites
 src/./tree_interval/core/interval_core.py:496:1: W293 blank line contains whitespace
 src/./tree_interval/core/interval_core.py:499:1: W293 blank line contains whitespace
 src/./tree_interval/core/interval_core.py:963:80: E501 line too long (82 > 79 characters)
-src/./tree_interval/rich_printer/printer.py:86:1: W293 blank line contains whitespace
-src/./tree_interval/rich_printer/printer.py:92:1: W293 blank line contains whitespace
-src/./tree_interval/rich_printer/printer.py:98:1: W293 blank line contains whitespace
-src/./tree_interval/rich_printer/printer.py:103:1: W293 blank line contains whitespace
+src/./tree_interval/rich_printer/printer.py:35:1: E302 expected 2 blank lines, found 1
 src/./tree_interval/visualizer/visualizer.py:90:1: W293 blank line contains whitespace
 src/./tree_interval/visualizer/visualizer.py:96:1: W293 blank line contains whitespace
 src/./tree_interval/visualizer/visualizer.py:102:1: W293 blank line contains whitespace
 src/./tree_interval/visualizer/visualizer.py:107:1: W293 blank line contains whitespace
-tests/./__init__.py:4:80: E501 line too long (80 > 79 characters)
+tests/./__init__.py:4:67: W291 trailing whitespace
 tests/./__init__.py:8:36: W291 trailing whitespace
-tests/./__init__.py:21:1: W293 blank line contains whitespace
-tests/./__init__.py:26:27: W291 trailing whitespace
-tests/./__init__.py:36:35: W291 trailing whitespace
-tests/./__init__.py:46:1: E305 expected 2 blank lines after class or function definition, found 1
+tests/./__init__.py:18:1: E302 expected 2 blank lines, found 1
+tests/./__init__.py:20:1: W293 blank line contains whitespace
