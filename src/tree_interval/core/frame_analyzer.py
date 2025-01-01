@@ -67,7 +67,9 @@ class FrameAnalyzer:
 
             # Find the node with the minimal position difference.
             if matching_nodes:
-                self.current_node = min(matching_nodes, key=lambda x: x[1])[0]
+                self.current_node = min(
+                            matching_nodes, key=lambda x: x[1]
+                        )[0]
         return self.current_node
 
     def build_tree(self) -> Optional[Tree]:
@@ -80,9 +82,9 @@ class FrameAnalyzer:
         """
         self.build_tree_done = True  # Mark tree building as done.
         if not hasattr(self, "tree") or self.tree is None and self.ast_builder is not None:
-            # Use builder to construct the tree if not already done.
+            # Use builder to construct the tree
             self.tree = self.ast_builder.build_from_frame()
-            # Return None if tree construction fails.
+            # Return None if construction fails
             if not self.tree:
                 return None
         if not hasattr(self, "current_node") or self.current_node is None:
@@ -109,7 +111,7 @@ class FrameAnalyzer:
             for start, end in sorted_positions:
                 current_node = nodes_by_pos[(start, end)]
                 if current_node.match(self.current_node):
-                    current_node.selected = True  # Mark current node as selected.
+                    current_node.selected = True  # Mark as selected
 
                 for parent_start, parent_end in sorted_positions:
                     if (

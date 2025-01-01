@@ -60,9 +60,9 @@ class ChainAnalyzer:
         """
         try:
             tree = ast.parse(code)
-            node = (tree.body[0].value 
-                     if isinstance(tree.body[0], ast.Expr)
-                     else tree.body[0])
+            node = (tree.body[0].value
+                   if isinstance(tree.body[0], ast.Expr)
+                   else tree.body[0])
 
             # Handle augmented assignments (+=, -=, etc)
             if isinstance(node, ast.AugAssign):
