@@ -320,6 +320,7 @@ def demonstrate_frame_analyzer():
                 current_node.statement.as_text(top_marker="$",
                                                chain_marker=".",
                                                current_marker="*"))
+
     def build_tree():
         analyzer = FrameAnalyzer(currentframe())
         tree = analyzer.build_tree()
