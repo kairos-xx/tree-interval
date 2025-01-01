@@ -1,9 +1,10 @@
-
 import pytest
+
 from tree_interval.core.future import Future
 
 
 class _Nested:
+
     def __init__(self) -> None:
         self.__dict__ = {}
 
@@ -40,5 +41,5 @@ def test_future_frame_analyzer_integration(nested):
     """Test that Future works with FrameAnalyzer"""
     instance = nested
     with pytest.raises(AttributeError) as exc_info:
-        instance.test.missing  # pyright: ignore
+        _ = instance.test.missing  # pyright: ignore
         assert "not found" in str(exc_info.value)
