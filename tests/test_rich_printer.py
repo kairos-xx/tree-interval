@@ -90,10 +90,12 @@ def test_custom_root_visualization(basic_tree, console):
     assert "Child" in output
     assert "10-50" in output
 
+
 def test_rich_printer_empty_config():
     printer = RichTreePrinter()
     with pytest.raises(AttributeError):
         printer.print_tree(None)
+
 
 def test_format_node_custom_styles():
     leaf = Leaf(Position(0, 100), info={"type": "Module"})
@@ -101,19 +103,19 @@ def test_format_node_custom_styles():
     formatted = printer._format_node(leaf, is_root=True)
     assert formatted != ""
 
-if __name__ == "__main__":
-    pytest.main([__file__])
 
 def test_format_empty_tree():
     printer = RichTreePrinter()
     with pytest.raises(AttributeError):
         printer.print_tree(Tree(""))
 
+
 def test_node_formatting():
     printer = RichTreePrinter()
     node = Leaf(Position(0, 100), info={"type": "test"})
     formatted = printer._format_node(node, is_root=True)
     assert formatted != ""
+
 
 def test_style_inheritance():
     from rich.style import Style
@@ -122,3 +124,7 @@ def test_style_inheritance():
     node = Leaf(Position(0, 100))
     formatted = printer._format_node(node, is_root=True)
     assert formatted != ""
+
+
+if __name__ == "__main__":
+    pytest.main([__file__])

@@ -44,6 +44,7 @@ def test_empty_tree_visualization():
     TreeVisualizer.visualize(tree)
     assert True  # Verify no exceptions
 
+
 def test_custom_style_visualization():
     from tree_interval import LeafStyle
     tree = Tree("")
@@ -53,12 +54,14 @@ def test_custom_style_visualization():
     TreeVisualizer.visualize(tree)
     assert True
 
+
 def test_node_info_truncation():
     tree = Tree("")
     node = Leaf(Position(0, 100), info="x" * 1000)  # Very long info
     tree.root = node
     TreeVisualizer.visualize(tree)
     assert True
+
+
 if __name__ == "__main__":
     pytest.main([__file__])
-

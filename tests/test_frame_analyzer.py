@@ -3,6 +3,7 @@ from inspect import currentframe
 import pytest
 
 from tree_interval import FrameAnalyzer
+from tree_interval.core.interval_core import Tree
 
 
 def test_frame_analyzer_initialization():
@@ -36,28 +37,33 @@ def test_find_current_node():
     assert node.info is not None
 
 
-if __name__ == "__main__":
-    pytest.main([__file__])
-
 def test_empty_frame():
     frame = None
     analyzer = FrameAnalyzer(frame)
     assert analyzer.find_current_node() is None
 
+
 def test_no_matching_nodes():
+
     def dummy_func():
-        frame = inspect.currentframe()
+        frame = currentframe()
         analyzer = FrameAnalyzer(frame)
         analyzer.tree = Tree("")
         return analyzer.find_current_node()
-    
+
     assert dummy_func() is None
 
+
 def test_build_tree_empty():
+
     def dummy_func():
-        frame = inspect.currentframe()
+        frame = currentframe()
         analyzer = FrameAnalyzer(frame)
         analyzer.ast_builder.source = None
         return analyzer.build_tree()
-    
+
     assert dummy_func() is None
+
+
+if __name__ == "__main__":
+    pytest.main([__file__])

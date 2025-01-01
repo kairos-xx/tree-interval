@@ -36,9 +36,10 @@ def test_leaf_serialization():
     assert leaf_dict["info"]["name"] == "test"
 
 
-def test_position_edge_cases():    
+def test_position_edge_cases():
     with pytest.raises(ValueError):
         _ = Position(None, None)
+
 
 def test_leaf_complex_operations():
     leaf = Leaf(Position(0, 100))
@@ -59,9 +60,6 @@ def test_tree_empty_operations():
     assert Tree.from_json(tree_json).root is None
 
 
-if __name__ == "__main__":
-    pytest.main([__file__])
-
 def test_complex_leaf_operations():
     leaf = Leaf(Position(0, 100))
     leaf.position.lineno = 1
@@ -73,6 +71,7 @@ def test_complex_leaf_operations():
     assert leaf.col_offset == 0
     assert leaf.end_col_offset == 10
 
+
 def test_leaf_navigation():
     root = Leaf(Position(0, 100))
     child1 = Leaf(Position(10, 30))
@@ -82,14 +81,19 @@ def test_leaf_navigation():
     assert child1.next == child2
     assert child2.previous == child1
 
+
 def test_tree_serialization():
     tree = Tree("test")
     root = Leaf(Position(0, 100), info={"type": "root"})
     child = Leaf(Position(10, 50), info={"type": "child"})
     tree.root = root
     tree.add_leaf(child)
-    
+
     json_str = tree.to_json()
     loaded_tree = Tree.from_json(json_str)
     assert loaded_tree.root is not None
-    assert loaded_tree.root.info["type"] == "root"
+    assert getattr(loaded_tree.root, "info", {}).get("type") == "root"
+
+
+if __name__ == "__main__":
+    pytest.main([__file__])
