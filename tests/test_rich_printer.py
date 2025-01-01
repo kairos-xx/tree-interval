@@ -94,8 +94,7 @@ def test_custom_root_visualization(basic_tree, console):
 def test_rich_printer_empty_config():
     printer = RichTreePrinter()
     with pytest.raises(AttributeError):
-        printer.print_tree(None)
-
+        printer.print_tree(None) 
 
 def test_format_node_custom_styles():
     leaf = Leaf(Position(0, 100), info={"type": "Module"})
@@ -106,7 +105,8 @@ def test_format_node_custom_styles():
 
 def test_format_empty_tree():
     printer = RichTreePrinter()
-    printer.print_tree(Tree(""))  # Should just print "Empty tree" without raising
+    printer.print_tree(
+        Tree(""))  # Should just print "Empty tree" without raising
     assert True
 
 
@@ -125,12 +125,14 @@ def test_style_inheritance():
     formatted = printer._format_node(node, is_root=True)
     assert formatted != ""
 
+
 def test_long_info_truncation():
     """Test that long info strings are truncated properly."""
     printer = RichTreePrinter(RichPrintConfig(terminal_size=40))
     node = Leaf(Position(0, 100), info={"very_long_key": "x" * 100})
     formatted = printer._format_node(node, level=2)
     assert "info=..." in formatted
+
 
 def test_node_selected_style():
     """Test that selected nodes use the selected style."""
@@ -140,6 +142,7 @@ def test_node_selected_style():
     formatted = printer._format_node(node)
     assert formatted != ""
 
+
 def test_node_with_no_style():
     """Test node formatting when no style is specified."""
     printer = RichTreePrinter()
@@ -147,6 +150,7 @@ def test_node_with_no_style():
     node.rich_style = None
     formatted = printer._format_node(node)
     assert formatted != ""
+
 
 def test_custom_root_no_children():
     """Test visualization from custom root with no children."""
@@ -185,6 +189,7 @@ def test_console_without_record():
     printer.print_tree(tree)  # Should not raise any errors
     assert True
 
+
 def test_format_node_long_info():
     """Test formatting node with long info string."""
     config = RichPrintConfig(terminal_size=20)
@@ -194,6 +199,7 @@ def test_format_node_long_info():
     formatted = printer._format_node(node)
     assert "info=..." in formatted
 
+
 def test_format_node_custom_style():
     """Test formatting node with custom style."""
     from rich.style import Style
@@ -202,6 +208,7 @@ def test_format_node_custom_style():
     node.rich_style = Style(color="red")
     formatted = printer._format_node(node)
     assert formatted is not None
+
 
 def test_function_def_style():
     """Test style assignment for FunctionDef nodes."""
@@ -213,22 +220,26 @@ def test_function_def_style():
     style = printer._get_node_style(node)
     assert style == Style(color="cyan")
 
+
 def test_default_style_fallback():
     """Test fallback to default node style."""
     from rich.style import Style
     config = RichPrintConfig()
-    config.leaf_style = Style(color="green",bold=True)
+    config.leaf_style = Style(color="green", bold=True)
     printer = RichTreePrinter(config)
     node = Leaf(Position(0, 10))
     node.info = {"type": "UnknownType"}
     style = printer._get_node_style(node)
-    assert style == config.root_style 
+    assert style == config.root_style
+
 
 def test_terminal_width_with_exception(monkeypatch):
     """Test terminal width fallback when get_terminal_size raises exception."""
     from tree_interval.rich_printer.config import get_terminal_width
-    def mock_get_terminal_size(*args, **kwargs):
+
+    def mock_get_terminal_size(*_, **__):
         raise OSError("Mock error")
+
     monkeypatch.setattr("shutil.get_terminal_size", mock_get_terminal_size)
     width = get_terminal_width()
     assert width == 80  # Check fallback value

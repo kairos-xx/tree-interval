@@ -63,7 +63,7 @@ def test_node_info_truncation():
     assert True
 
 
-def test_terminal_width_fallback(monkeypatch):
+def test_terminal_width_fallback_monkey(monkeypatch):
     """Test terminal width fallback when get_terminal_size fails."""
     from tree_interval.visualizer.config import get_terminal_width
 
@@ -102,7 +102,6 @@ def test_show_children_count():
     root.add_child(child2)
 
     config = VisualizationConfig(show_children_count=True)
-    visualizer = TreeVisualizer()
     TreeVisualizer.visualize(tree, config)
     assert len(root.children) == 2
 
