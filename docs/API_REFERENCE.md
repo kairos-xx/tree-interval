@@ -4,6 +4,7 @@
 - [README](README.md): Overview and implementation details
 - [AST Reference](AST_REFERENCE.md): AST analysis documentation
 - [Rich Printer Guide](RICH_PRINTER.md): Advanced visualization options
+- [Future Guide](FUTURE.md): Dynamic attribute handling and error reporting
 
 ## Core Modules
 
