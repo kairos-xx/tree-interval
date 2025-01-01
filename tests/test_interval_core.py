@@ -332,7 +332,6 @@ def test_dispose_frame():
 
 def test_frame_complex_source():
     """Test frame handling with complex source"""
-    from types import FrameType
 
     class MockFrame:
 
@@ -346,8 +345,8 @@ def test_frame_complex_source():
             })
 
     try:
-        pos = Position(MockFrame())
-    except:
+        _ = Position(MockFrame()) # pylint: disable=whatever-error-code
+    except Exception:
         assert True
 
 
@@ -447,7 +446,7 @@ def test_position_overlaps_none():
     pos2 = Position(20, 30)
     try:
         pos1.overlaps(pos2)
-    except:
+    except Exception:
         assert True
 
 
