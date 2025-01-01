@@ -1,4 +1,4 @@
-from inspect import currentframe
+from inspect import currentframe, stack
 
 from rich.style import Style as RichStyle
 
@@ -309,7 +309,7 @@ def demonstrate_frame_analyzer():
 
            
     def build_tree():
-        analyzer = FrameAnalyzer(currentframe())
+        analyzer = FrameAnalyzer(stack()[0].frame)
         tree = analyzer.build_tree()
         current_node = analyzer.find_current_node()
 

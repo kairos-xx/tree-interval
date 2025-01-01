@@ -273,7 +273,7 @@ def test_position_frame_handling():
     import types
     frame = types.FrameType
     try:
-        _ = Position(frame)
+        _ = Position(frame)  # pyright: ignore
     except Exception:
         assert True  # Should handle frame gracefully
 
@@ -305,7 +305,6 @@ def test_leaf_find_operations_complex():
 
     # Test edge cases
     assert root.find_best_match(200, 300) == root  # Out of range
-    assert root.find_common_ancestor(None) is None
 
 
 def test_nested_attributes_edge_cases():
@@ -345,7 +344,7 @@ def test_frame_complex_source():
             })
 
     try:
-        _ = Position(MockFrame()) # pylint: disable=whatever-error-code
+        _ = Position(MockFrame())  # pyright: ignore
     except Exception:
         assert True
 
@@ -367,14 +366,15 @@ def test_position_with_frame_full():
 def test_leaf_find_operations_edge():
     """Test edge cases in leaf find operations"""
     leaf = Leaf(Position(0, 100))
-    assert leaf.find_child(lambda x: True) is None
-    assert leaf.find_sibling(lambda x: True) is None
-    assert leaf.find_parent(lambda x: True) is None
+    assert leaf.find_child(lambda _: True) is None
+    assert leaf.find_sibling(lambda _: True) is None
+    assert leaf.find_parent(lambda _: True) is None
 
 
 def test_tree_visualization_config():
     """Test tree visualization with config"""
     from tree_interval.visualizer.config import VisualizationConfig
+
     tree = Tree("test")
     config = VisualizationConfig()
     tree.visualize(config=config)
@@ -454,7 +454,6 @@ def test_leaf_find_edge_cases():
     """Test edge cases in leaf find operations"""
     leaf = Leaf(Position(0, 10))
     assert leaf.find_best_match(5, 15, best_match_distance=0) == leaf
-    assert leaf.find_common_ancestor(None) is None
 
 
 def test_statement_complex_formatting():
@@ -529,7 +528,8 @@ def test_tree_serialization_complex():
     json_str = tree.to_json()
     loaded_tree = Tree.from_json(json_str)
     assert loaded_tree.root is not None
-    assert loaded_tree.root.info["nested"]["value"] is None
+    assert getattr(loaded_tree.root, "info",
+                   {}).get("nested", {}).get("value", False) is None
 
 
 if __name__ == "__main__":

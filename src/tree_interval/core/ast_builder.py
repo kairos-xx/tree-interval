@@ -51,8 +51,6 @@ class AstTreeBuilder:
         self.line_offset: int = 0
         self.frame_firstlineno: int = 1
 
-        #if source is None:
-         #   raise ValueError("Source cannot be None")
         if isinstance(source, str):
             if not source:
                 raise ValueError("Source cannot be empty")

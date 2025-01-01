@@ -7,14 +7,12 @@ It bridges runtime execution with static code analysis.
 """
 
 from ast import AST
+from inspect import isframe
 from types import FrameType
 from typing import Optional, cast
 
 from .ast_builder import AstTreeBuilder
 from .interval_core import Leaf, Position, Tree
-
-# Assuming FrameType is defined elsewhere,  this needs to be added to the original code or imported correctly.
-#FrameType = type(fra) # Placeholder, replace with actual type
 
 
 class FrameAnalyzer:
@@ -32,8 +30,10 @@ class FrameAnalyzer:
     def __init__(self, frame: Optional[FrameType]):
         """Initializes FrameAnalyzer with a given frame."""
         self.frame = frame
-        self.frame_position = Position(0, 0) if frame is None else Position(self.frame)
-        self.ast_builder = AstTreeBuilder(frame)
+        self.frame_position = Position(0, 0) if frame is None else Position(
+            self.frame)
+        if isframe(frame):
+            self.ast_builder = AstTreeBuilder(frame)
         self.tree = None
         self.current_node = None
 
@@ -107,11 +107,12 @@ class FrameAnalyzer:
         return self.tree
 
     def _find_node_positions(self):
-        #This method needs to be implemented based on the context of the original code and the intention of the changes
-        #A placeholder implementation is provided below.  Replace with the actual implementation needed.
 
         if self.tree:
             for node in self.tree.flatten():
-                if hasattr(node, 'position') and node.position and self.frame_position.overlaps(node.position):
+                if hasattr(
+                        node, 'position'
+                ) and node.position and self.frame_position.overlaps(
+                        node.position):
                     self.current_node = node
                     break

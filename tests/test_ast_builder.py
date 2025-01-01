@@ -3,7 +3,6 @@ from textwrap import dedent
 import pytest
 
 from tree_interval import AstTreeBuilder
-from tree_interval.core.interval_core import Leaf
 
 
 def test_ast_builder_initialization():
@@ -76,7 +75,7 @@ def test_get_node_value_edge_cases():
 
 def test_invalid_source():
     with pytest.raises(ValueError):
-        builder = AstTreeBuilder(None)
+        builder = AstTreeBuilder(None)  # pyright: ignore
         builder.build()
 
 
@@ -295,20 +294,23 @@ def test_build_tree_duplicate_leaf():
     ]
     assert len(nodes) > 0
 
+
 def test_node_value_extraction_edge_cases():
     """Test _get_node_value method with various node types."""
     import ast
     builder = AstTreeBuilder("x = 1")
-    
+
     # Test unsupported node type
     class CustomNode(ast.AST):
         pass
+
     custom_node = CustomNode()
     assert builder._get_node_value(custom_node) == ""
-    
+
     # Test constant node
     constant_node = ast.Constant(value=42)
     assert builder._get_node_value(constant_node) == "42"
+
 
 def test_ast_node_processing():
     """Test processing nodes during tree building."""
@@ -319,12 +321,15 @@ class Test:
     """
     builder = AstTreeBuilder(source)
     tree = builder.build()
-    
+    class_node = None
     # Verify node processing
-    nodes = tree.flatten()
-    class_node = next(n for n in nodes if getattr(n, "info", {}).get("type") == "ClassDef")
-    assert class_node.info["name"] == "Test"
-    assert class_node.ast_node is not None
+    if tree:
+        nodes = tree.flatten()
+        class_node = next(n for n in nodes
+                          if getattr(n, "info", {}).get("type") == "ClassDef")
+    assert getattr(class_node, "info", {}).get("name") == "Test"
+    assert getattr(class_node, "ast_node", None) is not None
+
 
 if __name__ == "__main__":
     pytest.main([__file__])

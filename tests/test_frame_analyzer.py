@@ -1,4 +1,4 @@
-from inspect import currentframe
+from inspect import stack
 
 import pytest
 
@@ -7,7 +7,7 @@ from tree_interval.core.interval_core import Leaf, Position, Tree
 
 
 def test_frame_analyzer_initialization():
-    frame = currentframe()
+    frame = stack()[0].frame
     analyzer = FrameAnalyzer(frame)
     assert analyzer.frame == frame
     assert analyzer.frame_position is not None
@@ -16,7 +16,7 @@ def test_frame_analyzer_initialization():
 def test_build_tree():
 
     def sample_func():
-        frame = currentframe()
+        frame = stack()[0].frame
         analyzer = FrameAnalyzer(frame)
         return analyzer.build_tree()
 
@@ -28,7 +28,7 @@ def test_build_tree():
 def test_find_current_node():
 
     def another_func():
-        frame = currentframe()
+        frame = stack()[0].frame
         analyzer = FrameAnalyzer(frame)
         return analyzer.find_current_node()
 
@@ -38,7 +38,7 @@ def test_find_current_node():
 
 
 def test_frame_analyzer_with_empty_frame():
-    frame = currentframe()
+    frame = stack()[0].frame
     analyzer = FrameAnalyzer(frame)
     analyzer.tree = None
     result = analyzer.find_current_node()
@@ -51,7 +51,7 @@ def test_frame_analyzer_position_handling():
     assert analyzer.frame_position.start == 0
     assert analyzer.frame_position.end == 0
 
-    frame = currentframe()
+    frame = stack()[0].frame
     analyzer = FrameAnalyzer(frame)
     assert analyzer.frame_position is not None
     assert analyzer.frame_position.start is not None
@@ -59,7 +59,7 @@ def test_frame_analyzer_position_handling():
 
 
 def test_frame_analyzer_empty_source():
-    frame = currentframe()
+    frame = stack()[0].frame
     analyzer = FrameAnalyzer(frame)
     analyzer.ast_builder.source = ""
     result = analyzer.build_tree()
@@ -69,7 +69,7 @@ def test_frame_analyzer_empty_source():
 def test_frame_analyzer_invalid_frame():
 
     def nested_func():
-        frame = currentframe()
+        frame = stack()[0].frame
         analyzer = FrameAnalyzer(frame)
         analyzer.frame = None
         return analyzer.find_current_node()
@@ -80,7 +80,7 @@ def test_frame_analyzer_invalid_frame():
 def test_frame_analyzer_no_matching_position():
 
     def nested_func():
-        frame = currentframe()
+        frame = stack()[0].frame
         analyzer = FrameAnalyzer(frame)
         analyzer.frame_position.start = 999999
         analyzer.frame_position.end = 999999
@@ -92,7 +92,7 @@ def test_frame_analyzer_no_matching_position():
 def test_no_matching_nodes():
 
     def dummy_func():
-        frame = currentframe()
+        frame = stack()[0].frame
         analyzer = FrameAnalyzer(frame)
         analyzer.tree = Tree("")
         return analyzer.find_current_node()
@@ -103,7 +103,7 @@ def test_no_matching_nodes():
 def test_build_tree_empty():
 
     def dummy_func():
-        frame = currentframe()
+        frame = stack()[0].frame
         analyzer = FrameAnalyzer(frame)
         analyzer.ast_builder.source = None
         return analyzer.build_tree()
@@ -114,7 +114,7 @@ def test_build_tree_empty():
 def test_frame_analyzer_no_ast_node():
 
     def dummy_func():
-        frame = currentframe()
+        frame = stack()[0].frame
         analyzer = FrameAnalyzer(frame)
         # Create a tree with nodes that don't have ast_node attribute
         analyzer.tree = Tree("")
@@ -130,7 +130,7 @@ def test_frame_analyzer_no_ast_node():
 def test_frame_analyzer_invalid_ast_node():
 
     def dummy_func():
-        frame = currentframe()
+        frame = stack()[0].frame
         analyzer = FrameAnalyzer(frame)
         analyzer.tree = Tree("")
         root = Leaf(Position(0, 100), info="root")

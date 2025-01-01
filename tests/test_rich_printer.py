@@ -93,8 +93,9 @@ def test_custom_root_visualization(basic_tree, console):
 
 def test_rich_printer_empty_config():
     printer = RichTreePrinter()
-    with pytest.raises(AttributeError):  
-        printer.print_tree(None)  # pyright-extended: ignore
+    with pytest.raises(AttributeError):
+        printer.print_tree(None)  # pyright: ignore
+
 
 def test_format_node_custom_styles():
     leaf = Leaf(Position(0, 100), info={"type": "Module"})
@@ -105,8 +106,7 @@ def test_format_node_custom_styles():
 
 def test_format_empty_tree():
     printer = RichTreePrinter()
-    printer.print_tree(
-        Tree(""))  # Should just print "Empty tree" without raising
+    printer.print_tree(Tree(""))
     assert True
 
 

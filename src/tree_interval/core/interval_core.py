@@ -916,8 +916,8 @@ class Tree(Generic[T]):
 
     def to_json(self) -> str:
         """Convert the tree to a JSON string."""
-     
-        return dumps(self._to_dict(),default=str)
+
+        return dumps(self._to_dict(), default=str)
 
     def _to_dict(self) -> Dict:
         """Convert the tree to a dictionary."""
