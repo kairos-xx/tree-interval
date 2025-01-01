@@ -18,7 +18,7 @@ def test_visualizer_empty_tree(capsys):
 
 def test_visualizer_position_formats():
     tree = Tree("Test")
-    root = Leaf(Position(0, 100, info="Root"))
+    root = Leaf(Position(0, 100), info="Root")
     tree.root = root
 
     config = VisualizationConfig(position_format="position")
@@ -41,14 +41,3 @@ def test_visualizer_node_formatting():
 
 if __name__ == "__main__":
     pytest.main([__file__])
-def test_visualizer_position_formats():
-    tree = Tree("")
-    leaf = Leaf(Position(0, 100))
-    tree.root = leaf
-    
-    config = VisualizationConfig()
-    config.position_format = "position"
-    TreeVisualizer.visualize(tree, config)
-    
-    config.position_format = "tuple"
-    TreeVisualizer.visualize(tree, config)

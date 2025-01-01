@@ -459,6 +459,10 @@ class Leaf:
     def info(self) -> Optional[Any]:
         return self._info
 
+    @info.setter
+    def info(self, value: Any) -> None:
+        self._info = value
+
     @property
     def size(self) -> Optional[int]:
         if self.start is None or self.end is None:

@@ -56,19 +56,23 @@ def test_position_tracking():
     assert func_node.position.end_lineno == 2
 
 
-if __name__ == "__main__":
-    pytest.main([__file__])
 def test_ast_builder_invalid_source():
     with pytest.raises(ValueError):
         builder = AstTreeBuilder("")
         builder.build()
+
 
 def test_ast_builder_malformed_ast():
     builder = AstTreeBuilder("invalid python code )")
     with pytest.raises(SyntaxError):
         builder.build()
 
+
 def test_get_node_value_edge_cases():
     builder = AstTreeBuilder("x = 1")
     tree = builder.build()
     assert tree is not None
+
+
+if __name__ == "__main__":
+    pytest.main([__file__])
