@@ -41,29 +41,29 @@ def test_visualizer_node_formatting():
 def test_terminal_width_fallback(monkeypatch):
     """Test terminal width fallback when get_terminal_size fails."""
     from tree_interval.visualizer.config import get_terminal_width
-    
+
     def mock_get_terminal_size():
         raise Exception("Failed to get terminal size")
-        
+
     monkeypatch.setattr('shutil.get_terminal_size', mock_get_terminal_size)
     width = get_terminal_width()
     assert width == 80  # Check fallback value
+
 
 def test_terminal_width_success(monkeypatch):
     """Test successful terminal width retrieval."""
     from shutil import _Terminology
     from tree_interval.visualizer.config import get_terminal_width
-    
+
     class MockSize(_Terminology):
         columns = 100
-        
+
     def mock_get_terminal_size():
         return MockSize()
-        
+
     monkeypatch.setattr('shutil.get_terminal_size', mock_get_terminal_size)
     width = get_terminal_width()
     assert width == 100
-
 
     TreeVisualizer.visualize(tree, config)
 
