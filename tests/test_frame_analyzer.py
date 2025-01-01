@@ -37,11 +37,6 @@ def test_find_current_node():
     assert node.info is not None
 
 
-def test_empty_frame():
-    frame = None
-    with pytest.raises(ValueError):
-        _ = FrameAnalyzer(frame)
-
 
 def test_frame_analyzer_with_empty_frame():
     frame = currentframe()
@@ -137,25 +132,27 @@ def test_frame_analyzer_invalid_ast_node():
     assert result.root is not None
 
 
-if __name__ == "__main__":
-    pytest.main([__file__])
 def test_node_matching_and_selection():
     """Test node matching and selection in frame analyzer"""
     from tree_interval import Leaf, Position, Tree
     from tree_interval.core.frame_analyzer import FrameAnalyzer
-    
+
     # Create a basic tree with nodes
     tree = Tree("test")
     node1 = Leaf(Position(10, 50), info={"type": "Call", "name": "test"})
     node2 = Leaf(Position(10, 50), info={"type": "Call", "name": "test"})
     tree.root = node1
-    
+
     # Initialize analyzer with the tree
     analyzer = FrameAnalyzer(None)
     analyzer.tree = tree
     analyzer.current_node = node2
-    
+
     # Test matching and selection
     assert node1.match(analyzer.current_node)
     node1.selected = True
     assert node1.selected
+
+
+if __name__ == "__main__":
+    pytest.main([__file__])

@@ -7,13 +7,14 @@ It bridges runtime execution with static code analysis.
 """
 
 from ast import AST
+from types import FrameType
 from typing import Optional, cast
 
 from .ast_builder import AstTreeBuilder
 from .interval_core import Leaf, Position, Tree
 
 # Assuming FrameType is defined elsewhere,  this needs to be added to the original code or imported correctly.
-FrameType = type(None) # Placeholder, replace with actual type
+#FrameType = type(fra) # Placeholder, replace with actual type
 
 
 class FrameAnalyzer:
