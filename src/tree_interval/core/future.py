@@ -50,20 +50,7 @@ class Future:
         new = AttributeError(f"{header}\n{footer}")
         current_node = FrameAnalyzer(frame).find_current_node()
         if current_node:
-            # Check if we're in a chain that ends with assignment
-            top_stmt = current_node.top_statement
-            is_assignment = getattr(top_stmt, "is_set", False)
-            
-            # Get the full chain from AST
-            chain = []
-            node = current_node
-            while node:
-                if hasattr(node, "info") and isinstance(node.info, dict):
-                    chain.append(node.info.get("name", ""))
-                node = node.parent
-                
-            # If we're in an assignment and this isn't the last attribute
-            if is_assignment and name in chain[1:]:
+            if getattr(current_node.top_statement, "is_set", False):
                 sys.tracebacklimit = original_tracebacklimit
                 new = type(instance)() if new_return is None else new_return
                 setattr(instance, name, new)
