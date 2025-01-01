@@ -1,5 +1,27 @@
-"""
-Comprehensive demonstration of all features of the tree interval package.
+"""Comprehensive demonstration of the tree interval package features.
+
+This module provides complete, working examples of:
+
+Core Features:
+1. Position handling and tracking
+2. Tree and node manipulation 
+3. AST analysis and traversal
+4. Frame analysis
+5. Rich visualization
+6. Custom styling
+7. Statement processing
+
+Each example is self-contained and demonstrates practical usage patterns
+for different package components. The examples progress from basic concepts
+to more advanced features.
+
+Usage:
+    Run directly:
+    $ python -m examples.demo
+    
+    Import and run specific examples:
+    >>> from examples.demo import demonstrate_positions
+    >>> demonstrate_positions()
 """
 
 from typing import Any

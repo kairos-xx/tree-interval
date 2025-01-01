@@ -1,3 +1,21 @@
+"""Main demonstration module for the tree-interval package.
+
+This module provides a comprehensive demonstration of all major features
+and capabilities of the tree-interval package through a series of
+focused examples. Key demonstrations include:
+
+Core Features:
+- Position tracking and manipulation
+- Tree creation and node handling
+- Frame analysis and AST traversal
+- Rich visualization and styling
+- Statement processing
+- Dynamic attribute handling
+
+Each demonstration function focuses on a specific feature set and
+includes sample usage patterns and output visualization.
+"""
+
 from inspect import currentframe, stack
 
 from rich.style import Style as RichStyle
