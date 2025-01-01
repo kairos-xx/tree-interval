@@ -1,20 +1,28 @@
+
 """PyPI package upload script.
 
-Handles building and uploading package to PyPI with logging.
+Handles building and uploading package to PyPI with proper versioning and logging.
+Contains utilities for version management and package deployment.
 """
 
+from datetime import datetime
+from pathlib import Path
+from typing import Tuple, Optional
 import json
 import os
 import subprocess
 import sys
 import urllib.request
-from datetime import datetime
-from pathlib import Path
 
 from replit import info
 
 
-def get_latest_version():
+def get_latest_version() -> str:
+    """Fetch the latest version from PyPI.
+    
+    Returns:
+        str: Latest version number in format 'x.y.z' or '0.0.0' if not found
+    """
     try:
         url = "https://pypi.org/pypi/tree-interval/json"
         with urllib.request.urlopen(url) as response:
@@ -24,12 +32,25 @@ def get_latest_version():
         return "0.0.0"
 
 
-def increment_version(version):
+def increment_version(version: str) -> str:
+    """Increment the patch version number.
+    
+    Args:
+        version: Current version in format 'x.y.z'
+        
+    Returns:
+        str: Incremented version number
+    """
     major, minor, patch = map(int, version.split("."))
     return f"{major}.{minor}.{patch + 1}"
 
 
-def update_version_in_files(new_version):
+def update_version_in_files(new_version: str) -> None:
+    """Update version strings in project configuration files.
+    
+    Args:
+        new_version: Version string to set
+    """
     # Update pyproject.toml
     with open("pyproject.toml", "r") as f:
         content = f.read()
@@ -51,6 +72,7 @@ def update_version_in_files(new_version):
             )
         )
 
+    # Update __init__.py
     with open("src/tree_interval/__init__.py", "r") as f:
         content = f.read()
     with open("src/tree_interval/__init__.py", "w") as f:
@@ -69,7 +91,15 @@ def update_version_in_files(new_version):
         )
 
 
-def check_token():
+def check_token() -> str:
+    """Verify PyPI token exists in environment.
+    
+    Returns:
+        str: PyPI token
+        
+    Raises:
+        SystemExit: If token is not set
+    """
     token = os.getenv("PYPI_TOKEN")
     if not token:
         print("Error: PYPI_TOKEN environment variable not set")
@@ -78,7 +108,12 @@ def check_token():
     return token
 
 
-def create_pypirc(token):
+def create_pypirc(token: str) -> None:
+    """Create PyPI configuration file with authentication.
+    
+    Args:
+        token: PyPI authentication token
+    """
     pypirc_content = f"""[distutils]
 index-servers = pypi
 
@@ -90,7 +125,15 @@ password = {token}
         f.write(pypirc_content)
 
 
-def build_and_upload(project_dir=None):
+def build_and_upload(project_dir: Optional[str] = None) -> None:
+    """Build and upload package to PyPI.
+    
+    Args:
+        project_dir: Optional directory containing the project
+        
+    Raises:
+        SystemExit: If build or upload fails
+    """
     working_dir = project_dir if project_dir else "."
     try:
         print(f"Building and uploading {working_dir}...")
@@ -124,7 +167,8 @@ def build_and_upload(project_dir=None):
         sys.exit(1)
 
 
-def main():
+def main() -> None:
+    """Main execution function for PyPI package upload."""
     print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     # Install required packages
     subprocess.run(["pip", "install", "wheel", "twine", "build"], check=True)
