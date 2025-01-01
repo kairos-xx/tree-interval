@@ -1,12 +1,11 @@
-
 """GitHub Actions workflow update script.
 
 Updates GitHub Actions workflow files with new configurations.
 """
 
-import os
 from datetime import datetime
 from typing import Dict, Any
+import os
 import yaml
 
 def load_workflow_config() -> Dict[str, Any]:

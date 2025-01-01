@@ -212,7 +212,7 @@ T = TypeVar("T")
 class Position:
     """Represents a code position with line/column tracking and hierarchical links.
 
-    This class handles various position input types (frame objects, disposition 
+    This class handles various position input types (frame objects, disposition
     objects, or direct values) and normalizes them into a consistent format with
     absolute and relative positions.
 

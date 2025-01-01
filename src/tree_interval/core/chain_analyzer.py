@@ -98,7 +98,7 @@ class ChainAnalyzer:
                 chain.reverse()
                 return ChainInfo(False, chain, None)
                 
-        except Exception as e:
+        except Exception:
             # Return empty chain info for unparseable code
             return ChainInfo(False, [], None)
             
@@ -131,7 +131,4 @@ class ChainAnalyzer:
         info = ChainAnalyzer.parse_expression(code)
         
         # Create attribute if it appears before the final position in assignment
-        if info.is_assignment and name in info.chain[:-1]:
-            return True
-            
-        return False
+        return info.is_assignment and name in info.chain[:-1]

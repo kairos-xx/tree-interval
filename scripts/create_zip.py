@@ -1,4 +1,3 @@
-
 """Create a ZIP archive of the project.
 
 This script creates a timestamped ZIP archive of the project files,
