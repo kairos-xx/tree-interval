@@ -52,14 +52,14 @@ def test_terminal_width_fallback(monkeypatch):
 
 def test_terminal_width_success(monkeypatch):
     """Test successful terminal width retrieval."""
-    from shutil import _Terminology
     from tree_interval.visualizer.config import get_terminal_width
+    from collections import namedtuple
 
-    class MockSize(_Terminology):
-        columns = 100
+    MockSize = namedtuple('MockSize', ['columns'])
+    mock_size = MockSize(columns=100)
 
     def mock_get_terminal_size():
-        return MockSize()
+        return mock_size
 
     monkeypatch.setattr('shutil.get_terminal_size', mock_get_terminal_size)
     width = get_terminal_width()
