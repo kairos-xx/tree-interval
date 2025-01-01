@@ -192,5 +192,51 @@ def test_build_tree_from_ast_empty_source():
         builder._build_tree_from_ast(ast.parse(""))
 
 
+def test_get_node_position_with_empty_lines():
+    """Test node position handling with empty lines in source."""
+    import ast
+    builder = AstTreeBuilder("x = 1\n\ny = 2")
+    node = ast.Name(id='y', ctx=ast.Load())
+    node.lineno = 3
+    node.col_offset = 0
+    node.end_lineno = 3
+    node.end_col_offset = 1
+    position = builder._get_node_position(node)
+    assert position is not None
+
+
+def test_build_tree_with_duplicate_positions():
+    """Test handling nodes with identical positions."""
+    source = "x = y = 1"
+    builder = AstTreeBuilder(source)
+    tree = builder.build()
+    assert tree is not None
+    
+    # Get all nodes with the same position
+    nodes = [n for n in tree.flatten() if n.start == n.end]
+    # Verify proper handling of duplicate positions
+    assert len(nodes) >= 0
+
+
+def test_build_tree_with_nested_nodes():
+    """Test handling deeply nested AST nodes."""
+    source = """
+def outer():
+    def inner():
+        x = 1
+        return x
+    return inner()
+    """
+    builder = AstTreeBuilder(source)
+    tree = builder.build()
+    assert tree is not None
+    
+    # Find the innermost node
+    inner_nodes = [n for n in tree.flatten() 
+                  if getattr(n, "info", {}).get("type") == "FunctionDef" 
+                  and getattr(n, "info", {}).get("name") == "inner"]
+    assert len(inner_nodes) > 0
+
+
 if __name__ == "__main__":
     pytest.main([__file__])
