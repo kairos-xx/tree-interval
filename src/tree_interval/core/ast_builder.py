@@ -79,7 +79,9 @@ class AstTreeBuilder:
                 *(
                     sum(
                         len(source_lines[i])
-                        for i in range((getattr(dis_position, "lineno", 1) or 1) - 1)
+                        for i in range(
+                            (getattr(dis_position, "lineno", 1) or 1) - 1
+                        )
                     )
                     + (getattr(dis_position, "col_offset", 0) or 0),
                     sum(
@@ -193,12 +195,18 @@ class AstTreeBuilder:
                     info={
                         "type": node.__class__.__name__,
                         "name": getattr(node, "name", node.__class__.__name__),
-                        "source": get_source_segment(dedent(self.source), node),
+                        "source": get_source_segment(
+                            dedent(self.source), node
+                        ),
                     },
                 )
-                setattr(node, self.cleaned_value_key, self._get_node_value(node))
+                setattr(
+                    node, self.cleaned_value_key, self._get_node_value(node)
+                )
                 leaf.ast_node = node
-                nodes_with_positions.append((position.start, position.end, leaf))
+                nodes_with_positions.append(
+                    (position.start, position.end, leaf)
+                )
 
         # Sort nodes by position and size to ensure proper nesting
         nodes_with_positions.sort(key=lambda x: (x[0], -(x[1] - x[0])))
@@ -217,7 +225,10 @@ class AstTreeBuilder:
             smallest_size = float("inf")
 
             for start, end, potential_parent in nodes_with_positions:
-                if potential_parent == leaf or potential_parent in leaf.get_ancestors():
+                if (
+                    potential_parent == leaf
+                    or potential_parent in leaf.get_ancestors()
+                ):
                     continue
 
                 if start <= leaf.start and end >= leaf.end:

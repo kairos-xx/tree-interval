@@ -1,4 +1,3 @@
-
 """
 Rich-based Tree Visualization Implementation.
 

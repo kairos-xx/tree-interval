@@ -225,7 +225,7 @@ class Position:
         end: Ending character position in source
         info: Additional position metadata
         selected: Selection state flag
-        _lineno: One-based line number 
+        _lineno: One-based line number
         _end_lineno: Ending line number
         _col_offset: Column offset from line start
         _end_col_offset: Ending column offset
@@ -249,7 +249,7 @@ class Position:
         selected: bool = False,
     ):
         """Initialize a Position object that tracks code location information.
-        
+
         This method handles three different initialization cases:
         1. From a frame object (runtime position tracking)
         2. From a disposition object (bytecode position info)
@@ -259,19 +259,19 @@ class Position:
         - Extracts source code using getsource()
         - Calculates indentation from source
         - Computes absolute positions from line/col offsets
-        
+
         For disposition objects:
         - Uses line/col information if source is provided
         - Falls back to direct offset values if no source
-        
+
         For direct initialization:
         - Simply stores the provided start/end positions
-        
+
         Args:
             start: Starting position, frame object, or disposition object
             end: Ending position (optional if start contains full
                  position info)
-            source: Source code string or metadata dictionary 
+            source: Source code string or metadata dictionary
             info: Additional position information
             selected: Selection state of this position
 
@@ -433,17 +433,17 @@ class Position:
 
     def position_as(self, position_format: str = "default") -> str:
         """Format position information according to specified format.
-        
+
         Supports three different output formats:
         - 'position': Detailed format with all position attributes
         - 'tuple': Compact tuple format with numeric values
         - 'default': Simple start/end format
-        
+
         The position format includes:
         - Absolute character positions (start/end)
         - Line numbers (lineno/end_lineno)
         - Column offsets (col_offset/end_col_offset)
-        
+
         This is useful for debugging and displaying position info
         in different contexts.
         """
@@ -485,19 +485,19 @@ class Position:
 
     def overlaps(self, other: "Position") -> bool:
         """Check if this position overlaps with another position.
-        
+
         Two positions overlap if:
         1. This position's start is before or at other's end AND
         2. This position's end is after or at other's start
-        
+
         This is used for:
         - Detecting intersecting code regions
         - Finding containing/contained positions
         - Resolving position conflicts
-        
+
         Args:
             other: Another Position object to check overlap with
-            
+
         Returns:
             bool: True if positions overlap, False otherwise
         """

@@ -1,4 +1,3 @@
-
 """Automated git commit script.
 
 Handles git add, commit, and push operations with logging.
@@ -12,10 +11,10 @@ from typing import Optional
 
 def git_commit(message: Optional[str] = None) -> None:
     """Perform git commit and push operations.
-    
+
     Args:
         message: Optional commit message. Uses timestamp if not provided.
-    
+
     Raises:
         subprocess.CalledProcessError: If git commands fail
     """

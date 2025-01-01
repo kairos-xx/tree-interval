@@ -1,4 +1,3 @@
-
 """PyPI package upload script.
 
 Handles building and uploading package to PyPI with logging.
@@ -12,11 +11,11 @@ from typing import List
 
 def run_command(command: List[str], log_file: str) -> None:
     """Run shell command and log output.
-    
+
     Args:
         command: Command and arguments to execute
         log_file: Path to log file
-        
+
     Raises:
         subprocess.CalledProcessError: If command fails
     """
@@ -36,19 +35,19 @@ def run_command(command: List[str], log_file: str) -> None:
 
 def upload_to_pypi() -> None:
     """Build and upload package to PyPI.
-    
+
     Builds distribution files and uploads to PyPI using twine.
     Logs all operations to pypi_upload.log.
     """
     # Ensure logs directory exists
     if not os.path.exists("logs"):
         os.makedirs("logs")
-    
+
     log_file = "logs/pypi_upload.log"
-    
+
     # Build distribution files
     run_command(["python", "-m", "build"], log_file)
-    
+
     # Upload to PyPI
     run_command(["python", "-m", "twine", "upload", "dist/*"], log_file)
 

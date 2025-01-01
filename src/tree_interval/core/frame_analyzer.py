@@ -32,7 +32,7 @@ class FrameAnalyzer:
         self.frame = frame
         # Initialize position and builder
         self.frame_position = (
-            Position(0, 0) if frame is None else Position(self.frame)
+            Position(0, 0) if (frame is None) else Position(self.frame)
         )
         if isframe(frame):
             # Initialize AST builder
@@ -55,7 +55,9 @@ class FrameAnalyzer:
             matching_nodes = []  # List to store matching nodes.
             for node in self.tree.flatten():
                 if hasattr(node, "position") and node.position:
-                    start_diff = abs(node.position.start - self.frame_position.start)
+                    start_diff = abs(
+                        node.position.start - self.frame_position.start
+                    )
                     end_diff = abs(node.position.end - self.frame_position.end)
                     matching_nodes.append((node, start_diff + end_diff))
 
@@ -99,7 +101,9 @@ class FrameAnalyzer:
                         node.position = pos  # Set node position.
                         nodes_by_pos[(pos.start, pos.end)] = node
 
-            sorted_positions = sorted(nodes_by_pos.keys(), key=lambda x: (x[0], -x[1]))
+            sorted_positions = sorted(
+                nodes_by_pos.keys(), key=lambda x: (x[0], -x[1])
+            )
 
             for start, end in sorted_positions:
                 current_node = nodes_by_pos[(start, end)]

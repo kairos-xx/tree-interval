@@ -1,4 +1,3 @@
-
 """Examples demonstrating the tree-interval package functionality.
 
 This package contains comprehensive examples showing how to use
@@ -17,4 +16,4 @@ to help users understand the package capabilities.
 
 from .demo import run_demo as run_demos
 
-__all__ = ['run_demos']
+__all__ = ["run_demos"]

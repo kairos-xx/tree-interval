@@ -36,31 +36,31 @@ class Future:
         new_return: Optional[Any] = None,
     ) -> Any:
         """Dynamic attribute creation and access handler.
-        
+
         This method implements the core logic for dynamic attribute
         handling by:
         1. Analyzing call stack context to determine operation type
         2. Creating new attributes in assignment context
         3. Raising descriptive errors in access context
         4. Managing nested attribute chains
-        
+
         The context analysis includes:
         - Frame inspection for operation type
         - AST analysis for statement structure
         - Position tracking for error reporting
-        
+
         Args:
             name: Name of the attribute being accessed
             instance: Object instance where attribute belongs
             frame: Call frame or stack level for context
             new_return: Value to use for new attributes
-            
+
         Returns:
             Any: Created attribute value in setting context
-            
+
         Raises:
             AttributeError: When attribute doesn't exist in get context
-            
+
         Example:
             >>> obj.nonexistent = 42  # Creates new attribute
             >>> print(obj.nonexistent)  # Prints 42
@@ -68,8 +68,9 @@ class Future:
         """
         """Create or handle attribute access in a dynamic object structure.
 
-        This method provides the core functionality for dynamic attribute handling,
-        determining whether to create new attributes or raise appropriate errors.
+        This method provides the core functionality for dynamic attribute
+        handling, determining whether to create new attributes or raise
+        appropriate errors.
 
         Args:
             name: The attribute name being accessed or created
@@ -86,11 +87,11 @@ class Future:
         # Get caller's frame if not provided for context analysis
         if not isframe(frame):
             frame = stack()[(frame + 1) if isinstance(frame, int) else 2].frame
-        
+
         # Suppress traceback for cleaner error messages
         original_tracebacklimit = getattr(sys, "tracebacklimit", -1)
         sys.tracebacklimit = 0
-        
+
         # Prepare error message components with formatting
         header = "Attribute \033[1m" + name + "\033[0m not found "
         footer = indent(
@@ -128,4 +129,3 @@ class Future:
 
         # Raise error for invalid attribute access
         raise new
-    

@@ -18,7 +18,7 @@ to more advanced features.
 Usage:
     Run directly:
     $ python -m examples.demo
-    
+
     Import and run specific examples:
     >>> from examples.demo import demonstrate_positions
     >>> demonstrate_positions()
