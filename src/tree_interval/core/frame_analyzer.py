@@ -44,29 +44,7 @@ class FrameAnalyzer:
         self.build_tree_done = False  # Tree building not done initially.
 
     def find_current_node(self) -> Optional[Leaf]:
-        """Find the AST node corresponding to the current frame's position.
-        
-        Searches the AST tree to find the node that best matches the current
-        frame's execution position. The matching is done based on:
-        1. Position comparison (start/end offsets)
-        2. Minimal distance calculation for approximate matches
-        3. Tree traversal to find closest node
-        
-        This is particularly useful for:
-        - Runtime code analysis
-        - Error context identification
-        - Dynamic attribute resolution
-        
-        Returns:
-            Optional[Leaf]: The AST node at the current frame position,
-                          or None if not found
-                          
-        Example:
-            >>> frame = inspect.currentframe()
-            >>> analyzer = FrameAnalyzer(frame)
-            >>> node = analyzer.find_current_node()
-            >>> print(node.info['type'])  # Prints AST node type
-        """
+        """Find the AST node for current frame's position in the code."""
         # Build the tree if it has not been done yet.
         if not self.build_tree_done:
             self.build_tree()
@@ -82,7 +60,8 @@ class FrameAnalyzer:
                             node,
                             abs(
                                 node.position.start - self.frame_position.start
-                            ) + abs(node.position.end - self.frame_position.end),
+                            )
+                            + abs(node.position.end - self.frame_position.end),
                         )
                     )
 
@@ -100,9 +79,7 @@ class FrameAnalyzer:
             construction fails.
         """
         self.build_tree_done = True  # Mark tree building as done.
-        if (
-            not hasattr(self, "tree") or self.tree is None
-        ) and self.ast_builder is not None:
+        if not hasattr(self, "tree") or self.tree is None and self.ast_builder is not None:
             # Use builder to construct the tree if not already done.
             self.tree = self.ast_builder.build_from_frame()
             # Return None if tree construction fails.
