@@ -94,7 +94,7 @@ def test_custom_root_visualization(basic_tree, console):
 def test_rich_printer_empty_config():
     printer = RichTreePrinter()
     with pytest.raises(AttributeError):  # pylint: disable=no-member
-        printer.print_tree(None) # pylint: disable
+        printer.print_tree(None)  # pylint: disable=no-member 
 
 def test_format_node_custom_styles():
     leaf = Leaf(Position(0, 100), info={"type": "Module"})
