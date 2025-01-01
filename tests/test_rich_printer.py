@@ -4,8 +4,8 @@ import pytest
 from rich.console import Console
 from rich.style import Style
 
-from src.tree_interval import Leaf, Position, Tree
-from src.tree_interval.rich_printer import RichPrintConfig, RichTreePrinter
+from tree_interval import Leaf, Position, Tree
+from tree_interval.rich_printer import RichPrintConfig, RichTreePrinter
 
 
 @pytest.fixture

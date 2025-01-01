@@ -43,6 +43,16 @@ def update_version_in_files(new_version):
             content.replace(f'version="{get_latest_version()}"',
                             f'version="{new_version}"'))
 
+    with open("src/tree_interval/__init__.py", "r") as f:
+        content = f.read()
+    with open("src/tree_interval/__init__.py", "w") as f:
+        match_string = "__version__ = "
+        f.write("\n".join(
+            line.split(match_string, 1)[0] + match_string +
+            f'"{new_version}"' if match_string in line else line
+            for line in content.splitlines()))
+
+       
 
 def check_token():
     token = os.getenv("PYPI_TOKEN")

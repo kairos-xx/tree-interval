@@ -1,5 +1,6 @@
 import os
 import subprocess
+from contextlib import suppress
 from datetime import datetime
 from typing import List
 
@@ -19,10 +20,12 @@ CUSTOM_IGNORE = [
     "dev",
     "poetry.lock",
     "flake.txt",
-    ".replit",
-    "replit.nix",
+    #    ".replit",
+    #   "replit.nix",
     "generated-icon.png",
 ]
+
+BRANCH = "replit"
 
 
 def clean_merge_conflicts(file_path: str) -> None:
@@ -51,7 +54,7 @@ def clean_merge_conflicts(file_path: str) -> None:
             elif line.strip().startswith("======="):
                 skip_mode = True
                 continue
-            elif line.strip().startswith(">>>>>>> origin/main"):
+            elif line.strip().startswith(f">>>>>>> origin/{BRANCH}"):
                 skip_mode = False
                 continue
 
@@ -94,19 +97,58 @@ def commit_changes():
         if not os.path.exists(".git"):
             subprocess.run(["git", "init"], check=True)
             subprocess.run(
-                ["git", "config", "user.email", "noreply@replit.com"],
+                ["git", "config", "user.email", "joaoslopes@gmail.com"],
                 check=True)
-            subprocess.run(["git", "config", "user.name", "Replit"],
+            subprocess.run(["git", "config", "user.name", "kairos-xx"],
                            check=True)
 
         # Clean merge conflicts in all files first
         clean_all_files()
 
-        subprocess.run(["git", "add", "."], check=True)
+        # First check if we're in a git repository
+        try:
+            subprocess.run(["git", "rev-parse", "--is-inside-work-tree"],
+                           check=True,
+                           capture_output=True)
+        except subprocess.CalledProcessError:
+            subprocess.run(["git", "init"], check=True)
+
+        # Add all files
+        subprocess.run(["git", "add", "-A"], check=True)
+
+        # Create commit message
         message = ("Auto commit:" +
                    f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+
+        # Configure git if needed
+        subprocess.run([
+            "git", "config", "--global", "user.email", "joaoslopes@gmail.com"
+        ],
+                       check=True)
+        subprocess.run(["git", "config", "--global", "user.name", "kairos-xx"],
+                       check=True)
+
+        # Commit changes
         subprocess.run(["git", "commit", "-m", message], check=True)
-        subprocess.run(["git", "push", "origin", "main"], check=True)
+
+        # Ensure we're on the right branch
+        subprocess.run(["git", "checkout", "-B", BRANCH], check=True)
+
+        # Add remote if not exists
+        with suppress(Exception):
+            subprocess.run([
+                "git", "remote", "add", "origin",
+                "https://github.com/kairos-xx/tree-interval.git"
+            ],
+                           check=True)
+
+        # Push using SSH or token-based auth
+        try:
+            subprocess.run(["git", "push", "-u", "origin", BRANCH], check=True)
+        except subprocess.CalledProcessError:
+            print("❌ Push failed. Please ensure your GitHub credentials " +
+                  "are configured in Replit.")
+            return
         print("✅ Changes committed and pushed")
     except Exception as e:
         print(f"❌ Error in git operations: {e}")
@@ -114,7 +156,6 @@ def commit_changes():
 
 def main():
     """Run all operations."""
-    print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     print("🚀 Starting automated operations...")
     print("\nCleaning merge conflicts and committing changes...")
     commit_changes()

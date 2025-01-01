@@ -1,4 +1,5 @@
 from textwrap import dedent
+
 import pytest
 
 from tree_interval import AstTreeBuilder
@@ -23,9 +24,8 @@ def test_build_from_source():
 
     assert tree is not None
     assert tree.root is not None
-    print("----", tree.root)
-    assert isinstance(tree.root.children[0].info, dict)
-    #assert tree.root.info.get("type") == "Module"
+    assert isinstance(tree.root.info, dict)
+    assert tree.root.info.get("type") == "Module"
 
 
 def test_node_value_extraction():
@@ -35,8 +35,9 @@ def test_node_value_extraction():
 
     assert tree is not None
     nodes = tree.flatten()
-    #call_node = next(n for n in nodes if n.info["type"] == "Call")
-    #assert call_node is not None
+    call_node = next(n for n in nodes
+                     if getattr(n, "info", {}).get("type") == "Call")
+    assert call_node is not None
 
 
 def test_position_tracking():
@@ -48,11 +49,12 @@ def test_position_tracking():
     builder = AstTreeBuilder(source)
     tree = builder.build()
 
-    #func_node = next(n for n in tree.flatten()
-    #                 if n.info["type"] == "FunctionDef")
-    #assert func_node.position.lineno == 1
-    #assert func_node.position.end_lineno == 2
+    assert tree is not None
+    func_node = next(n for n in tree.flatten()
+                     if getattr(n, "info", {}).get("type") == "FunctionDef")
+    assert func_node.position.lineno == 1
+    assert func_node.position.end_lineno == 2
 
 
-test_build_from_source()
-#pytest.main([__file__])
+if __name__ == "__main__":
+    pytest.main([__file__])
