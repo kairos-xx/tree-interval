@@ -90,5 +90,54 @@ def test_empty_source():
         _ = AstTreeBuilder("")
 
 
+def test_build_with_empty_string():
+    builder = AstTreeBuilder(" ")
+    tree = builder.build()
+    assert tree is not None
+    assert isinstance(tree.root, Leaf)
+    assert tree.root.info == ""
+
+def test_attribute_node_value():
+    source = "obj.attr.subattr"
+    builder = AstTreeBuilder(source)
+    tree = builder.build()
+    nodes = tree.flatten()
+    attr_node = next(n for n in nodes if getattr(n, "info", {}).get("type") == "Attribute")
+    assert attr_node is not None
+
+def test_call_node_value():
+    source = "func(1, 2)"
+    builder = AstTreeBuilder(source)
+    tree = builder.build()
+    nodes = tree.flatten()
+    call_node = next(n for n in nodes if getattr(n, "info", {}).get("type") == "Call")
+    assert call_node is not None
+
+def test_subscript_node_value():
+    source = "arr[0]"
+    builder = AstTreeBuilder(source)
+    tree = builder.build()
+    nodes = tree.flatten()
+    subscript_node = next(n for n in nodes if getattr(n, "info", {}).get("type") == "Subscript")
+    assert subscript_node is not None
+
+def test_binop_node_value():
+    source = "a + b"
+    builder = AstTreeBuilder(source)
+    tree = builder.build()
+    nodes = tree.flatten()
+    binop_node = next(n for n in nodes if getattr(n, "info", {}).get("type") == "BinOp")
+    assert binop_node is not None
+
+def test_lambda_node_value():
+    source = "lambda x: x * 2"
+    builder = AstTreeBuilder(source)
+    tree = builder.build()
+    nodes = tree.flatten()
+    lambda_node = next(n for n in nodes if getattr(n, "info", {}).get("type") == "Lambda")
+    assert lambda_node is not None
+
+
+
 if __name__ == "__main__":
     pytest.main([__file__])
