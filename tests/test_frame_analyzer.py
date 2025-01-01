@@ -144,6 +144,25 @@ def test_frame_analyzer_invalid_ast_node():
     assert result.root is not None
 
 
+def test_frame_analyzer_missing_tree():
+    """Test frame analyzer when tree is missing"""
+    from tree_interval import FrameAnalyzer
+    analyzer = FrameAnalyzer(None)
+    analyzer.tree = None
+    result = analyzer.find_current_node()
+    assert result is None
+
+def test_frame_analyzer_no_matching_nodes_empty():
+    """Test frame analyzer when no nodes match position"""
+    from tree_interval import FrameAnalyzer, Tree, Leaf, Position
+    analyzer = FrameAnalyzer(None)
+    analyzer.tree = Tree("test")
+    analyzer.tree.root = Leaf(Position(0, 10))
+    # Set frame position that won't match any nodes
+    analyzer.frame_position = Position(100, 200)
+    result = analyzer.find_current_node()
+    assert result is None
+
 def test_node_matching_and_selection():
     """Test node matching and selection in frame analyzer"""
     from tree_interval import Leaf, Position, Tree
