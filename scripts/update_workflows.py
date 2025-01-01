@@ -5,7 +5,6 @@ Updates GitHub Actions workflow files with new configurations.
 """
 
 import os
-import subprocess
 from datetime import datetime
 from typing import Dict, Any
 import yaml

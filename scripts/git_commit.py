@@ -4,10 +4,10 @@
 Handles git add, commit, and push operations with logging.
 """
 
-import os
-import subprocess
 from datetime import datetime
 from typing import Optional
+import os
+import subprocess
 
 def git_commit(message: Optional[str] = None) -> None:
     """Perform git commit and push operations.
