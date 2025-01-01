@@ -159,6 +159,38 @@ def test_lambda_node_value():
                            if getattr(n, "info", {}).get("type") == "Lambda")
     assert lambda_node is not None
 
+def test_build_from_frame_no_source():
+    builder = AstTreeBuilder("test")
+    builder.source = None
+    result = builder.build_from_frame()
+    assert result is None
+
+def test_get_node_position_missing_lineno():
+    import ast
+    builder = AstTreeBuilder("x = 1")
+    node = ast.Name(id='x', ctx=ast.Load())
+    # Node without lineno should return None
+    assert builder._get_node_position(node) is None
+
+def test_node_with_invalid_source():
+    builder = AstTreeBuilder("x = 1")
+    builder.source = ""  # Invalid source
+    import ast
+    node = ast.Name(id='x', ctx=ast.Load())
+    node.lineno = 1
+    node.col_offset = 0
+    node.end_lineno = 1
+    node.end_col_offset = 1
+    # Should handle invalid source gracefully
+    assert builder._get_node_position(node) is None
+
+def test_build_tree_from_ast_empty_source():
+    builder = AstTreeBuilder(" ")
+    builder.source = None
+    import ast
+    with pytest.raises(ValueError, match="No source code available"):
+        builder._build_tree_from_ast(ast.parse(""))
+
 
 if __name__ == "__main__":
     pytest.main([__file__])
