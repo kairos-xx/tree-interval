@@ -1,6 +1,30 @@
-
+examples/./demo.py:21:1: W293 blank line contains whitespace
 examples/./demo.py:450:15: W292 no newline at end of file
+scripts/./create_zip.py:16:1: W293 blank line contains whitespace
+scripts/./create_zip.py:34:1: W293 blank line contains whitespace
+scripts/./create_zip.py:41:1: W293 blank line contains whitespace
+scripts/./create_zip.py:45:1: W293 blank line contains whitespace
+scripts/./create_zip.py:47:1: W293 blank line contains whitespace
+scripts/./create_zip.py:53:1: W293 blank line contains whitespace
+scripts/./create_zip.py:58:1: W293 blank line contains whitespace
 scripts/./create_zip.py:65:1: W391 blank line at end of file
+scripts/./get_author.py:13:1: W293 blank line contains whitespace
+scripts/./get_author.py:16:1: W293 blank line contains whitespace
+scripts/./get_author.py:24:1: W293 blank line contains whitespace
+scripts/./get_author.py:29:1: W293 blank line contains whitespace
+scripts/./git_commit.py:15:1: W293 blank line contains whitespace
+scripts/./git_commit.py:18:1: W293 blank line contains whitespace
+scripts/./pypi_upload.py:15:1: W293 blank line contains whitespace
+scripts/./pypi_upload.py:19:1: W293 blank line contains whitespace
+scripts/./pypi_upload.py:39:1: W293 blank line contains whitespace
+scripts/./pypi_upload.py:46:1: W293 blank line contains whitespace
+scripts/./pypi_upload.py:48:1: W293 blank line contains whitespace
+scripts/./pypi_upload.py:51:1: W293 blank line contains whitespace
+scripts/./update_workflows.py:16:1: W293 blank line contains whitespace
+scripts/./update_workflows.py:54:1: W293 blank line contains whitespace
+scripts/./update_workflows.py:61:1: W293 blank line contains whitespace
+scripts/./update_workflows.py:64:1: W293 blank line contains whitespace
+scripts/./update_workflows.py:68:1: W293 blank line contains whitespace
 src/./tree_interval/core/ast_builder.py:160:80: E501 line too long (80 > 79 characters)
 src/./tree_interval/core/ast_builder.py:195:80: E501 line too long (80 > 79 characters)
 src/./tree_interval/core/ast_builder.py:198:80: E501 line too long (81 > 79 characters)
@@ -13,19 +37,43 @@ src/./tree_interval/core/frame_analyzer.py:72:25: E126 continuation line over-in
 src/./tree_interval/core/frame_analyzer.py:84:80: E501 line too long (91 > 79 characters)
 src/./tree_interval/core/frame_analyzer.py:103:80: E501 line too long (81 > 79 characters)
 src/./tree_interval/core/frame_analyzer.py:132:25: W292 no newline at end of file
+src/./tree_interval/core/future.py:39:1: W293 blank line contains whitespace
 src/./tree_interval/core/future.py:40:80: E501 line too long (80 > 79 characters)
+src/./tree_interval/core/future.py:45:1: W293 blank line contains whitespace
+src/./tree_interval/core/future.py:50:1: W293 blank line contains whitespace
+src/./tree_interval/core/future.py:56:1: W293 blank line contains whitespace
+src/./tree_interval/core/future.py:59:1: W293 blank line contains whitespace
+src/./tree_interval/core/future.py:62:1: W293 blank line contains whitespace
 src/./tree_interval/core/future.py:70:80: E501 line too long (83 > 79 characters)
 src/./tree_interval/core/future.py:71:80: E501 line too long (81 > 79 characters)
+src/./tree_interval/core/future.py:88:1: W293 blank line contains whitespace
+src/./tree_interval/core/future.py:92:1: W293 blank line contains whitespace
 src/./tree_interval/core/future.py:129:18: W292 no newline at end of file
 src/./tree_interval/core/interval_core.py:213:80: E501 line too long (83 > 79 characters)
 src/./tree_interval/core/interval_core.py:216:80: E501 line too long (80 > 79 characters)
 src/./tree_interval/core/interval_core.py:219:80: E501 line too long (80 > 79 characters)
 src/./tree_interval/core/interval_core.py:220:73: W291 trailing whitespace
 src/./tree_interval/core/interval_core.py:228:39: W291 trailing whitespace
+src/./tree_interval/core/interval_core.py:252:1: W293 blank line contains whitespace
+src/./tree_interval/core/interval_core.py:262:1: W293 blank line contains whitespace
+src/./tree_interval/core/interval_core.py:266:1: W293 blank line contains whitespace
+src/./tree_interval/core/interval_core.py:269:1: W293 blank line contains whitespace
 src/./tree_interval/core/interval_core.py:272:80: E501 line too long (80 > 79 characters)
 src/./tree_interval/core/interval_core.py:273:62: W291 trailing whitespace
+src/./tree_interval/core/interval_core.py:435:1: W293 blank line contains whitespace
+src/./tree_interval/core/interval_core.py:440:1: W293 blank line contains whitespace
+src/./tree_interval/core/interval_core.py:445:1: W293 blank line contains whitespace
+src/./tree_interval/core/interval_core.py:487:1: W293 blank line contains whitespace
+src/./tree_interval/core/interval_core.py:491:1: W293 blank line contains whitespace
+src/./tree_interval/core/interval_core.py:496:1: W293 blank line contains whitespace
+src/./tree_interval/core/interval_core.py:499:1: W293 blank line contains whitespace
 src/./tree_interval/core/interval_core.py:963:80: E501 line too long (82 > 79 characters)
 src/./tree_interval/rich_printer/printer.py:35:1: E302 expected 2 blank lines, found 1
+src/./tree_interval/visualizer/visualizer.py:90:1: W293 blank line contains whitespace
+src/./tree_interval/visualizer/visualizer.py:96:1: W293 blank line contains whitespace
+src/./tree_interval/visualizer/visualizer.py:102:1: W293 blank line contains whitespace
+src/./tree_interval/visualizer/visualizer.py:107:1: W293 blank line contains whitespace
 tests/./__init__.py:4:67: W291 trailing whitespace
 tests/./__init__.py:8:36: W291 trailing whitespace
 tests/./__init__.py:18:1: E302 expected 2 blank lines, found 1
+tests/./__init__.py:20:1: W293 blank line contains whitespace
