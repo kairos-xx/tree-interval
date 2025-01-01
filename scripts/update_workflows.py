@@ -182,8 +182,10 @@ workflows = [
         "author":
         author_id,
         "tasks": [{
-            "task": "shell.exec",
-            "args": "pytest --cov=src | tee logs/pytest.log 2>&1"
+            "task":
+            "shell.exec",
+            "args": ("pytest --cov=src --cov-report term-missing | " +
+                     "tee logs/pytest.log 2>&1")
         }],
     },
     {

@@ -1,4 +1,4 @@
-run = ["python", "main.py"]
+run = ["python", "dev/frame_dev_min.py"]
 entrypoint = "README.md"
 modules = ["python-3.11:v30-20240222-aba8eb6"]
 hidden = [".pythonlibs"]
@@ -153,7 +153,7 @@ author = 299513
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "pytest --cov=src | tee logs/pytest.log 2>&1"
+args = "pytest --cov=src --cov-report term-missing | tee logs/pytest.log 2>&1"
 
 [[workflows.workflow]]
 name = "[Report] All"

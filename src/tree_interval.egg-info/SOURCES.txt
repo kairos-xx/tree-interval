@@ -2,7 +2,6 @@ LICENSE
 README.md
 pyproject.toml
 setup.py
-src/tree_interval/__init__ (copy).py
 src/tree_interval/__init__.py
 src/tree_interval.egg-info/PKG-INFO
 src/tree_interval.egg-info/SOURCES.txt

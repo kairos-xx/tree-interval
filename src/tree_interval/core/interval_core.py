@@ -187,6 +187,7 @@ class Statement:
     @property
     def text(self) -> str:
         """Property access for default markers."""
+
         return self.as_text()
 
 
@@ -423,6 +424,7 @@ class Leaf:
         style: Optional[Any] = None,
         rich_style: Optional[Any] = None,
     ):
+
         if position is None:
             position = Position(0, 0)
 

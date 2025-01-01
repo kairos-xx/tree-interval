@@ -61,7 +61,8 @@ def test_frame_analyzer_position_handling():
 def test_frame_analyzer_empty_source():
     frame = stack()[0].frame
     analyzer = FrameAnalyzer(frame)
-    analyzer.ast_builder.source = ""
+    if analyzer.ast_builder:
+        analyzer.ast_builder.source = ""
     result = analyzer.build_tree()
     assert result is None
 
@@ -105,7 +106,8 @@ def test_build_tree_empty():
     def dummy_func():
         frame = stack()[0].frame
         analyzer = FrameAnalyzer(frame)
-        analyzer.ast_builder.source = None
+        if analyzer.ast_builder:
+            analyzer.ast_builder.source = None
         return analyzer.build_tree()
 
     assert dummy_func() is None

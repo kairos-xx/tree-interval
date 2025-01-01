@@ -52,8 +52,10 @@ class AstTreeBuilder:
         self.frame_firstlineno: int = 1
 
         if isinstance(source, str):
+            if not source:
+                raise ValueError("Source cannot be empty")
             self.source = source
-        else:
+        elif hasattr(source, 'f_code'):
             self.frame_firstlineno = source.f_code.co_firstlineno
             self.source = getsource(source)
 
@@ -90,9 +92,10 @@ class AstTreeBuilder:
         return None
 
     def build(self) -> Optional[Tree]:
-        if not self.source:
+        if self.source is None:
             raise ValueError("No source code available")
-
+        if not self.source.strip():
+            return Tree("")
         tree = parse(dedent(self.source))
         return self._build_tree_from_ast(tree)
 

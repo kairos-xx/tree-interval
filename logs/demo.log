@@ -18,7 +18,7 @@ Leaf from args: Leaf(start=60, end=90, info='Using Args')
 
 === Styling Examples ===
 [1;32m[0-100] size=100 info=Info(type='Module')[0m
-└── [34m[10-50] size=40 info=Info(type='FunctionDef')[0m
+└── [36m[10-50] size=40 info=Info(type='FunctionDef')[0m
 Tree created with source: Example Code
 Basic Tree:
 [94m(0, 100) size=100 info='Root'[0m
@@ -125,4 +125,15 @@ Deserialized tree:
 AST Tree:
 [1;32msize=100 info=Info(type='Module')[0m
 └── [34msize=80 info=Info(type='FunctionDef', name='example')[0m
-    └── [38;5;249msize=10 info=Info(type='Arguments')[0m
+    └── [36msize=10 info=Info(type='Arguments')[0m
+=== Tree Styling Examples ===
+
+Syntax Highlighted Tree:
+[1;32m[0-100] size=100 info=Info(type='Module', name='main')[0m
+└── [34m[10-90] size=80 info=Info(type='FunctionDef', name='process_data')[0m
+    └── [36m[20-30] size=10 info=Info(type='Arguments')[0m
+
+Tree with Selected Node:
+[1;32m[0-100] size=100 info=Root[0m
+├── [36m[10-40] size=30 info=Selected Node[0m
+└── [36m[50-90] size=40 info=Normal Node[0m

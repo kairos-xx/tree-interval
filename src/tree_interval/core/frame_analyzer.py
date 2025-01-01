@@ -34,6 +34,8 @@ class FrameAnalyzer:
             self.frame)
         if isframe(frame):
             self.ast_builder = AstTreeBuilder(frame)
+        else:
+            self.ast_builder = None
         self.tree = None
         self.current_node = None
 
@@ -69,13 +71,14 @@ class FrameAnalyzer:
             Optional[Tree]: The complete AST tree, or None if
                             construction fails.
         """
-        if not hasattr(self, 'tree') or self.tree is None:
+        if (not hasattr(self, 'tree')
+                or self.tree is None) and self.ast_builder is not None:
             self.tree = self.ast_builder.build_from_frame()
             if not self.tree:
                 return None
         if not hasattr(self, 'current_node') or self.current_node is None:
-            self._find_node_positions()
-        if self.tree and self.tree.root:
+            self.find_current_node()
+        if self.tree and self.tree.root and self.ast_builder:
             nodes_by_pos = {}
             for node in self.tree.flatten():
                 if hasattr(node, "ast_node") and isinstance(
@@ -105,14 +108,3 @@ class FrameAnalyzer:
                             break
 
         return self.tree
-
-    def _find_node_positions(self):
-
-        if self.tree:
-            for node in self.tree.flatten():
-                if hasattr(
-                        node, 'position'
-                ) and node.position and self.frame_position.overlaps(
-                        node.position):
-                    self.current_node = node
-                    break
