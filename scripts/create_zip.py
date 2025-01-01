@@ -62,4 +62,3 @@ def create_zip() -> None:
 
 if __name__ == "__main__":
     create_zip()
-
