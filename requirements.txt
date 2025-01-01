@@ -8,3 +8,4 @@ flake8
 build
 requests
 toml
+pyyaml

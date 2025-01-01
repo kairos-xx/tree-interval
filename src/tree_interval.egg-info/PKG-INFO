@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: tree-interval
-Version: 0.1.18
+Version: 0.1.19
 Summary: A Python package for managing and visualizing interval tree structures
 Home-page: https://github.com/kairos-xx/tree-interval
 Author: Joao Lopes
@@ -8,7 +8,7 @@ Author-email: Joao Lopes <joaoslopes@gmail.com>
 License: 
         MIT License
         
-        Copyright (c) 2024 Replit User
+        Copyright (c) 2024 Joao Lopes
         
         Permission is hereby granted, free of charge, to any person obtaining a copy
         of this software and associated documentation files (the "Software"), to deal

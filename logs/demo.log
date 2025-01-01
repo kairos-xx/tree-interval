@@ -5,8 +5,8 @@ Basic position: start=0, end=100
 Position with lines: lineno=1, end_lineno=5
 Position with columns: col_offset=4, end_col_offset=8
 Absolute positions: absolute_start=30, absolute_end=70
-Position format: Position(start=30, end=70, lineno=None, end_lineno=1, col_offset=0, end_col_offset=40)
-Tuple format: (30, 70, None, 1, 0, 40)
+Position format: Position(start=30, end=70, lineno=1, end_lineno=1, col_offset=0, end_col_offset=40)
+Tuple format: (30, 70, 1, 1, 0, 40)
 Default format: Position(start=30, end=70)
 
 === Leaf Examples ===
@@ -95,52 +95,6 @@ Rich visualization from Child:
 === Future Examples ===
 Created nested attribute: root.a.b.c = 42
 Caught expected error: Attribute [1mx[0m not found in [1mroot[0m
-   File "/home/runner/treeinterval/examples/demo.py"line 386, in demonstrate_future
+   File "/home/runner/treeinterval/examples/demo.py"line 427, in demonstrate_future
    print(root.x.y.z)
    ~~~~~~^^^^^▲^^^^~
-=== Rich Printer Examples ===
-
-Basic Tree:
-[1;32m[0-100] size=100 info=Root Node[0m
-├── [36m[10-40] size=30 info=First Child[0m
-└── [36m[50-90] size=40 info=Second Child[0m
-
-Styled Tree:
-[1;31m[0-100] info=Info(name='Main')[0m
-└── [36m[10-50] info=Info(name='Sub')[0m
-
-Default visualization:
-[94m(0, 100) size=100 info='Root'[0m
-├── [93m(10, 40) size=30 info='Child 1'[0m
-└── [93m(50, 90) size=40 info='Child 2'[0m
-
-With position objects:
-[94mPosition(start=0, end=100, lineno=None, end_lineno=None, col_offset=None, end_col_offset=100, size=100) size=100 info=...[0m
-├── [93mPosition(start=10, end=40, lineno=None, end_lineno=None, col_offset=None, end_col_offset=30, size=30) size=30 info=...[0m
-└── [93mPosition(start=50, end=90, lineno=None, end_lineno=None, col_offset=None, end_col_offset=40, size=40) size=40 info=...[0m
-
-With tuples and children count:
-[94m(0, 100) info='Root' children=2[0m
-├── [93m(10, 40) info='Child 1' children=0[0m
-└── [93m(50, 90) info='Child 2' children=0[0m
-JSON representation: {"source": "Serialization Example", "start_lineno": null, "indent_size": 4, "root": {"start": 0, "end": 100, "info": "Root", "children": [{"start": 10, "end": 50, "info": "Child", "children": [], "style": null, "rich_style": null}], "style": null, "rich_style": null}}
-
-Deserialized tree:
-[94m(0, 100) size=100 info='Root'[0m
-└── [93m(10, 50) size=40 info='Child'[0m
-
-AST Tree:
-[1;32msize=100 info=Info(type='Module')[0m
-└── [34msize=80 info=Info(type='FunctionDef', name='example')[0m
-    └── [36msize=10 info=Info(type='Arguments')[0m
-=== Tree Styling Examples ===
-
-Syntax Highlighted Tree:
-[1;32m[0-100] size=100 info=Info(type='Module', name='main')[0m
-└── [34m[10-90] size=80 info=Info(type='FunctionDef', name='process_data')[0m
-    └── [36m[20-30] size=10 info=Info(type='Arguments')[0m
-
-Tree with Selected Node:
-[1;32m[0-100] size=100 info=Root[0m
-├── [36m[10-40] size=30 info=Selected Node[0m
-└── [36m[50-90] size=40 info=Normal Node[0m
