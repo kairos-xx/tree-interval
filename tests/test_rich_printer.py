@@ -185,6 +185,24 @@ def test_console_without_record():
     printer.print_tree(tree)  # Should not raise any errors
     assert True
 
+def test_format_node_long_info():
+    """Test formatting node with long info string."""
+    config = RichPrintConfig(terminal_size=20)
+    printer = RichTreePrinter(config)
+    info = {"very_long_key": "very_long_value" * 10}
+    node = Leaf(Position(0, 10), info=info)
+    formatted = printer._format_node(node)
+    assert "info=..." in formatted
+
+def test_format_node_custom_style():
+    """Test formatting node with custom style."""
+    from rich.style import Style
+    printer = RichTreePrinter()
+    node = Leaf(Position(0, 10))
+    node.rich_style = Style(color="red")
+    formatted = printer._format_node(node)
+    assert formatted is not None
+
 
 if __name__ == "__main__":
     pytest.main([__file__])

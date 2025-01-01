@@ -134,6 +134,25 @@ def test_frame_analyzer_invalid_ast_node():
     assert isinstance(result, Tree)
     assert result.root is not None
 
+def test_build_tree_no_current_node():
+    """Test building tree with no current node."""
+    frame_analyzer = FrameAnalyzer(None)
+    frame_analyzer.tree = Tree("test")
+    frame_analyzer._find_node_positions()
+    assert frame_analyzer.current_node is None
+
+def test_build_tree_with_ast():
+    """Test building tree with AST nodes."""
+    import ast
+    node = ast.Name(id='x', ctx=ast.Load())
+    frame_analyzer = FrameAnalyzer(None)
+    frame_analyzer.tree = Tree("x = 1")
+    leaf = Leaf(Position(0, 1))
+    leaf.ast_node = node
+    frame_analyzer.tree.root = leaf
+    result = frame_analyzer.build_tree()
+    assert result is not None
+
 
 if __name__ == "__main__":
     pytest.main([__file__])

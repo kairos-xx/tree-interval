@@ -88,6 +88,19 @@ def test_terminal_width_fallback_attribute_error(monkeypatch):
     assert width == 80  # Check fallback value
 
 
+def test_terminal_width_fallback():
+    """Test terminal width fallback value."""
+    from tree_interval.rich_printer.config import get_terminal_width
+    from shutil import get_terminal_size
+    def mock_get_terminal_size():
+        raise Exception("Terminal size not available")
+    
+    old_get_terminal_size = get_terminal_size
+    get_terminal_size = mock_get_terminal_size
+    width = get_terminal_width()
+    assert width == 80
+    get_terminal_size = old_get_terminal_size
+
 def test_terminal_width_success(monkeypatch):
     """Test successful terminal width retrieval."""
     from collections import namedtuple
