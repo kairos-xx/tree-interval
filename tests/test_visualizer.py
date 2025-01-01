@@ -36,35 +36,6 @@ def test_visualizer_node_formatting():
     root.add_child(child)
 
     config = VisualizationConfig(show_info=True, show_size=True)
-
-
-def test_terminal_width_fallback(monkeypatch):
-    """Test terminal width fallback when get_terminal_size fails."""
-    from tree_interval.visualizer.config import get_terminal_width
-
-    def mock_get_terminal_size():
-        raise Exception("Failed to get terminal size")
-
-    monkeypatch.setattr('shutil.get_terminal_size', mock_get_terminal_size)
-    width = get_terminal_width()
-    assert width == 80  # Check fallback value
-
-
-def test_terminal_width_success(monkeypatch):
-    """Test successful terminal width retrieval."""
-    from tree_interval.visualizer.config import get_terminal_width
-    from collections import namedtuple
-
-    MockSize = namedtuple('MockSize', ['columns'])
-    mock_size = MockSize(columns=100)
-
-    def mock_get_terminal_size():
-        return mock_size
-
-    monkeypatch.setattr('shutil.get_terminal_size', mock_get_terminal_size)
-    width = get_terminal_width()
-    assert width == 100
-
     TreeVisualizer.visualize(tree, config)
 
 
@@ -90,6 +61,35 @@ def test_node_info_truncation():
     tree.root = node
     TreeVisualizer.visualize(tree)
     assert True
+
+
+def test_terminal_width_fallback(monkeypatch):
+    """Test terminal width fallback when get_terminal_size fails."""
+    from tree_interval.visualizer.config import get_terminal_width
+
+    def mock_get_terminal_size():
+        raise Exception("Failed to get terminal size")
+
+    monkeypatch.setattr('shutil.get_terminal_size', mock_get_terminal_size)
+    width = get_terminal_width()
+    assert width == 80  # Check fallback value
+
+
+def test_terminal_width_success(monkeypatch):
+    """Test successful terminal width retrieval."""
+    from collections import namedtuple
+
+    from tree_interval.visualizer.config import get_terminal_width
+
+    MockSize = namedtuple('MockSize', ['columns'])
+    mock_size = MockSize(columns=100)
+
+    def mock_get_terminal_size():
+        return mock_size
+
+    monkeypatch.setattr('shutil.get_terminal_size', mock_get_terminal_size)
+    width = get_terminal_width()
+    assert width == 100
 
 
 if __name__ == "__main__":
