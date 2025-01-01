@@ -1,4 +1,5 @@
 """Rich printer examples demonstrating various features."""
+
 from rich.style import Style
 
 from src.tree_interval import Leaf, Position, Tree
@@ -65,9 +66,9 @@ def example_custom_visualization():
     print("\nWith tuples and children count:")
     TreeVisualizer.visualize(
         tree,
-        VisualizationConfig(position_format="tuple",
-                            show_children_count=True,
-                            show_size=False),
+        VisualizationConfig(
+            position_format="tuple", show_children_count=True, show_size=False
+        ),
     )
 
 

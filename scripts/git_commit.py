@@ -98,18 +98,22 @@ def commit_changes():
             subprocess.run(["git", "init"], check=True)
             subprocess.run(
                 ["git", "config", "user.email", "joaoslopes@gmail.com"],
-                check=True)
-            subprocess.run(["git", "config", "user.name", "kairos-xx"],
-                           check=True)
+                check=True,
+            )
+            subprocess.run(
+                ["git", "config", "user.name", "kairos-xx"], check=True
+            )
 
         # Clean merge conflicts in all files first
         clean_all_files()
 
         # First check if we're in a git repository
         try:
-            subprocess.run(["git", "rev-parse", "--is-inside-work-tree"],
-                           check=True,
-                           capture_output=True)
+            subprocess.run(
+                ["git", "rev-parse", "--is-inside-work-tree"],
+                check=True,
+                capture_output=True,
+            )
         except subprocess.CalledProcessError:
             subprocess.run(["git", "init"], check=True)
 
@@ -117,16 +121,24 @@ def commit_changes():
         subprocess.run(["git", "add", "-A"], check=True)
 
         # Create commit message
-        message = ("Auto commit:" +
-                   f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        message = (
+            "Auto commit:" + f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+        )
 
         # Configure git if needed
-        subprocess.run([
-            "git", "config", "--global", "user.email", "joaoslopes@gmail.com"
-        ],
-                       check=True)
-        subprocess.run(["git", "config", "--global", "user.name", "kairos-xx"],
-                       check=True)
+        subprocess.run(
+            [
+                "git",
+                "config",
+                "--global",
+                "user.email",
+                "joaoslopes@gmail.com",
+            ],
+            check=True,
+        )
+        subprocess.run(
+            ["git", "config", "--global", "user.name", "kairos-xx"], check=True
+        )
 
         # Commit changes
         subprocess.run(["git", "commit", "-m", message], check=True)
@@ -136,18 +148,25 @@ def commit_changes():
 
         # Add remote if not exists
         with suppress(Exception):
-            subprocess.run([
-                "git", "remote", "add", "origin",
-                "https://github.com/kairos-xx/tree-interval.git"
-            ],
-                           check=True)
+            subprocess.run(
+                [
+                    "git",
+                    "remote",
+                    "add",
+                    "origin",
+                    "https://github.com/kairos-xx/tree-interval.git",
+                ],
+                check=True,
+            )
 
         # Push using SSH or token-based auth
         try:
             subprocess.run(["git", "push", "-u", "origin", BRANCH], check=True)
         except subprocess.CalledProcessError:
-            print("❌ Push failed. Please ensure your GitHub credentials " +
-                  "are configured in Replit.")
+            print(
+                "❌ Push failed. Please ensure your GitHub credentials "
+                + "are configured in Replit."
+            )
             return
         print("✅ Changes committed and pushed")
     except Exception as e:

@@ -55,7 +55,7 @@ class AstTreeBuilder:
             if not source:
                 raise ValueError("Source cannot be empty")
             self.source = source
-        elif hasattr(source, 'f_code'):
+        elif hasattr(source, "f_code"):
             self.frame_firstlineno = source.f_code.co_firstlineno
             self.source = getsource(source)
 
@@ -70,21 +70,34 @@ class AstTreeBuilder:
                 lineno=lineno,
                 end_lineno=getattr(node, "end_lineno", lineno),
                 col_offset=getattr(node, "col_offset", 0),
-                end_col_offset=getattr(node, "end_col_offset",
-                                       len(source_lines[-1])))
-            position = Position(*(
-                sum(
-                    len(source_lines[i])
-                    for i in range((getattr(dis_position, "lineno", 1) or 1) -
-                                   1)) +
-                (getattr(dis_position, "col_offset", 0) or 0),
-                sum(
-                    len(source_lines[i]) for i in range(
-                        (getattr(dis_position, "end_lineno", 1) or 1) - 1)) +
-                (getattr(dis_position, "end_col_offset", 0) or 0),
-            ))
-            (position.lineno, position.end_lineno, position.col_offset,
-             position.end_col_offset) = tuple(dis_position)
+                end_col_offset=getattr(
+                    node, "end_col_offset", len(source_lines[-1])
+                ),
+            )
+            position = Position(
+                *(
+                    sum(
+                        len(source_lines[i])
+                        for i in range(
+                            (getattr(dis_position, "lineno", 1) or 1) - 1
+                        )
+                    )
+                    + (getattr(dis_position, "col_offset", 0) or 0),
+                    sum(
+                        len(source_lines[i])
+                        for i in range(
+                            (getattr(dis_position, "end_lineno", 1) or 1) - 1
+                        )
+                    )
+                    + (getattr(dis_position, "end_col_offset", 0) or 0),
+                )
+            )
+            (
+                position.lineno,
+                position.end_lineno,
+                position.col_offset,
+                position.end_col_offset,
+            ) = tuple(dis_position)
 
             return position
         except (IndexError, AttributeError):
@@ -179,11 +192,7 @@ class AstTreeBuilder:
         root_pos = Position(0, len(self.source))
         result_tree.root = Leaf(
             root_pos,
-            info={
-                "type": "Module",
-                "name": "Module",
-                "source": self.source
-            },
+            info={"type": "Module", "name": "Module", "source": self.source},
         )
 
         nodes_with_positions = []
@@ -195,16 +204,20 @@ class AstTreeBuilder:
                     position,
                     info={
                         "type": node.__class__.__name__,
-                        "name": getattr(node, 'name', node.__class__.__name__),
-                        "source": get_source_segment(dedent(self.source), node)
+                        "name": getattr(node, "name", node.__class__.__name__),
+                        "source": get_source_segment(
+                            dedent(self.source), node
+                        ),
                     },
                 )
 
-                setattr(node, self.cleaned_value_key,
-                        self._get_node_value(node))
+                setattr(
+                    node, self.cleaned_value_key, self._get_node_value(node)
+                )
                 leaf.ast_node = node
                 nodes_with_positions.append(
-                    (position.start, position.end, leaf))
+                    (position.start, position.end, leaf)
+                )
 
         # Sort nodes by position and size to ensure proper nesting
         nodes_with_positions.sort(key=lambda x: (x[0], -(x[1] - x[0])))
@@ -220,14 +233,16 @@ class AstTreeBuilder:
 
             # Find best parent for current leaf
             best_match = None
-            smallest_size = float('inf')
+            smallest_size = float("inf")
 
             for start, end, potential_parent in nodes_with_positions:
-                if (potential_parent == leaf
-                        or potential_parent in leaf.get_ancestors()):
+                if (
+                    potential_parent == leaf
+                    or potential_parent in leaf.get_ancestors()
+                ):
                     continue
 
-                if (start <= leaf.start and end >= leaf.end):
+                if start <= leaf.start and end >= leaf.end:
                     size = end - start
                     if size < smallest_size:
                         best_match = potential_parent

@@ -30,8 +30,9 @@ class FrameAnalyzer:
     def __init__(self, frame: Optional[FrameType]):
         """Initializes FrameAnalyzer with a given frame."""
         self.frame = frame
-        self.frame_position = Position(0, 0) if frame is None else Position(
-            self.frame)
+        self.frame_position = (
+            Position(0, 0) if frame is None else Position(self.frame)
+        )
         if isframe(frame):
             self.ast_builder = AstTreeBuilder(frame)
         else:
@@ -55,11 +56,16 @@ class FrameAnalyzer:
         if self.current_node is None:
             matching_nodes = []
             for node in self.tree.flatten():
-                if hasattr(node, 'position') and node.position:
+                if hasattr(node, "position") and node.position:
                     matching_nodes.append(
-                        (node,
-                         abs(node.position.start - self.frame_position.start) +
-                         abs(node.position.end - self.frame_position.end)))
+                        (
+                            node,
+                            abs(
+                                node.position.start - self.frame_position.start
+                            )
+                            + abs(node.position.end - self.frame_position.end),
+                        )
+                    )
 
             if matching_nodes:
                 self.current_node = min(matching_nodes, key=lambda x: x[1])[0]
@@ -74,27 +80,31 @@ class FrameAnalyzer:
                             construction fails.
         """
         self.build_tree_done = True
-        if (not hasattr(self, 'tree')
-                or self.tree is None) and self.ast_builder is not None:
+        if (
+            not hasattr(self, "tree") or self.tree is None
+        ) and self.ast_builder is not None:
             self.tree = self.ast_builder.build_from_frame()
             if not self.tree:
                 return None
-        if not hasattr(self, 'current_node') or self.current_node is None:
+        if not hasattr(self, "current_node") or self.current_node is None:
             self.find_current_node()
         if self.tree and self.tree.root and self.ast_builder:
             nodes_by_pos = {}
             for node in self.tree.flatten():
                 if hasattr(node, "ast_node") and isinstance(
-                        node.ast_node, AST):
+                    node.ast_node, AST
+                ):
                     pos = self.ast_builder._get_node_position(
-                        cast(AST, node.ast_node))
+                        cast(AST, node.ast_node)
+                    )
                     if pos:
                         pos.selected = node.selected
                         node.position = pos
                         nodes_by_pos[(pos.start, pos.end)] = node
 
-            sorted_positions = sorted(nodes_by_pos.keys(),
-                                      key=lambda x: (x[0], -x[1]))
+            sorted_positions = sorted(
+                nodes_by_pos.keys(), key=lambda x: (x[0], -x[1])
+            )
 
             for start, end in sorted_positions:
                 current_node = nodes_by_pos[(start, end)]
@@ -102,11 +112,17 @@ class FrameAnalyzer:
                     current_node.selected = True
 
                 for parent_start, parent_end in sorted_positions:
-                    if (parent_start <= start and parent_end >= end
-                            and (parent_start, parent_end) != (start, end)):
+                    if (
+                        parent_start <= start
+                        and parent_end >= end
+                        and (parent_start, parent_end) != (start, end)
+                    ):
                         parent_node = nodes_by_pos[(parent_start, parent_end)]
-                        if not any(p for p in parent_node.get_ancestors()
-                                   if p.start <= start and p.end >= end):
+                        if not any(
+                            p
+                            for p in parent_node.get_ancestors()
+                            if p.start <= start and p.end >= end
+                        ):
                             parent_node.add_child(current_node)
                             break
 

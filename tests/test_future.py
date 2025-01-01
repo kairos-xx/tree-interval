@@ -21,8 +21,8 @@ def test_future_attribute_creation(nested):
     """Test that Future creates new attributes properly"""
     instance = nested
     instance.test.sub = 42
-    assert hasattr(instance, 'test')
-    assert hasattr(instance.test, 'sub')
+    assert hasattr(instance, "test")
+    assert hasattr(instance.test, "sub")
     assert instance.test.sub == 42
 
 
@@ -30,10 +30,10 @@ def test_future_nested_creation(nested):
     """Test nested attribute creation"""
     instance = nested
     instance.a.b.c.d = 123
-    assert hasattr(instance, 'a')
-    assert hasattr(instance.a, 'b')
-    assert hasattr(instance.a.b, 'c')
-    assert hasattr(instance.a.b.c, 'd')
+    assert hasattr(instance, "a")
+    assert hasattr(instance.a, "b")
+    assert hasattr(instance.a.b, "c")
+    assert hasattr(instance.a.b.c, "d")
     assert instance.a.b.c.d == 123
 
 

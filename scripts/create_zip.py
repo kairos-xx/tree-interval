@@ -4,7 +4,11 @@ from datetime import datetime
 from typing import List
 
 CUSTOM_IGNORE = [
-    "__pycache__", "attached_assets", ".pytest_cache", ".ruff_cache", "zip"
+    "__pycache__",
+    "attached_assets",
+    ".pytest_cache",
+    ".ruff_cache",
+    "zip",
 ]
 
 
@@ -21,8 +25,10 @@ def get_files_to_zip() -> List[str]:
         for filename in filenames:
             filepath = os.path.join(root, filename)
             # Skip if the file matches any ignore pattern
-            if (not any(ignore in filepath for ignore in CUSTOM_IGNORE)
-                    and filename not in CUSTOM_IGNORE):
+            if (
+                not any(ignore in filepath for ignore in CUSTOM_IGNORE)
+                and filename not in CUSTOM_IGNORE
+            ):
                 files.append(filepath)
 
     return files
@@ -36,8 +42,9 @@ def create_zip() -> None:
     files = get_files_to_zip()
 
     try:
-        with zipfile.ZipFile(f"{output_folder}/{output_filename}", "w",
-                             zipfile.ZIP_DEFLATED) as zipf:
+        with zipfile.ZipFile(
+            f"{output_folder}/{output_filename}", "w", zipfile.ZIP_DEFLATED
+        ) as zipf:
             for file in files:
                 zipf.write(file)
         print(f"Zip file created successfully: {output_filename}")

@@ -1,6 +1,7 @@
 """
 Comprehensive demonstration of all features of the tree interval package.
 """
+
 from typing import Any
 
 from rich.style import Style as RichStyle
@@ -162,15 +163,16 @@ def example_custom_visualization():
     tree.visualize()
 
     print("\nWith position objects:")
-    TreeVisualizer.visualize(tree,
-                             VisualizationConfig(position_format="position"))
+    TreeVisualizer.visualize(
+        tree, VisualizationConfig(position_format="position")
+    )
 
     print("\nWith tuples and children count:")
     TreeVisualizer.visualize(
         tree,
-        VisualizationConfig(position_format="tuple",
-                            show_children_count=True,
-                            show_size=False),
+        VisualizationConfig(
+            position_format="tuple", show_children_count=True, show_size=False
+        ),
     )
 
 
@@ -220,8 +222,9 @@ def demonstrate_line_positions():
     tree.visualize()
 
     print("\nDetailed position view:")
-    TreeVisualizer.visualize(tree,
-                             VisualizationConfig(position_format="position"))
+    TreeVisualizer.visualize(
+        tree, VisualizationConfig(position_format="position")
+    )
 
 
 def demonstrate_dot_notation():
@@ -253,18 +256,29 @@ def demonstrate_dot_notation():
         info = getattr(attrs, "info", {})
         return info if isinstance(info, dict) else {}
 
-    found_parent = grandchild.find_parent(lambda n: bool(n and n._as_dict(
-    ) and safe_get_info(n).get("type") == "FunctionDef"))
+    found_parent = grandchild.find_parent(
+        lambda n: bool(
+            n
+            and n._as_dict()
+            and safe_get_info(n).get("type") == "FunctionDef"
+        )
+    )
     print("Parent:", safe_get_info(found_parent))
 
     # Find child using dot notation
-    found_child = root.find_child(lambda n: bool(n and n._as_dict(
-    ) and safe_get_info(n).get("type") == "ClassDef"))
+    found_child = root.find_child(
+        lambda n: bool(
+            n and n._as_dict() and safe_get_info(n).get("type") == "ClassDef"
+        )
+    )
     print("Child:", safe_get_info(found_child))
 
     # Find sibling using dot notation
-    found_sibling = child1.find_sibling(lambda n: bool(n and n._as_dict(
-    ) and safe_get_info(n).get("name") == "MyClass"))
+    found_sibling = child1.find_sibling(
+        lambda n: bool(
+            n and n._as_dict() and safe_get_info(n).get("name") == "MyClass"
+        )
+    )
     print("Sibling:", safe_get_info(found_sibling))
 
 
@@ -288,9 +302,15 @@ def demonstrate_ast_parsing():
         return
 
     # Find class definition node
-    class_node = tree.root.find(lambda n: (n is not None and hasattr(
-        n, "info") and n.info is not None and isinstance(n.info, dict) and n.
-                                           info.get("type") == "ClassDef"))
+    class_node = tree.root.find(
+        lambda n: (
+            n is not None
+            and hasattr(n, "info")
+            and n.info is not None
+            and isinstance(n.info, dict)
+            and n.info.get("type") == "ClassDef"
+        )
+    )
     print("=== AST Node Info Example ===")
     if class_node and hasattr(class_node, "ast_node") and class_node.ast_node:
         print(f"Class name: {class_node.ast_node.name}")
@@ -371,10 +391,9 @@ def demonstrate_future():
             self.__dict__: dict[str, "Nested"] = {}
 
         def __getattr__(self, name: str) -> Any:
-            return Future(name,
-                          frame=1,
-                          instance=self,
-                          new_return=type(self)())
+            return Future(
+                name, frame=1, instance=self, new_return=type(self)()
+            )
 
     # Example 1: Setting nested attributes
     root = Nested()

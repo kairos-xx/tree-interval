@@ -149,6 +149,7 @@ def test_frame_analyzer_invalid_ast_node():
 def test_frame_analyzer_missing_tree():
     """Test frame analyzer when tree is missing"""
     from tree_interval import FrameAnalyzer
+
     analyzer = FrameAnalyzer(None)
     analyzer.tree = None
     result = analyzer.find_current_node()

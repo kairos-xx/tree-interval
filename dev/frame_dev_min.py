@@ -10,10 +10,12 @@ class Nested:
         self.__dict__: dict[str, "Nested"] = {}
 
     def __getattr__(self, name: str) -> Any:
-        return Future(name,
-                      frame=stack()[1].frame,
-                      instance=self,
-                      new_return=type(self)())
+        return Future(
+            name,
+            frame=stack()[1].frame,
+            instance=self,
+            new_return=type(self)(),
+        )
 
 
 def xpto():

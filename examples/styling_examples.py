@@ -1,4 +1,5 @@
 """Examples demonstrating tree node styling capabilities."""
+
 from typing import Dict
 
 from src.tree_interval import Leaf, LeafStyle, Position, Tree
@@ -11,11 +12,9 @@ def example_syntax_highlighting():
 
     # Create nodes with different types
     root = Leaf(Position(0, 100), info={"type": "Module", "name": "main"})
-    func_def = Leaf(Position(10, 90),
-                    info={
-                        "type": "FunctionDef",
-                        "name": "process_data"
-                    })
+    func_def = Leaf(
+        Position(10, 90), info={"type": "FunctionDef", "name": "process_data"}
+    )
     args = Leaf(Position(20, 30), info={"type": "Arguments"})
 
     # Build tree structure
@@ -27,12 +26,12 @@ def example_syntax_highlighting():
     def apply_syntax_styles(node: Leaf) -> None:
         """Apply syntax highlighting based on node type."""
         if isinstance(node.info, Dict):
-            node_type = node.info.get('type', '')
-            if node_type == 'Module':
+            node_type = node.info.get("type", "")
+            if node_type == "Module":
                 node.style = LeafStyle(color="#4CAF50", bold=True)  # Green
-            elif node_type == 'FunctionDef':
+            elif node_type == "FunctionDef":
                 node.style = LeafStyle(color="#2196F3", bold=False)  # Blue
-            elif node_type == 'Arguments':
+            elif node_type == "Arguments":
                 node.style = LeafStyle(color="#FFC107", bold=False)  # Yellow
 
     # Apply styles to all nodes

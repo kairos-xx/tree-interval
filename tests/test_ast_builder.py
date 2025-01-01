@@ -13,11 +13,13 @@ def test_ast_builder_initialization():
 
 
 def test_build_from_source():
-    source = dedent("""
+    source = dedent(
+        """
     def test():
         x = 1
         return x
-    """).strip()
+    """
+    ).strip()
 
     builder = AstTreeBuilder(source)
     tree = builder.build()
@@ -35,23 +37,29 @@ def test_node_value_extraction():
 
     assert tree is not None
     nodes = tree.flatten()
-    call_node = next(n for n in nodes
-                     if getattr(n, "info", {}).get("type") == "Call")
+    call_node = next(
+        n for n in nodes if getattr(n, "info", {}).get("type") == "Call"
+    )
     assert call_node is not None
 
 
 def test_position_tracking():
-    source = dedent("""
+    source = dedent(
+        """
     def func():
         return 42
-    """).strip()
+    """
+    ).strip()
 
     builder = AstTreeBuilder(source)
     tree = builder.build()
 
     assert tree is not None
-    func_node = next(n for n in tree.flatten()
-                     if getattr(n, "info", {}).get("type") == "FunctionDef")
+    func_node = next(
+        n
+        for n in tree.flatten()
+        if getattr(n, "info", {}).get("type") == "FunctionDef"
+    )
     assert func_node.position.lineno == 1
     assert func_node.position.end_lineno == 2
 
@@ -105,8 +113,11 @@ def test_attribute_node_value():
     attr_node = None
     if tree:
         nodes = tree.flatten()
-        attr_node = next(n for n in nodes
-                         if getattr(n, "info", {}).get("type") == "Attribute")
+        attr_node = next(
+            n
+            for n in nodes
+            if getattr(n, "info", {}).get("type") == "Attribute"
+        )
     assert attr_node is not None
 
 
@@ -117,8 +128,9 @@ def test_call_node_value():
     call_node = None
     if tree:
         nodes = tree.flatten()
-        call_node = next(n for n in nodes
-                         if getattr(n, "info", {}).get("type") == "Call")
+        call_node = next(
+            n for n in nodes if getattr(n, "info", {}).get("type") == "Call"
+        )
     assert call_node is not None
 
 
@@ -130,8 +142,10 @@ def test_subscript_node_value():
     if tree:
         nodes = tree.flatten()
         subscript_node = next(
-            n for n in nodes
-            if getattr(n, "info", {}).get("type") == "Subscript")
+            n
+            for n in nodes
+            if getattr(n, "info", {}).get("type") == "Subscript"
+        )
     assert subscript_node is not None
 
 
@@ -142,8 +156,9 @@ def test_binop_node_value():
     binop_node = None
     if tree:
         nodes = tree.flatten()
-        binop_node = next(n for n in nodes
-                          if getattr(n, "info", {}).get("type") == "BinOp")
+        binop_node = next(
+            n for n in nodes if getattr(n, "info", {}).get("type") == "BinOp"
+        )
     assert binop_node is not None
 
 
@@ -154,8 +169,9 @@ def test_lambda_node_value():
     lambda_node = None
     if tree:
         nodes = tree.flatten()
-        lambda_node = next(n for n in nodes
-                           if getattr(n, "info", {}).get("type") == "Lambda")
+        lambda_node = next(
+            n for n in nodes if getattr(n, "info", {}).get("type") == "Lambda"
+        )
     assert lambda_node is not None
 
 
@@ -168,8 +184,9 @@ def test_build_from_frame_no_source():
 
 def test_get_node_position_missing_lineno():
     import ast
+
     builder = AstTreeBuilder("x = 1")
-    node = ast.Name(id='x', ctx=ast.Load())
+    node = ast.Name(id="x", ctx=ast.Load())
     # Node without lineno should return None
     assert builder._get_node_position(node) is None
 
@@ -178,7 +195,8 @@ def test_node_with_invalid_source():
     builder = AstTreeBuilder("x = 1")
     builder.source = ""  # Invalid source
     import ast
-    node = ast.Name(id='x', ctx=ast.Load())
+
+    node = ast.Name(id="x", ctx=ast.Load())
     node.lineno = 1
     node.col_offset = 0
     node.end_lineno = 1
@@ -191,6 +209,7 @@ def test_build_tree_from_ast_empty_source():
     builder = AstTreeBuilder(" ")
     builder.source = None
     import ast
+
     with pytest.raises(ValueError, match="No source code available"):
         builder._build_tree_from_ast(ast.parse(""))
 
@@ -198,8 +217,9 @@ def test_build_tree_from_ast_empty_source():
 def test_get_node_position_with_empty_lines():
     """Test node position handling with empty lines in source."""
     import ast
+
     builder = AstTreeBuilder("x = 1\n\ny = 2")
-    node = ast.Name(id='y', ctx=ast.Load())
+    node = ast.Name(id="y", ctx=ast.Load())
     node.lineno = 3
     node.col_offset = 0
     node.end_lineno = 3
@@ -236,7 +256,8 @@ def outer():
 
     # Find the innermost node
     inner_nodes = [
-        n for n in tree.flatten()
+        n
+        for n in tree.flatten()
         if getattr(n, "info", {}).get("type") == "FunctionDef"
         and getattr(n, "info", {}).get("name") == "inner"
     ]
@@ -246,8 +267,9 @@ def outer():
 def test_node_position_empty_source_lines():
     """Test position calculation with empty source lines."""
     import ast
+
     builder = AstTreeBuilder("\n\nx = 1")
-    node = ast.Name(id='x', ctx=ast.Load())
+    node = ast.Name(id="x", ctx=ast.Load())
     node.lineno = 3
     node.col_offset = 0
     node.end_lineno = 3
@@ -273,11 +295,13 @@ class A:
 
     # Test the hierarchy structure
     nodes = tree.flatten()
-    class_node = next(n for n in nodes
-                      if getattr(n, "info", {}).get("type") == "ClassDef")
+    class_node = next(
+        n for n in nodes if getattr(n, "info", {}).get("type") == "ClassDef"
+    )
     assert any(
         getattr(child, "info", {}).get("type") == "FunctionDef"
-        for child in class_node.children)
+        for child in class_node.children
+    )
 
 
 def test_build_tree_duplicate_leaf():
@@ -289,7 +313,8 @@ def test_build_tree_duplicate_leaf():
 
     # Get all assignment targets
     nodes = [
-        n for n in tree.flatten()
+        n
+        for n in tree.flatten()
         if getattr(n, "info", {}).get("type") == "Name"
     ]
     assert len(nodes) > 0
@@ -298,6 +323,7 @@ def test_build_tree_duplicate_leaf():
 def test_node_value_extraction_edge_cases():
     """Test _get_node_value method with various node types."""
     import ast
+
     builder = AstTreeBuilder("x = 1")
 
     # Test unsupported node type
@@ -325,8 +351,11 @@ class Test:
     # Verify node processing
     if tree:
         nodes = tree.flatten()
-        class_node = next(n for n in nodes
-                          if getattr(n, "info", {}).get("type") == "ClassDef")
+        class_node = next(
+            n
+            for n in nodes
+            if getattr(n, "info", {}).get("type") == "ClassDef"
+        )
     assert getattr(class_node, "info", {}).get("name") == "Test"
     assert getattr(class_node, "ast_node", None) is not None
 

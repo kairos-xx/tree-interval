@@ -28,35 +28,59 @@ class Nested:
         before = ""
         if current_node and tree:
             current_node_ast_node = getattr(current_node, "ast_node", None)
-            print("Current attribute node: " +
-                  (unparse(current_node_ast_node) if isinstance(
-                      current_node_ast_node, AST) else "None"))
+            print(
+                "Current attribute node: "
+                + (
+                    unparse(current_node_ast_node)
+                    if isinstance(current_node_ast_node, AST)
+                    else "None"
+                )
+            )
             top_statement = current_node.top_statement
             top_statement_ast_node = getattr(top_statement, "ast_node", None)
-            print("Top attribute node: " +
-                  (unparse(top_statement_ast_node) if isinstance(
-                      top_statement_ast_node, AST) else "None"))
+            print(
+                "Top attribute node: "
+                + (
+                    unparse(top_statement_ast_node)
+                    if isinstance(top_statement_ast_node, AST)
+                    else "None"
+                )
+            )
             is_set = top_statement.is_set if top_statement else False
             print(f"Is set operation: {is_set}")
             next_attribute = current_node.next_attribute
             continues = bool(next_attribute)
             next_attribute_ast_node = getattr(next_attribute, "ast_node", None)
-            print("Next attribute node: " +
-                  (unparse(next_attribute_ast_node) if isinstance(
-                      next_attribute_ast_node, AST) else "None"))
+            print(
+                "Next attribute node: "
+                + (
+                    unparse(next_attribute_ast_node)
+                    if isinstance(next_attribute_ast_node, AST)
+                    else "None"
+                )
+            )
 
             previous_attribute = current_node.previous_attribute
-            previous_attribute_ast_node = getattr(previous_attribute,
-                                                  "ast_node", None)
-            print("Previous attribute node: " +
-                  (unparse(previous_attribute_ast_node) if isinstance(
-                      previous_attribute_ast_node, AST) else "None"))
+            previous_attribute_ast_node = getattr(
+                previous_attribute, "ast_node", None
+            )
+            print(
+                "Previous attribute node: "
+                + (
+                    unparse(previous_attribute_ast_node)
+                    if isinstance(previous_attribute_ast_node, AST)
+                    else "None"
+                )
+            )
 
             # Show statement with different marker styles
             print("\nDefault markers:", current_node.statement)
             underline_text = current_node.statement.as_text()
-            before = current_node.statement.before.replace(" ", "").replace(
-                "\n", "").removesuffix(".")
+            before = (
+                current_node.statement.before.replace(" ", "")
+                .replace("\n", "")
+                .removesuffix(".")
+            )
 
             # print(current_node.statement)
             flat_nodes = tree.flatten()
@@ -71,8 +95,10 @@ class Nested:
                     node.style = LeafStyle(color="#cccccc", bold=False)
             tree.visualize()
 
-        print(f"\nThe chain continues: {continues} |" +
-              f" At the end is a set: {is_set}")
+        print(
+            f"\nThe chain continues: {continues} |"
+            + f" At the end is a set: {is_set}"
+        )
 
         if is_set:
             new = type(self)()
@@ -80,14 +106,16 @@ class Nested:
             return new
         else:
             import sys
+
             caller = stack()[1]
             sys.tracebacklimit = 0
             raise AttributeError(
-                f"Attribute \033[1m{name}\033[0m not found in " +
-                f"\033[1m{before}\033[0m\n" +
-                f"   File \"{caller.filename}\"," +
-                f"line {caller.lineno}, in {caller.function}\n" +
-                f"{indent(underline_text,'   ')}")
+                f"Attribute \033[1m{name}\033[0m not found in "
+                + f"\033[1m{before}\033[0m\n"
+                + f'   File "{caller.filename}",'
+                + f"line {caller.lineno}, in {caller.function}\n"
+                + f"{indent(underline_text,'   ')}"
+            )
 
 
 def test():

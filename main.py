@@ -25,15 +25,15 @@ CYAN = "\033[96m"
 RESET = "\033[0m"
 
 
-def print_header(title, color=BLUE):
+def print_header(title: str, color: str = BLUE, full: bool = False) -> None:
     """Print a section header with ASCII borders."""
-    width = 60
+    width = 120 if full else 60
     print(f"\n{color}╔{'═' * (width-2)}╗")
     print(f"║{title.center(width-2)}║")
     print(f"╚{'═' * (width-2)}╝{RESET}\n")
 
 
-def demonstrate_positions():
+def demonstrate_positions() -> None:
     print_header("Position Examples", GREEN)
     pos1 = Position(0, 100)
     print("Basic position:", f"start={pos1.start}, end={pos1.end}")
@@ -62,7 +62,7 @@ def demonstrate_positions():
     print("Default format:", pos4.position_as())
 
 
-def demonstrate_tree_styling():
+def demonstrate_tree_styling() -> None:
     """Example showcasing rich tree styling capabilities."""
     print_header("Tree Styling Demo", CYAN)
 
@@ -107,7 +107,7 @@ def demonstrate_tree_styling():
     tree.visualize()
 
 
-def demonstrate_statements():
+def demonstrate_statements() -> None:
     """Demonstrates Statement functionality"""
     print_header("Statement Examples", MAGENTA)
 
@@ -123,7 +123,7 @@ def demonstrate_statements():
     print(stmt.as_text(top_marker="$", chain_marker=".", current_marker="*"))
 
 
-def demonstrate_find_nodes():
+def demonstrate_find_nodes() -> None:
     print_header("Find Nodes Example", YELLOW)
     tree = Tree("Find Example")
     root = Leaf(Position(0, 100), info={"type": "Module"})
@@ -167,7 +167,7 @@ def demonstrate_find_nodes():
     print("Found sibling:", found_sibling.info if found_sibling else None)
 
 
-def demonstrate_leaves():
+def demonstrate_leaves() -> None:
     """Demonstrates different ways to create and use Leaf nodes."""
     print_header("Leaf Examples", YELLOW)
     leaf1 = Leaf(Position(0, 100), info="Using Position")
@@ -180,7 +180,7 @@ def demonstrate_leaves():
     print("Leaf from args:", leaf3)
 
 
-def demonstrate_tree_operations():
+def demonstrate_tree_operations() -> None:
     """
     Demonstrates various tree operations including creation, modificatio
     and visualization.
@@ -278,17 +278,15 @@ def demonstrate_tree_operations():
     printer = RichTreePrinter(RichPrintConfig(show_info=True))
     printer.print_tree(tree, root=child2)
 
-    return tree
 
-
-def demonstrate_frame_analyzer():
+def demonstrate_frame_analyzer() -> None:
     """
     Demonstrates the frame analyzer functionality for
     inspecting call stack frames.
     """
     print_header("Frame Analyzer Demo", MAGENTA)
 
-    def analyze_this():
+    def analyze_this() -> None:
         analyzer = FrameAnalyzer(currentframe())
 
         current_node = analyzer.find_current_node()
@@ -308,7 +306,7 @@ def demonstrate_frame_analyzer():
                 f"{next_attr.info['type'] if next_attr and next_attr.info else None}"
             )
 
-    def build_tree():
+    def build_tree() -> None:
         analyzer = FrameAnalyzer(stack()[0].frame)
         tree = analyzer.build_tree()
         current_node = analyzer.find_current_node()
@@ -347,7 +345,7 @@ def demonstrate_frame_analyzer():
     build_tree()
 
 
-def demonstrate_line_positions():
+def demonstrate_line_positions() -> None:
     """Demonstrates working with line positions in the tree structure."""
     print_header("Line Position Examples", GREEN)
     tree = Tree("Line Number Example")
@@ -374,7 +372,7 @@ def demonstrate_line_positions():
                              VisualizationConfig(position_format="position"))
 
 
-def demonstrate_basic_rich_printing():
+def demonstrate_basic_rich_printing() -> None:
     """Demonstrates basic rich printing capabilities for tree visualization."""
     print_header("Basic Rich Printing", CYAN)
     tree = Tree("Basic Example")
@@ -406,7 +404,7 @@ def demonstrate_basic_rich_printing():
     printer.print_tree(tree)
 
 
-def demonstrate_custom_config():
+def demonstrate_custom_config() -> None:
     """Demonstrates custom configuration options for tree visualization."""
     from rich.style import Style
 
@@ -430,7 +428,7 @@ def demonstrate_custom_config():
     printer.print_tree(tree)
 
 
-def demonstrate_ast_rich_printing():
+def demonstrate_ast_rich_printing() -> None:
     """Demonstrates rich printing of Abstract Syntax Tree (AST) structures."""
     print_header("AST Rich Printing", YELLOW)
     tree = Tree("AST Example")
@@ -453,7 +451,7 @@ def demonstrate_ast_rich_printing():
     printer.print_tree(tree)
 
 
-def demonstrate_nested_attributes():
+def demonstrate_nested_attributes() -> None:
     """Demonstrates working with nested attributes in tree nodes."""
     print_header("Nested Attributes Example", BLUE)
     tree = Tree("Nested Attributes Example")
@@ -476,7 +474,7 @@ def demonstrate_nested_attributes():
     print(f"Column offset: {root.attributes.position.col_offset}")
 
 
-def demonstrate_find_method():
+def demonstrate_find_method() -> None:
     """Demonstrates various node finding methods in the tree structure."""
     print_header("Find Method Example", GREEN)
 
@@ -515,7 +513,7 @@ def demonstrate_find_method():
     print(f"Found module: {found.info if found else None}")
 
 
-def demonstrate_leaf_navigation():
+def demonstrate_leaf_navigation() -> None:
     """Demonstrates navigation between leaf nodes in the tree."""
     print_header("Leaf Navigation Example", CYAN)
     tree = Tree("Navigation Example")
@@ -553,7 +551,7 @@ def demonstrate_leaf_navigation():
     )
 
 
-def demonstrate_node_navigation():
+def demonstrate_node_navigation() -> None:
     """Demonstrates navigation between different types of nodes in the tree."""
     print_header("Node Navigation Examples", MAGENTA)
 
@@ -585,7 +583,7 @@ def demonstrate_node_navigation():
         f" {function_def.children[0].info if function_def.children else None}")
 
 
-def demonstrate_custom_root_visualization():
+def demonstrate_custom_root_visualization() -> None:
     """Demonstrates visualizing trees from different root nodes."""
     print_header("Custom Root Visualization", YELLOW)
 
@@ -611,7 +609,7 @@ def demonstrate_custom_root_visualization():
     printer.print_tree(tree, root=child2)
 
 
-def demonstrate_custom_styling():
+def demonstrate_custom_styling() -> None:
     """Demonstrates custom styling for tree nodes with different types."""
     print_header("Custom Node Styling", BLUE)
     tree = Tree("Custom Styled Tree")
@@ -656,7 +654,7 @@ def demonstrate_custom_styling():
     printer.print_tree(tree)
 
 
-def demonstrate_future_usage():
+def demonstrate_future_usage() -> None:
     """Example of using Future for dynamic attribute handling"""
     print_header("Future Usage Demo", CYAN)
 
@@ -665,7 +663,7 @@ def demonstrate_future_usage():
         def __init__(self) -> None:
             self.__dict__: dict[str, "DynamicConfig"] = {}
 
-        def __getattr__(self, name):
+        def __getattr__(self, name: str) -> "Future":
             return Future(name, frame=1, instance=self)
 
     # Create a dynamic configuration
@@ -690,7 +688,7 @@ def demonstrate_future_usage():
 
 
 def main():
-    print_header("Tree Interval Package Demo", BLUE)
+    print_header("Tree Interval Package Demo", BLUE, True)
     demonstrate_positions()
     demonstrate_find_nodes()
     demonstrate_tree_styling()

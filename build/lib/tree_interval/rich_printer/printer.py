@@ -23,6 +23,7 @@ The RichTreePrinter class serves as the main entry point for
 tree visualization, offering both basic and advanced formatting
 options through the Rich library.
 """
+
 from typing import Optional
 
 from rich.console import Console
@@ -58,24 +59,29 @@ class RichTreePrinter:
             self.console.print("[red]Empty tree")
             return
 
-        rich_tree = RichTree(self._format_node(root_node,
-                                               is_root=True,
-                                               level=0),
-                             guide_style=self.config.guide_style)
+        rich_tree = RichTree(
+            self._format_node(root_node, is_root=True, level=0),
+            guide_style=self.config.guide_style,
+        )
         self._add_children(root_node, rich_tree, 1)
         self.console.print(rich_tree)
 
     def _get_node_style(self, node: Leaf, is_root: bool = False) -> Style:
 
-        style = (self.config.root_style if is_root else
-                 (self.config.leaf_style
-                  if not node.children else self.config.node_style))
+        style = (
+            self.config.root_style
+            if is_root
+            else (
+                self.config.leaf_style
+                if not node.children
+                else self.config.node_style
+            )
+        )
         return style or self.config.node_style
 
-    def _format_node(self,
-                     node: Leaf,
-                     is_root: bool = False,
-                     level: int = 0) -> str:
+    def _format_node(
+        self, node: Leaf, is_root: bool = False, level: int = 0
+    ) -> str:
         """Format node information."""
         style = self._get_node_style(node, is_root)
 
@@ -90,16 +96,20 @@ class RichTreePrinter:
         if self.config.show_info and node.info:
             terminal_width = self.config.terminal_size
             current_width = (sum(len(p) for p in parts) + len(parts) * 1) + (
-                (level + 1) * 4)  # Add spaces between parts
+                (level + 1) * 4
+            )  # Add spaces between parts
             if isinstance(node.info, dict):
-                info_str = ("Info(" +
-                            ", ".join(f"{k}={repr(v)}"
-                                      for k, v in node.info.items()) + ")")
+                info_str = (
+                    "Info("
+                    + ", ".join(f"{k}={repr(v)}" for k, v in node.info.items())
+                    + ")"
+                )
             else:
                 info_str = str(node.info)
 
-            available_width = (terminal_width - current_width
-                               )  # Extra padding for rich formatting
+            available_width = (
+                terminal_width - current_width
+            )  # Extra padding for rich formatting
 
             if len(f"info={info_str}") > available_width:
                 parts.append("info=...")
@@ -108,10 +118,9 @@ class RichTreePrinter:
 
         return style.render(" ".join(parts))
 
-    def _add_children(self,
-                      node: Leaf,
-                      rich_node: RichTree,
-                      level: int = 0) -> None:
+    def _add_children(
+        self, node: Leaf, rich_node: RichTree, level: int = 0
+    ) -> None:
         """Recursively add children to Rich tree."""
         for child in node.children:
             child_node = rich_node.add(

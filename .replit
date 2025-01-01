@@ -1,4 +1,4 @@
-run = ["python", "dev/frame_dev_min.py"]
+run = ["python", "main.py"]
 entrypoint = "README.md"
 modules = ["python-3.11:v30-20240222-aba8eb6"]
 hidden = [".pythonlibs"]
@@ -135,7 +135,7 @@ author = 299513
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "flake8 --exclude */. --exclude ./build  | tee logs/flake8.log 2>&1"
+args = "pflake8 --exclude */. --exclude ./build  | tee logs/flake8.log 2>&1"
 
 [[workflows.workflow]]
 name = "[Report] ruff"
@@ -162,4 +162,4 @@ author = 299513
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "pyright --warnings | tee logs/pyright.log 2>&1 && flake8 --exclude */. --exclude ./build | tee logs/flake8.log 2>&1 && ruff check ./dev ./src ./examples ./tests ./scripts | tee logs/ruff.log 2>&1"
+args = "pyright --warnings | tee logs/pyright.log 2>&1 && pflake8 --exclude */. --exclude ./build | tee logs/flake8.log 2>&1 && ruff check ./dev ./src ./examples ./tests ./scripts | tee logs/ruff.log 2>&1"

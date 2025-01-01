@@ -26,6 +26,7 @@ def get_terminal_width() -> int:
     """Get the width of the terminal window."""
     try:
         from shutil import get_terminal_size
+
         return get_terminal_size().columns
     except Exception:
         return 80  # Default fallback width
