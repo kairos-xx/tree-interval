@@ -9,6 +9,7 @@ import subprocess
 from datetime import datetime
 from typing import List
 
+
 def run_command(command: List[str], log_file: str) -> None:
     """Run shell command and log output.
     

@@ -4,8 +4,8 @@
 Retrieves the git author name and email from git config.
 """
 
-from typing import Tuple
 import subprocess
+from typing import Tuple
 
 
 def get_git_author() -> Tuple[str, str]:

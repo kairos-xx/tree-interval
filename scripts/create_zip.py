@@ -4,10 +4,11 @@ This script creates a timestamped ZIP archive of the project files,
 excluding specified directories and files.
 """
 
+import os
 from datetime import datetime
 from typing import List
 from zipfile import ZipFile
-import os
+
 
 def get_exclude_dirs() -> List[str]:
     """Get list of directories to exclude from ZIP.

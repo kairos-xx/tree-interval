@@ -6,9 +6,10 @@ It parses Python expressions to extract information about attribute chains
 and their usage context.
 """
 
-from dataclasses import dataclass
 import ast
+from dataclasses import dataclass
 from typing import List, Optional
+
 
 @dataclass
 class ChainInfo:

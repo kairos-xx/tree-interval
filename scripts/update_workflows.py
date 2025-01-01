@@ -3,10 +3,12 @@
 Updates GitHub Actions workflow files with new configurations.
 """
 
-from datetime import datetime
-from typing import Dict, Any
 import os
+from datetime import datetime
+from typing import Any, Dict
+
 import yaml
+
 
 def load_workflow_config() -> Dict[str, Any]:
     """Load workflow configuration from YAML.
