@@ -30,10 +30,12 @@ class FrameAnalyzer:
     def __init__(self, frame: Optional[FrameType]):
         """Initializes FrameAnalyzer with a given frame."""
         self.frame = frame
-        # Set frame position to (0, 0) for None frame, or use frame position.
-        self.frame_position = Position(0, 0) if frame is None else Position(self.frame)
+        # Initialize position and builder
+        self.frame_position = (
+            Position(0, 0) if frame is None else Position(self.frame)
+        )
         if isframe(frame):
-            # Initialize AST builder if the frame is valid.
+            # Initialize AST builder
             self.ast_builder = AstTreeBuilder(frame)
         else:
             self.ast_builder = None
@@ -85,10 +87,15 @@ class FrameAnalyzer:
         if self.tree and self.tree.root and self.ast_builder:
             nodes_by_pos = {}  # Dictionary to map positions to nodes.
             for node in self.tree.flatten():
-                if hasattr(node, "ast_node") and isinstance(node.ast_node, AST):
-                    pos = self.ast_builder._get_node_position(cast(AST, node.ast_node))
+                if hasattr(node, "ast_node") and isinstance(
+                    node.ast_node, AST
+                ):
+                    pos = self.ast_builder._get_node_position(
+                        cast(AST, node.ast_node)
+                    )
                     if pos:
-                        pos.selected = node.selected  # Propagate selection info.
+                        # Propagate selection info
+                        pos.selected = node.selected
                         node.position = pos  # Set node position.
                         nodes_by_pos[(pos.start, pos.end)] = node
 

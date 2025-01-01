@@ -71,7 +71,9 @@ class AstTreeBuilder:
                 lineno=lineno,
                 end_lineno=getattr(node, "end_lineno", lineno),
                 col_offset=getattr(node, "col_offset", 0),
-                end_col_offset=getattr(node, "end_col_offset", len(source_lines[-1])),
+                end_col_offset=getattr(
+                    node, "end_col_offset", len(source_lines[-1])
+                ),
             )
             position = Position(
                 *(
