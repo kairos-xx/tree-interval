@@ -65,36 +65,30 @@ class RichTreePrinter:
         self._add_children(root_node, rich_tree, 1)
         self.console.print(rich_tree)
 
+    def _get_node_style(self, node: Leaf, is_root: bool = False) -> Style:
+        """Get the style for a node based on its properties."""
+        if hasattr(node, 'rich_style') and node.rich_style:
+            return node.rich_style
+        elif hasattr(node, "selected") and node.selected:
+            return self.config.selected_style
+        elif isinstance(node.info, dict) and "type" in node.info:
+            if node.info["type"] == "Module":
+                return Style(color="green", bold=True)
+            elif node.info["type"] == "FunctionDef":
+                return Style(color="blue", bold=False)
+            else:
+                return Style(color="grey70", bold=False)
+        
+        style = (self.config.root_style if is_root else
+                 (self.config.leaf_style if not node.children else self.config.node_style))
+        return style or self.config.node_style
+
     def _format_node(self,
                      node: Leaf,
                      is_root: bool = False,
                      level: int = 0) -> str:
         """Format node information."""
-        # Determine style priority:
-        # rich_style > selected > type-based > default
-        style = None
-
-        # Check for custom rich_style or selected state
-        if hasattr(node, 'rich_style') and node.rich_style:
-            style = node.rich_style
-        elif hasattr(node, "selected") and node.selected:
-            style = self.config.selected_style
-        # Check for type-based styling
-        elif isinstance(node.info, dict) and "type" in node.info:
-            if node.info["type"] == "Module":
-                style = Style(color="green", bold=True)
-            elif node.info["type"] == "FunctionDef":
-                style = Style(color="blue", bold=False)
-            else:
-                style = Style(color="grey70", bold=False)
-        else:
-            style = (self.config.root_style if is_root else
-                     (self.config.leaf_style
-                      if not node.children else self.config.node_style))
-
-        # Ensure style is applied
-        if not style:
-            style = self.config.node_style
+        style = self._get_node_style(node, is_root)
 
         # Build display string
         parts = []
