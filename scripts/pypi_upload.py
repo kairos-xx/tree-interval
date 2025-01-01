@@ -21,7 +21,6 @@ def run_command(command: List[str], log_file: str) -> None:
         subprocess.CalledProcessError: If command fails
     """
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    
     with open(log_file, "a") as log:
         try:
             output = subprocess.check_output(command, stderr=subprocess.STDOUT)
