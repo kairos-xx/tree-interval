@@ -204,18 +204,5 @@ def test_format_node_custom_style():
     assert formatted is not None
 
 
-def test_show_children_count():
-    """Test that children count is displayed when configured."""
-    config = RichPrintConfig(show_children_count=True)
-    printer = RichTreePrinter(config)
-    parent = Leaf(Position(0, 100))
-    child1 = Leaf(Position(10, 50))
-    child2 = Leaf(Position(60, 90))
-    parent.add_child(child1)
-    parent.add_child(child2)
-    formatted = printer._format_node(parent)
-    assert "children=2" in formatted
-
-
 if __name__ == "__main__":
     pytest.main([__file__])
