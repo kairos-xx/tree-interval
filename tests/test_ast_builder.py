@@ -295,6 +295,36 @@ def test_build_tree_duplicate_leaf():
     ]
     assert len(nodes) > 0
 
+def test_node_value_extraction_edge_cases():
+    """Test _get_node_value method with various node types."""
+    import ast
+    builder = AstTreeBuilder("x = 1")
+    
+    # Test unsupported node type
+    class CustomNode(ast.AST):
+        pass
+    custom_node = CustomNode()
+    assert builder._get_node_value(custom_node) == ""
+    
+    # Test constant node
+    constant_node = ast.Constant(value=42)
+    assert builder._get_node_value(constant_node) == "42"
+
+def test_ast_node_processing():
+    """Test processing nodes during tree building."""
+    source = """
+class Test:
+    def method(self):
+        pass
+    """
+    builder = AstTreeBuilder(source)
+    tree = builder.build()
+    
+    # Verify node processing
+    nodes = tree.flatten()
+    class_node = next(n for n in nodes if getattr(n, "info", {}).get("type") == "ClassDef")
+    assert class_node.info["name"] == "Test"
+    assert class_node.ast_node is not None
 
 if __name__ == "__main__":
     pytest.main([__file__])
