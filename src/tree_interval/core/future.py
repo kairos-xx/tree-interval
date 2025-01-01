@@ -35,6 +35,36 @@ class Future:
         frame: Optional[Union[int, FrameType]] = None,
         new_return: Optional[Any] = None,
     ) -> Any:
+        """Dynamic attribute creation and access handler.
+        
+        This method implements the core logic for dynamic attribute handling by:
+        1. Analyzing call stack context to determine operation type
+        2. Creating new attributes in assignment context
+        3. Raising descriptive errors in access context
+        4. Managing nested attribute chains
+        
+        The context analysis includes:
+        - Frame inspection for operation type
+        - AST analysis for statement structure
+        - Position tracking for error reporting
+        
+        Args:
+            name: Name of the attribute being accessed
+            instance: Object instance where attribute belongs
+            frame: Call frame or stack level for context
+            new_return: Value to use for new attributes
+            
+        Returns:
+            Any: Created attribute value in setting context
+            
+        Raises:
+            AttributeError: When attribute doesn't exist in get context
+            
+        Example:
+            >>> obj.nonexistent = 42  # Creates new attribute
+            >>> print(obj.nonexistent)  # Prints 42
+            >>> print(obj.missing)  # Raises AttributeError
+        """
         """Create or handle attribute access in a dynamic object structure.
 
         This method provides the core functionality for dynamic attribute handling,

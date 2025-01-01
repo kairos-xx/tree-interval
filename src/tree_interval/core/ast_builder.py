@@ -185,6 +185,31 @@ class AstTreeBuilder:
             return ""
 
     def _build_tree_from_ast(self, ast_tree: AST) -> Optional[Tree]:
+        """Build a hierarchical tree structure from an AST.
+        
+        This method transforms a Python AST into a position-aware tree structure
+        where each node maintains:
+        1. Source code position information
+        2. Parent-child relationships
+        3. Type and metadata from AST
+        4. Original source snippets
+        
+        The building process:
+        1. Creates root node for the module
+        2. Walks AST collecting nodes with position info
+        3. Sorts nodes by position and size for proper nesting
+        4. Establishes parent-child relationships
+        5. Handles overlapping node positions
+        
+        Args:
+            ast_tree: The Python AST to process
+            
+        Returns:
+            Optional[Tree]: The built tree structure or None if failed
+            
+        Raises:
+            ValueError: If no source code is available
+        """
         if not self.source:
             raise ValueError("No source code available")
         result_tree = Tree[str](self.source)

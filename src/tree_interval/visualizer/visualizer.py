@@ -86,6 +86,28 @@ class TreeVisualizer:
         def format_node_info(
             node: Any, level: int = 0, info_len: int = 0
         ) -> str:
+            """Format node information for display.
+            
+            Creates a formatted string containing node metadata including:
+            - Size information
+            - Node type and attributes
+            - Child count if enabled
+            - Additional metadata
+            
+            The formatting handles:
+            1. Terminal width constraints
+            2. Nesting level indentation
+            3. Information truncation
+            4. Style application
+            
+            Args:
+                node: The tree node to format
+                level: Current nesting level (affects indentation)
+                info_len: Length of existing info string
+                
+            Returns:
+                str: Formatted node information string
+            """
             """Format additional information about a node for display."""
             parts: list[str] = []
             terminal_width = config.terminal_size

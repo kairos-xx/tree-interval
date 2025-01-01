@@ -82,6 +82,28 @@ class RichTreePrinter:
     def _format_node(
         self, node: Leaf, is_root: bool = False, level: int = 0
     ) -> str:
+        """Format a node for Rich tree display.
+        
+        Creates a styled string representation of a node including:
+        1. Position information (start-end)
+        2. Size details if enabled
+        3. Node metadata and info
+        4. Type-specific formatting
+        
+        The formatting considers:
+        - Available terminal width
+        - Nesting level for layout
+        - Node type for styling
+        - Configuration preferences
+        
+        Args:
+            node: The node to format
+            is_root: Whether this is the root node
+            level: Nesting level for indentation
+            
+        Returns:
+            str: Rich-formatted node string
+        """
         """Format node information."""
         style = self._get_node_style(node, is_root)
 

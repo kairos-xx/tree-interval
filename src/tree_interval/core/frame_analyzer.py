@@ -44,12 +44,28 @@ class FrameAnalyzer:
         self.build_tree_done = False  # Tree building not done initially.
 
     def find_current_node(self) -> Optional[Leaf]:
-        """
-        Finds the AST node corresponding to the current frame's position.
-
+        """Find the AST node corresponding to the current frame's position.
+        
+        Searches the AST tree to find the node that best matches the current
+        frame's execution position. The matching is done based on:
+        1. Position comparison (start/end offsets)
+        2. Minimal distance calculation for approximate matches
+        3. Tree traversal to find closest node
+        
+        This is particularly useful for:
+        - Runtime code analysis
+        - Error context identification
+        - Dynamic attribute resolution
+        
         Returns:
             Optional[Leaf]: The AST node at the current frame position,
-            or None if not found.
+                          or None if not found
+                          
+        Example:
+            >>> frame = inspect.currentframe()
+            >>> analyzer = FrameAnalyzer(frame)
+            >>> node = analyzer.find_current_node()
+            >>> print(node.info['type'])  # Prints AST node type
         """
         # Build the tree if it has not been done yet.
         if not self.build_tree_done:
