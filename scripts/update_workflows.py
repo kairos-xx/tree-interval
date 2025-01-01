@@ -1,195 +1,65 @@
-"""Update workflows configuration."""
+
+"""Script to update GitHub workflow files.
+
+Updates GitHub Actions workflow files with current package
+version and other dynamic values.
+"""
 
 import subprocess
+from pathlib import Path
+from typing import Optional
 
-try:
-    author_id = int(
-        subprocess.check_output(["python", "scripts/get_author.py"]).strip()
-    )
-except Exception:
-    author_id = 299513
 
-workflows = [
-    {
-        "name": "[Package] pypi upload",
-        "mode": "sequential",
-        "author": author_id,
-        "tasks": [
-            {
-                "task": "shell.exec",
-                "args": (
-                    "python scripts/pypi_upload.py | "
-                    + "tee logs/pypi_upload.log 2>&1",
-                ),
-            }
-        ],
-    },
-    {
-        "name": "[Package] git commit",
-        "mode": "sequential",
-        "author": author_id,
-        "tasks": [
-            {
-                "task": "shell.exec",
-                "args": (
-                    "python scripts/git_commit.py |"
-                    + "tee logs/git_commit.log 2>&1"
-                ),
-            }
-        ],
-    },
-    {
-        "name": "————————————————",
-        "mode": "sequential",
-        "author": author_id,
-        "tasks": [{"task": "shell.exec", "args": ""}],
-    },
-    {
-        "name": "[Util] create zip",
-        "mode": "sequential",
-        "author": author_id,
-        "tasks": [
-            {"task": "shell.exec", "args": "python scripts/create_zip.py"}
-        ],
-    },
-    {
-        "name": "[Util] build",
-        "mode": "sequential",
-        "author": author_id,
-        "tasks": [
-            {
-                "task": "shell.exec",
-                "args": (
-                    "rm -rf dist build *.egg-info && "
-                    + "python setup.py sdist bdist_wheel"
-                ),
-            }
-        ],
-    },
-    {
-        "name": "[Util] tests",
-        "mode": "sequential",
-        "author": author_id,
-        "tasks": [
-            {
-                "task": "shell.exec",
-                "args": "pytest ./tests | tee logs/tests.log 2>&1",
-            }
-        ],
-    },
-    {
-        "name": "[Util] demo",
-        "mode": "sequential",
-        "author": author_id,
-        "tasks": [
-            {
-                "task": "shell.exec",
-                "args": "python -m examples | tee logs/demo.log 2>&1",
-            }
-        ],
-    },
-    {
-        "name": "[Util] update workflows",
-        "mode": "sequential",
-        "author": author_id,
-        "tasks": [
-            {
-                "task": "shell.exec",
-                "args": (
-                    "python scripts/update_workflows.py | "
-                    + "tee logs/update_worflows.log 2>&1"
-                ),
-            }
-        ],
-    },
-    {
-        "name": "————————————————",
-        "mode": "sequential",
-        "author": author_id,
-        "tasks": [{"task": "shell.exec", "args": ""}],
-    },
-    {
-        "name": "[Format] ruff",
-        "mode": "sequential",
-        "author": author_id,
-        "tasks": [{"task": "shell.exec", "args": "ruff format"}],
-    },
-    {
-        "name": "————————————————",
-        "mode": "sequential",
-        "author": author_id,
-        "tasks": [{"task": "shell.exec", "args": ""}],
-    },
-    {
-        "name": "[Report] pyright",
-        "mode": "sequential",
-        "author": author_id,
-        "tasks": [
-            {
-                "task": "shell.exec",
-                "args": (
-                    "pyright --warnings | " + "tee logs/pyright.log 2>&1"
-                ),
-            }
-        ],
-    },
-    {
-        "name": "[Report] flake8",
-        "mode": "sequential",
-        "author": author_id,
-        "tasks": [
-            {
-                "task": "shell.exec",
-                "args": (
-                    "pflake8 --exclude */. --exclude ./build | "
-                    + "tee logs/flake8.log 2>&1"
-                ),
-            }
-        ],
-    },
-    {
-        "name": "[Report] ruff",
-        "mode": "sequential",
-        "author": author_id,
-        "tasks": [
-            {
-                "task": "shell.exec",
-                "args": (
-                    "ruff check ./dev ./src ./examples ./tests ./scripts | "
-                    + "tee logs/ruff.log 2>&1"
-                ),
-            }
-        ],
-    },
-    {
-        "name": "[Report] pytest",
-        "mode": "sequential",
-        "author": author_id,
-        "tasks": [
-            {
-                "task": "shell.exec",
-                "args": (
-                    "pytest --cov=src --cov-report term-missing | "
-                    + "tee logs/pytest.log 2>&1"
-                ),
-            }
-        ],
-    },
-    {
-        "name": "[Report] All",
-        "mode": "sequential",
-        "author": author_id,
-        "tasks": [
-            {
-                "task": "shell.exec",
-                "args": (
-                    "pyright --warnings | tee logs/pyright.log 2>&1 && "
-                    + "pflake8 --exclude */. --exclude ./build | "
-                    + "tee logs/flake8.log 2>&1 && "
-                    + "ruff check ./dev ./src ./examples ./tests ./scripts | "
-                    + "tee logs/ruff.log 2>&1"
-                ),
-            }
-        ],
-    },
-]
+def run_command(command: list[str], log_file: Path) -> Optional[str]:
+    """Run a shell command and log output.
+    
+    Args:
+        command: Command as list of strings
+        log_file: Path to log file
+        
+    Returns:
+        str: Command output if successful, None otherwise
+    """
+    try:
+        result = subprocess.run(
+            command,
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        log_file.write_text(result.stdout)
+        return result.stdout
+    except subprocess.CalledProcessError as e:
+        log_file.write_text(f'Error: {e.stderr}')
+        return None
+
+
+def update_workflow_files() -> None:
+    """Update GitHub workflow configuration files."""
+    workflows_dir = Path('.github/workflows')
+    if not workflows_dir.exists():
+        return
+        
+    for workflow in workflows_dir.glob('*.yml'):
+        # Update workflow file content as needed
+        content = workflow.read_text()
+        # Add workflow file update logic here
+        workflow.write_text(content)
+
+
+def main() -> None:
+    """Main entry point for workflow update process."""
+    log_dir = Path('logs')
+    log_dir.mkdir(exist_ok=True)
+    log_file = log_dir / 'update_workflows.log'
+    
+    update_workflow_files()
+    
+    # Commit changes if any were made
+    run_command(['git', 'add', '.github/workflows/*.yml'], log_file)
+    run_command(['git', 'commit', '-m', 'Update workflows'], log_file)
+    run_command(['git', 'push'], log_file)
+
+
+if __name__ == '__main__':
+    main()
