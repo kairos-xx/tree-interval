@@ -210,30 +210,34 @@ T = TypeVar("T")
 
 
 class Position:
-    """
-    Represents a position in source code with line and column tracking.
+    """Represents a code position with line/column tracking and hierarchical links.
 
-    Handles different types of position inputs and normalizes them into
-    a consistent format with start/end positions and line/column info.
+    This class handles various position input types (frame objects, disposition 
+    objects, or direct values) and normalizes them into a consistent format with
+    absolute and relative positions.
+
+    The position information is stored both as absolute character offsets and as
+    line/column pairs, allowing for flexible position representation and 
+    comparison.
 
     Attributes:
-        start (int): Starting position in the source
-        end (int): Ending position in the source
-        info (Any): Additional information about the position
-        selected (bool): Whether this position is currently selected
-        _lineno (int): Line number in source code
-        _end_lineno (int): Ending line number
-        _col_offset (int): Column offset from line start
-        _end_col_offset (int): Ending column offset
-        parent (Optional[Leaf]): Parent node in tree structure
-        children (List[Leaf]): Child nodes in tree structure
+        start: Starting character position in source
+        end: Ending character position in source
+        info: Additional position metadata
+        selected: Selection state flag
+        _lineno: One-based line number 
+        _end_lineno: Ending line number
+        _col_offset: Column offset from line start
+        _end_col_offset: Ending column offset
+        parent: Parent node reference
+        children: List of child nodes
 
-    Implementation:
-        - Handles frame objects for runtime tracking
-        - Supports position objects from dis module
-        - Maintains absolute and line-relative positions
-        - Calculates indentation offsets
-        - Preserves parent-child links
+    Key Features:
+        - Frame object support for runtime analysis
+        - Disposition object compatibility
+        - Absolute/relative position tracking
+        - Indentation handling
+        - Parent-child relationship management
     """
 
     def __init__(
@@ -901,28 +905,28 @@ class Leaf:
 
 
 class Tree(Generic[T]):
-    """
-    A tree structure containing nodes with position information.
+    """Generic tree structure for position-aware hierarchical data representation.
 
-    Implements a generic tree where each node maintains position info and
-    parent-child relationships. Supports JSON serialization and
-    visualization.
+    This class implements a tree where nodes maintain position information and
+    parent-child relationships. It provides comprehensive tree operations
+    including traversal, serialization, and visualization capabilities.
 
     Type Parameters:
-        T: Type of source data stored in the tree
+        T: The type of source data stored in the tree nodes
 
     Attributes:
-        source (T): Source data associated with the tree
-        start_lineno (Optional[int]): Starting line number in source
-        indent_size (int): Number of spaces per indentation level
-        root (Optional[Leaf]): Root node of the tree
+        source: Source data associated with the tree
+        start_lineno: Starting line number in source (1-based)
+        indent_size: Number of spaces per indentation level
+        root: Root node of the tree structure
 
-    Features:
-        - Hierarchical node structure
-        - Position-based node matching
-        - Tree traversal methods
-        - JSON serialization
-        - Visualization support
+    Implementation Features:
+        - Generic typing for flexible data storage
+        - Position-based node matching and traversal
+        - Efficient tree manipulation methods
+        - JSON serialization/deserialization
+        - Rich visualization support
+        - Duplicate node detection
     """
 
     def __init__(
