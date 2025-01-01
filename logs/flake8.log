@@ -1,23 +1,19 @@
-examples/./demo.py:7:30: W291 trailing whitespace
 examples/./demo.py:21:1: W293 blank line contains whitespace
-scripts/./create_zip.py:15:1: W293 blank line contains whitespace
-scripts/./create_zip.py:30:1: E302 expected 2 blank lines, found 1
-scripts/./create_zip.py:32:1: W293 blank line contains whitespace
-scripts/./create_zip.py:39:1: W293 blank line contains whitespace
-scripts/./create_zip.py:43:1: W293 blank line contains whitespace
+examples/./demo.py:450:15: W292 no newline at end of file
+scripts/./create_zip.py:16:1: W293 blank line contains whitespace
+scripts/./create_zip.py:34:1: W293 blank line contains whitespace
+scripts/./create_zip.py:41:1: W293 blank line contains whitespace
 scripts/./create_zip.py:45:1: W293 blank line contains whitespace
-scripts/./create_zip.py:51:1: W293 blank line contains whitespace
-scripts/./create_zip.py:56:1: W293 blank line contains whitespace
-scripts/./create_zip.py:60:1: E305 expected 2 blank lines after class or function definition, found 1
-scripts/./create_zip.py:61:17: W292 no newline at end of file
+scripts/./create_zip.py:47:1: W293 blank line contains whitespace
+scripts/./create_zip.py:53:1: W293 blank line contains whitespace
+scripts/./create_zip.py:58:1: W293 blank line contains whitespace
+scripts/./create_zip.py:65:1: W391 blank line at end of file
 scripts/./get_author.py:13:1: W293 blank line contains whitespace
 scripts/./get_author.py:16:1: W293 blank line contains whitespace
 scripts/./get_author.py:24:1: W293 blank line contains whitespace
 scripts/./get_author.py:29:1: W293 blank line contains whitespace
-scripts/./get_author.py:32:1: E305 expected 2 blank lines after class or function definition, found 1
 scripts/./git_commit.py:15:1: W293 blank line contains whitespace
 scripts/./git_commit.py:18:1: W293 blank line contains whitespace
-scripts/./git_commit.py:50:1: E305 expected 2 blank lines after class or function definition, found 1
 scripts/./pypi_upload.py:15:1: W293 blank line contains whitespace
 scripts/./pypi_upload.py:19:1: W293 blank line contains whitespace
 scripts/./pypi_upload.py:24:1: W293 blank line contains whitespace
