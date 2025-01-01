@@ -237,6 +237,49 @@ def outer():
                   and getattr(n, "info", {}).get("name") == "inner"]
     assert len(inner_nodes) > 0
 
+def test_node_position_empty_source_lines():
+    """Test position calculation with empty source lines."""
+    import ast
+    builder = AstTreeBuilder("\n\nx = 1")
+    node = ast.Name(id='x', ctx=ast.Load())
+    node.lineno = 3
+    node.col_offset = 0
+    node.end_lineno = 3
+    node.end_col_offset = 1
+    position = builder._get_node_position(node)
+    assert position is not None
+    assert position.lineno == 3
+
+def test_build_tree_complex_hierarchy():
+    """Test building tree with complex parent-child relationships."""
+    source = """
+class A:
+    def method1(self):
+        if True:
+            def nested():
+                return 42
+            return nested()
+    """
+    builder = AstTreeBuilder(source)
+    tree = builder.build()
+    assert tree is not None
+    
+    # Test the hierarchy structure
+    nodes = tree.flatten()
+    class_node = next(n for n in nodes if getattr(n, "info", {}).get("type") == "ClassDef")
+    assert any(child.info.get("type") == "FunctionDef" for child in class_node.children)
+
+def test_build_tree_duplicate_leaf():
+    """Test handling of duplicate leaf additions."""
+    source = "x = y = z = 1"
+    builder = AstTreeBuilder(source)
+    tree = builder.build()
+    assert tree is not None
+    
+    # Get all assignment targets
+    nodes = [n for n in tree.flatten() if getattr(n, "info", {}).get("type") == "Name"]
+    assert len(nodes) > 0
+
 
 if __name__ == "__main__":
     pytest.main([__file__])
