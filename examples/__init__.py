@@ -3,9 +3,18 @@ from . import demo, rich_printer_examples, styling_examples
 
 
 def run_demos():
-    demo.run_demo()
-    rich_printer_examples.run_demo()
-    styling_examples.run_demo()
+    try:
+        demo.run_demo()
+    except Exception as e:
+        print(e)
+    try:
+        rich_printer_examples.run_demo()
+    except Exception as e:
+        print(e)
+    try:
+        styling_examples.run_demo()
+    except Exception as e:
+        print(e)
 
 
 if __name__ == "__main__":

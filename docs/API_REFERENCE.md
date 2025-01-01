@@ -4,8 +4,28 @@
 - [README](README.md): Overview and implementation details
 - [AST Reference](AST_REFERENCE.md): AST analysis documentation
 - [Rich Printer Guide](RICH_PRINTER.md): Advanced visualization options
+- [Future Guide](FUTURE.md): Dynamic attribute handling and error reporting
 
 ## Core Modules
+
+### 🔮 `tree_interval.core.future`
+
+#### `Future` Class
+*Dynamic attribute creation and error handling for nested objects*
+
+##### Methods
+
+* **`__new__(cls, name: str, instance: object, frame: Optional[Union[int, FrameType]] = None, new_return: Optional[Any] = None) -> Any`**
+Creates or handles missing attributes dynamically.
+
+Parameters:
+- `name` (`str`): Name of the attribute being accessed
+- `instance` (`object`): Object instance the attribute is accessed on
+- `frame` (`Optional[Union[int, FrameType]]`): Stack frame or frame index
+- `new_return` (`Optional[Any]`): Optional return value for new attributes
+
+Returns:
+- New attribute instance or raises AttributeError with context
 
 ### 📦 `tree_interval.core.interval_core`
 

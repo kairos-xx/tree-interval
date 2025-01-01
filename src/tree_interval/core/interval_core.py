@@ -187,6 +187,7 @@ class Statement:
     @property
     def text(self) -> str:
         """Property access for default markers."""
+
         return self.as_text()
 
 
@@ -404,6 +405,10 @@ class Position:
                 and self._col_offset == other._col_offset
                 and self._end_col_offset == other._end_col_offset)
 
+    def overlaps(self, other: 'Position') -> bool:
+        # Returns True if the positions overlap
+        return self.start <= other.end and self.end >= other.start
+
 
 class Leaf:
     """
@@ -419,6 +424,7 @@ class Leaf:
         style: Optional[Any] = None,
         rich_style: Optional[Any] = None,
     ):
+
         if position is None:
             position = Position(0, 0)
 
@@ -458,6 +464,10 @@ class Leaf:
     @property
     def info(self) -> Optional[Any]:
         return self._info
+
+    @info.setter
+    def info(self, value: Any) -> None:
+        self._info = value
 
     @property
     def size(self) -> Optional[int]:
@@ -908,7 +918,8 @@ class Tree(Generic[T]):
 
     def to_json(self) -> str:
         """Convert the tree to a JSON string."""
-        return dumps(self._to_dict())
+
+        return dumps(self._to_dict(), default=str)
 
     def _to_dict(self) -> Dict:
         """Convert the tree to a dictionary."""

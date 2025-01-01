@@ -52,8 +52,10 @@ class AstTreeBuilder:
         self.frame_firstlineno: int = 1
 
         if isinstance(source, str):
+            if not source:
+                raise ValueError("Source cannot be empty")
             self.source = source
-        else:
+        elif hasattr(source, 'f_code'):
             self.frame_firstlineno = source.f_code.co_firstlineno
             self.source = getsource(source)
 
@@ -90,9 +92,10 @@ class AstTreeBuilder:
         return None
 
     def build(self) -> Optional[Tree]:
-        if not self.source:
+        if self.source is None:
             raise ValueError("No source code available")
-
+        if not self.source.strip():
+            return Tree("")
         tree = parse(dedent(self.source))
         return self._build_tree_from_ast(tree)
 
@@ -173,11 +176,19 @@ class AstTreeBuilder:
             raise ValueError("No source code available")
         result_tree = Tree[str](self.source)
 
-        root_pos = Position(0, len(self.source), "Module")
-        result_tree.root = Leaf(root_pos)
+        root_pos = Position(0, len(self.source))
+        result_tree.root = Leaf(
+            root_pos,
+            info={
+                "type": "Module",
+                "name": "Module",
+                "source": self.source
+            },
+        )
 
         nodes_with_positions = []
         for node in walk(ast_tree):
+
             position = self._get_node_position(node)
             if position:
                 leaf = Leaf(
@@ -232,4 +243,5 @@ class AstTreeBuilder:
             else:
                 result_tree.add_leaf(leaf)
                 processed.add(leaf)
+
         return result_tree

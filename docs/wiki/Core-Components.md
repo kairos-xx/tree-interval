@@ -1,6 +1,7 @@
 
 # Core Components
 
+
 ## Position
 
 The `Position` class is the foundation for tracking node locations:
@@ -71,3 +72,43 @@ if node.previous:
 func_node = root.find(lambda n: n.info.get("type") == "FunctionDef")
 parent = child.find_parent(lambda n: n.info.get("type") == "Module")
 ```
+
+
+
+
+## Future
+
+The `Future` class provides dynamic attribute handling with contextual error reporting:
+
+```python
+from tree_interval import Future
+from inspect import stack
+
+class Nested:
+    def __init__(self) -> None:
+        self.__dict__ = {}
+        
+    def __getattr__(self, name: str):
+        return Future(name, 
+                     frame=stack()[1].frame,
+                     instance=self,
+                     new_return=type(self)())
+
+# Usage
+obj = Nested()
+obj.a.b.c = 42  # Creates chain dynamically
+print(obj.a.b.c)  # 42
+print(obj.x.y.z)  # Raises detailed error with context
+"""
+AttributeError: Attribute x not found in obj
+    print(obj.x.y.z)
+    ~~~~~~^^^^▲^^^^~
+"""
+```
+
+Key Features:
+- Automatic attribute chain creation
+- Context-aware error reporting
+- Stack trace analysis
+- Smart attribute access handling
+
