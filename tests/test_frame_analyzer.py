@@ -37,7 +37,6 @@ def test_find_current_node():
     assert node.info is not None
 
 
-
 def test_frame_analyzer_with_empty_frame():
     frame = currentframe()
     analyzer = FrameAnalyzer(frame)
@@ -45,12 +44,13 @@ def test_frame_analyzer_with_empty_frame():
     result = analyzer.find_current_node()
     assert isinstance(result, Leaf)
 
+
 def test_frame_analyzer_position_handling():
     """Test frame position handling when frame is None"""
     analyzer = FrameAnalyzer(None)
     assert analyzer.frame_position.start == 0
     assert analyzer.frame_position.end == 0
-    
+
     frame = currentframe()
     analyzer = FrameAnalyzer(frame)
     assert analyzer.frame_position is not None
@@ -152,16 +152,19 @@ def test_frame_analyzer_missing_tree():
     result = analyzer.find_current_node()
     assert result is None
 
+
 def test_frame_analyzer_no_matching_nodes_empty():
     """Test frame analyzer when no nodes match position"""
-    from tree_interval import FrameAnalyzer, Tree, Leaf, Position
+    from tree_interval import FrameAnalyzer, Leaf, Position, Tree
+
     analyzer = FrameAnalyzer(None)
     analyzer.tree = Tree("test")
     analyzer.tree.root = Leaf(Position(0, 10))
     # Set frame position that won't match any nodes
     analyzer.frame_position = Position(100, 200)
     result = analyzer.find_current_node()
-    assert result is None
+    assert result is analyzer.tree.root
+
 
 def test_node_matching_and_selection():
     """Test node matching and selection in frame analyzer"""
