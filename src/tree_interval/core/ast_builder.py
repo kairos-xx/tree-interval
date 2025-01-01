@@ -51,9 +51,11 @@ class AstTreeBuilder:
         self.line_offset: int = 0
         self.frame_firstlineno: int = 1
 
-        if isinstance(source, str):
+        if source is None:
+            self.source = ""
+        elif isinstance(source, str):
             self.source = source
-        else:
+        elif hasattr(source, 'f_code'):
             self.frame_firstlineno = source.f_code.co_firstlineno
             self.source = getsource(source)
 
