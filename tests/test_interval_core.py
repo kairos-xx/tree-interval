@@ -61,3 +61,35 @@ def test_tree_empty_operations():
 
 if __name__ == "__main__":
     pytest.main([__file__])
+
+def test_complex_leaf_operations():
+    leaf = Leaf(Position(0, 100))
+    leaf.position.lineno = 1
+    leaf.position.end_lineno = 5
+    leaf.position.col_offset = 0
+    leaf.position.end_col_offset = 10
+    assert leaf.lineno == 1
+    assert leaf.end_lineno == 5
+    assert leaf.col_offset == 0
+    assert leaf.end_col_offset == 10
+
+def test_leaf_navigation():
+    root = Leaf(Position(0, 100))
+    child1 = Leaf(Position(10, 30))
+    child2 = Leaf(Position(40, 60))
+    root.add_child(child1)
+    root.add_child(child2)
+    assert child1.next == child2
+    assert child2.previous == child1
+
+def test_tree_serialization():
+    tree = Tree("test")
+    root = Leaf(Position(0, 100), info={"type": "root"})
+    child = Leaf(Position(10, 50), info={"type": "child"})
+    tree.root = root
+    tree.add_leaf(child)
+    
+    json_str = tree.to_json()
+    loaded_tree = Tree.from_json(json_str)
+    assert loaded_tree.root is not None
+    assert loaded_tree.root.info["type"] == "root"

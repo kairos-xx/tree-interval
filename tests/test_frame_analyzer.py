@@ -38,3 +38,26 @@ def test_find_current_node():
 
 if __name__ == "__main__":
     pytest.main([__file__])
+
+def test_empty_frame():
+    frame = None
+    analyzer = FrameAnalyzer(frame)
+    assert analyzer.find_current_node() is None
+
+def test_no_matching_nodes():
+    def dummy_func():
+        frame = inspect.currentframe()
+        analyzer = FrameAnalyzer(frame)
+        analyzer.tree = Tree("")
+        return analyzer.find_current_node()
+    
+    assert dummy_func() is None
+
+def test_build_tree_empty():
+    def dummy_func():
+        frame = inspect.currentframe()
+        analyzer = FrameAnalyzer(frame)
+        analyzer.ast_builder.source = None
+        return analyzer.build_tree()
+    
+    assert dummy_func() is None

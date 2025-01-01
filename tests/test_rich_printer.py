@@ -103,3 +103,22 @@ def test_format_node_custom_styles():
 
 if __name__ == "__main__":
     pytest.main([__file__])
+
+def test_format_empty_tree():
+    printer = RichTreePrinter()
+    with pytest.raises(AttributeError):
+        printer.print_tree(Tree(""))
+
+def test_node_formatting():
+    printer = RichTreePrinter()
+    node = Leaf(Position(0, 100), info={"type": "test"})
+    formatted = printer._format_node(node, is_root=True)
+    assert formatted != ""
+
+def test_style_inheritance():
+    from rich.style import Style
+    config = RichPrintConfig(root_style=Style(color="red"))
+    printer = RichTreePrinter(config)
+    node = Leaf(Position(0, 100))
+    formatted = printer._format_node(node, is_root=True)
+    assert formatted != ""

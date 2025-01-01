@@ -76,3 +76,27 @@ def test_get_node_value_edge_cases():
 
 if __name__ == "__main__":
     pytest.main([__file__])
+
+def test_invalid_source():
+    with pytest.raises(ValueError):
+        builder = AstTreeBuilder(None)
+        builder.build()
+
+def test_malformed_ast():
+    builder = AstTreeBuilder("def invalid syntax:")
+    with pytest.raises(SyntaxError):
+        builder.build()
+
+def test_empty_source():
+    builder = AstTreeBuilder("")
+    tree = builder.build()
+    assert tree is not None
+
+def test_get_node_value_edge_cases():
+    builder = AstTreeBuilder("a[b]") # Test subscript
+    tree = builder.build()
+    assert tree is not None
+
+def test_build_frame_edge_cases():
+    builder = AstTreeBuilder("")
+    assert builder.build_from_frame() is None
