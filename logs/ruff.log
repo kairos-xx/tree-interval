@@ -1,1 +1,91 @@
-All checks passed!
+scripts/create_zip.py:13:20: F401 [*] `typing.List` imported but unused
+   |
+11 | from datetime import datetime
+12 | from pathlib import Path
+13 | from typing import List, Set
+   |                    ^^^^ F401
+14 | from zipfile import ZipFile
+   |
+   = help: Remove unused import: `typing.List`
+
+scripts/git_commit.py:49:5: SIM102 Use a single `if` statement instead of nested `if` statements
+   |
+48 |       # Run git commands
+49 |       if run_git_command(['git', 'add', '.'], log_file):
+   |  _____^
+50 | |         if run_git_command(['git', 'commit', '-m', message], log_file):
+   | |_______________________________________________________________________^ SIM102
+51 |               run_git_command(['git', 'push'], log_file)
+   |
+   = help: Combine `if` statements using `and`
+
+src/tree_interval/core/chain_analyzer.py:10:1: I001 [*] Import block is un-sorted or un-formatted
+   |
+ 8 |   """
+ 9 |   
+10 | / import ast
+11 | | from typing import Tuple, List, Optional
+12 | | from dataclasses import dataclass
+13 | | 
+14 | | @dataclass
+   | |_^ I001
+15 |   class ChainInfo:
+16 |       """Information about an attribute access chain.
+   |
+   = help: Organize imports
+
+src/tree_interval/core/chain_analyzer.py:11:20: F401 [*] `typing.Tuple` imported but unused
+   |
+10 | import ast
+11 | from typing import Tuple, List, Optional
+   |                    ^^^^^ F401
+12 | from dataclasses import dataclass
+   |
+   = help: Remove unused import: `typing.Tuple`
+
+src/tree_interval/core/chain_analyzer.py:61:89: E501 Line too long (93 > 88)
+   |
+59 |         try:
+60 |             tree = ast.parse(code)
+61 |             node = tree.body[0].value if isinstance(tree.body[0], ast.Expr) else tree.body[0]
+   |                                                                                         ^^^^^ E501
+62 |             
+63 |             # Handle augmented assignments (+=, -=, etc)
+   |
+
+src/tree_interval/core/chain_analyzer.py:100:9: E722 Do not use bare `except`
+    |
+ 98 |                 return ChainInfo(False, chain, None)
+ 99 |                 
+100 |         except:
+    |         ^^^^^^ E722
+101 |             # Return empty chain info for unparseable code
+102 |             pass
+    |
+
+src/tree_interval/core/chain_analyzer.py:133:9: SIM103 Return the condition directly
+    |
+132 |           # Create attribute if it appears before the final position in assignment
+133 |           if info.is_assignment and name in info.chain[:-1]:
+    |  _________^
+134 | |             return True
+135 | |             
+136 | |         return False
+    | |____________________^ SIM103
+    |
+    = help: Inline condition
+
+tests/__init__.py:16:1: I001 [*] Import block is un-sorted or un-formatted
+   |
+14 |   """
+15 |   
+16 | / import pytest
+17 | | 
+18 | | def run_tests():
+   | |_^ I001
+19 |       """Run all test suites in the proper order.
+   |
+   = help: Organize imports
+
+Found 8 errors.
+[*] 4 fixable with the `--fix` option (1 hidden fix can be enabled with the `--unsafe-fixes` option).
