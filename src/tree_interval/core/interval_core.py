@@ -360,7 +360,7 @@ class Position:
     @property
     def lineno(self) -> Optional[int]:
         """Get line number."""
-        return self._lineno
+        return self._lineno if self._lineno is not None else 1
 
     @lineno.setter
     def lineno(self, value: Optional[int]) -> None:
