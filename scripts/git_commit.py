@@ -47,5 +47,6 @@ def git_commit(message: Optional[str] = None) -> None:
             log.write(f"Error during git operations: {str(e)}\n")
             raise
 
+
 if __name__ == "__main__":
     git_commit()

@@ -4,7 +4,7 @@ This module provides complete, working examples of:
 
 Core Features:
 1. Position handling and tracking
-2. Tree and node manipulation 
+2. Tree and node manipulation
 3. AST analysis and traversal
 4. Frame analysis
 5. Rich visualization

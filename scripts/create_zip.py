@@ -1,3 +1,4 @@
+
 """Create a ZIP archive of the project.
 
 This script creates a timestamped ZIP archive of the project files,
@@ -27,6 +28,7 @@ def get_exclude_dirs() -> List[str]:
         "logs",
     ]
 
+
 def create_zip() -> None:
     """Create ZIP archive of project files.
     
@@ -40,7 +42,7 @@ def create_zip() -> None:
     # Ensure zip directory exists
     if not os.path.exists("zip"):
         os.makedirs("zip")
-        
+    
     exclude_dirs = get_exclude_dirs()
     
     # Create ZIP with filtered contents
@@ -53,9 +55,11 @@ def create_zip() -> None:
                 # Skip ZIP files
                 if file.endswith(".zip"):
                     continue
-                    
+                
                 file_path = os.path.join(root, file)
                 zip_file.write(file_path)
 
+
 if __name__ == "__main__":
     create_zip()
+

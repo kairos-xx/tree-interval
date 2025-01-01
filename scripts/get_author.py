@@ -29,6 +29,7 @@ def get_git_author() -> Tuple[str, str]:
     
     return name, email
 
+
 if __name__ == "__main__":
     author_name, author_email = get_git_author()
     print(f"Author: {author_name} <{author_email}>")
