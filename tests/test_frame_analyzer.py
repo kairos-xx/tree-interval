@@ -104,5 +104,36 @@ def test_build_tree_empty():
     assert dummy_func() is None
 
 
+def test_frame_analyzer_no_ast_node():
+    def dummy_func():
+        frame = currentframe()
+        analyzer = FrameAnalyzer(frame)
+        # Create a tree with nodes that don't have ast_node attribute
+        analyzer.tree = Tree("")
+        root = Leaf(Position(0, 100), info="root")
+        analyzer.tree.root = root
+        return analyzer.build_tree()
+
+    result = dummy_func()
+    assert isinstance(result, Tree)
+    assert result.root is not None
+
+
+def test_frame_analyzer_invalid_ast_node():
+    def dummy_func():
+        frame = currentframe()
+        analyzer = FrameAnalyzer(frame)
+        analyzer.tree = Tree("")
+        root = Leaf(Position(0, 100), info="root")
+        # Set invalid ast_node
+        root.ast_node = "not an AST node"
+        analyzer.tree.root = root
+        return analyzer.build_tree()
+
+    result = dummy_func()
+    assert isinstance(result, Tree)
+    assert result.root is not None
+
+
 if __name__ == "__main__":
     pytest.main([__file__])
