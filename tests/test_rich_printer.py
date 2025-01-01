@@ -157,5 +157,34 @@ def test_custom_root_no_children():
     printer.print_tree(tree, root=leaf)  # Should not raise any errors
     assert True
 
+
+def test_node_without_rich_style():
+    """Test node formatting when rich_style attribute doesn't exist."""
+    printer = RichTreePrinter()
+    node = Leaf(Position(0, 100))
+    delattr(node, 'rich_style')  # Remove rich_style attribute
+    formatted = printer._format_node(node)
+    assert formatted != ""
+
+
+def test_empty_info_string():
+    """Test node formatting with empty info string."""
+    printer = RichTreePrinter()
+    node = Leaf(Position(0, 100), info="")
+    formatted = printer._format_node(node)
+    assert formatted != ""
+
+
+def test_console_without_record():
+    """Test printing with console that doesn't support record."""
+    console = Console(record=False)
+    printer = RichTreePrinter(console=console)
+    tree = Tree("Test")
+    root = Leaf(Position(0, 100), "Root")
+    tree.root = root
+    printer.print_tree(tree)  # Should not raise any errors
+    assert True
+
+
 if __name__ == "__main__":
     pytest.main([__file__])
