@@ -55,15 +55,9 @@ class FrameAnalyzer:
             matching_nodes = []  # List to store matching nodes.
             for node in self.tree.flatten():
                 if hasattr(node, "position") and node.position:
-                    matching_nodes.append(
-                        (
-                            node,
-                            abs(
-                                node.position.start - self.frame_position.start
-                            )
-                            + abs(node.position.end - self.frame_position.end),
-                        )
-                    )
+                    start_diff = abs(node.position.start - self.frame_position.start)
+                    end_diff = abs(node.position.end - self.frame_position.end)
+                    matching_nodes.append((node, start_diff + end_diff))
 
             # Find the node with the minimal position difference.
             if matching_nodes:

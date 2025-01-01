@@ -32,6 +32,7 @@ from rich.tree import Tree as RichTree
 from ..core.interval_core import Leaf, Tree
 from .config import RichPrintConfig
 
+
 class RichTreePrinter:
     """Prints tree structures using Rich library."""
 
