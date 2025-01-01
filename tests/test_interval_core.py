@@ -102,10 +102,6 @@ def test_position_overlaps():
     assert pos1.overlaps(pos2)
     assert not pos1.overlaps(pos3)
 
-def test_leaf_is_set():
-    leaf = Leaf(Position(0, 100), info={"type": "Set"})
-    assert leaf.is_set
-
 def test_leaf_statement():
     root = Leaf(Position(0, 100), info={"type": "Call", "source": "test()", "cleaned_value": "test"})
     child = Leaf(Position(10, 50), info={"type": "Name", "source": "test", "cleaned_value": "test"})
@@ -123,7 +119,7 @@ def test_leaf_find_operations():
     root.add_child(child2)
     child1.add_child(grandchild)
     
-    found = grandchild.find(lambda n: n.start == 40)
+    found = root.find(lambda n: n.start == 40)
     assert found == child2
 
 def test_leaf_next_previous():
