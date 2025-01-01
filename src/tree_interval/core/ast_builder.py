@@ -73,15 +73,30 @@ class AstTreeBuilder:
                     node, "end_col_offset", len(source_lines[-1])
                 ),
             )
-            start = ((self.indent_offset * (lineno - 1)) + dis_position.col_offset
-                     if dis_position.col_offset is not None else 0)
-            end = ((self.indent_offset * (dis_position.end_lineno - 1)) + dis_position.end_col_offset
-                  if dis_position.end_col_offset is not None else 0)
-            position = Position(start=start, end=end)
-            position.lineno = (lineno + self.line_offset
-                               if lineno is not None else None)
-            position.end_lineno = (dis_position.end_lineno + self.line_offset
-                                   if dis_position.end_lineno is not None else None)
+            position = Position(
+                *(
+                    sum(
+                        len(source_lines[i])
+                        for i in range(
+                            (getattr(dis_position, "lineno", 1) or 1) - 1
+                        )
+                    )
+                    + (getattr(dis_position, "col_offset", 0) or 0),
+                    sum(
+                        len(source_lines[i])
+                        for i in range(
+                            (getattr(dis_position, "end_lineno", 1) or 1) - 1
+                        )
+                    )
+                    + (getattr(dis_position, "end_col_offset", 0) or 0),
+                )
+            )
+            (
+                position.lineno,
+                position.end_lineno,
+                position.col_offset,
+                position.end_col_offset,
+            ) = tuple(dis_position)
 
             return position
         except (IndexError, AttributeError):
