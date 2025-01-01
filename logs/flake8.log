@@ -17,18 +17,15 @@ scripts/./git_commit.py:18:1: W293 blank line contains whitespace
 scripts/./pypi_upload.py:15:1: W293 blank line contains whitespace
 scripts/./pypi_upload.py:19:1: W293 blank line contains whitespace
 scripts/./pypi_upload.py:24:1: W293 blank line contains whitespace
-scripts/./pypi_upload.py:37:1: E302 expected 2 blank lines, found 1
-scripts/./pypi_upload.py:39:1: W293 blank line contains whitespace
-scripts/./pypi_upload.py:48:1: W293 blank line contains whitespace
-scripts/./pypi_upload.py:51:1: W293 blank line contains whitespace
-scripts/./pypi_upload.py:55:1: E305 expected 2 blank lines after class or function definition, found 1
-scripts/./update_workflows.py:15:1: W293 blank line contains whitespace
-scripts/./update_workflows.py:50:1: E302 expected 2 blank lines, found 1
-scripts/./update_workflows.py:52:1: W293 blank line contains whitespace
-scripts/./update_workflows.py:62:1: W293 blank line contains whitespace
-scripts/./update_workflows.py:66:1: W293 blank line contains whitespace
-scripts/./update_workflows.py:72:1: E305 expected 2 blank lines after class or function definition, found 1
-scripts/./update_workflows.py:73:23: W292 no newline at end of file
+scripts/./pypi_upload.py:40:1: W293 blank line contains whitespace
+scripts/./pypi_upload.py:47:1: W293 blank line contains whitespace
+scripts/./pypi_upload.py:49:1: W293 blank line contains whitespace
+scripts/./pypi_upload.py:52:1: W293 blank line contains whitespace
+scripts/./update_workflows.py:16:1: W293 blank line contains whitespace
+scripts/./update_workflows.py:54:1: W293 blank line contains whitespace
+scripts/./update_workflows.py:61:1: W293 blank line contains whitespace
+scripts/./update_workflows.py:64:1: W293 blank line contains whitespace
+scripts/./update_workflows.py:68:1: W293 blank line contains whitespace
 src/./tree_interval/core/ast_builder.py:189:1: W293 blank line contains whitespace
 src/./tree_interval/core/ast_builder.py:190:80: E501 line too long (80 > 79 characters)
 src/./tree_interval/core/ast_builder.py:196:1: W293 blank line contains whitespace
