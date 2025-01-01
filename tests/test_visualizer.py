@@ -66,23 +66,26 @@ def test_node_info_truncation():
 def test_terminal_width_fallback(monkeypatch):
     """Test terminal width fallback when get_terminal_size fails."""
     from tree_interval.visualizer.config import get_terminal_width
-    
+
     def mock_get_terminal_size():
         raise OSError("Terminal size not available")
-        
+
     monkeypatch.setattr('shutil.get_terminal_size', mock_get_terminal_size)
     width = get_terminal_width()
     assert width == 80  # Check fallback value
 
+
 def test_terminal_width_fallback_attribute_error(monkeypatch):
     """Test terminal width fallback when terminal size has no columns."""
     from tree_interval.visualizer.config import get_terminal_width
-    
+
     def mock_get_terminal_size():
+
         class MockSize:
             pass
+
         return MockSize()  # No columns attribute
-        
+
     monkeypatch.setattr('shutil.get_terminal_size', mock_get_terminal_size)
     width = get_terminal_width()
     assert width == 80  # Check fallback value
@@ -103,18 +106,22 @@ def test_show_children_count():
     TreeVisualizer.visualize(tree, config)
     assert len(root.children) == 2
 
+
 def test_terminal_width_fallback():
     """Test terminal width fallback value."""
-    from tree_interval.rich_printer.config import get_terminal_width
     from shutil import get_terminal_size
+
+    from tree_interval.rich_printer.config import get_terminal_width
+
     def mock_get_terminal_size():
         raise Exception("Terminal size not available")
-    
+
     old_get_terminal_size = get_terminal_size
     get_terminal_size = mock_get_terminal_size
     width = get_terminal_width()
     assert width == 80
     get_terminal_size = old_get_terminal_size
+
 
 def test_terminal_width_success(monkeypatch):
     """Test successful terminal width retrieval."""
