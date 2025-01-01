@@ -91,6 +91,13 @@ Visualize from Child:
 Rich visualization from Child:
 [1;32m[10-50] size=40 info=Child[0m
 └── [36m[20-30] size=10 info=Grandchild[0m
+
+=== Future Examples ===
+Created nested attribute: root.a.b.c = 42
+Caught expected error: Attribute [1mx[0m not found in [1mroot[0m
+   File "/home/runner/treeinterval/examples/demo.py"line 386, in demonstrate_future
+   print(root.x.y.z)
+   ~~~~~~^^^^^▲^^^^~
 === Rich Printer Examples ===
 
 Basic Tree:

@@ -12,6 +12,7 @@ from src.tree_interval import (
     VisualizationConfig,
 )
 from src.tree_interval.rich_printer import RichPrintConfig, RichTreePrinter
+from tree_interval.core.future import Future
 from tree_interval.core.interval_core import PartStatement, Statement
 
 # ANSI Colors
@@ -307,7 +308,6 @@ def demonstrate_frame_analyzer():
                 f"{next_attr.info['type'] if next_attr and next_attr.info else None}"
             )
 
-           
     def build_tree():
         analyzer = FrameAnalyzer(stack()[0].frame)
         tree = analyzer.build_tree()
@@ -656,6 +656,39 @@ def demonstrate_custom_styling():
     printer.print_tree(tree)
 
 
+def demonstrate_future_usage():
+    """Example of using Future for dynamic attribute handling"""
+    print_header("Future Usage Demo", CYAN)
+
+    class DynamicConfig:
+
+        def __init__(self) -> None:
+            self.__dict__: dict[str, "DynamicConfig"] = {}
+
+        def __getattr__(self, name):
+            return Future(name, frame=1, instance=self)
+
+    # Create a dynamic configuration
+    config = DynamicConfig()
+
+    # Set nested attributes
+    config.database.host = "localhost"  # pyright: ignore
+    config.database.port = 5432  # pyright: ignore
+    config.database.credentials.username = "admin"  # pyright: ignore
+
+    # Access the values
+    print(f"Database host: {config.database.host}")  # pyright: ignore
+    print(f"Database port: {config.database.port}")  # pyright: ignore
+    print(
+        f"Username: {config.database.credentials.username}")  # pyright: ignore
+
+    # This will raise an informative error
+    try:
+        print(config.missing.attribute)  # pyright: ignore
+    except AttributeError as e:
+        print(f"Error accessing missing attribute:\n{e}")
+
+
 def main():
     print_header("Tree Interval Package Demo", BLUE)
     demonstrate_positions()
@@ -675,38 +708,8 @@ def main():
     demonstrate_node_navigation()
     demonstrate_custom_root_visualization()
     demonstrate_custom_styling()
+    demonstrate_future_usage()
 
-
-def demonstrate_future_usage():
-    """Example of using Future for dynamic attribute handling"""
-    print_header("Future Usage Demo", CYAN)
-    
-    class DynamicConfig:
-        def __init__(self):
-            self.__dict__ = {}
-            
-        def __getattr__(self, name):
-            return Future(name, frame=1, instance=self)
-    
-    # Create a dynamic configuration
-    config = DynamicConfig()
-    
-    # Set nested attributes
-    config.database.host = "localhost"
-    config.database.port = 5432
-    config.database.credentials.username = "admin"
-    
-    # Access the values
-    print(f"Database host: {config.database.host}")
-    print(f"Database port: {config.database.port}")
-    print(f"Username: {config.database.credentials.username}")
-    
-    # This will raise an informative error
-    try:
-        print(config.missing.attribute)
-    except AttributeError as e:
-        print(f"Error accessing missing attribute:\n{e}")
 
 if __name__ == "__main__":
     main()
-    demonstrate_future_usage()

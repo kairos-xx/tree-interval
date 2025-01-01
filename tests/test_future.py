@@ -20,10 +20,10 @@ def nested():
 def test_future_attribute_creation(nested):
     """Test that Future creates new attributes properly"""
     instance = nested
-    instance.test.sub = 42  # pyright: ignore
+    instance.test.sub = 42
     assert hasattr(instance, 'test')
     assert hasattr(instance.test, 'sub')
-    assert instance.test.sub == 42  # pyright: ignore
+    assert instance.test.sub == 42
 
 
 def test_future_nested_creation(nested):
@@ -32,14 +32,19 @@ def test_future_nested_creation(nested):
     instance.a.b.c.d = 123
     assert hasattr(instance, 'a')
     assert hasattr(instance.a, 'b')
-    assert hasattr(instance.a.b, 'c')  # pyright: ignore
-    assert hasattr(instance.a.b.c, 'd')  # pyright: ignore
-    assert instance.a.b.c.d == 123  # pyright: ignore
+    assert hasattr(instance.a.b, 'c')
+    assert hasattr(instance.a.b.c, 'd')
+    assert instance.a.b.c.d == 123
 
 
 def test_future_frame_analyzer_integration(nested):
     """Test that Future works with FrameAnalyzer"""
     instance = nested
     with pytest.raises(AttributeError) as exc_info:
-        _ = instance.test.missing  # pyright: ignore
-        assert "not found" in str(exc_info.value)
+        nested(instance.test.missing)
+
+    assert "not found" in str(exc_info.value)
+
+
+if __name__ == "__main__":
+    pytest.main([__file__])

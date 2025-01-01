@@ -1,6 +1,8 @@
 """
 Comprehensive demonstration of all features of the tree interval package.
 """
+from typing import Any
+
 from rich.style import Style as RichStyle
 
 from src.tree_interval import (
@@ -12,6 +14,7 @@ from src.tree_interval import (
     VisualizationConfig,
 )
 from src.tree_interval.rich_printer import RichTreePrinter
+from tree_interval.core.future import Future
 from tree_interval.core.interval_core import PartStatement, Statement
 
 
@@ -363,11 +366,15 @@ def demonstrate_future():
     print("\n=== Future Examples ===")
 
     class Nested:
+
         def __init__(self) -> None:
             self.__dict__: dict[str, "Nested"] = {}
 
         def __getattr__(self, name: str) -> Any:
-            return Future(name, frame=1, instance=self, new_return=type(self)())
+            return Future(name,
+                          frame=1,
+                          instance=self,
+                          new_return=type(self)())
 
     # Example 1: Setting nested attributes
     root = Nested()
@@ -380,9 +387,9 @@ def demonstrate_future():
     except AttributeError as e:
         print(f"Caught expected error: {e}")
 
+
 def run_demo():
     print("=== Tree Interval Package Demo ===")
-    demonstrate_future()
     demonstrate_positions()
     demonstrate_leaves()
     demonstrate_tree_operations()
@@ -395,6 +402,7 @@ def run_demo():
     demonstrate_node_navigation()
     demonstrate_statements()
     demonstrate_custom_root_visualization()
+    demonstrate_future()
 
 
 if __name__ == "__main__":

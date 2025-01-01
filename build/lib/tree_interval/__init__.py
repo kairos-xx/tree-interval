@@ -19,6 +19,7 @@ Usage:
 
 from .core.ast_builder import AstTreeBuilder
 from .core.frame_analyzer import FrameAnalyzer
+from .core.future import Future
 from .core.interval_core import Leaf, LeafStyle, Position, Tree
 from .visualizer.visualizer import TreeVisualizer, VisualizationConfig
 
@@ -31,6 +32,7 @@ __all__ = [
     "AstTreeBuilder",
     "TreeVisualizer",
     "VisualizationConfig",
+    "Future",
 ]
 
 __version__ = "0.1.16"
