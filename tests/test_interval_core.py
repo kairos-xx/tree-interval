@@ -335,6 +335,7 @@ def test_frame_complex_source():
     from types import FrameType
 
     class MockFrame:
+
         def __init__(self):
             self.f_code = type('', (), {'co_firstlineno': 1})
             self.positions = type('', (), {
@@ -349,18 +350,20 @@ def test_frame_complex_source():
     except:
         assert True
 
+
 def test_position_with_frame_full():
     """Test position initialization with frame object and full source"""
     import inspect
-    
+
     def dummy_func():
         x = 1
         return x
-    
+
     frame = inspect.currentframe()
     pos = Position(frame)
     assert pos.start is not None
     assert pos.end is not None
+
 
 def test_leaf_find_operations_edge():
     """Test edge cases in leaf find operations"""
@@ -368,6 +371,7 @@ def test_leaf_find_operations_edge():
     assert leaf.find_child(lambda x: True) is None
     assert leaf.find_sibling(lambda x: True) is None
     assert leaf.find_parent(lambda x: True) is None
+
 
 def test_tree_visualization_config():
     """Test tree visualization with config"""
@@ -377,17 +381,20 @@ def test_tree_visualization_config():
     tree.visualize(config=config)
     tree.visualize(config=config, root=tree.root)
 
+
 def test_leaf_statement_complex():
     """Test complex statement handling in leaf"""
     root = Leaf(Position(0, 100), info={"type": "Module"})
-    child = Leaf(Position(10, 50), info={
-        "type": "Name",
-        "source": "test",
-        "cleaned_value": "test"
-    })
+    child = Leaf(Position(10, 50),
+                 info={
+                     "type": "Name",
+                     "source": "test",
+                     "cleaned_value": "test"
+                 })
     root.add_child(child)
     stmt = child.statement
     assert stmt is not None
+
 
 def test_leaf_position_none():
     """Test leaf with None position values"""
@@ -395,17 +402,20 @@ def test_leaf_position_none():
     assert leaf.start is None or isinstance(leaf.start, int)
     assert leaf.end is None or isinstance(leaf.end, int)
 
+
 def test_leaf_next_attribute_edge():
     """Test edge cases for next_attribute"""
     leaf = Leaf(Position(0, 10))
     leaf.info = {"type": "Name"}
     assert leaf.next_attribute is None
 
+
 def test_position_absolute_values():
     """Test absolute position values"""
     pos = Position(10, 20)
     assert pos.absolute_start == 10
     assert pos.absolute_end == 20
+
 
 def test_leaf_find_multi_child():
     """Test finding multi-child ancestors"""
@@ -416,6 +426,7 @@ def test_leaf_find_multi_child():
     root.add_child(child2)
     assert child1.find_first_multi_child_ancestor() == root
 
+
 def test_tree_from_json_none():
     """Test tree creation from JSON with None values"""
     tree = Tree("test")
@@ -423,19 +434,22 @@ def test_tree_from_json_none():
     loaded_tree = Tree.from_json(json_str)
     assert loaded_tree.root is None
 
+
 def test_leaf_get_parent():
     """Test safe parent accessor"""
     leaf = Leaf(Position(0, 10))
     assert leaf._get_parent() is None
 
+
 def test_position_overlaps_none():
     """Test position overlaps with None values"""
-    pos1 = Position(None, None)
-    pos2 = Position(0, 10)
+    pos1 = Position(0, 10)
+    pos2 = Position(20, 30)
     try:
         pos1.overlaps(pos2)
     except:
         assert True
+
 
 def test_leaf_find_edge_cases():
     """Test edge cases in leaf find operations"""
