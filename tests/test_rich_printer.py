@@ -203,6 +203,27 @@ def test_format_node_custom_style():
     formatted = printer._format_node(node)
     assert formatted is not None
 
+def test_function_def_style():
+    """Test style assignment for FunctionDef nodes."""
+    from rich.style import Style
+    config = RichPrintConfig()
+    printer = RichTreePrinter(config)
+    node = Leaf(Position(0, 10))
+    node.info = {"type": "FunctionDef"}
+    style = printer._get_node_style(node)
+    assert style == Style(color="blue", bold=False)
+
+def test_default_style_fallback():
+    """Test fallback to default node style."""
+    from rich.style import Style
+    config = RichPrintConfig()
+    config.node_style = Style(color="green")
+    printer = RichTreePrinter(config)
+    node = Leaf(Position(0, 10))
+    node.info = {"type": "UnknownType"}
+    style = printer._get_node_style(node)
+    assert style == config.node_style
+
 
 if __name__ == "__main__":
     pytest.main([__file__])
