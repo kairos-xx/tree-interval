@@ -45,6 +45,18 @@ def test_frame_analyzer_with_empty_frame():
     result = analyzer.find_current_node()
     assert isinstance(result, Leaf)
 
+def test_frame_analyzer_position_handling():
+    """Test frame position handling when frame is None"""
+    analyzer = FrameAnalyzer(None)
+    assert analyzer.frame_position.start == 0
+    assert analyzer.frame_position.end == 0
+    
+    frame = currentframe()
+    analyzer = FrameAnalyzer(frame)
+    assert analyzer.frame_position is not None
+    assert analyzer.frame_position.start is not None
+    assert analyzer.frame_position.end is not None
+
 
 def test_frame_analyzer_empty_source():
     frame = currentframe()
