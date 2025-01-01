@@ -45,7 +45,7 @@ print(a.x.y.z)  # Raises AttributeError with context
 Attribute x not found in obj
    File "example.py", line 15, in <module>
    print(obj.x.y.z)
-   ^^^^^~~~~***~~~
+   ^^^^^^~~~~*~~~~^
 ```
 
 ## Implementation Details
