@@ -9,15 +9,38 @@
 
 ## ✨ Features
 
+- 🔮 **Future Class**: Powerful dynamic attribute handling with context-aware error reporting and smart chain creation
 - 📍 **Position-Aware Nodes**: Track code positions with line numbers, column offsets and intervals
 - 🌲 **AST Analysis**: Built-in support for Python AST traversal and node location
 - 🔍 **Frame Analysis**: Runtime code inspection with frame position tracking
 - 🎨 **Rich Visualization**: Multiple visualization options including ASCII trees and Rich-based pretty printing
 - 💾 **JSON Serialization**: Full support for saving and loading tree structures
 - 🔎 **Flexible Node Search**: Parent, child and sibling search with custom predicates
-- 🔮 **Dynamic Attributes**: Smart attribute chain creation with context-aware error reporting
 
 ## 🚀 Quick Start
+
+### Dynamic Attribute Handling with Future
+
+```python
+from tree_interval import Future
+
+class Nested:
+    def __init__(self):
+        self.__dict__ = {}
+        
+    def __getattr__(self, name):
+        return Future(name, frame=1, instance=self)
+
+# Dynamic attribute chain creation
+obj = Nested()
+obj.a.b.c = 42  # Creates nested structure automatically
+print(obj.a.b.c)  # 42
+
+# Smart error reporting
+print(obj.x.y.z)  # Raises detailed error with context
+```
+
+### Tree Operations
 
 ```python
 from tree_interval import Tree, Leaf, Position
