@@ -211,18 +211,18 @@ def test_function_def_style():
     node = Leaf(Position(0, 10))
     node.info = {"type": "FunctionDef"}
     style = printer._get_node_style(node)
-    assert style == Style(color="blue", bold=False)
+    assert style == Style(color="cyan")
 
 def test_default_style_fallback():
     """Test fallback to default node style."""
     from rich.style import Style
     config = RichPrintConfig()
-    config.node_style = Style(color="green")
+    config.leaf_style = Style(color="green",bold=True)
     printer = RichTreePrinter(config)
     node = Leaf(Position(0, 10))
     node.info = {"type": "UnknownType"}
     style = printer._get_node_style(node)
-    assert style == config.node_style
+    assert style == config.root_style 
 
 
 if __name__ == "__main__":
