@@ -307,20 +307,7 @@ def demonstrate_frame_analyzer():
                 f"{next_attr.info['type'] if next_attr and next_attr.info else None}"
             )
 
-            # Demonstrate statement formatting
-            print("\nStatement Representation:")
-            print("Default markers:")
-            print(current_node.statement.text)
-            print("\nCustom markers:")
-            print(
-                current_node.statement.as_text(top_marker="#",
-                                               chain_marker="-",
-                                               current_marker="@"))
-            print(
-                current_node.statement.as_text(top_marker="$",
-                                               chain_marker=".",
-                                               current_marker="*"))
-
+           
     def build_tree():
         analyzer = FrameAnalyzer(currentframe())
         tree = analyzer.build_tree()
