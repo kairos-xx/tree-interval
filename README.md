@@ -4,6 +4,9 @@
   <h1>Tree Interval</h1>
   <p><em>A powerful Python package for managing, analyzing, and visualizing tree structures with rich interval-based node positioning</em></p>
   
+  <a href="https://replit.com/@kairos/treeinterval">
+    <img src="https://img.shields.io/badge/Try%20on-Replit-blue?style=for-the-badge&logo=replit" alt="Try on Replit"/>
+  </a>
   
 </div>
 
