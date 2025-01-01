@@ -294,6 +294,16 @@ class Position:
             indent_size = len(source_lines[0]) - len(split(dedent(source))[0])
             first_line = frame.f_code.co_firstlineno or 1
             frame_positions = getframeinfo(frame).positions
+            # Calculate absolute character positions for start and end:
+            # 1. Sum the lengths of all lines before the target line
+            # 2. Add indent_size for each line to account for dedentation
+            # 3. Add the column offset to get exact character position
+            # Example:
+            #   If source is:
+            #     def foo():
+            #         x = 1
+            #   And we want position of 'x',
+            #   start = len('def foo():\n') + 4 + col_offset_of_x
             self.start, self.end = (
                 sum(
                     len(source_lines[i]) + indent_size
