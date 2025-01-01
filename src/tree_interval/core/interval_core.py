@@ -74,13 +74,12 @@ class Statement:
     the statement.
 
     The statement is broken down into several components:
-    - Top-level statement parts (marked with '^' by default)
-    - Chain/attribute parts (marked with '~' by default)
-    - Current attribute/expression (marked with '*' by default)
+    - Top parts (marked with '^' by default)
+    - Chain parts (marked with '~' by default)
+    - Current parts (marked with '*' by default)
 
-    Each component can be formatted with different markers to visualize the
-    structure of complex statements, especially useful for debugging and
-    code analysis.
+    Each component uses different markers to visualize statement structure,
+    useful for debugging and code analysis.
 
     Attributes:
         top (PartStatement): The top-level statement containing
