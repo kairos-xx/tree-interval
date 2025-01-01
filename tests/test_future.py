@@ -1,11 +1,9 @@
-import pytest
 
-from tree_interval.core.frame_analyzer import FrameAnalyzer
+import pytest
 from tree_interval.core.future import Future
 
 
-class TestNested():
-
+class _Nested:
     def __init__(self) -> None:
         self.__dict__ = {}
 
@@ -13,19 +11,23 @@ class TestNested():
         return Future(name, frame=1, instance=self, new_return=type(self)())
 
 
-def test_future_attribute_creation():
+@pytest.fixture
+def nested():
+    return _Nested()
+
+
+def test_future_attribute_creation(nested):
     """Test that Future creates new attributes properly"""
-    instance = TestNested()
-    # This should create the attribute 'test' on instance
+    instance = nested
     instance.test.sub = 42  # pyright: ignore
     assert hasattr(instance, 'test')
     assert hasattr(instance.test, 'sub')
     assert instance.test.sub == 42  # pyright: ignore
 
 
-def test_future_nested_creation():
+def test_future_nested_creation(nested):
     """Test nested attribute creation"""
-    instance = TestNested()
+    instance = nested
     instance.a.b.c.d = 123
     assert hasattr(instance, 'a')
     assert hasattr(instance.a, 'b')
@@ -34,10 +36,9 @@ def test_future_nested_creation():
     assert instance.a.b.c.d == 123  # pyright: ignore
 
 
-def test_future_frame_analyzer_integration():
+def test_future_frame_analyzer_integration(nested):
     """Test that Future works with FrameAnalyzer"""
-    instance = TestNested()
-    # This should trigger FrameAnalyzer
+    instance = nested
     with pytest.raises(AttributeError) as exc_info:
         instance.test.missing  # pyright: ignore
         assert "not found" in str(exc_info.value)
