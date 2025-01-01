@@ -98,11 +98,8 @@ class AstTreeBuilder:
             raise ValueError("No source code available")
         if not self.source.strip():
             return Tree("")
-        try:
-            tree = parse(dedent(self.source))
-            return self._build_tree_from_ast(tree)
-        except SyntaxError:
-            return Tree("")
+        tree = parse(dedent(self.source))
+        return self._build_tree_from_ast(tree)
 
     def build_from_frame(self) -> Optional[Tree]:
         if not self.source:

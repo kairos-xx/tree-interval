@@ -44,9 +44,6 @@ class FrameAnalyzer:
             Optional[Leaf]: The AST node at the current frame position,
             or None if not found.
         """
-        if self.frame is None:
-            return None
-            
         self.tree = self.tree or self.build_tree()
         if not self.tree or not self.tree.root:
             return None
