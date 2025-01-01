@@ -1,4 +1,3 @@
-
 """Chain analysis module for attribute access patterns.
 
 This module provides functionality to analyze attribute chains in Python code,
@@ -7,8 +6,8 @@ It parses Python expressions to extract information about attribute chains
 and their usage context.
 """
 
-import ast
 from dataclasses import dataclass
+import ast
 from typing import List, Optional
 
 @dataclass
@@ -99,9 +98,9 @@ class ChainAnalyzer:
                 chain.reverse()
                 return ChainInfo(False, chain, None)
                 
-        except Exception:
+        except Exception as e:
             # Return empty chain info for unparseable code
-            pass
+            return ChainInfo(False, [], None)
             
         return ChainInfo(False, [], None)
     

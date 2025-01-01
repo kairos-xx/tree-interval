@@ -45,9 +45,9 @@ def main() -> None:
     message = f'Auto commit: {timestamp}'
     
     # Run git commands
-    if (run_git_command(['git', 'add', '.'], log_file) and 
-          run_git_command(['git', 'commit', '-m', message], log_file)):
-          run_git_command(['git', 'push'], log_file)
+    if (run_git_command(['git', 'add', '.'], log_file) and
+            run_git_command(['git', 'commit', '-m', message], log_file)):
+        run_git_command(['git', 'push'], log_file)
 
 
 if __name__ == '__main__':

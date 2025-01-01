@@ -1094,13 +1094,12 @@ class Tree(Generic[T]):
         config: Optional["VisualizationConfig"] = None,
         root: Optional["Leaf"] = None,
     ) -> None:
-        """
-        Visualize the tree structure.
+        """Visualize the tree structure.
 
         Args:
             config: Optional visualization configuration
             root: Optional root node to start visualization from. If provided,
-                 visualization will start from this node instead of tree.root
+                visualization will start from this node instead of tree.root
 
         Example:
             # Visualize full tree
