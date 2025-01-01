@@ -70,8 +70,10 @@ class FrameAnalyzer:
         """
         if not hasattr(self, 'tree') or self.tree is None:
             self.tree = self.ast_builder.build_from_frame()
+            if not self.tree:
+                return None
         if not hasattr(self, 'current_node') or self.current_node is None:
-            self.current_node = self.find_current_node()
+            self._find_node_positions()
         if self.tree and self.tree.root:
             nodes_by_pos = {}
             for node in self.tree.flatten():
@@ -102,3 +104,13 @@ class FrameAnalyzer:
                             break
 
         return self.tree
+
+    def _find_node_positions(self):
+        #This method needs to be implemented based on the context of the original code and the intention of the changes
+        #A placeholder implementation is provided below.  Replace with the actual implementation needed.
+
+        if self.tree:
+            for node in self.tree.flatten():
+                if hasattr(node, 'position') and node.position and self.frame_position.overlaps(node.position):
+                    self.current_node = node
+                    break

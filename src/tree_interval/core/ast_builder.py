@@ -92,9 +92,10 @@ class AstTreeBuilder:
         return None
 
     def build(self) -> Optional[Tree]:
-        if not self.source:
+        if self.source is None:
             raise ValueError("No source code available")
-
+        if not self.source.strip():
+            return Tree("")
         tree = parse(dedent(self.source))
         return self._build_tree_from_ast(tree)
 
