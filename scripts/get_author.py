@@ -3,7 +3,7 @@
 Retrieves the git author name and email from git config.
 """
 
-import subprocess
+from subprocess import check_output
 from typing import Tuple
 
 
@@ -17,18 +17,10 @@ def get_git_author() -> Tuple[str, str]:
         subprocess.CalledProcessError: If git command fails
     """
     # Get author name
-    name = (
-        subprocess.check_output(["git", "config", "user.name"])
-        .decode()
-        .strip()
-    )
+    name = check_output(["git", "config", "user.name"]).decode().strip()
 
     # Get author email
-    email = (
-        subprocess.check_output(["git", "config", "user.email"])
-        .decode()
-        .strip()
-    )
+    email = check_output(["git", "config", "user.email"]).decode().strip()
 
     return name, email
 

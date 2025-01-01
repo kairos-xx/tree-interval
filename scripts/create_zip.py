@@ -4,8 +4,8 @@ This script creates a timestamped ZIP archive of the project files,
 excluding specified directories and files.
 """
 
-import os
 from datetime import datetime
+from os import makedirs, path, walk
 from typing import List
 from zipfile import ZipFile
 
@@ -39,14 +39,14 @@ def create_zip() -> None:
     zip_name = f"tree_interval_{timestamp}.zip"
 
     # Ensure zip directory exists
-    if not os.path.exists("zip"):
-        os.makedirs("zip")
+    if not path.exists("zip"):
+        makedirs("zip")
 
     exclude_dirs = get_exclude_dirs()
 
     # Create ZIP with filtered contents
     with ZipFile(f"zip/{zip_name}", "w") as zip_file:
-        for root, dirs, files in os.walk("."):
+        for root, dirs, files in walk("."):
             # Skip excluded directories
             dirs[:] = [d for d in dirs if d not in exclude_dirs]
 
@@ -55,7 +55,7 @@ def create_zip() -> None:
                 if file.endswith(".zip"):
                     continue
 
-                file_path = os.path.join(root, file)
+                file_path = path.join(root, file)
                 zip_file.write(file_path)
 
 

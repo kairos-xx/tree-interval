@@ -6,13 +6,13 @@ Contains utilities for version management and package deployment.
 """
 
 from datetime import datetime
+from json import loads
+from os import getenv
 from pathlib import Path
+from subprocess import CalledProcessError, run
+from sys import exit
 from typing import Optional
-import json
-import os
-import subprocess
-import sys
-import urllib.request
+from urllib.request import urlopen
 
 from replit import info
 
@@ -26,8 +26,8 @@ def get_latest_version() -> str:
     """
     try:
         url = "https://pypi.org/pypi/tree-interval/json"
-        with urllib.request.urlopen(url) as response:
-            data = json.loads(response.read())
+        with urlopen(url) as response:
+            data = loads(response.read())
             return data["info"]["version"]
     except Exception:
         return "0.0.0"
@@ -101,11 +101,11 @@ def check_token() -> str:
     Raises:
         SystemExit: If token is not set
     """
-    token = os.getenv("PYPI_TOKEN")
+    token = getenv("PYPI_TOKEN")
     if not token:
         print("Error: PYPI_TOKEN environment variable not set")
         print("Please set it in the Secrets tab (Environment Variables)")
-        sys.exit(1)
+        exit(1)
     return token
 
 
@@ -140,7 +140,7 @@ def build_and_upload(project_dir: Optional[str] = None) -> None:
         print(f"Building and uploading {working_dir}...")
 
         # Clean previous builds
-        subprocess.run(
+        run(
             "rm -rf dist build *.egg-info",
             shell=True,
             cwd=working_dir,
@@ -148,14 +148,14 @@ def build_and_upload(project_dir: Optional[str] = None) -> None:
         )
 
         # Build the package
-        subprocess.run(
+        run(
             ["python", "setup.py", "sdist", "bdist_wheel"],
             cwd=working_dir,
             check=True,
         )
 
         # Upload to PyPI
-        subprocess.run(
+        run(
             ["python", "-m", "twine", "upload", "dist/*"],
             cwd=working_dir,
             check=True,
@@ -163,16 +163,16 @@ def build_and_upload(project_dir: Optional[str] = None) -> None:
 
         print(f"Successfully uploaded {working_dir} to PyPI!")
 
-    except subprocess.CalledProcessError as e:
+    except CalledProcessError as e:
         print(f"Error during build/upload for {working_dir}: {e}")
-        sys.exit(1)
+        exit(1)
 
 
 def main() -> None:
     """Main execution function for PyPI package upload."""
     print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     # Install required packages
-    subprocess.run(["pip", "install", "wheel", "twine", "build"], check=True)
+    run(["pip", "install", "wheel", "twine", "build"], check=True)
 
     # Get current version and increment it
     current_version = get_latest_version()

@@ -1,6 +1,0 @@
-scripts/./pypi_upload.py:10:1: F401 'typing.Tuple' imported but unused
-tests/./test_interval_core.py:505:12: F632 use ==/!= to compare constant literals (str, bytes, int, float, tuple)
-tests/./test_interval_core.py:505:27: E261 at least two spaces before inline comment
-tests/./test_interval_core.py:506:27: W291 trailing whitespace
-tests/./test_tree_core.py:12:12: F632 use ==/!= to compare constant literals (str, bytes, int, float, tuple)
-tests/./test_tree_core.py:12:27: E261 at least two spaces before inline comment

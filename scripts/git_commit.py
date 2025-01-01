@@ -3,9 +3,9 @@
 Handles git add, commit, and push operations with logging.
 """
 
-import os
-import subprocess
 from datetime import datetime
+from os import makedirs, path
+from subprocess import CalledProcessError, run
 from typing import Optional
 
 
@@ -24,25 +24,25 @@ def git_commit(message: Optional[str] = None) -> None:
         message = f"Auto commit: {timestamp}"
 
     # Ensure logs directory exists
-    if not os.path.exists("logs"):
-        os.makedirs("logs")
+    if not path.exists("logs"):
+        makedirs("logs")
 
     # Log git operations
     with open("logs/git_commit.log", "a") as log:
         try:
             # Add all changes
-            subprocess.run(["git", "add", "."], check=True)
+            run(["git", "add", "."], check=True)
             log.write(f"\nGit add completed at {datetime.now()}\n")
 
             # Commit changes
-            subprocess.run(["git", "commit", "-m", message], check=True)
+            run(["git", "commit", "-m", message], check=True)
             log.write(f"Git commit completed at {datetime.now()}\n")
 
             # Push changes
-            subprocess.run(["git", "push"], check=True)
+            run(["git", "push"], check=True)
             log.write(f"Git push completed at {datetime.now()}\n")
 
-        except subprocess.CalledProcessError as e:
+        except CalledProcessError as e:
             log.write(f"Error during git operations: {str(e)}\n")
             raise
 
