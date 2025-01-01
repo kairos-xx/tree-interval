@@ -58,6 +58,7 @@ class ChainAnalyzer:
                 return ChainInfo(False, chain, None)
                 
         except:
+            # Catch all exceptions silently and return a default ChainInfo
             pass
             
         return ChainInfo(False, [], None)
