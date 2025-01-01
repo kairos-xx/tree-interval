@@ -224,6 +224,15 @@ def test_default_style_fallback():
     style = printer._get_node_style(node)
     assert style == config.root_style 
 
+def test_terminal_width_with_exception(monkeypatch):
+    """Test terminal width fallback when get_terminal_size raises exception."""
+    from tree_interval.rich_printer.config import get_terminal_width
+    def mock_get_terminal_size(*args, **kwargs):
+        raise OSError("Mock error")
+    monkeypatch.setattr("shutil.get_terminal_size", mock_get_terminal_size)
+    width = get_terminal_width()
+    assert width == 80  # Check fallback value
+
 
 if __name__ == "__main__":
     pytest.main([__file__])
