@@ -95,5 +95,80 @@ def test_tree_serialization():
     assert getattr(loaded_tree.root, "info", {}).get("type") == "root"
 
 
+def test_position_overlaps():
+    pos1 = Position(0, 50)
+    pos2 = Position(40, 90)
+    pos3 = Position(60, 100)
+    assert pos1.overlaps(pos2)
+    assert not pos1.overlaps(pos3)
+
+def test_leaf_is_set():
+    leaf = Leaf(Position(0, 100), info={"type": "Set"})
+    assert leaf.is_set
+
+def test_leaf_statement():
+    root = Leaf(Position(0, 100), info={"type": "Call", "source": "test()", "cleaned_value": "test"})
+    child = Leaf(Position(10, 50), info={"type": "Name", "source": "test", "cleaned_value": "test"})
+    root.add_child(child)
+    stmt = child.statement
+    assert stmt.text is not None
+
+def test_leaf_find_operations():
+    root = Leaf(Position(0, 100))
+    child1 = Leaf(Position(10, 30))
+    child2 = Leaf(Position(40, 60))
+    grandchild = Leaf(Position(15, 25))
+    
+    root.add_child(child1)
+    root.add_child(child2)
+    child1.add_child(grandchild)
+    
+    found = grandchild.find(lambda n: n.start == 40)
+    assert found == child2
+
+def test_leaf_next_previous():
+    root = Leaf(Position(0, 100))
+    child1 = Leaf(Position(10, 30))
+    child2 = Leaf(Position(40, 60))
+    root.add_child(child1)
+    root.add_child(child2)
+    
+    assert child1.next == child2
+    assert child2.previous == child1
+    assert root.previous is None
+    assert child2.next is None
+
+def test_tree_add_duplicate_leaf():
+    tree = Tree("test")
+    leaf1 = Leaf(Position(0, 50), info="test")
+    leaf2 = Leaf(Position(0, 50), info="test")
+    
+    tree.add_leaf(leaf1)
+    tree.add_leaf(leaf2)  # Should not add duplicate
+    assert len(tree.flatten()) == 1
+
+def test_nested_attributes_missing():
+    leaf = Leaf(Position(0, 100))
+    assert leaf.attributes.nonexistent_attr is None
+
+def test_position_with_none_values():
+    pos = Position(0, 100)
+    pos.lineno = None
+    pos.end_lineno = None
+    assert pos.end_lineno == 1  # Default fallback
+
+def test_leaf_get_ancestors():
+    root = Leaf(Position(0, 100))
+    child = Leaf(Position(10, 50))
+    grandchild = Leaf(Position(20, 40))
+    
+    root.add_child(child)
+    child.add_child(grandchild)
+    
+    ancestors = grandchild.get_ancestors()
+    assert len(ancestors) == 2
+    assert ancestors[0] == child
+    assert ancestors[1] == root
+
 if __name__ == "__main__":
     pytest.main([__file__])
