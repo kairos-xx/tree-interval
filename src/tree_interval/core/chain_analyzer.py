@@ -8,8 +8,8 @@ and their usage context.
 """
 
 import ast
-from typing import Tuple, List, Optional
 from dataclasses import dataclass
+from typing import List, Optional
 
 @dataclass
 class ChainInfo:
@@ -58,7 +58,9 @@ class ChainAnalyzer:
         """
         try:
             tree = ast.parse(code)
-            node = tree.body[0].value if isinstance(tree.body[0], ast.Expr) else tree.body[0]
+            node = (tree.body[0].value 
+                   if isinstance(tree.body[0], ast.Expr) 
+                   else tree.body[0])
             
             # Handle augmented assignments (+=, -=, etc)
             if isinstance(node, ast.AugAssign):
@@ -97,7 +99,7 @@ class ChainAnalyzer:
                 chain.reverse()
                 return ChainInfo(False, chain, None)
                 
-        except:
+        except Exception:
             # Return empty chain info for unparseable code
             pass
             
