@@ -1,13 +1,13 @@
-
 """PyPI package upload script.
 
-Handles building and uploading package to PyPI with proper versioning and logging.
+Handles building and uploading package to PyPI with proper
+versioning and logging.
 Contains utilities for version management and package deployment.
 """
 
 from datetime import datetime
 from pathlib import Path
-from typing import Tuple, Optional
+from typing import Optional
 import json
 import os
 import subprocess
@@ -19,9 +19,10 @@ from replit import info
 
 def get_latest_version() -> str:
     """Fetch the latest version from PyPI.
-    
+
     Returns:
-        str: Latest version number in format 'x.y.z' or '0.0.0' if not found
+        str: Latest version number in format 'x.y.z' or
+             '0.0.0' if not found
     """
     try:
         url = "https://pypi.org/pypi/tree-interval/json"
@@ -34,10 +35,10 @@ def get_latest_version() -> str:
 
 def increment_version(version: str) -> str:
     """Increment the patch version number.
-    
+
     Args:
         version: Current version in format 'x.y.z'
-        
+
     Returns:
         str: Incremented version number
     """
@@ -47,7 +48,7 @@ def increment_version(version: str) -> str:
 
 def update_version_in_files(new_version: str) -> None:
     """Update version strings in project configuration files.
-    
+
     Args:
         new_version: Version string to set
     """
@@ -93,10 +94,10 @@ def update_version_in_files(new_version: str) -> None:
 
 def check_token() -> str:
     """Verify PyPI token exists in environment.
-    
+
     Returns:
         str: PyPI token
-        
+
     Raises:
         SystemExit: If token is not set
     """
@@ -110,7 +111,7 @@ def check_token() -> str:
 
 def create_pypirc(token: str) -> None:
     """Create PyPI configuration file with authentication.
-    
+
     Args:
         token: PyPI authentication token
     """
@@ -127,10 +128,10 @@ password = {token}
 
 def build_and_upload(project_dir: Optional[str] = None) -> None:
     """Build and upload package to PyPI.
-    
+
     Args:
         project_dir: Optional directory containing the project
-        
+
     Raises:
         SystemExit: If build or upload fails
     """
