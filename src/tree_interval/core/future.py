@@ -8,6 +8,24 @@ from .frame_analyzer import FrameAnalyzer
 
 
 class Future:
+    """
+    Handles dynamic attribute creation and access in nested object structures.
+    
+    This class provides context-aware attribute handling by analyzing the call stack
+    and current execution frame to determine whether an attribute access is part of
+    a setting operation (creating new attributes) or a getting operation (which may
+    raise appropriate errors).
+    
+    Example:
+        class Nested:
+            def __getattr__(self, name):
+                return Future(name, frame=1, instance=self)
+                
+        obj = Nested()
+        obj.a.b.c = 42  # Creates nested structure
+        print(obj.a.b.c)  # Prints 42
+        print(obj.x.y)  # Raises AttributeError with context
+    """
 
     def __new__(cls,
                 name: str,

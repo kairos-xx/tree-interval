@@ -358,8 +358,31 @@ def demonstrate_custom_root_visualization():
     printer.print_tree(tree, root=child)
 
 
+def demonstrate_future():
+    """Demonstrates Future functionality for dynamic attribute creation"""
+    print("\n=== Future Examples ===")
+
+    class Nested:
+        def __init__(self) -> None:
+            self.__dict__: dict[str, "Nested"] = {}
+
+        def __getattr__(self, name: str) -> Any:
+            return Future(name, frame=1, instance=self, new_return=type(self)())
+
+    # Example 1: Setting nested attributes
+    root = Nested()
+    root.a.b.c = 42
+    print(f"Created nested attribute: root.a.b.c = {root.a.b.c}")
+
+    # Example 2: Accessing non-existent attributes (will raise AttributeError)
+    try:
+        print(root.x.y.z)
+    except AttributeError as e:
+        print(f"Caught expected error: {e}")
+
 def run_demo():
     print("=== Tree Interval Package Demo ===")
+    demonstrate_future()
     demonstrate_positions()
     demonstrate_leaves()
     demonstrate_tree_operations()

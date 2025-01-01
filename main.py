@@ -677,5 +677,36 @@ def main():
     demonstrate_custom_styling()
 
 
+def demonstrate_future_usage():
+    """Example of using Future for dynamic attribute handling"""
+    print_header("Future Usage Demo", CYAN)
+    
+    class DynamicConfig:
+        def __init__(self):
+            self.__dict__ = {}
+            
+        def __getattr__(self, name):
+            return Future(name, frame=1, instance=self)
+    
+    # Create a dynamic configuration
+    config = DynamicConfig()
+    
+    # Set nested attributes
+    config.database.host = "localhost"
+    config.database.port = 5432
+    config.database.credentials.username = "admin"
+    
+    # Access the values
+    print(f"Database host: {config.database.host}")
+    print(f"Database port: {config.database.port}")
+    print(f"Username: {config.database.credentials.username}")
+    
+    # This will raise an informative error
+    try:
+        print(config.missing.attribute)
+    except AttributeError as e:
+        print(f"Error accessing missing attribute:\n{e}")
+
 if __name__ == "__main__":
     main()
+    demonstrate_future_usage()
