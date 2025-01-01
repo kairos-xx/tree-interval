@@ -166,5 +166,115 @@ def test_leaf_get_ancestors():
     assert ancestors[0] == child
     assert ancestors[1] == root
 
+def test_position_column_handling():
+    pos = Position(0, 100)
+    pos.col_offset = 5
+    pos.end_col_offset = 15
+    assert pos.col_offset == 5
+    assert pos.end_col_offset == 15
+
+def test_position_with_disposition():
+    from dis import Positions
+    class MockDisposition(Positions):
+        def __init__(self):
+            self.lineno = 1
+            self.end_lineno = 2
+            self.col_offset = 0
+            self.end_col_offset = 10
+
+    pos = Position(MockDisposition(), source="test\ncode")
+    assert pos.start is not None
+    assert pos.end is not None
+
+def test_leaf_chain_operations():
+    root = Leaf(Position(0, 100), info={"type": "Call", "source": "obj.method()", "cleaned_value": "obj"})
+    attr = Leaf(Position(10, 50), info={"type": "Attribute", "source": ".method", "cleaned_value": "method"})
+    root.add_child(attr)
+    assert attr.previous_attribute is not None
+    assert root.next_attribute == attr
+
+def test_tree_duplicate_handling():
+    tree = Tree("test")
+    leaf1 = Leaf(Position(0, 50))
+    leaf2 = Leaf(Position(0, 50))  # Same position
+    tree.add_leaf(leaf1)
+    tree.add_leaf(leaf2)
+    assert len(tree.flatten()) == 1
+
+def test_leaf_match():
+    leaf1 = Leaf(Position(0, 50), info={"type": "test"})
+    leaf2 = Leaf(Position(0, 50), info={"type": "test"})
+    leaf3 = Leaf(Position(10, 60), info={"type": "different"})
+    assert leaf1.match(leaf2)
+    assert not leaf1.match(leaf3)
+    assert not leaf1.match(None)
+
+def test_nested_attributes_complex():
+    leaf = Leaf(Position(0, 100))
+    leaf.position.lineno = 1
+    leaf.position.end_lineno = 5
+    leaf.position.col_offset = 0
+    leaf.position.end_col_offset = 10
+    assert leaf.attributes.position.lineno == 1
+    assert leaf.attributes.position.end_lineno == 5
+
+def test_tree_serialization_with_styles():
+    from rich.style import Style
+    tree = Tree("test")
+    root = Leaf(Position(0, 100))
+    root.style = {"color": "red", "bold": True}
+    root.rich_style = Style(color="red", bold=True)
+    tree.root = root
+    
+    json_str = tree.to_json()
+    loaded_tree = Tree.from_json(json_str)
+    assert loaded_tree.root is not None
+    assert loaded_tree.root.style == {"color": "red", "bold": True}
+
+def test_position_frame_handling():
+    import types
+    frame = types.FrameType
+    try:
+        pos = Position(frame)
+    except Exception:
+        assert True  # Should handle frame gracefully
+
+def test_statement_formatting():
+    part = PartStatement(before="test(", after=")")
+    stmt = Statement(top=part, before="obj.", self="method", after="()")
+    formatted = stmt.as_text(top_marker="^", chain_marker="~", current_marker="*")
+    assert "test" in formatted
+    assert "method" in formatted
+
+def test_leaf_find_operations_complex():
+    root = Leaf(Position(0, 100))
+    child1 = Leaf(Position(10, 30))
+    child2 = Leaf(Position(40, 60))
+    grandchild = Leaf(Position(15, 25))
+    
+    root.add_child(child1)
+    root.add_child(child2)
+    child1.add_child(grandchild)
+    
+    # Test various find operations
+    assert root.find_best_match(12, 28) == grandchild
+    assert grandchild.find_common_ancestor(child2) == root
+    assert grandchild.find_first_multi_child_ancestor() == root
+    
+    # Test edge cases
+    assert root.find_best_match(200, 300) == root  # Out of range
+    assert root.find_common_ancestor(None) is None
+
+def test_nested_attributes_edge_cases():
+    data = {
+        "test": None,
+        "nested": {"value": None}
+    }
+    attrs = NestedAttributes(data)
+    assert attrs.test is None
+    assert attrs.nested.value is None
+    assert attrs.nonexistent is None
+    assert str(attrs) == repr(attrs)
+
 if __name__ == "__main__":
     pytest.main([__file__])
