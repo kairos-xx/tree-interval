@@ -37,7 +37,8 @@ class Future:
     ) -> Any:
         """Dynamic attribute creation and access handler.
         
-        This method implements the core logic for dynamic attribute handling by:
+        This method implements the core logic for dynamic attribute
+        handling by:
         1. Analyzing call stack context to determine operation type
         2. Creating new attributes in assignment context
         3. Raising descriptive errors in access context
@@ -127,3 +128,4 @@ class Future:
 
         # Raise error for invalid attribute access
         raise new
+    

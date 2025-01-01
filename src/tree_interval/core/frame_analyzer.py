@@ -31,9 +31,7 @@ class FrameAnalyzer:
         """Initializes FrameAnalyzer with a given frame."""
         self.frame = frame
         # Set frame position to (0, 0) for None frame, or use frame position.
-        self.frame_position = (
-            Position(0, 0) if frame is None else Position(self.frame)
-        )
+        self.frame_position = Position(0, 0) if frame is None else Position(self.frame)
         if isframe(frame):
             # Initialize AST builder if the frame is valid.
             self.ast_builder = AstTreeBuilder(frame)
@@ -61,9 +59,7 @@ class FrameAnalyzer:
 
             # Find the node with the minimal position difference.
             if matching_nodes:
-                self.current_node = min(
-                            matching_nodes, key=lambda x: x[1]
-                        )[0]
+                self.current_node = min(matching_nodes, key=lambda x: x[1])[0]
         return self.current_node
 
     def build_tree(self) -> Optional[Tree]:
@@ -75,7 +71,9 @@ class FrameAnalyzer:
             construction fails.
         """
         self.build_tree_done = True  # Mark tree building as done.
-        if not hasattr(self, "tree") or self.tree is None and self.ast_builder is not None:
+        if (
+            not hasattr(self, "tree") or self.tree is None
+        ) and self.ast_builder is not None:
             # Use builder to construct the tree
             self.tree = self.ast_builder.build_from_frame()
             # Return None if construction fails
@@ -87,20 +85,14 @@ class FrameAnalyzer:
         if self.tree and self.tree.root and self.ast_builder:
             nodes_by_pos = {}  # Dictionary to map positions to nodes.
             for node in self.tree.flatten():
-                if hasattr(node, "ast_node") and isinstance(
-                    node.ast_node, AST
-                ):
-                    pos = self.ast_builder._get_node_position(
-                        cast(AST, node.ast_node)
-                    )
+                if hasattr(node, "ast_node") and isinstance(node.ast_node, AST):
+                    pos = self.ast_builder._get_node_position(cast(AST, node.ast_node))
                     if pos:
                         pos.selected = node.selected  # Propagate selection info.
                         node.position = pos  # Set node position.
                         nodes_by_pos[(pos.start, pos.end)] = node
 
-            sorted_positions = sorted(
-                nodes_by_pos.keys(), key=lambda x: (x[0], -x[1])
-            )
+            sorted_positions = sorted(nodes_by_pos.keys(), key=lambda x: (x[0], -x[1]))
 
             for start, end in sorted_positions:
                 current_node = nodes_by_pos[(start, end)]

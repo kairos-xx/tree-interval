@@ -19,9 +19,10 @@ class AstTreeBuilder:
     """
     Builds tree structures from Python Abstract Syntax Trees.
 
-    This class handles the conversion of Python source code or frame objects
-    into tree structures with position tracking. It manages preprocessing,
-    AST parsing, and tree construction with positional information.
+    This class handles the conversion of Python source code or
+    frame objects into tree structures with position tracking.
+    It manages preprocessing, AST parsing, and tree construction
+    with positional information.
 
     Attributes:
         source (Optional[str]): The source code to analyze
@@ -42,8 +43,9 @@ class AstTreeBuilder:
         Initialize the AST builder with source code or a frame.
 
         Args:
-            source: Either a string containing source code or a frame object
-                   from which source code can be extracted
+            source: Either a string containing source code or a
+                    frame object from which source code
+                    can be extracted
         """
         self.cleaned_value_key = "cleaned_value"
         self.source: Optional[str] = None
@@ -69,17 +71,13 @@ class AstTreeBuilder:
                 lineno=lineno,
                 end_lineno=getattr(node, "end_lineno", lineno),
                 col_offset=getattr(node, "col_offset", 0),
-                end_col_offset=getattr(
-                    node, "end_col_offset", len(source_lines[-1])
-                ),
+                end_col_offset=getattr(node, "end_col_offset", len(source_lines[-1])),
             )
             position = Position(
                 *(
                     sum(
                         len(source_lines[i])
-                        for i in range(
-                            (getattr(dis_position, "lineno", 1) or 1) - 1
-                        )
+                        for i in range((getattr(dis_position, "lineno", 1) or 1) - 1)
                     )
                     + (getattr(dis_position, "col_offset", 0) or 0),
                     sum(
@@ -157,7 +155,8 @@ class AstTreeBuilder:
     def _build_tree_from_ast(self, ast_tree: AST) -> Optional[Tree]:
         """Build a hierarchical tree structure from an AST.
 
-        This method transforms a Python AST into a position-aware tree structure
+        This method transforms a Python AST into a position-aware
+        tree structure
         where each node maintains:
         1. Source code position information
         2. Parent-child relationships
@@ -216,10 +215,7 @@ class AstTreeBuilder:
             smallest_size = float("inf")
 
             for start, end, potential_parent in nodes_with_positions:
-                if (
-                    potential_parent == leaf
-                    or potential_parent in leaf.get_ancestors()
-                ):
+                if potential_parent == leaf or potential_parent in leaf.get_ancestors():
                     continue
 
                 if start <= leaf.start and end >= leaf.end:

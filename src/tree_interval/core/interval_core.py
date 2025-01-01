@@ -209,15 +209,16 @@ T = TypeVar("T")
 
 
 class Position:
-    """Represents a code position with line/column tracking and hierarchical links.
+    """Represents a code position with line/column tracking and
+    hierarchical links.
 
-    This class handles various position input types (frame objects, disposition
-    objects, or direct values) and normalizes them into a consistent format with
-    absolute and relative positions.
+    This class handles various position input types (frame objects,
+    disposition objects, or direct values) and normalizes them into
+    a consistent format with absolute and relative positions.
 
-    The position information is stored both as absolute character offsets and as
-    line/column pairs, allowing for flexible position representation and 
-    comparison.
+    The position information is stored both as absolute character
+    offsets and as line/column pairs, allowing for flexible position
+    representation and comparison.
 
     Attributes:
         start: Starting character position in source
@@ -268,7 +269,8 @@ class Position:
         
         Args:
             start: Starting position, frame object, or disposition object
-            end: Ending position (optional if start contains full position info)
+            end: Ending position (optional if start contains full
+                 position info)
             source: Source code string or metadata dictionary 
             info: Additional position information
             selected: Selection state of this position
@@ -959,7 +961,9 @@ class Leaf:
 
 
 class Tree(Generic[T]):
-    """Generic tree structure for position-aware hierarchical data representation.
+    """
+    Generic tree structure for position-aware hierarchical data
+    representation.
 
     This class implements a tree where nodes maintain position information and
     parent-child relationships. It provides comprehensive tree operations

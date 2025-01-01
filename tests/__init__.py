@@ -1,11 +1,11 @@
 
 """Tests for the tree-visualizer package.
 
-This package contains comprehensive test suites for validating the 
+This package contains comprehensive test suites for validating the
 functionality of the tree-interval package components including:
 - AST building and parsing
 - Frame analysis and position tracking
-- Tree operations and manipulations 
+- Tree operations and manipulations
 - Visualization capabilities
 - Rich printing functionality
 
@@ -15,9 +15,10 @@ test files for each major component.
 
 import pytest
 
+
 def run_tests():
     """Run all test suites in the proper order.
-    
+
     This function executes all test modules using pytest, ensuring proper
     coverage of all package functionality including:
     - AST builder tests
