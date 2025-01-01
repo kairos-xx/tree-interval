@@ -15,6 +15,7 @@
 - 🎨 **Rich Visualization**: Multiple visualization options including ASCII trees and Rich-based pretty printing
 - 💾 **JSON Serialization**: Full support for saving and loading tree structures
 - 🔎 **Flexible Node Search**: Parent, child and sibling search with custom predicates
+- 🔮 **Dynamic Attributes**: Smart attribute chain creation with context-aware error reporting
 
 ## 🚀 Quick Start
 

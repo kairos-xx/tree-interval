@@ -5,6 +5,39 @@
 
 The `Position` class is the foundation for tracking node locations:
 
+```
+
+## Future
+
+The `Future` class provides dynamic attribute handling with contextual error reporting:
+
+```python
+from tree_interval import Future
+from inspect import stack
+
+class Nested:
+    def __init__(self) -> None:
+        self.__dict__ = {}
+        
+    def __getattr__(self, name: str):
+        return Future(name, 
+                     frame=stack()[1].frame,
+                     instance=self,
+                     new_return=type(self)())
+
+# Usage
+obj = Nested()
+obj.a.b.c = 42  # Creates chain dynamically
+print(obj.a.b.c)  # 42
+print(obj.x.y.z)  # Raises detailed error with context
+```
+
+Key Features:
+- Automatic attribute chain creation
+- Context-aware error reporting
+- Stack trace analysis
+- Smart attribute access handling
+
 ```python
 from tree_interval import Position
 
@@ -24,9 +57,75 @@ print(f"Size: {pos.end - pos.start}")  # 100
 print(f"Span: {pos.lineno}-{pos.end_lineno}")  # 1-5
 ```
 
+## Future
+
+The `Future` class provides dynamic attribute handling with contextual error reporting:
+
+```python
+from tree_interval import Future
+from inspect import stack
+
+class Nested:
+    def __init__(self) -> None:
+        self.__dict__ = {}
+        
+    def __getattr__(self, name: str):
+        return Future(name, 
+                     frame=stack()[1].frame,
+                     instance=self,
+                     new_return=type(self)())
+
+# Usage
+obj = Nested()
+obj.a.b.c = 42  # Creates chain dynamically
+print(obj.a.b.c)  # 42
+print(obj.x.y.z)  # Raises detailed error with context
+```
+
+Key Features:
+- Automatic attribute chain creation
+- Context-aware error reporting
+- Stack trace analysis
+- Smart attribute access handling
+
+```
+
 ## Leaf 
 
 Leaf nodes form the tree structure:
+
+```
+
+## Future
+
+The `Future` class provides dynamic attribute handling with contextual error reporting:
+
+```python
+from tree_interval import Future
+from inspect import stack
+
+class Nested:
+    def __init__(self) -> None:
+        self.__dict__ = {}
+        
+    def __getattr__(self, name: str):
+        return Future(name, 
+                     frame=stack()[1].frame,
+                     instance=self,
+                     new_return=type(self)())
+
+# Usage
+obj = Nested()
+obj.a.b.c = 42  # Creates chain dynamically
+print(obj.a.b.c)  # 42
+print(obj.x.y.z)  # Raises detailed error with context
+```
+
+Key Features:
+- Automatic attribute chain creation
+- Context-aware error reporting
+- Stack trace analysis
+- Smart attribute access handling
 
 ```python
 from tree_interval import Leaf, Position
@@ -44,6 +143,39 @@ children = root.children  # Get children
 ### Navigation Methods
 
 The `Leaf` class provides methods for navigating between nodes:
+
+```
+
+## Future
+
+The `Future` class provides dynamic attribute handling with contextual error reporting:
+
+```python
+from tree_interval import Future
+from inspect import stack
+
+class Nested:
+    def __init__(self) -> None:
+        self.__dict__ = {}
+        
+    def __getattr__(self, name: str):
+        return Future(name, 
+                     frame=stack()[1].frame,
+                     instance=self,
+                     new_return=type(self)())
+
+# Usage
+obj = Nested()
+obj.a.b.c = 42  # Creates chain dynamically
+print(obj.a.b.c)  # 42
+print(obj.x.y.z)  # Raises detailed error with context
+```
+
+Key Features:
+- Automatic attribute chain creation
+- Context-aware error reporting
+- Stack trace analysis
+- Smart attribute access handling
 
 ```python
 # Get parent node
@@ -66,8 +198,107 @@ if node.previous:
     print(f"Previous sibling: {node.previous.info}")
 ```
 
+## Future
+
+The `Future` class provides dynamic attribute handling with contextual error reporting:
+
+```python
+from tree_interval import Future
+from inspect import stack
+
+class Nested:
+    def __init__(self) -> None:
+        self.__dict__ = {}
+        
+    def __getattr__(self, name: str):
+        return Future(name, 
+                     frame=stack()[1].frame,
+                     instance=self,
+                     new_return=type(self)())
+
+# Usage
+obj = Nested()
+obj.a.b.c = 42  # Creates chain dynamically
+print(obj.a.b.c)  # 42
+print(obj.x.y.z)  # Raises detailed error with context
+```
+
+Key Features:
+- Automatic attribute chain creation
+- Context-aware error reporting
+- Stack trace analysis
+- Smart attribute access handling
+
+```
+
 # Search
+```
+
+## Future
+
+The `Future` class provides dynamic attribute handling with contextual error reporting:
+
+```python
+from tree_interval import Future
+from inspect import stack
+
+class Nested:
+    def __init__(self) -> None:
+        self.__dict__ = {}
+        
+    def __getattr__(self, name: str):
+        return Future(name, 
+                     frame=stack()[1].frame,
+                     instance=self,
+                     new_return=type(self)())
+
+# Usage
+obj = Nested()
+obj.a.b.c = 42  # Creates chain dynamically
+print(obj.a.b.c)  # 42
+print(obj.x.y.z)  # Raises detailed error with context
+```
+
+Key Features:
+- Automatic attribute chain creation
+- Context-aware error reporting
+- Stack trace analysis
+- Smart attribute access handling
+
 ```python
 func_node = root.find(lambda n: n.info.get("type") == "FunctionDef")
 parent = child.find_parent(lambda n: n.info.get("type") == "Module")
+```
+
+## Future
+
+The `Future` class provides dynamic attribute handling with contextual error reporting:
+
+```python
+from tree_interval import Future
+from inspect import stack
+
+class Nested:
+    def __init__(self) -> None:
+        self.__dict__ = {}
+        
+    def __getattr__(self, name: str):
+        return Future(name, 
+                     frame=stack()[1].frame,
+                     instance=self,
+                     new_return=type(self)())
+
+# Usage
+obj = Nested()
+obj.a.b.c = 42  # Creates chain dynamically
+print(obj.a.b.c)  # 42
+print(obj.x.y.z)  # Raises detailed error with context
+```
+
+Key Features:
+- Automatic attribute chain creation
+- Context-aware error reporting
+- Stack trace analysis
+- Smart attribute access handling
+
 ```
