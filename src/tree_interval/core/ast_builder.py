@@ -52,8 +52,10 @@ class AstTreeBuilder:
         self.frame_firstlineno: int = 1
 
         if source is None:
-            self.source = ""
+            raise ValueError("Source cannot be None")
         elif isinstance(source, str):
+            if not source:
+                raise ValueError("Source cannot be empty")
             self.source = source
         elif hasattr(source, 'f_code'):
             self.frame_firstlineno = source.f_code.co_firstlineno

@@ -58,8 +58,7 @@ def test_position_tracking():
 
 def test_ast_builder_invalid_source():
     with pytest.raises(ValueError):
-        builder = AstTreeBuilder("")
-        builder.build()
+        _ = AstTreeBuilder("")
 
 
 def test_ast_builder_malformed_ast():
@@ -87,14 +86,8 @@ def test_malformed_ast():
 
 
 def test_empty_source():
-    builder = AstTreeBuilder("")
-    tree = builder.build()
-    assert tree is not None
-
-
-def test_build_frame_edge_cases():
-    builder = AstTreeBuilder("")
-    assert builder.build_from_frame() is None
+    with pytest.raises(ValueError):
+        _ = AstTreeBuilder("")
 
 
 if __name__ == "__main__":

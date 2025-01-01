@@ -39,8 +39,8 @@ def test_find_current_node():
 
 def test_empty_frame():
     frame = None
-    analyzer = FrameAnalyzer(frame)
-    assert analyzer.find_current_node() is None
+    with pytest.raises(ValueError):
+        _ = FrameAnalyzer(frame)
 
 
 def test_no_matching_nodes():

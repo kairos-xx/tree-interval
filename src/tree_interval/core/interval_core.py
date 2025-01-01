@@ -404,6 +404,10 @@ class Position:
                 and self._col_offset == other._col_offset
                 and self._end_col_offset == other._end_col_offset)
 
+    def overlaps(self, other: 'Position') -> bool:
+        # Returns True if the positions overlap
+        return self.start <= other.end and self.end >= other.start
+
 
 class Leaf:
     """
