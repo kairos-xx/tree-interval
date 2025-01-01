@@ -1,7 +1,7 @@
 from textwrap import dedent
 import pytest
 
-from src.tree_interval import AstTreeBuilder
+from tree_interval import AstTreeBuilder
 
 
 def test_ast_builder_initialization():
