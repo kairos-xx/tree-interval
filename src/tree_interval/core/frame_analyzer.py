@@ -38,6 +38,7 @@ class FrameAnalyzer:
             self.ast_builder = None
         self.tree = None
         self.current_node = None
+        self.build_tree_done = False
 
     def find_current_node(self) -> Optional[Leaf]:
         """
@@ -47,7 +48,8 @@ class FrameAnalyzer:
             Optional[Leaf]: The AST node at the current frame position,
             or None if not found.
         """
-        self.tree = self.tree or self.build_tree()
+        if not self.build_tree_done:
+            self.build_tree()
         if not self.tree or not self.tree.root:
             return None
         if self.current_node is None:
@@ -71,6 +73,7 @@ class FrameAnalyzer:
             Optional[Tree]: The complete AST tree, or None if
                             construction fails.
         """
+        self.build_tree_done = True
         if (not hasattr(self, 'tree')
                 or self.tree is None) and self.ast_builder is not None:
             self.tree = self.ast_builder.build_from_frame()

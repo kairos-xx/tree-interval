@@ -9,6 +9,7 @@ def run_tests():
         "tests/test_ast_builder.py",
         "tests/test_ast_nodes.py",
         "tests/test_frame_analyzer.py",
+        "tests/test_future.py",
         "tests/test_interval_core.py",
         "tests/test_rich_printer.py",
         "tests/test_styling.py",
