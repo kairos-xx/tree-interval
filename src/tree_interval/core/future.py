@@ -35,21 +35,32 @@ class Future:
         frame: Optional[Union[int, FrameType]] = None,
         new_return: Optional[Any] = None,
     ) -> Any:
+        """Create or handle attribute access in a dynamic object structure.
 
-        # If the frame is not already a frame object, get the caller's frame
-        # by traversing the call stack. This is necessary to understand the
-        # context in which the attribute is being accessed or modified.
+        This method provides the core functionality for dynamic attribute handling,
+        determining whether to create new attributes or raise appropriate errors.
+
+        Args:
+            name: The attribute name being accessed or created
+            instance: The object instance where the attribute belongs
+            frame: Optional frame object or stack level for context analysis
+            new_return: Optional value to use when creating new attributes
+
+        Returns:
+            Any: Created attribute value if in a setting context
+
+        Raises:
+            AttributeError: When attribute doesn't exist in a get context
+        """
+        # Get caller's frame if not provided for context analysis
         if not isframe(frame):
             frame = stack()[(frame + 1) if isinstance(frame, int) else 2].frame
         
-        # Temporarily suppress traceback output to clean up error messages that
-        # will be generated for attribute access.
+        # Suppress traceback for cleaner error messages
         original_tracebacklimit = getattr(sys, "tracebacklimit", -1)
         sys.tracebacklimit = 0
         
-        # Preparing the attribute error message that will be shown if the attribute
-        # is not found. The header indicates the attribute's name, and the footer
-        # provides context about where in the code the error happened.
+        # Prepare error message components with formatting
         header = "Attribute \033[1m" + name + "\033[0m not found "
         footer = indent(
             f'File "{frame.f_code.co_filename}"'
@@ -59,28 +70,18 @@ class Future:
         )
         new = AttributeError(f"{header}\n{footer}")
 
-        # Use a FrameAnalyzer to inspect the current frame and find
-        # the current node of execution. This helps determine if we are
-        # performing an attribute setting operation.
+        # Analyze current execution frame to determine context
         current_node = FrameAnalyzer(frame).find_current_node()
         if current_node:
-            # If a current node is found in the frame analyzer,
-            # we check if the top statement of the current node
-            # has an attribute `is_set` and whether it's true,
-            # indicating if an attribute assignment is being performed.
+            # Check if we're in an attribute setting operation
             if getattr(current_node.top_statement, "is_set", False):
-                # Restore the original traceback limit before making changes.
                 sys.tracebacklimit = original_tracebacklimit
-                # If the attribute is being set, return a new instance
-                # of the type if no specific return value is provided.
+                # Create and set new attribute if in setting context
                 new = type(instance)() if new_return is None else new_return
-                # Set the new attribute on the instance.
                 setattr(instance, name, new)
                 return new
             else:
-                # Construct a more informative AttributeError if the
-                # attribute is accessed but not set, by using information
-                # from the current node's statement.
+                # Build detailed error for attribute access in get context
                 statement = current_node.statement
                 new = AttributeError(
                     header
@@ -94,6 +95,5 @@ class Future:
                     + indent(statement.text, "   ")
                 )
 
-        # Raise the constructed AttributeError if attribute access
-        # or modification is invalid in the current context.
+        # Raise error for invalid attribute access
         raise new
