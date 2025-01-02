@@ -1,12 +1,10 @@
 import pytest
 
 from tree_interval import Leaf, Position
-from tree_interval.core.interval_core import (
-    NestedAttributes,
-    PartStatement,
-    Statement,
-    Tree,
-)
+from tree_interval.core.interval_core import (NestedAttributes,
+                                              PartStatement,
+                                              Statement,
+                                              Tree)
 
 
 def test_leaf_statement_property():

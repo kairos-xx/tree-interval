@@ -1,12 +1,10 @@
 import pytest
 
-from tree_interval import (
-    Leaf,
-    Position,
-    Tree,
-    TreeVisualizer,
-    VisualizationConfig,
-)
+from tree_interval import (Leaf,
+                           Position,
+                           Tree,
+                           TreeVisualizer,
+                           VisualizationConfig)
 
 
 def test_visualizer_empty_tree(capsys):

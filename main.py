@@ -20,15 +20,13 @@ from inspect import currentframe, stack
 
 from rich.style import Style as RichStyle
 
-from src.tree_interval import (
-    FrameAnalyzer,
-    Leaf,
-    LeafStyle,
-    Position,
-    Tree,
-    TreeVisualizer,
-    VisualizationConfig,
-)
+from src.tree_interval import (FrameAnalyzer,
+                               Leaf,
+                               LeafStyle,
+                               Position,
+                               Tree,
+                               TreeVisualizer,
+                               VisualizationConfig)
 from src.tree_interval.core.future import Future
 from src.tree_interval.core.interval_core import PartStatement, Statement
 from src.tree_interval.rich_printer import RichPrintConfig, RichTreePrinter

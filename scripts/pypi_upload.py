@@ -6,18 +6,18 @@ Contains utilities for version management and package deployment.
 """
 
 from datetime import datetime
-from json import loads
 from os import getenv
 from pathlib import Path
 from subprocess import CalledProcessError, run
 from sys import exit
+from textwrap import dedent
 from typing import Optional
-from urllib.request import urlopen
 
 from replit import info
+from requests import get
 
 
-def get_latest_version() -> str:
+def get_latest_version(project_name) -> str:
     """Fetch the latest version from PyPI.
 
     Returns:
@@ -25,10 +25,9 @@ def get_latest_version() -> str:
              '0.0.0' if not found
     """
     try:
-        url = "https://pypi.org/pypi/tree-interval/json"
-        with urlopen(url) as response:
-            data = loads(response.read())
-            return data["info"]["version"]
+        return get(f"https://pypi.org/pypi/{project_name}/json").json()[
+            "info"
+        ]["version"]
     except Exception:
         return "0.0.0"
 
@@ -46,19 +45,21 @@ def increment_version(version: str) -> str:
     return f"{major}.{minor}.{patch + 1}"
 
 
-def update_version_in_files(new_version: str) -> None:
+def update_version_in_files(
+    new_version: str, pyproject_path: str, project_name: str
+) -> None:
     """Update version strings in project configuration files.
 
     Args:
         new_version: Version string to set
     """
     # Update pyproject.toml
-    with open("pyproject.toml", "r") as f:
+    with open(pyproject_path, "r") as f:
         content = f.read()
-    with open("pyproject.toml", "w") as f:
+    with open(pyproject_path, "w") as f:
         f.write(
             content.replace(
-                f'version = "{get_latest_version()}"',
+                f'version = "{get_latest_version(project_name)}"',
                 f'version = "{new_version}"',
             )
         )
@@ -69,27 +70,20 @@ def update_version_in_files(new_version: str) -> None:
     with open("setup.py", "w") as f:
         f.write(
             content.replace(
-                f'version="{get_latest_version()}"', f'version="{new_version}"'
+                f'version="{get_latest_version(project_name)}"',
+                f'version="{new_version}"',
             )
         )
 
     # Update __init__.py
-    with open("src/tree_interval/__init__.py", "r") as f:
-        content = f.read()
-    with open("src/tree_interval/__init__.py", "w") as f:
-        match_string = "__version__ = "
-        f.write(
-            "\n".join(
-                (
-                    line.split(match_string, 1)[0]
-                    + match_string
-                    + f'"{new_version}"\n'
-                    if match_string in line
-                    else line
-                )
-                for line in content.splitlines()
-            )
-        )
+    # with open("src/tree_interval/__init__.py", "r") as f:
+    #     content = f.read()
+    # with open("src/tree_interval/__init__.py", "w") as f:
+    #     match_string = "__version__ = "
+    #     f.write("\n".join(
+    #         (line.split(match_string, 1)[0] + match_string +
+    #          f'"{new_version}"\n' if match_string in line else line)
+    #         for line in content.splitlines()))
 
 
 def check_token() -> str:
@@ -115,15 +109,16 @@ def create_pypirc(token: str) -> None:
     Args:
         token: PyPI authentication token
     """
-    pypirc_content = f"""[distutils]
-index-servers = pypi
-
-[pypi]
-username = __token__
-password = {token}
-"""
+    pypirc_content = f"""
+    [distutils]
+    index-servers = pypi
+    
+    [pypi]
+    username = __token__
+    password = {token}
+    """
     with open(str(Path.home() / ".pypirc"), "w") as f:
-        f.write(pypirc_content)
+        f.write(dedent(pypirc_content))
 
 
 def build_and_upload(project_dir: Optional[str] = None) -> None:
@@ -171,24 +166,26 @@ def build_and_upload(project_dir: Optional[str] = None) -> None:
 def main() -> None:
     """Main execution function for PyPI package upload."""
     print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    project_name = get(str(info.replit_id_url)).url.split("/")[-1]
+    pyproject_path = "pyproject.toml"
+
     # Install required packages
     run(["pip", "install", "wheel", "twine", "build"], check=True)
 
     # Get current version and increment it
-    current_version = get_latest_version()
+    current_version = get_latest_version(project_name)
     new_version = increment_version(current_version)
     print(f"Incrementing version from {current_version} to {new_version}")
 
     # Update version in files
-    update_version_in_files(new_version)
+    update_version_in_files(new_version, pyproject_path, project_name)
 
     # Check and setup PyPI token
-    token = check_token()
-    create_pypirc(token)
+    create_pypirc(check_token())
 
     # Build and upload directly
     build_and_upload(f'{Path.home()}/{(info.replit_url or "").split("/")[-1]}')
-    print("Tree Interval package built and uploaded successfully!")
+    print("Package built and uploaded successfully!")
 
 
 if __name__ == "__main__":

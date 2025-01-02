@@ -16,16 +16,7 @@ def get_exclude_dirs() -> List[str]:
     Returns:
         List[str]: Directories to exclude
     """
-    return [
-        "__pycache__",
-        ".git",
-        ".pytest_cache",
-        ".ruff_cache",
-        "build",
-        "dist",
-        "venv",
-        "logs",
-    ]
+    return ["build", "dist", "zip", "venv", "logs"]
 
 
 def create_zip() -> None:
@@ -35,28 +26,26 @@ def create_zip() -> None:
     excluding specified directories and files.
     """
     # Get current timestamp for filename
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    zip_name = f"tree_interval_{timestamp}.zip"
+    zip_path = "zip"
+    project_name = "tree_interval"
 
     # Ensure zip directory exists
-    if not path.exists("zip"):
-        makedirs("zip")
-
-    exclude_dirs = get_exclude_dirs()
+    if not path.exists(zip_path):
+        makedirs(zip_path)
 
     # Create ZIP with filtered contents
-    with ZipFile(f"zip/{zip_name}", "w") as zip_file:
+    with ZipFile(
+            f"{zip_path}/" + f"{project_name}_" +
+            f'{datetime.now().strftime("%Y%m%d_%H%M%S")}' + ".zip",
+            "w",
+    ) as zip_file:
         for root, dirs, files in walk("."):
-            # Skip excluded directories
-            dirs[:] = [d for d in dirs if d not in exclude_dirs]
-
+            dirs[:] = [
+                d for d in dirs if d not in get_exclude_dirs()
+                and not d.startswith(".") and not d.startswith("__")
+            ]
             for file in files:
-                # Skip ZIP files
-                if file.endswith(".zip"):
-                    continue
-
-                file_path = path.join(root, file)
-                zip_file.write(file_path)
+                zip_file.write(path.join(root, file))
 
 
 if __name__ == "__main__":

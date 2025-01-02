@@ -3,13 +3,11 @@
 import pytest
 
 from tree_interval import AstTreeBuilder
-from tree_interval.core.interval_core import (
-    Leaf,
-    PartStatement,
-    Position,
-    Statement,
-    Tree,
-)
+from tree_interval.core.interval_core import (Leaf,
+                                              PartStatement,
+                                              Position,
+                                              Statement,
+                                              Tree)
 
 
 def test_ast_node_access() -> None:
