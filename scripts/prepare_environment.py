@@ -1,4 +1,3 @@
-
 """GitHub Actions workflow configuration and environment setup.
 
 This module handles the setup and configuration of GitHub Actions workflows,
@@ -21,8 +20,7 @@ from toml import dump as toml_dump
 
 
 def check_packages(
-    required_packages: Optional[List[str]] = None
-) -> Tuple[str, ...]:
+        required_packages: Optional[List[str]] = None) -> Tuple[str, ...]:
     """Check which required packages are missing from the environment.
 
     Args:
@@ -38,13 +36,12 @@ def check_packages(
             print(f"✓ {package} is installed")
         except ImportError:
             print(f"✗ {package} is not installed")
-            missing_packages += (package,)
+            missing_packages += (package, )
     return missing_packages
 
 
 def install_missing_packages(
-    packages: Optional[Tuple[str, ...]] = None
-) -> None:
+        packages: Optional[Tuple[str, ...]] = None) -> None:
     """Install packages that are missing from the environment.
 
     Args:
@@ -125,7 +122,9 @@ def setup_github_repo(
         run(["git", "commit", "-m", "Initial commit"], check=True)
         run(["git", "push", "-u", "origin", "main"], check=True)
 
-        print(f"\nRepository created and configured: {response_json['html_url']}")
+        print(
+            f"\nRepository created and configured: {response_json['html_url']}"
+        )
     except Exception as e:
         print(f"Error setting up repository: {str(e)}")
 
@@ -150,10 +149,14 @@ def run_all() -> None:
                     "build-backend": "setuptools.build_meta",
                 },
                 "project": {
-                    "name": "",
-                    "version": "",
-                    "description": "",
-                    "readme": "README.md",
+                    "name":
+                    "",
+                    "version":
+                    "",
+                    "description":
+                    "",
+                    "readme":
+                    "README.md",
                     "authors": [
                         {
                             "name": "",
@@ -163,10 +166,11 @@ def run_all() -> None:
                     "license": {
                         "file": "LICENSE",
                     },
-                    "requires-python": ">=3.11",
+                    "requires-python":
+                    ">=3.11",
                     "classifiers": [
                         "Intended Audience :: Developers",
-                        "Intended Audience :: Science/Research", 
+                        "Intended Audience :: Science/Research",
                         "License :: OSI Approved :: MIT License",
                         "Programming Language :: Python :: 3",
                         "Programming Language :: Python :: 3.11",
@@ -184,7 +188,7 @@ def run_all() -> None:
                         "lint": {
                             "select": [
                                 "E",
-                                "W", 
+                                "W",
                                 "F",
                                 "I",
                                 "B",
@@ -239,24 +243,26 @@ def run_all() -> None:
                     "deploymentTarget": "cloudrun",
                 },
                 "env": {
-                    "PYTHONPATH": (
-                        "$PYTHONPATH:$REPL_HOME/.pythonlibs/lib/python3.11/"
-                        "site-packages"
-                    )
+                    "PYTHONPATH":
+                    ("$PYTHONPATH:$REPL_HOME/.pythonlibs/lib/python3.11/"
+                     "site-packages")
                 },
                 "workflows": {
                     "workflow": [
                         {
-                            "name": "[Package] pypi upload",
-                            "mode": "sequential",
-                            "author": 0,
+                            "name":
+                            "[Package] pypi upload",
+                            "mode":
+                            "sequential",
+                            "author":
+                            0,
                             "tasks": [
                                 {
-                                    "task": "shell.exec",
-                                    "args": (
-                                        "python @@pypi_upload@@ | "
-                                        "tee @@logs@@/pypi_upload.log 2>&1"
-                                    ),
+                                    "task":
+                                    "shell.exec",
+                                    "args":
+                                    ("python @@pypi_upload@@ | "
+                                     "tee @@logs@@/pypi_upload.log 2>&1"),
                                 },
                             ],
                         },
@@ -272,9 +278,12 @@ def run_all() -> None:
                             ],
                         },
                         {
-                            "name": "[Util] create zip",
-                            "mode": "sequential",
-                            "author": 0,
+                            "name":
+                            "[Util] create zip",
+                            "mode":
+                            "sequential",
+                            "author":
+                            0,
                             "tasks": [
                                 {
                                     "task": "shell.exec",
@@ -283,16 +292,19 @@ def run_all() -> None:
                             ],
                         },
                         {
-                            "name": "[Util] build",
-                            "mode": "sequential",
-                            "author": 0,
+                            "name":
+                            "[Util] build",
+                            "mode":
+                            "sequential",
+                            "author":
+                            0,
                             "tasks": [
                                 {
-                                    "task": "shell.exec",
-                                    "args": (
-                                        "rm -rf dist build *.egg-info && "
-                                        "python setup.py sdist bdist_wheel"
-                                    ),
+                                    "task":
+                                    "shell.exec",
+                                    "args":
+                                    ("rm -rf dist build *.egg-info && "
+                                     "python setup.py sdist bdist_wheel"),
                                 },
                             ],
                         },
@@ -308,9 +320,12 @@ def run_all() -> None:
                             ],
                         },
                         {
-                            "name": "[Format] ruff",
-                            "mode": "sequential",
-                            "author": 0,
+                            "name":
+                            "[Format] ruff",
+                            "mode":
+                            "sequential",
+                            "author":
+                            0,
                             "tasks": [
                                 {
                                     "task": "shell.exec",
@@ -319,9 +334,12 @@ def run_all() -> None:
                             ],
                         },
                         {
-                            "name": "[Format] black",
-                            "mode": "sequential",
-                            "author": 0,
+                            "name":
+                            "[Format] black",
+                            "mode":
+                            "sequential",
+                            "author":
+                            0,
                             "tasks": [
                                 {
                                     "task": "shell.exec",
@@ -330,9 +348,12 @@ def run_all() -> None:
                             ],
                         },
                         {
-                            "name": "[Format] isort",
-                            "mode": "sequential",
-                            "author": 0,
+                            "name":
+                            "[Format] isort",
+                            "mode":
+                            "sequential",
+                            "author":
+                            0,
                             "tasks": [
                                 {
                                     "task": "shell.exec",
@@ -352,122 +373,138 @@ def run_all() -> None:
                             ],
                         },
                         {
-                            "name": "[Report] pyright",
-                            "mode": "sequential",
-                            "author": 0,
+                            "name":
+                            "[Report] pyright",
+                            "mode":
+                            "sequential",
+                            "author":
+                            0,
                             "tasks": [
                                 {
-                                    "task": "shell.exec",
-                                    "args": (
-                                        "pyright --warnings | "
-                                        "tee @@logs@@/pyright.log 2>&1"
-                                    ),
+                                    "task":
+                                    "shell.exec",
+                                    "args": ("pyright --warnings | "
+                                             "tee @@logs@@/pyright.log 2>&1"),
                                 },
                             ],
                         },
                         {
-                            "name": "[Report] flake8",
-                            "mode": "sequential",
-                            "author": 0,
+                            "name":
+                            "[Report] flake8",
+                            "mode":
+                            "sequential",
+                            "author":
+                            0,
                             "tasks": [
                                 {
-                                    "task": "shell.exec",
-                                    "args": (
-                                        "pflake8 --exclude */. --exclude __* | "
-                                        "tee @@logs@@/flake8.log 2>&1"
-                                    ),
+                                    "task":
+                                    "shell.exec",
+                                    "args":
+                                    ("pflake8 --exclude */. --exclude __* | "
+                                     "tee @@logs@@/flake8.log 2>&1"),
                                 },
                             ],
                         },
                         {
-                            "name": "[Report] ruff",
-                            "mode": "sequential",
-                            "author": 0,
+                            "name":
+                            "[Report] ruff",
+                            "mode":
+                            "sequential",
+                            "author":
+                            0,
                             "tasks": [
                                 {
-                                    "task": "shell.exec",
-                                    "args": (
-                                        "ruff check . --line-length 79 | "
-                                        "tee @@logs@@/ruff.log 2>&1"
-                                    ),
+                                    "task":
+                                    "shell.exec",
+                                    "args": ("ruff check . --line-length 79 | "
+                                             "tee @@logs@@/ruff.log 2>&1"),
                                 },
                             ],
                         },
                         {
-                            "name": "[Report] black",
-                            "mode": "sequential",
-                            "author": 0,
+                            "name":
+                            "[Report] black",
+                            "mode":
+                            "sequential",
+                            "author":
+                            0,
                             "tasks": [
                                 {
-                                    "task": "shell.exec",
-                                    "args": (
-                                        "black . --check --line-length 79 | "
-                                        "tee @@logs@@/ruff.log 2>&1"
-                                    ),
+                                    "task":
+                                    "shell.exec",
+                                    "args":
+                                    ("black . --check --line-length 79 | "
+                                     "tee @@logs@@/ruff.log 2>&1"),
                                 },
                             ],
                         },
                         {
-                            "name": "[Report] pytest",
-                            "mode": "sequential",
-                            "author": 0,
+                            "name":
+                            "[Report] pytest",
+                            "mode":
+                            "sequential",
+                            "author":
+                            0,
                             "tasks": [
                                 {
-                                    "task": "shell.exec",
-                                    "args": (
-                                        "pytest --cov=src --cov-report "
-                                        "term-missing | tee @@logs@@/pytest.log "
-                                        "2>&1"
-                                    ),
+                                    "task":
+                                    "shell.exec",
+                                    "args":
+                                    ("pytest --cov=src --cov-report "
+                                     "term-missing | tee @@logs@@/pytest.log "
+                                     "2>&1"),
                                 },
                             ],
                         },
                         {
-                            "name": "[Report] All",
-                            "mode": "sequential",
-                            "author": 0,
+                            "name":
+                            "[Report] All",
+                            "mode":
+                            "sequential",
+                            "author":
+                            0,
                             "tasks": [
                                 {
-                                    "task": "shell.exec",
-                                    "args": (
-                                        "pyright --warnings | "
-                                        "tee @@logs@@/pyright.log 2>&1"
-                                    ),
+                                    "task":
+                                    "shell.exec",
+                                    "args": ("pyright --warnings | "
+                                             "tee @@logs@@/pyright.log 2>&1"),
                                 },
                                 {
-                                    "task": "shell.exec",
-                                    "args": (
-                                        "pflake8 --exclude */. --exclude __* | "
-                                        "tee @@logs@@/flake8.log 2>&1"
-                                    ),
+                                    "task":
+                                    "shell.exec",
+                                    "args":
+                                    ("pflake8 --exclude */. --exclude __* | "
+                                     "tee @@logs@@/flake8.log 2>&1"),
                                 },
                                 {
-                                    "task": "shell.exec",
-                                    "args": (
-                                        "ruff check . --line-length 79 | "
-                                        "tee @@logs@@/ruff.log 2>&1"
-                                    ),
+                                    "task":
+                                    "shell.exec",
+                                    "args": ("ruff check . --line-length 79 | "
+                                             "tee @@logs@@/ruff.log 2>&1"),
                                 },
                                 {
-                                    "task": "shell.exec",
-                                    "args": (
-                                        "black . --check --line-length 79 | "
-                                        "tee @@logs@@/black.log 2>&1"
-                                    ),
+                                    "task":
+                                    "shell.exec",
+                                    "args":
+                                    ("black . --check --line-length 79 | "
+                                     "tee @@logs@@/black.log 2>&1"),
                                 },
                             ],
                         },
                     ]
                 },
             },
-            "nix": """
+            "nix":
+            """
             {pkgs}: {
               deps = [
               @@@
               ];
             }
             """,
-            "pypi_upload": '''
+            "pypi_upload":
+            '''
             """
             PyPI package upload script.
             Handles building and uploading package to PyPI with proper
@@ -658,7 +695,8 @@ def run_all() -> None:
             if __name__ == "__main__":
                 main()
             ''',
-            "create_zip": '''
+            "create_zip":
+            '''
             """Create a ZIP archive of the project.
 
             This script creates a timestamped ZIP archive of the project files,
@@ -714,7 +752,8 @@ def run_all() -> None:
             if __name__ == "__main__":
                 create_zip()
             ''',
-            "license": """
+            "license":
+            """
             MIT License
 
             Copyright (c) 2024 @@@
@@ -778,8 +817,10 @@ def run_all() -> None:
                     "Debuggers",
                 ],
             },
-            "version": "0.1.1",
-            "description": "",
+            "version":
+            "0.1.1",
+            "description":
+            "",
             "user_config": {
                 "user_name": "kairos-xx",
                 "user_email": "joaoslopes@gmail.com",
@@ -880,15 +921,13 @@ def run_all() -> None:
     for v1 in replit_dict["workflows"]["workflow"]:
         v1["author"] = int(replit_owner_id)
         for v2 in v1["tasks"]:
-            v2["args"] = (
-                v2["args"].replace(
-                    "@@pypi_upload@@",
-                    pypi_upload_path,
-                ).replace(
-                    "@@create_zip@@",
-                    create_zip_path,
-                ).replace("@@logs@@", logs_folder_path)
-            )
+            v2["args"] = (v2["args"].replace(
+                "@@pypi_upload@@",
+                pypi_upload_path,
+            ).replace(
+                "@@create_zip@@",
+                create_zip_path,
+            ).replace("@@logs@@", logs_folder_path))
 
     replit_dict["run"][1] += entrypoint_path
     replit_dict["deployment"]["run"][1] += entrypoint_path
@@ -903,25 +942,28 @@ def run_all() -> None:
         with open(paths["requirements"], "w") as f:
             f.write("\n".join(setup["requirements"]))
         with open(paths["nix"], "w") as f:
-            f.write(dedent(templates["nix"].replace(
-                "@@@",
-                "\n".join(setup["nix_packages"]),
-            )))
+            f.write(
+                dedent(templates["nix"].replace(
+                    "@@@",
+                    "\n".join(setup["nix_packages"]),
+                )))
         mkdir("/".join(pypi_upload_path.split("/")[:-1]))
         with open(pypi_upload_path, "w") as f:
-            f.write(dedent(templates["pypi_upload"].replace(
-                "@@@",
-                pyproject_path,
-            )))
+            f.write(
+                dedent(templates["pypi_upload"].replace(
+                    "@@@",
+                    pyproject_path,
+                )))
         mkdir("/".join(create_zip_path.split("/")[:-1]))
         with open(create_zip_path, "w") as f:
-            f.write(dedent(templates["create_zip"].replace(
-                "@@@",
-                project_name,
-            ).replace(
-                "###",
-                create_zip_folder_path,
-            )))
+            f.write(
+                dedent(templates["create_zip"].replace(
+                    "@@@",
+                    project_name,
+                ).replace(
+                    "###",
+                    create_zip_folder_path,
+                )))
         with open(license_path, "w") as f:
             f.write(dedent(templates["license"].replace("@@@", name)))
 

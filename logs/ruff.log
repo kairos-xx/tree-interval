@@ -1,177 +1,76 @@
-scripts/prepare_environment.py:674:89: E501 Line too long (91 > 88)
+main.py:78:80: E501 Line too long (82 > 79)
+   |
+76 |     print(
+77 |         "Absolute positions:",
+78 |         f"absolute_start={pos4.absolute_start}, absolute_end={pos4.absolute_end}",
+   |                                                                                ^^^ E501
+79 |     )
+   |
+
+main.py:323:80: E501 Line too long (82 > 79)
     |
-673 |                 # Build and upload directly
-674 |                 build_and_upload(f'{Path.home()}/{(info.replit_url or "").split("/")[-1]}')
-    |                                                                                         ^^^ E501
-675 |                 print("Package built and uploaded successfully!")
+321 |             print(
+322 |                 "Top Statement: " +
+323 |                 f"{top_stmt.info['type'] if top_stmt and top_stmt.info else None}"
+    |                                                                                ^^^ E501
+324 |             )
+325 |             print(
     |
 
-scripts/prepare_environment.py:743:89: E501 Line too long (89 > 88)
+main.py:327:80: E501 Line too long (85 > 79)
     |
-742 |             Permission is hereby granted, free of charge, to any person obtaining a copy
-743 |             of this software and associated documentation files (the "Software"), to deal
-    |                                                                                         ^ E501
-744 |             in the Software without restriction, including without limitation the rights
-745 |             to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    |
-
-scripts/prepare_environment.py:749:89: E501 Line too long (90 > 88)
-    |
-747 |             furnished to do so, subject to the following conditions:
-748 | 
-749 |             The above copyright notice and this permission notice shall be included in all
-    |                                                                                         ^^ E501
-750 |             copies or substantial portions of the Software.
+325 |             print(
+326 |                 "Next Attribute: " +
+327 |                 f"{next_attr.info['type'] if next_attr and next_attr.info else None}"
+    |                                                                                ^^^^^^ E501
+328 |             )
     |
 
-scripts/prepare_environment.py:756:89: E501 Line too long (89 > 88)
+main.py:344:80: E501 Line too long (81 > 79)
     |
-754 |             FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-755 |             AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-756 |             LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    |                                                                                         ^ E501
-757 |             OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-758 |             SOFTWARE.
-    |
-
-scripts/prepare_environment.py:757:89: E501 Line too long (89 > 88)
-    |
-755 |             AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-756 |             LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-757 |             OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    |                                                                                         ^ E501
-758 |             SOFTWARE.
-759 |             """,
+342 |                 node.style = LeafStyle(color="#888888", bold=False)
+343 | 
+344 |                 # Check if this is the current node by matching position and info
+    |                                                                                ^^ E501
+345 |                 if (node.start == current_node.start
+346 |                         and node.end == current_node.end
     |
 
-scripts/prepare_environment.py:815:89: E501 Line too long (89 > 88)
+main.py:577:80: E501 Line too long (81 > 79)
     |
-813 |                 "Topic :: Desktop Environment :: Window Managers",
-814 |                 "Topic :: Desktop Environment :: Window Managers :: Afterstep",
-815 |                 "Topic :: Desktop Environment :: Window Managers :: Afterstep :: Themes",
-    |                                                                                         ^ E501
-816 |                 "Topic :: Desktop Environment :: Window Managers :: Applets",
-817 |                 "Topic :: Desktop Environment :: Window Managers :: Blackbox",
+576 |     print(
+577 |         f"Parent 1's next sibling: {parent1.next.info if parent1.next else None}"
+    |                                                                                ^^ E501
+578 |     )
     |
 
-scripts/prepare_environment.py:822:89: E501 Line too long (94 > 88)
+scripts/prepare_environment.py:595:80: E501 Line too long (82 > 79)
     |
-820 |                 "Topic :: Desktop Environment :: Window Managers :: CTWM :: Themes",
-821 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment",
-822 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Epplets",
-    |                                                                                         ^^^^^^ E501
-823 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Themes DR15",
-824 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Themes DR16",
-    |
-
-scripts/prepare_environment.py:823:89: E501 Line too long (98 > 88)
-    |
-821 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment",
-822 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Epplets",
-823 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Themes DR15",
-    |                                                                                         ^^^^^^^^^^ E501
-824 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Themes DR16",
-825 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Themes DR17",
+593 |                     print("Error: PYPI_TOKEN environment variable not set")
+594 |                     print(
+595 |                         "Please set it in the Secrets tab (Environment Variables)"
+    |                                                                                ^^^ E501
+596 |                     )
+597 |                     exit(1)
     |
 
-scripts/prepare_environment.py:824:89: E501 Line too long (98 > 88)
+scripts/prepare_environment.py:761:80: E501 Line too long (81 > 79)
     |
-822 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Epplets",
-823 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Themes DR15",
-824 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Themes DR16",
-    |                                                                                         ^^^^^^^^^^ E501
-825 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Themes DR17",
-826 |                 "Topic :: Desktop Environment :: Window Managers :: Fluxbox",
-    |
-
-scripts/prepare_environment.py:825:89: E501 Line too long (98 > 88)
-    |
-823 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Themes DR15",
-824 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Themes DR16",
-825 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Themes DR17",
-    |                                                                                         ^^^^^^^^^^ E501
-826 |                 "Topic :: Desktop Environment :: Window Managers :: Fluxbox",
-827 |                 "Topic :: Desktop Environment :: Window Managers :: Fluxbox :: Themes",
+759 |             Copyright (c) 2024 @@@
+760 | 
+761 |             Permission is hereby granted, free of charge, to any person obtaining
+    |                                                                                ^^ E501
+762 |             a copy of this software and associated documentation files (the
+763 |             "Software"), to deal in the Software without restriction, including
     |
 
-scripts/prepare_environment.py:837:89: E501 Line too long (92 > 88)
+scripts/prepare_environment.py:766:80: E501 Line too long (81 > 79)
     |
-835 |                 "Topic :: Desktop Environment :: Window Managers :: Oroborus :: Themes",
-836 |                 "Topic :: Desktop Environment :: Window Managers :: Sawfish",
-837 |                 "Topic :: Desktop Environment :: Window Managers :: Sawfish :: Themes 0.30",
-    |                                                                                         ^^^^ E501
-838 |                 "Topic :: Desktop Environment :: Window Managers :: Sawfish :: Themes pre-0.30",
-839 |                 "Topic :: Desktop Environment :: Window Managers :: Waimea",
-    |
-
-scripts/prepare_environment.py:838:89: E501 Line too long (96 > 88)
-    |
-836 |                 "Topic :: Desktop Environment :: Window Managers :: Sawfish",
-837 |                 "Topic :: Desktop Environment :: Window Managers :: Sawfish :: Themes 0.30",
-838 |                 "Topic :: Desktop Environment :: Window Managers :: Sawfish :: Themes pre-0.30",
-    |                                                                                         ^^^^^^^^ E501
-839 |                 "Topic :: Desktop Environment :: Window Managers :: Waimea",
-840 |                 "Topic :: Desktop Environment :: Window Managers :: Waimea :: Themes",
+764 |             without limitation the rights to use, copy, modify, merge, publish,
+765 |             distribute, sublicense, and/or sell copies of the Software, and to
+766 |             permit persons to whom the Software is furnished to do so, subject to
+    |                                                                                ^^ E501
+767 |             the following conditions:
     |
 
-scripts/prepare_environment.py:842:89: E501 Line too long (93 > 88)
-    |
-840 |                 "Topic :: Desktop Environment :: Window Managers :: Waimea :: Themes",
-841 |                 "Topic :: Desktop Environment :: Window Managers :: Window Maker",
-842 |                 "Topic :: Desktop Environment :: Window Managers :: Window Maker :: Applets",
-    |                                                                                         ^^^^^ E501
-843 |                 "Topic :: Desktop Environment :: Window Managers :: Window Maker :: Themes",
-844 |                 "Topic :: Desktop Environment :: Window Managers :: XFCE",
-    |
-
-scripts/prepare_environment.py:843:89: E501 Line too long (92 > 88)
-    |
-841 |                 "Topic :: Desktop Environment :: Window Managers :: Window Maker",
-842 |                 "Topic :: Desktop Environment :: Window Managers :: Window Maker :: Applets",
-843 |                 "Topic :: Desktop Environment :: Window Managers :: Window Maker :: Themes",
-    |                                                                                         ^^^^ E501
-844 |                 "Topic :: Desktop Environment :: Window Managers :: XFCE",
-845 |                 "Topic :: Desktop Environment :: Window Managers :: XFCE :: Themes",
-    |
-
-scripts/prepare_environment.py:874:89: E501 Line too long (90 > 88)
-    |
-872 |                 "Topic :: Internet :: WWW/HTTP :: Browsers",
-873 |                 "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
-874 |                 "Topic :: Internet :: WWW/HTTP :: Dynamic Content :: CGI Tools/Libraries",
-    |                                                                                         ^^ E501
-875 |                 "Topic :: Internet :: WWW/HTTP :: Dynamic Content :: Message Boards",
-876 |                 "Topic :: Internet :: WWW/HTTP :: Dynamic Content :: News/Diary",
-    |
-
-scripts/prepare_environment.py:947:89: E501 Line too long (90 > 88)
-    |
-945 |                 "Topic :: Scientific/Engineering :: Image Recognition",
-946 |                 "Topic :: Scientific/Engineering :: Information Analysis",
-947 |                 "Topic :: Scientific/Engineering :: Interface Engine/Protocol Translator",
-    |                                                                                         ^^ E501
-948 |                 "Topic :: Scientific/Engineering :: Mathematics",
-949 |                 "Topic :: Scientific/Engineering :: Medical Science Apps.",
-    |
-
-scripts/prepare_environment.py:1029:89: E501 Line too long (96 > 88)
-     |
-1027 |                 "Topic :: System :: Systems Administration",
-1028 |                 "Topic :: System :: Systems Administration :: Authentication/Directory",
-1029 |                 "Topic :: System :: Systems Administration :: Authentication/Directory :: LDAP",
-     |                                                                                         ^^^^^^^^ E501
-1030 |                 "Topic :: System :: Systems Administration :: Authentication/Directory :: NIS",
-1031 |                 "Topic :: System :: System Shells",
-     |
-
-scripts/prepare_environment.py:1030:89: E501 Line too long (95 > 88)
-     |
-1028 |                 "Topic :: System :: Systems Administration :: Authentication/Directory",
-1029 |                 "Topic :: System :: Systems Administration :: Authentication/Directory :: LDAP",
-1030 |                 "Topic :: System :: Systems Administration :: Authentication/Directory :: NIS",
-     |                                                                                         ^^^^^^^ E501
-1031 |                 "Topic :: System :: System Shells",
-1032 |                 "Topic :: Terminals",
-     |
-
-Found 18 errors.
+Found 8 errors.
