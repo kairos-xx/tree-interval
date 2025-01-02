@@ -319,16 +319,12 @@ def demonstrate_frame_analyzer() -> None:
         if current_node:
             top_stmt = current_node.top_statement
             next_attr = current_node.next_attribute
-            print(
-                "Top Statement: " +
-                f"{(top_stmt.info['type'] if top_stmt and top_stmt.info 
-                   else None)}"
-            )
-            print(
-                "Next Attribute: " +
-                f"{(next_attr.info['type'] if next_attr and next_attr.info 
-                   else None)}"
-            )
+            next_attr = next_attr.info[
+                'type'] if next_attr and next_attr.info else None
+            top_stmt = top_stmt.info[
+                'type'] if top_stmt and top_stmt.info else None
+            print(("Top Statement: " + f"{top_stmt}"))
+            print(("Next Attribute: " + f"{next_attr}"))
 
     def build_tree() -> None:
         analyzer = FrameAnalyzer(stack()[0].frame)
@@ -576,10 +572,8 @@ def demonstrate_leaf_navigation() -> None:
     prev_info = prev_node.info if prev_node else None
     print(f"Child 1.2's previous sibling: {prev_info}")
 
-    print(
-        f"Parent 1's next sibling: "
-        f"{parent1.next.info if parent1.next else None}"
-    )
+    print(f"Parent 1's next sibling: "
+          f"{parent1.next.info if parent1.next else None}")
 
 
 def demonstrate_node_navigation() -> None:

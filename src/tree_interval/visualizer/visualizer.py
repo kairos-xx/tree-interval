@@ -187,7 +187,3 @@ class TreeVisualizer:
                 )
 
         _print_node(display_root)
-
-
-__version__ = "0.1.0"
-__all__ = ["TreeVisualizer", "VisualizationConfig"]

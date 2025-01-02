@@ -1,4 +1,0 @@
-scripts/./prepare_environment.py:136:36: W291 trailing whitespace
-scripts/./prepare_environment.py:595:80: E501 line too long (82 > 79 characters)
-scripts/./prepare_environment.py:761:80: E501 line too long (81 > 79 characters)
-scripts/./prepare_environment.py:766:80: E501 line too long (81 > 79 characters)

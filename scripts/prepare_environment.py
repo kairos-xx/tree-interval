@@ -133,7 +133,7 @@ def run_all() -> None:
     """Execute all environment setup tasks.
 
     This function orchestrates the entire setup process including:
-    - Loading project configuration 
+    - Loading project configuration
     - Installing required packages
     - Setting up GitHub repository
     - Configuring project files
