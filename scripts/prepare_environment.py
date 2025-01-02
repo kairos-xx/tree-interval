@@ -1,9 +1,5 @@
-"""GitHub Actions workflow configuration and environment setup.
-
-This module handles the setup and configuration of GitHub Actions workflows,
-environment variables, and project dependencies. It includes utilities for
-checking and installing required packages, setting up GitHub repositories,
-and managing project configurations.
+"""
+Prepare a new Replit Environment
 """
 
 from difflib import get_close_matches
@@ -450,7 +446,7 @@ def run_all() -> None:
                                     "task":
                                     "shell.exec",
                                     "args":
-                                    ("pytest --cov=src --cov-report "
+                                    ("pytest --cov=@@src@@ --cov-report "
                                      "term-missing | tee @@logs@@/pytest.log "
                                      "2>&1"),
                                 },
@@ -810,6 +806,7 @@ def run_all() -> None:
                 "create_zip_folder": "zip",
                 "logs_folder": "logs",
                 "entrypoint": "main.py",
+                "source_folder": "src",
             },
             "classifiers": {
                 "development_status": 1,
@@ -879,6 +876,7 @@ def run_all() -> None:
     logs_folder_path = paths["logs_folder"]
     license_path = paths["license"]
     entrypoint_path = paths["entrypoint"]
+    soruce_folder_path = paths["source_folder"]
     templates = project_info["templates"]
     replit_dict = templates["replit"]
     pyproject_dict = templates["pyproject"]
@@ -929,7 +927,8 @@ def run_all() -> None:
             ).replace(
                 "@@create_zip@@",
                 create_zip_path,
-            ).replace("@@logs@@", logs_folder_path))
+            ).replace("@@logs@@",
+                      logs_folder_path).replace("@@src@@", soruce_folder_path))
 
     replit_dict["run"][1] += entrypoint_path
     replit_dict["deployment"]["run"][1] += entrypoint_path
@@ -970,6 +969,7 @@ def run_all() -> None:
             f.write(dedent(templates["license"].replace("@@@", name)))
 
         mkdir(logs_folder_path)
+        mkdir(soruce_folder_path)
         open(paths["readme"], "a+").close()
         setup_github_repo(
             github_token,
