@@ -4,16 +4,12 @@ Updates GitHub Actions workflow files with new configurations.
 """
 
 from importlib import import_module
-from json import dumps as json_dumps
-from json import loads as json_loads
 from subprocess import CalledProcessError, run
-from typing import Any, Dict, List, Tuple
+from textwrap import dedent
+from typing import Tuple
 
 from toml import dump as toml_dump
-from toml import dumps as toml_dumps
 from toml import load as toml_load
-from yaml import load as yaml_load
-from yaml import safe_load
 
 
 def check_packages(required_packages: Tuple) -> Tuple:
@@ -51,12 +47,15 @@ def install_missing_packages(packages: Tuple[str]) -> None:
 
 
 def update_workflows() -> None:
-    required_packages = ("toml", "yaml")
+    required_packages = ("toml", )
+
     project_info = {
         "paths": {
             "pyproject": "pyproject.toml",
             "requirements": "requirements.txt",
-            "replit": "replit.txt",
+            "replit": ".replit",
+            "nix": "replit.nix",
+            "readme": "README.md",
         },
         "templates": {
             "pyproject": {
@@ -65,16 +64,23 @@ def update_workflows() -> None:
                     "build-backend": "setuptools.build_meta",
                 },
                 "project": {
-                    "name": "tree-",
-                    "version": "",
-                    "description": "",
-                    "readme": "README.md",
+                    "name":
+                    "",
+                    "version":
+                    "",
+                    "description":
+                    "",
+                    "readme":
+                    "README.md",
                     "authors": [{
                         "name": "Joao Lopes",
                         "email": "joaoslopes@gmail.com"
                     }],
-                    "license": {"file": "LICENSE"},
-                    "requires-python": ">=3.11",
+                    "license": {
+                        "file": "LICENSE"
+                    },
+                    "requires-python":
+                    ">=3.11",
                     "classifiers": [
                         "Development Status :: 5 - Production/Stable",
                         "Intended Audience :: Developers",
@@ -91,12 +97,10 @@ def update_workflows() -> None:
                         "Typing :: Typed",
                     ],
                     "urls": {
-                        "Homepage": (
-                            "https://github.com/kairos-xx/tree-interval"
-                        ),
-                        "Repository": (
-                            "https://github.com/kairos-xx/tree-interval.git"
-                        ),
+                        "Homepage":
+                        ("https://github.com/kairos-xx/tree-interval"),
+                        "Repository":
+                        ("https://github.com/kairos-xx/tree-interval.git"),
                     },
                 },
                 "tool": {
@@ -122,7 +126,7 @@ def update_workflows() -> None:
                 },
             },
             "replit": {
-                "run": ["python", "main.py"],
+                "run": ["python", ""],
                 "entrypoint": "README.md",
                 "modules": ["python-3.11:v30-20240222-aba8eb6"],
                 "hidden": [".pythonlibs"],
@@ -135,7 +139,7 @@ def update_workflows() -> None:
                     "language": "python3"
                 },
                 "deployment": {
-                    "run": ["python3", "main.py"],
+                    "run": ["python3", ""],
                     "deploymentTarget": "cloudrun",
                 },
                 "env": {
@@ -155,12 +159,12 @@ def update_workflows() -> None:
                                 "task":
                                 "shell.exec",
                                 "args":
-                                "python scripts/pypi_upload.py | tee logs/pypi_upload.log 2>&1",
+                                "python scripts/pypi_upload.py | " +
+                                "tee logs/pypi_upload.log 2>&1",
                             }],
                         },
                         {
-                            "name":
-                            "\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014",
+                            "name": "————————————————",
                             "mode": "sequential",
                             "author": 299513,
                             "tasks": [{
@@ -191,7 +195,8 @@ def update_workflows() -> None:
                                 "task":
                                 "shell.exec",
                                 "args":
-                                "rm -rf dist build *.egg-info && python  setup.py sdist bdist_wheel",
+                                "rm -rf dist build *.egg-info && " +
+                                "python setup.py sdist bdist_wheel",
                             }],
                         },
                         {
@@ -205,7 +210,8 @@ def update_workflows() -> None:
                                 "task":
                                 "shell.exec",
                                 "args":
-                                "pytest ./tests | tee logs/tests.log 2>&1",
+                                "pytest ./tests | " +
+                                "tee logs/tests.log 2>&1",
                             }],
                         },
                         {
@@ -219,12 +225,12 @@ def update_workflows() -> None:
                                 "task":
                                 "shell.exec",
                                 "args":
-                                "python scripts/update_workflows.py | tee logs/update_worflows.log 2>&1",
+                                "python scripts/update_workflows.py | " +
+                                "tee logs/update_worflows.log 2>&1",
                             }],
                         },
                         {
-                            "name":
-                            "\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014",
+                            "name": "————————————————",
                             "mode": "sequential",
                             "author": 299513,
                             "tasks": [{
@@ -269,8 +275,7 @@ def update_workflows() -> None:
                             }],
                         },
                         {
-                            "name":
-                            "\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014",
+                            "name": "————————————————",
                             "mode": "sequential",
                             "author": 299513,
                             "tasks": [{
@@ -289,7 +294,8 @@ def update_workflows() -> None:
                                 "task":
                                 "shell.exec",
                                 "args":
-                                "pyright --warnings | tee logs/pyright.log 2>&1",
+                                "pyright --warnings | " +
+                                "tee logs/pyright.log 2>&1",
                             }],
                         },
                         {
@@ -303,7 +309,8 @@ def update_workflows() -> None:
                                 "task":
                                 "shell.exec",
                                 "args":
-                                "pflake8 --exclude */. --exclude ./build  | tee logs/flake8.log 2>&1",
+                                "pflake8 --exclude */. --exclude ./build  | " +
+                                "tee logs/flake8.log 2>&1",
                             }],
                         },
                         {
@@ -317,7 +324,10 @@ def update_workflows() -> None:
                                 "task":
                                 "shell.exec",
                                 "args":
-                                "ruff check ./dev ./src ./examples ./tests ./scripts  | tee logs/ruff.log 2>&1",
+                                "ruff check " +
+                                "./dev ./src ./examples ./tests ./scripts  " +
+                                "--line-length 79 | " +
+                                "tee logs/ruff.log 2>&1",
                             }],
                         },
                         {
@@ -331,7 +341,8 @@ def update_workflows() -> None:
                                 "task":
                                 "shell.exec",
                                 "args":
-                                "pytest --cov=src --cov-report term-missing | tee logs/pytest.log 2>&1",
+                                "pytest --cov=src --cov-report term-missing | "
+                                + "tee logs/pytest.log 2>&1",
                             }],
                         },
                         {
@@ -345,19 +356,32 @@ def update_workflows() -> None:
                                 "task":
                                 "shell.exec",
                                 "args":
-                                "pyright --warnings | tee logs/pyright.log 2>&1 && pflake8 --exclude */. --exclude ./build | tee logs/flake8.log 2>&1 && ruff check ./dev ./src ./examples ./tests ./scripts | tee logs/ruff.log 2>&1",
+                                "pyright --warnings | " +
+                                "tee logs/pyright.log 2>&1 && " +
+                                "pflake8 --exclude */. --exclude ./build | " +
+                                "tee logs/flake8.log 2>&1 && " +
+                                "ruff check ./dev ./src ./examples ./tests ./scripts | "
+                                + "tee logs/ruff.log 2>&1",
                             }],
                         },
                     ]
                 },
             },
+            "nix":
+            '''
+            {pkgs}: {
+              deps = [
+              @@@
+              ];
+            }
+            ''',
         },
         "name":
-        "tree-interval",
+        "",
         "version":
         "0.1.1",
         "description":
-        "A Python package for managing and visualizing interval tree structures",
+        "",
         "urls": {
             "Homepage": "https://github.com/kairos-xx/tree-interval",
             "Repository": "https://github.com/kairos-xx/tree-interval.git",
@@ -374,55 +398,44 @@ def update_workflows() -> None:
             "pyyaml",
             "isort",
         ],
-        "entrypoint": "main.py",
-    "replit": {
-        "author": 299513
+        "entrypoint":
+        "main.py",
+        "nix_packages": ["pkgs.libyaml", "pkgs.nano", "pkgs.python312Full"]
     }
-    }
+    with open(project_info["paths"]["pyproject"], "r") as f:
+        t = toml_load(f)
+    project_info["name"] = project_info["templates"]["pyproject"]["name"] = t[
+        "project"]["name"]
 
     pyproject_dict = project_info["templates"]["pyproject"]
-    pyproject_dict["project"]["name"] = project_info["name"]
     pyproject_dict["project"]["version"] = project_info["version"]
     pyproject_dict["project"]["description"] = project_info["description"]
     pyproject_dict["project"]["urls"] = project_info["urls"]
-    # requirements_text = "\n".join(project_info["requirements"])
-    # with open(project_info["paths"]["pyproject"], "w") as f:
-    #     toml_dump(pyproject_dict, f)
-    # with open(project_info["paths"]["requirements"], "w") as f:
-    #     f.write(requirements_text)
+    requirements_text = "\n".join(project_info["requirements"])
+    nix_text = project_info["template"]["nix"].replace(
+        "@@@", "\n".join(project_info["nix_packages"]))
 
-    # missing_packages = check_packages(required_packages)
-    # if missing_packages:
-    #     print("\nInstalling missing packages...")
-    #     install_missing_packages(missing_packages)
-    # else:
-    #     print("\nAll required packages are installed!")
+    missing_packages = check_packages(required_packages)
+    if missing_packages:
+        print("\nInstalling missing packages...")
+        install_missing_packages(missing_packages)
+    else:
+        print("\nAll required packages are installed!")
 
-    # replit_dict = project_info["templates"]["replit"]
-    # replit_dict["run"][1] = replit_dict["deployment"][1] = replit_dict[
-    #     "entrypoint"] = project_info["entrypoint"]
+    replit_dict = project_info["templates"]["replit"]
+    replit_dict["run"][1] = replit_dict["deployment"][1] = replit_dict[
+        "entrypoint"] = project_info["entrypoint"]
 
-    # with open(".replit", "r") as f:
-    #     replit_config = toml_load(f)
-    #     print(json_dumps(replit_config, indent=4))
-    from replit import info
-    print(dir(info),info.co_url,info.id_co_url)
+    with open(project_info["paths"]["pyproject"], "w") as f:
+        toml_dump(pyproject_dict, f)
+    with open(project_info["paths"]["requirements"], "w") as f:
+        f.write(requirements_text)
 
+    with open(project_info["paths"]["nix"], "w") as f:
+        f.write(dedent(nix_text))
 
-# with open(pyproject_path, "rb") as f:
+    open(project_info["paths"]["readme"], 'a+').close()
 
-# pyproject_path = "pyproject.toml"
-# requirements_path = "requirements.txt"
-
-# # Write updated workflow file
-# with open(pyproject_path, "rb") as f:
-#     p = toml_load(f)
-# print(json_dumps(p, indent=3))
-
-# # Log update
-# with open("logs/update_worflows.log", "a") as log:
-#     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-#     log.write(f"\nWorkflow updated at {timestamp}\n")
 
 if __name__ == "__main__":
     update_workflows()
