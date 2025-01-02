@@ -1,1 +1,650 @@
-All checks passed!
+examples/demo.py:27:1: I001 [*] Import block is un-sorted or un-formatted
+   |
+25 |   """
+26 |   
+27 | / from typing import Any
+28 | | 
+29 | | from rich.style import Style as RichStyle
+30 | | 
+31 | | from src.tree_interval import (AstTreeBuilder,
+32 | |                                Leaf,
+33 | |                                Position,
+34 | |                                Tree,
+35 | |                                TreeVisualizer,
+36 | |                                VisualizationConfig)
+37 | | from src.tree_interval.rich_printer import RichTreePrinter
+38 | | from tree_interval.core.future import Future
+39 | | from tree_interval.core.interval_core import PartStatement, Statement
+40 | | 
+41 | | 
+42 | | # All demonstrate functions in order of execution
+   | |_^ I001
+43 |   def demonstrate_positions():
+44 |       print("\n=== Position Examples ===")
+   |
+   = help: Organize imports
+
+main.py:19:1: I001 [*] Import block is un-sorted or un-formatted
+   |
+17 |   """
+18 |   
+19 | / from inspect import currentframe, stack
+20 | | 
+21 | | from rich.style import Style as RichStyle
+22 | | 
+23 | | from src.tree_interval import (FrameAnalyzer,
+24 | |                                Leaf,
+25 | |                                LeafStyle,
+26 | |                                Position,
+27 | |                                Tree,
+28 | |                                TreeVisualizer,
+29 | |                                VisualizationConfig)
+30 | | from src.tree_interval.core.future import Future
+31 | | from src.tree_interval.core.interval_core import PartStatement, Statement
+32 | | from src.tree_interval.rich_printer import RichPrintConfig, RichTreePrinter
+33 | | 
+34 | | # ANSI Colors
+   | |_^ I001
+35 |   RED = "\033[91m"
+36 |   GREEN = "\033[92m"
+   |
+   = help: Organize imports
+
+main.py:73:80: E501 Line too long (81 > 79)
+   |
+71 |     print(
+72 |         "Absolute positions:",
+73 |         f"absolute_start={pos4.absolute_start}, absolute_end={pos4.absolute_end}"
+   |                                                                                ^^ E501
+74 |     )
+   |
+
+main.py:318:80: E501 Line too long (82 > 79)
+    |
+316 |             print(
+317 |                 "Top Statement: " +
+318 |                 f"{top_stmt.info['type'] if top_stmt and top_stmt.info else None}"
+    |                                                                                ^^^ E501
+319 |             )
+320 |             print(
+    |
+
+main.py:322:80: E501 Line too long (85 > 79)
+    |
+320 |             print(
+321 |                 "Next Attribute: " +
+322 |                 f"{next_attr.info['type'] if next_attr and next_attr.info else None}"
+    |                                                                                ^^^^^^ E501
+323 |             )
+    |
+
+main.py:339:80: E501 Line too long (81 > 79)
+    |
+337 |                 node.style = LeafStyle(color="#888888", bold=False)
+338 | 
+339 |                 # Check if this is the current node by matching position and info
+    |                                                                                ^^ E501
+340 |                 if (node.start == current_node.start
+341 |                         and node.end == current_node.end
+    |
+
+main.py:566:80: E501 Line too long (81 > 79)
+    |
+565 |     print(
+566 |         f"Parent 1's next sibling: {parent1.next.info if parent1.next else None}"
+    |                                                                                ^^ E501
+567 |     )
+    |
+
+scripts/init_repo.py:26:9: E722 Do not use bare `except`
+   |
+24 |         try:
+25 |             run(["git", "config", "user.name"], check=True)
+26 |         except:
+   |         ^^^^^^ E722
+27 |             name = input("Enter your name for Git: ")
+28 |             run(["git", "config", "user.name", name], check=True)
+   |
+
+scripts/init_repo.py:32:9: E722 Do not use bare `except`
+   |
+30 |         try:
+31 |             run(["git", "config", "user.email"], check=True)
+32 |         except:
+   |         ^^^^^^ E722
+33 |             email = input("Enter your email for Git: ")
+34 |             run(["git", "config", "user.email", email], check=True)
+   |
+
+scripts/prepare_environment.py:437:80: E501 Line too long (83 > 79)
+    |
+435 |                                     "shell.exec",
+436 |                                     "args":
+437 |                                     "pytest --cov=src --cov-report term-missing | "
+    |                                                                                ^^^^ E501
+438 |                                     + "tee @@logs@@/pytest.log 2>&1",
+439 |                                 },
+    |
+
+scripts/prepare_environment.py:559:80: E501 Line too long (85 > 79)
+    |
+557 |                 if not token:
+558 |                     print("Error: PYPI_TOKEN environment variable not set")
+559 |                     print("Please set it in the Secrets tab (Environment Variables)")
+    |                                                                                ^^^^^^ E501
+560 |                     exit(1)
+561 |                 return token
+    |
+
+scripts/prepare_environment.py:636:80: E501 Line too long (86 > 79)
+    |
+634 |                 current_version = get_latest_version(project_name)
+635 |                 new_version = increment_version(current_version)
+636 |                 print(f"Incrementing version from {current_version} to {new_version}")
+    |                                                                                ^^^^^^^ E501
+637 | 
+638 |                 # Update version in files
+    |
+
+scripts/prepare_environment.py:639:80: E501 Line too long (82 > 79)
+    |
+638 |                 # Update version in files
+639 |                 update_version_in_files(new_version, pyproject_path, project_name)
+    |                                                                                ^^^ E501
+640 | 
+641 |                 # Check and setup PyPI token
+    |
+
+scripts/prepare_environment.py:645:80: E501 Line too long (91 > 79)
+    |
+644 |                 # Build and upload directly
+645 |                 build_and_upload(f'{Path.home()}/{(info.replit_url or "").split("/")[-1]}')
+    |                                                                                ^^^^^^^^^^^^ E501
+646 |                 print("Package built and uploaded successfully!")
+    |
+
+scripts/prepare_environment.py:698:80: E501 Line too long (80 > 79)
+    |
+696 |                         dirs[:] = [
+697 |                             d for d in dirs if d not in get_exclude_dirs()
+698 |                             and not d.startswith(".") and not d.startswith("__")
+    |                                                                                ^ E501
+699 |                         ]
+700 |                         for file in files:
+    |
+
+scripts/prepare_environment.py:755:80: E501 Line too long (88 > 79)
+    |
+753 |                 "Topic :: Desktop Environment :: GNUstep",
+754 |                 "Topic :: Desktop Environment :: K Desktop Environment (KDE)",
+755 |                 "Topic :: Desktop Environment :: K Desktop Environment (KDE) :: Themes",
+    |                                                                                ^^^^^^^^^ E501
+756 |                 "Topic :: Desktop Environment :: PicoGUI",
+757 |                 "Topic :: Desktop Environment :: PicoGUI :: Applications",
+    |
+
+scripts/prepare_environment.py:762:80: E501 Line too long (89 > 79)
+    |
+760 |                 "Topic :: Desktop Environment :: Window Managers",
+761 |                 "Topic :: Desktop Environment :: Window Managers :: Afterstep",
+762 |                 "Topic :: Desktop Environment :: Window Managers :: Afterstep :: Themes",
+    |                                                                                ^^^^^^^^^^ E501
+763 |                 "Topic :: Desktop Environment :: Window Managers :: Applets",
+764 |                 "Topic :: Desktop Environment :: Window Managers :: Blackbox",
+    |
+
+scripts/prepare_environment.py:765:80: E501 Line too long (88 > 79)
+    |
+763 |                 "Topic :: Desktop Environment :: Window Managers :: Applets",
+764 |                 "Topic :: Desktop Environment :: Window Managers :: Blackbox",
+765 |                 "Topic :: Desktop Environment :: Window Managers :: Blackbox :: Themes",
+    |                                                                                ^^^^^^^^^ E501
+766 |                 "Topic :: Desktop Environment :: Window Managers :: CTWM",
+767 |                 "Topic :: Desktop Environment :: Window Managers :: CTWM :: Themes",
+    |
+
+scripts/prepare_environment.py:767:80: E501 Line too long (84 > 79)
+    |
+765 |                 "Topic :: Desktop Environment :: Window Managers :: Blackbox :: Themes",
+766 |                 "Topic :: Desktop Environment :: Window Managers :: CTWM",
+767 |                 "Topic :: Desktop Environment :: Window Managers :: CTWM :: Themes",
+    |                                                                                ^^^^^ E501
+768 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment",
+769 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Epplets",
+    |
+
+scripts/prepare_environment.py:768:80: E501 Line too long (83 > 79)
+    |
+766 |                 "Topic :: Desktop Environment :: Window Managers :: CTWM",
+767 |                 "Topic :: Desktop Environment :: Window Managers :: CTWM :: Themes",
+768 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment",
+    |                                                                                ^^^^ E501
+769 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Epplets",
+770 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Themes DR15",
+    |
+
+scripts/prepare_environment.py:769:80: E501 Line too long (94 > 79)
+    |
+767 |                 "Topic :: Desktop Environment :: Window Managers :: CTWM :: Themes",
+768 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment",
+769 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Epplets",
+    |                                                                                ^^^^^^^^^^^^^^^ E501
+770 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Themes DR15",
+771 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Themes DR16",
+    |
+
+scripts/prepare_environment.py:770:80: E501 Line too long (98 > 79)
+    |
+768 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment",
+769 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Epplets",
+770 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Themes DR15",
+    |                                                                                ^^^^^^^^^^^^^^^^^^^ E501
+771 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Themes DR16",
+772 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Themes DR17",
+    |
+
+scripts/prepare_environment.py:771:80: E501 Line too long (98 > 79)
+    |
+769 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Epplets",
+770 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Themes DR15",
+771 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Themes DR16",
+    |                                                                                ^^^^^^^^^^^^^^^^^^^ E501
+772 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Themes DR17",
+773 |                 "Topic :: Desktop Environment :: Window Managers :: Fluxbox",
+    |
+
+scripts/prepare_environment.py:772:80: E501 Line too long (98 > 79)
+    |
+770 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Themes DR15",
+771 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Themes DR16",
+772 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Themes DR17",
+    |                                                                                ^^^^^^^^^^^^^^^^^^^ E501
+773 |                 "Topic :: Desktop Environment :: Window Managers :: Fluxbox",
+774 |                 "Topic :: Desktop Environment :: Window Managers :: Fluxbox :: Themes",
+    |
+
+scripts/prepare_environment.py:774:80: E501 Line too long (87 > 79)
+    |
+772 |                 "Topic :: Desktop Environment :: Window Managers :: Enlightenment :: Themes DR17",
+773 |                 "Topic :: Desktop Environment :: Window Managers :: Fluxbox",
+774 |                 "Topic :: Desktop Environment :: Window Managers :: Fluxbox :: Themes",
+    |                                                                                ^^^^^^^^ E501
+775 |                 "Topic :: Desktop Environment :: Window Managers :: FVWM",
+776 |                 "Topic :: Desktop Environment :: Window Managers :: FVWM :: Themes",
+    |
+
+scripts/prepare_environment.py:776:80: E501 Line too long (84 > 79)
+    |
+774 |                 "Topic :: Desktop Environment :: Window Managers :: Fluxbox :: Themes",
+775 |                 "Topic :: Desktop Environment :: Window Managers :: FVWM",
+776 |                 "Topic :: Desktop Environment :: Window Managers :: FVWM :: Themes",
+    |                                                                                ^^^^^ E501
+777 |                 "Topic :: Desktop Environment :: Window Managers :: IceWM",
+778 |                 "Topic :: Desktop Environment :: Window Managers :: IceWM :: Themes",
+    |
+
+scripts/prepare_environment.py:778:80: E501 Line too long (85 > 79)
+    |
+776 |                 "Topic :: Desktop Environment :: Window Managers :: FVWM :: Themes",
+777 |                 "Topic :: Desktop Environment :: Window Managers :: IceWM",
+778 |                 "Topic :: Desktop Environment :: Window Managers :: IceWM :: Themes",
+    |                                                                                ^^^^^^ E501
+779 |                 "Topic :: Desktop Environment :: Window Managers :: MetaCity",
+780 |                 "Topic :: Desktop Environment :: Window Managers :: MetaCity :: Themes",
+    |
+
+scripts/prepare_environment.py:780:80: E501 Line too long (88 > 79)
+    |
+778 |                 "Topic :: Desktop Environment :: Window Managers :: IceWM :: Themes",
+779 |                 "Topic :: Desktop Environment :: Window Managers :: MetaCity",
+780 |                 "Topic :: Desktop Environment :: Window Managers :: MetaCity :: Themes",
+    |                                                                                ^^^^^^^^^ E501
+781 |                 "Topic :: Desktop Environment :: Window Managers :: Oroborus",
+782 |                 "Topic :: Desktop Environment :: Window Managers :: Oroborus :: Themes",
+    |
+
+scripts/prepare_environment.py:782:80: E501 Line too long (88 > 79)
+    |
+780 |                 "Topic :: Desktop Environment :: Window Managers :: MetaCity :: Themes",
+781 |                 "Topic :: Desktop Environment :: Window Managers :: Oroborus",
+782 |                 "Topic :: Desktop Environment :: Window Managers :: Oroborus :: Themes",
+    |                                                                                ^^^^^^^^^ E501
+783 |                 "Topic :: Desktop Environment :: Window Managers :: Sawfish",
+784 |                 "Topic :: Desktop Environment :: Window Managers :: Sawfish :: Themes 0.30",
+    |
+
+scripts/prepare_environment.py:784:80: E501 Line too long (92 > 79)
+    |
+782 |                 "Topic :: Desktop Environment :: Window Managers :: Oroborus :: Themes",
+783 |                 "Topic :: Desktop Environment :: Window Managers :: Sawfish",
+784 |                 "Topic :: Desktop Environment :: Window Managers :: Sawfish :: Themes 0.30",
+    |                                                                                ^^^^^^^^^^^^^ E501
+785 |                 "Topic :: Desktop Environment :: Window Managers :: Sawfish :: Themes pre-0.30",
+786 |                 "Topic :: Desktop Environment :: Window Managers :: Waimea",
+    |
+
+scripts/prepare_environment.py:785:80: E501 Line too long (96 > 79)
+    |
+783 |                 "Topic :: Desktop Environment :: Window Managers :: Sawfish",
+784 |                 "Topic :: Desktop Environment :: Window Managers :: Sawfish :: Themes 0.30",
+785 |                 "Topic :: Desktop Environment :: Window Managers :: Sawfish :: Themes pre-0.30",
+    |                                                                                ^^^^^^^^^^^^^^^^^ E501
+786 |                 "Topic :: Desktop Environment :: Window Managers :: Waimea",
+787 |                 "Topic :: Desktop Environment :: Window Managers :: Waimea :: Themes",
+    |
+
+scripts/prepare_environment.py:787:80: E501 Line too long (86 > 79)
+    |
+785 |                 "Topic :: Desktop Environment :: Window Managers :: Sawfish :: Themes pre-0.30",
+786 |                 "Topic :: Desktop Environment :: Window Managers :: Waimea",
+787 |                 "Topic :: Desktop Environment :: Window Managers :: Waimea :: Themes",
+    |                                                                                ^^^^^^^ E501
+788 |                 "Topic :: Desktop Environment :: Window Managers :: Window Maker",
+789 |                 "Topic :: Desktop Environment :: Window Managers :: Window Maker :: Applets",
+    |
+
+scripts/prepare_environment.py:788:80: E501 Line too long (82 > 79)
+    |
+786 |                 "Topic :: Desktop Environment :: Window Managers :: Waimea",
+787 |                 "Topic :: Desktop Environment :: Window Managers :: Waimea :: Themes",
+788 |                 "Topic :: Desktop Environment :: Window Managers :: Window Maker",
+    |                                                                                ^^^ E501
+789 |                 "Topic :: Desktop Environment :: Window Managers :: Window Maker :: Applets",
+790 |                 "Topic :: Desktop Environment :: Window Managers :: Window Maker :: Themes",
+    |
+
+scripts/prepare_environment.py:789:80: E501 Line too long (93 > 79)
+    |
+787 |                 "Topic :: Desktop Environment :: Window Managers :: Waimea :: Themes",
+788 |                 "Topic :: Desktop Environment :: Window Managers :: Window Maker",
+789 |                 "Topic :: Desktop Environment :: Window Managers :: Window Maker :: Applets",
+    |                                                                                ^^^^^^^^^^^^^^ E501
+790 |                 "Topic :: Desktop Environment :: Window Managers :: Window Maker :: Themes",
+791 |                 "Topic :: Desktop Environment :: Window Managers :: XFCE",
+    |
+
+scripts/prepare_environment.py:790:80: E501 Line too long (92 > 79)
+    |
+788 |                 "Topic :: Desktop Environment :: Window Managers :: Window Maker",
+789 |                 "Topic :: Desktop Environment :: Window Managers :: Window Maker :: Applets",
+790 |                 "Topic :: Desktop Environment :: Window Managers :: Window Maker :: Themes",
+    |                                                                                ^^^^^^^^^^^^^ E501
+791 |                 "Topic :: Desktop Environment :: Window Managers :: XFCE",
+792 |                 "Topic :: Desktop Environment :: Window Managers :: XFCE :: Themes",
+    |
+
+scripts/prepare_environment.py:792:80: E501 Line too long (84 > 79)
+    |
+790 |                 "Topic :: Desktop Environment :: Window Managers :: Window Maker :: Themes",
+791 |                 "Topic :: Desktop Environment :: Window Managers :: XFCE",
+792 |                 "Topic :: Desktop Environment :: Window Managers :: XFCE :: Themes",
+    |                                                                                ^^^^^ E501
+793 |                 "Topic :: Documentation",
+794 |                 "Topic :: Documentation :: Sphinx",
+    |
+
+scripts/prepare_environment.py:821:80: E501 Line too long (90 > 79)
+    |
+819 |                 "Topic :: Internet :: WWW/HTTP :: Browsers",
+820 |                 "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+821 |                 "Topic :: Internet :: WWW/HTTP :: Dynamic Content :: CGI Tools/Libraries",
+    |                                                                                ^^^^^^^^^^^ E501
+822 |                 "Topic :: Internet :: WWW/HTTP :: Dynamic Content :: Message Boards",
+823 |                 "Topic :: Internet :: WWW/HTTP :: Dynamic Content :: News/Diary",
+    |
+
+scripts/prepare_environment.py:822:80: E501 Line too long (85 > 79)
+    |
+820 |                 "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+821 |                 "Topic :: Internet :: WWW/HTTP :: Dynamic Content :: CGI Tools/Libraries",
+822 |                 "Topic :: Internet :: WWW/HTTP :: Dynamic Content :: Message Boards",
+    |                                                                                ^^^^^^ E501
+823 |                 "Topic :: Internet :: WWW/HTTP :: Dynamic Content :: News/Diary",
+824 |                 "Topic :: Internet :: WWW/HTTP :: Dynamic Content :: Page Counters",
+    |
+
+scripts/prepare_environment.py:823:80: E501 Line too long (81 > 79)
+    |
+821 |                 "Topic :: Internet :: WWW/HTTP :: Dynamic Content :: CGI Tools/Libraries",
+822 |                 "Topic :: Internet :: WWW/HTTP :: Dynamic Content :: Message Boards",
+823 |                 "Topic :: Internet :: WWW/HTTP :: Dynamic Content :: News/Diary",
+    |                                                                                ^^ E501
+824 |                 "Topic :: Internet :: WWW/HTTP :: Dynamic Content :: Page Counters",
+825 |                 "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+    |
+
+scripts/prepare_environment.py:824:80: E501 Line too long (84 > 79)
+    |
+822 |                 "Topic :: Internet :: WWW/HTTP :: Dynamic Content :: Message Boards",
+823 |                 "Topic :: Internet :: WWW/HTTP :: Dynamic Content :: News/Diary",
+824 |                 "Topic :: Internet :: WWW/HTTP :: Dynamic Content :: Page Counters",
+    |                                                                                ^^^^^ E501
+825 |                 "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+826 |                 "Topic :: Internet :: WWW/HTTP :: Indexing/Search",
+    |
+
+scripts/prepare_environment.py:829:80: E501 Line too long (84 > 79)
+    |
+827 |                 "Topic :: Internet :: WWW/HTTP :: Session",
+828 |                 "Topic :: Internet :: WWW/HTTP :: Site Management",
+829 |                 "Topic :: Internet :: WWW/HTTP :: Site Management :: Link Checking",
+    |                                                                                ^^^^^ E501
+830 |                 "Topic :: Internet :: WWW/HTTP :: WSGI",
+831 |                 "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
+    |
+
+scripts/prepare_environment.py:889:80: E501 Line too long (88 > 79)
+    |
+887 |                 "Topic :: Scientific/Engineering :: Bio-Informatics",
+888 |                 "Topic :: Scientific/Engineering :: Chemistry",
+889 |                 "Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)",
+    |                                                                                ^^^^^^^^^ E501
+890 |                 "Topic :: Scientific/Engineering :: GIS",
+891 |                 "Topic :: Scientific/Engineering :: Human Machine Interfaces",
+    |
+
+scripts/prepare_environment.py:894:80: E501 Line too long (90 > 79)
+    |
+892 |                 "Topic :: Scientific/Engineering :: Image Recognition",
+893 |                 "Topic :: Scientific/Engineering :: Information Analysis",
+894 |                 "Topic :: Scientific/Engineering :: Interface Engine/Protocol Translator",
+    |                                                                                ^^^^^^^^^^^ E501
+895 |                 "Topic :: Scientific/Engineering :: Mathematics",
+896 |                 "Topic :: Scientific/Engineering :: Medical Science Apps.",
+    |
+
+scripts/prepare_environment.py:917:80: E501 Line too long (87 > 79)
+    |
+915 |                 "Topic :: Software Development :: Interpreters",
+916 |                 "Topic :: Software Development :: Libraries",
+917 |                 "Topic :: Software Development :: Libraries :: Application Frameworks",
+    |                                                                                ^^^^^^^^ E501
+918 |                 "Topic :: Software Development :: Libraries :: Java Libraries",
+919 |                 "Topic :: Software Development :: Libraries :: Perl Modules",
+    |
+
+scripts/prepare_environment.py:932:80: E501 Line too long (81 > 79)
+    |
+930 |                 "Topic :: Software Development :: Quality Assurance",
+931 |                 "Topic :: Software Development :: Testing",
+932 |                 "Topic :: Software Development :: Testing :: Traffic Generation",
+    |                                                                                ^^ E501
+933 |                 "Topic :: Software Development :: User Interfaces",
+934 |                 "Topic :: Software Development :: Version Control",
+    |
+
+scripts/prepare_environment.py:963:80: E501 Line too long (83 > 79)
+    |
+961 |                 "Topic :: System :: Networking :: Firewalls",
+962 |                 "Topic :: System :: Networking :: Monitoring",
+963 |                 "Topic :: System :: Networking :: Monitoring :: Hardware Watchdog",
+    |                                                                                ^^^^ E501
+964 |                 "Topic :: System :: Networking :: Time Synchronization",
+965 |                 "Topic :: System :: Operating System",
+    |
+
+scripts/prepare_environment.py:975:80: E501 Line too long (88 > 79)
+    |
+973 |                 "Topic :: System :: Software Distribution",
+974 |                 "Topic :: System :: Systems Administration",
+975 |                 "Topic :: System :: Systems Administration :: Authentication/Directory",
+    |                                                                                ^^^^^^^^^ E501
+976 |                 "Topic :: System :: Systems Administration :: Authentication/Directory :: LDAP",
+977 |                 "Topic :: System :: Systems Administration :: Authentication/Directory :: NIS",
+    |
+
+scripts/prepare_environment.py:976:80: E501 Line too long (96 > 79)
+    |
+974 |                 "Topic :: System :: Systems Administration",
+975 |                 "Topic :: System :: Systems Administration :: Authentication/Directory",
+976 |                 "Topic :: System :: Systems Administration :: Authentication/Directory :: LDAP",
+    |                                                                                ^^^^^^^^^^^^^^^^^ E501
+977 |                 "Topic :: System :: Systems Administration :: Authentication/Directory :: NIS",
+978 |                 "Topic :: System :: System Shells",
+    |
+
+scripts/prepare_environment.py:977:80: E501 Line too long (95 > 79)
+    |
+975 |                 "Topic :: System :: Systems Administration :: Authentication/Directory",
+976 |                 "Topic :: System :: Systems Administration :: Authentication/Directory :: LDAP",
+977 |                 "Topic :: System :: Systems Administration :: Authentication/Directory :: NIS",
+    |                                                                                ^^^^^^^^^^^^^^^^ E501
+978 |                 "Topic :: System :: System Shells",
+979 |                 "Topic :: Terminals",
+    |
+
+scripts/prepare_environment.py:986:80: E501 Line too long (85 > 79)
+    |
+984 |                 "Topic :: Text Editors :: Documentation",
+985 |                 "Topic :: Text Editors :: Emacs",
+986 |                 "Topic :: Text Editors :: Integrated Development Environments (IDE)",
+    |                                                                                ^^^^^^ E501
+987 |                 "Topic :: Text Editors :: Text Processing",
+988 |                 "Topic :: Text Editors :: Word Processors",
+    |
+
+scripts/prepare_environment.py:1075:5: F841 Local variable `log_path` is assigned to but never used
+     |
+1073 |     user_email = user_config["user_email"]
+1074 |     name = user_config["name"]
+1075 |     log_path = paths["logs_folder"]
+     |     ^^^^^^^^ F841
+1076 |     pypi_upload_path = paths["pypi_upload"]
+1077 |     pyproject_path = paths["pyproject"]
+     |
+     = help: Remove assignment to unused variable `log_path`
+
+scripts/prepare_environment.py:1151:11: SIM115 Use a context manager for opening files
+     |
+1150 | if __name__ == "__main__":
+1151 |     print(open("scripts/pypi_upload.py").read())
+     |           ^^^^ SIM115
+1152 |     # update_workflows()
+     |
+
+scripts/setup_github.py:1:80: E501 Line too long (80 > 79)
+  |
+1 | """Set up GitHub repository and environment variables for the Replit project."""
+  |                                                                                ^ E501
+2 | 
+3 | import os
+  |
+
+scripts/setup_github.py:85:80: E501 Line too long (81 > 79)
+   |
+84 |         print(
+85 |             f"\nRepository created and configured: {response.json()['html_url']}"
+   |                                                                                ^^ E501
+86 |         )
+87 |         print("\nGit environment variables have been set in Replit DB")
+   |
+
+src/tree_interval/core/interval_core.py:25:1: I001 [*] Import block is un-sorted or un-formatted
+   |
+23 |   """
+24 |   
+25 | / from dataclasses import dataclass
+26 | | from dis import Positions as disposition
+27 | | from inspect import getframeinfo, getsource
+28 | | from json import dumps, loads
+29 | | from textwrap import dedent
+30 | | from types import FrameType
+31 | | from typing import (TYPE_CHECKING,
+32 | |                     Any,
+33 | |                     Callable,
+34 | |                     Dict,
+35 | |                     Generic,
+36 | |                     List,
+37 | |                     NamedTuple,
+38 | |                     Optional,
+39 | |                     TypeVar,
+40 | |                     Union)
+41 | | 
+42 | | from .ast_types import AST_TYPES
+43 | | 
+44 | | 
+45 | | class LeafStyle(NamedTuple):
+   | |_^ I001
+46 |       """Style configuration for leaf nodes.
+   |
+   = help: Organize imports
+
+tests/test_ast_nodes.py:3:1: I001 [*] Import block is un-sorted or un-formatted
+   |
+ 1 |   """Tests for AST node information access"""
+ 2 |   
+ 3 | / import pytest
+ 4 | | 
+ 5 | | from tree_interval import AstTreeBuilder
+ 6 | | from tree_interval.core.interval_core import (Leaf,
+ 7 | |                                               PartStatement,
+ 8 | |                                               Position,
+ 9 | |                                               Statement,
+10 | |                                               Tree)
+11 | | 
+12 | | 
+13 | | def test_ast_node_access() -> None:
+   | |_^ I001
+14 |       code = "x = 1 + 2"
+15 |       builder = AstTreeBuilder(code)
+   |
+   = help: Organize imports
+
+tests/test_interval_core.py:1:1: I001 [*] Import block is un-sorted or un-formatted
+   |
+ 1 | / import pytest
+ 2 | | 
+ 3 | | from tree_interval import Leaf, Position
+ 4 | | from tree_interval.core.interval_core import (NestedAttributes,
+ 5 | |                                               PartStatement,
+ 6 | |                                               Statement,
+ 7 | |                                               Tree)
+ 8 | | 
+ 9 | | 
+10 | | def test_leaf_statement_property():
+   | |_^ I001
+11 |       root = Leaf(Position(0, 100), info={"type": "Module"})
+12 |       child = Leaf(Position(10, 50), info={"type": "Call"})
+   |
+   = help: Organize imports
+
+tests/test_visualizer.py:1:1: I001 [*] Import block is un-sorted or un-formatted
+   |
+ 1 | / import pytest
+ 2 | | 
+ 3 | | from tree_interval import (Leaf,
+ 4 | |                            Position,
+ 5 | |                            Tree,
+ 6 | |                            TreeVisualizer,
+ 7 | |                            VisualizationConfig)
+ 8 | | 
+ 9 | | 
+10 | | def test_visualizer_empty_tree(capsys):
+   | |_^ I001
+11 |       tree = Tree("Test")
+12 |       TreeVisualizer.visualize(tree)
+   |
+   = help: Organize imports
+
+Found 58 errors.
+[*] 6 fixable with the `--fix` option (1 hidden fix can be enabled with the `--unsafe-fixes` option).

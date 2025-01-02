@@ -1,0 +1,66 @@
+scripts/./create_zip.py:38:49: W504 line break after binary operator
+scripts/./init_repo.py:26:9: E722 do not use bare 'except'
+scripts/./init_repo.py:32:9: E722 do not use bare 'except'
+scripts/./prepare_environment.py:227:80: E501 line too long (85 > 79 characters)
+scripts/./prepare_environment.py:243:63: W504 line break after binary operator
+scripts/./prepare_environment.py:285:72: W504 line break after binary operator
+scripts/./prepare_environment.py:367:61: W504 line break after binary operator
+scripts/./prepare_environment.py:384:62: W504 line break after binary operator
+scripts/./prepare_environment.py:385:57: W504 line break after binary operator
+scripts/./prepare_environment.py:402:77: W504 line break after binary operator
+scripts/./prepare_environment.py:419:56: W504 line break after binary operator
+scripts/./prepare_environment.py:420:59: W504 line break after binary operator
+scripts/./prepare_environment.py:437:80: E501 line too long (83 > 79 characters)
+scripts/./prepare_environment.py:454:61: W504 line break after binary operator
+scripts/./prepare_environment.py:455:73: W504 line break after binary operator
+scripts/./prepare_environment.py:456:62: W504 line break after binary operator
+scripts/./prepare_environment.py:457:56: W504 line break after binary operator
+scripts/./prepare_environment.py:458:72: W504 line break after binary operator
+scripts/./prepare_environment.py:459:77: W504 line break after binary operator
+scripts/./prepare_environment.py:477:43: W291 trailing whitespace
+scripts/./prepare_environment.py:503:80: E501 line too long (82 > 79 characters)
+scripts/./prepare_environment.py:559:80: E501 line too long (85 > 79 characters)
+scripts/./prepare_environment.py:636:80: E501 line too long (86 > 79 characters)
+scripts/./prepare_environment.py:639:80: E501 line too long (82 > 79 characters)
+scripts/./prepare_environment.py:645:80: E501 line too long (91 > 79 characters)
+scripts/./prepare_environment.py:698:80: E501 line too long (80 > 79 characters)
+scripts/./prepare_environment.py:755:80: E501 line too long (88 > 79 characters)
+scripts/./prepare_environment.py:762:80: E501 line too long (89 > 79 characters)
+scripts/./prepare_environment.py:765:80: E501 line too long (88 > 79 characters)
+scripts/./prepare_environment.py:767:80: E501 line too long (84 > 79 characters)
+scripts/./prepare_environment.py:768:80: E501 line too long (83 > 79 characters)
+scripts/./prepare_environment.py:769:80: E501 line too long (94 > 79 characters)
+scripts/./prepare_environment.py:770:80: E501 line too long (98 > 79 characters)
+scripts/./prepare_environment.py:771:80: E501 line too long (98 > 79 characters)
+scripts/./prepare_environment.py:772:80: E501 line too long (98 > 79 characters)
+scripts/./prepare_environment.py:774:80: E501 line too long (87 > 79 characters)
+scripts/./prepare_environment.py:776:80: E501 line too long (84 > 79 characters)
+scripts/./prepare_environment.py:778:80: E501 line too long (85 > 79 characters)
+scripts/./prepare_environment.py:780:80: E501 line too long (88 > 79 characters)
+scripts/./prepare_environment.py:782:80: E501 line too long (88 > 79 characters)
+scripts/./prepare_environment.py:784:80: E501 line too long (92 > 79 characters)
+scripts/./prepare_environment.py:785:80: E501 line too long (96 > 79 characters)
+scripts/./prepare_environment.py:787:80: E501 line too long (86 > 79 characters)
+scripts/./prepare_environment.py:788:80: E501 line too long (82 > 79 characters)
+scripts/./prepare_environment.py:789:80: E501 line too long (93 > 79 characters)
+scripts/./prepare_environment.py:790:80: E501 line too long (92 > 79 characters)
+scripts/./prepare_environment.py:792:80: E501 line too long (84 > 79 characters)
+scripts/./prepare_environment.py:821:80: E501 line too long (90 > 79 characters)
+scripts/./prepare_environment.py:822:80: E501 line too long (85 > 79 characters)
+scripts/./prepare_environment.py:823:80: E501 line too long (81 > 79 characters)
+scripts/./prepare_environment.py:824:80: E501 line too long (84 > 79 characters)
+scripts/./prepare_environment.py:829:80: E501 line too long (84 > 79 characters)
+scripts/./prepare_environment.py:889:80: E501 line too long (88 > 79 characters)
+scripts/./prepare_environment.py:894:80: E501 line too long (90 > 79 characters)
+scripts/./prepare_environment.py:917:80: E501 line too long (87 > 79 characters)
+scripts/./prepare_environment.py:932:80: E501 line too long (81 > 79 characters)
+scripts/./prepare_environment.py:963:80: E501 line too long (83 > 79 characters)
+scripts/./prepare_environment.py:975:80: E501 line too long (88 > 79 characters)
+scripts/./prepare_environment.py:976:80: E501 line too long (96 > 79 characters)
+scripts/./prepare_environment.py:977:80: E501 line too long (95 > 79 characters)
+scripts/./prepare_environment.py:986:80: E501 line too long (85 > 79 characters)
+scripts/./prepare_environment.py:1063:55: W504 line break after binary operator
+scripts/./prepare_environment.py:1075:5: F841 local variable 'log_path' is assigned to but never used
+scripts/./pypi_upload.py:115:1: W293 blank line contains whitespace
+scripts/./setup_github.py:1:80: E501 line too long (80 > 79 characters)
+scripts/./setup_github.py:85:80: E501 line too long (81 > 79 characters)

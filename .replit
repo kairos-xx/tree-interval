@@ -157,9 +157,21 @@ args = "pytest --cov=src --cov-report term-missing | tee logs/pytest.log 2>&1"
 
 [[workflows.workflow]]
 name = "[Report] All"
-mode = "sequential"
+mode = "parallel"
 author = 299513
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "pyright --warnings | tee logs/pyright.log 2>&1 && pflake8 --exclude */. --exclude ./build | tee logs/flake8.log 2>&1 && ruff check ./dev ./src ./examples ./tests ./scripts | tee logs/ruff.log 2>&1"
+args = "pyright --warnings | tee logs/pyright.log 2>&1"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pflake8 --exclude */. --exclude __* | tee logs/flake8.log 2>&1"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "ruff check . --line-length 79  | tee logs/ruff.log 2>&1"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "black . --check --line-length 79  | tee logs/black.log 2>&1"

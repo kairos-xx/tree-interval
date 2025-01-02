@@ -4,8 +4,10 @@ Updates GitHub Actions workflow files with new configurations.
 
 from difflib import get_close_matches
 from importlib import import_module
+from json import dumps as json_dumps
 from os import environ, getenv, mkdir
 from os.path import exists
+from pathlib import Path
 from subprocess import CalledProcessError, run
 from textwrap import dedent
 from typing import List, Tuple
@@ -116,7 +118,7 @@ def setup_github_repo(github_token, project_name, user_name, user_email,
         print(f"Error setting up repository: {str(e)}")
 
 
-def update_workflows() -> None:
+def run_all() -> None:
 
     project_info = {
         "templates": {
@@ -200,7 +202,7 @@ def update_workflows() -> None:
                     "python",
                     "",
                 ],
-                "entrypoint": "README.md",
+                "entrypoint": "",
                 "modules": [
                     "python-3.11:v30-20240222-aba8eb6",
                 ],
@@ -240,7 +242,7 @@ def update_workflows() -> None:
                                     "task":
                                     "shell.exec",
                                     "args":
-                                    "python @@py_upload@@ | " +
+                                    "python @@pypi_upload@@ | " +
                                     "tee @@logs@@/pypi_upload.log 2>&1",
                                 },
                             ],
@@ -266,7 +268,7 @@ def update_workflows() -> None:
                             "tasks": [
                                 {
                                     "task": "shell.exec",
-                                    "args": "@@create_zip@@",
+                                    "args": "python @@create_zip@@",
                                 },
                             ],
                         },
@@ -284,23 +286,6 @@ def update_workflows() -> None:
                                     "args":
                                     "rm -rf dist build *.egg-info && " +
                                     "python setup.py sdist bdist_wheel",
-                                },
-                            ],
-                        },
-                        {
-                            "name":
-                            "[Util] tests",
-                            "mode":
-                            "sequential",
-                            "author":
-                            0,
-                            "tasks": [
-                                {
-                                    "task":
-                                    "shell.exec",
-                                    "args":
-                                    "pytest ./tests | " +
-                                    "tee @@logs@@/tests.log 2>&1",
                                 },
                             ],
                         },
@@ -325,7 +310,8 @@ def update_workflows() -> None:
                             "tasks": [
                                 {
                                     "task": "shell.exec",
-                                    "args": "ruff format --line-length 79",
+                                    "args":
+                                    "ruff . " + "format --line-length 79",
                                 },
                             ],
                         },
@@ -397,8 +383,9 @@ def update_workflows() -> None:
                                     "task":
                                     "shell.exec",
                                     "args":
-                                    "pflake8 --exclude */. --exclude ./build  | "
-                                    + "tee @@logs@@/flake8.log 2>&1",
+                                    "pflake8 --exclude */. " +
+                                    "--exclude __*  | " +
+                                    "tee @@logs@@/flake8.log 2>&1",
                                 },
                             ],
                         },
@@ -414,9 +401,25 @@ def update_workflows() -> None:
                                     "task":
                                     "shell.exec",
                                     "args":
-                                    "ruff check " +
-                                    "./dev ./src ./examples ./tests ./scripts  "
-                                    + "--line-length 79 | " +
+                                    "ruff check . " + "--line-length 79 | " +
+                                    "tee @@logs@@/ruff.log 2>&1",
+                                },
+                            ],
+                        },
+                        {
+                            "name":
+                            "[Report] black",
+                            "mode":
+                            "sequential",
+                            "author":
+                            0,
+                            "tasks": [
+                                {
+                                    "task":
+                                    "shell.exec",
+                                    "args":
+                                    "black . --check " +
+                                    "--line-length 79 | " +
                                     "tee @@logs@@/ruff.log 2>&1",
                                 },
                             ],
@@ -451,11 +454,30 @@ def update_workflows() -> None:
                                     "shell.exec",
                                     "args":
                                     "pyright --warnings | " +
-                                    "tee @@logs@@/pyright.log 2>&1 && " +
-                                    "pflake8 --exclude */. --exclude ./build | "
-                                    + "tee @@logs@@/flake8.log 2>&1 && " +
-                                    "ruff check . ./dev ./src ./examples ./tests ./scripts | "
-                                    + "tee @@logs@@/ruff.log 2>&1",
+                                    "tee @@logs@@/pyright.log 2>&1"
+                                },
+                                {
+                                    "task":
+                                    "shell.exec",
+                                    "args":
+                                    "pflake8 --exclude */. " +
+                                    "--exclude __* | " +
+                                    "tee @@logs@@/flake8.log 2>&1"
+                                },
+                                {
+                                    "task":
+                                    "shell.exec",
+                                    "args":
+                                    "ruff check . " + "--line-length 79 | " +
+                                    "tee @@logs@@/ruff.log 2>&1",
+                                },
+                                {
+                                    "task":
+                                    "shell.exec",
+                                    "args":
+                                    "black . --check " +
+                                    "--line-length 79 | " +
+                                    "tee @@logs@@/black.log 2>&1",
                                 },
                             ],
                         },
@@ -1054,13 +1076,30 @@ def update_workflows() -> None:
         },
     }
 
-    project_name = get(str(info.replit_id_url)).url.split("/")[-1]
+    a=get(str(info.replit_id_url),allow_redirects=True)
+    
+
+    
+   
+    project_name = a.url.split("/")[-1]
     replit_owner_id = getenv("REPL_OWNER_ID", "299513")
     github_token = getenv(
         "GITHUB_TOKEN",
         "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ghp" +
         "_jMChfQ9izNyKLdJd9M46VTTOfZDTGV2r2CfY",
     )
+    
+    
+    print(project_name)
+    homedir = Path.home()
+    homedir = str(homedir).replace("\\", "/")
+
+    try:
+        __sid__ = open(f"{homedir}/repl-cli/connect.sid", "r").read().strip()
+    except:
+        __sid__ = None
+        
+    print(__sid__,get(f"https://replit.com/data/repls/@kairos").content,homedir)
 
     setup = project_info["setup"]
     user_config = setup["user_config"]
@@ -1070,7 +1109,6 @@ def update_workflows() -> None:
     user_name = user_config["user_name"]
     user_email = user_config["user_email"]
     name = user_config["name"]
-    log_path = paths["logs_folder"]
     pypi_upload_path = paths["pypi_upload"]
     pyproject_path = paths["pyproject"]
     create_zip_path = paths["create_zip"]
@@ -1094,21 +1132,24 @@ def update_workflows() -> None:
     pyproject_dict_project["description"] = setup["description"]
     pyproject_dict_project["urls"] = setup["urls"]
     pyproject_dict_project_classifiers.insert(
-        0, setup_classifiers["development_status"][development_status])
+        0, development_status[setup_classifiers["development_status"]])
 
     for v in setup_classifiers["topics"]:
         topic = next(iter(get_close_matches(v, topics, len(topics), 0)), None)
         if topic:
             pyproject_dict_project_classifiers.append(topic)
-    for v in replit_dict["workflows"]["workflow"]:
-        v["author"] = int(replit_owner_id)
-        for v2 in v["tasks"]:
+    for v1 in replit_dict["workflows"]["workflow"]:
+        v1["author"] = int(replit_owner_id)
+        for v2 in v1["tasks"]:
             v2["args"] = v2["args"].replace(
                 "@@pypi_upload@@", pypi_upload_path).replace(
                     "@@create_zip@@",
                     create_zip_path).replace("@@logs@@", logs_folder_path)
-    replit_dict["run"][1] = replit_dict["deployment"][1] = replit_dict[
-        "entrypoint"] = setup["entrypoint"]
+    entry_point = setup["entrypoint"]
+    replit_dict["run"][1] += entry_point
+    replit_dict["deployment"]["run"][1] += entry_point
+    replit_dict["entrypoint"] += entry_point
+
 
     def create():
         missing_packages = check_packages(setup["required_packages"])
@@ -1146,5 +1187,5 @@ def update_workflows() -> None:
 
 
 if __name__ == "__main__":
-    print(open("scripts/pypi_upload.py").read())
-    # update_workflows()
+    #print(open("scripts/pypi_upload.py").read())
+    run_all()
