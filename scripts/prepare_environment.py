@@ -374,8 +374,10 @@ def update_workflows() -> None:
             "pyyaml",
             "isort",
         ],
-        "entrypoint":
-        "main.py"
+        "entrypoint": "main.py",
+    "replit": {
+        "author": 299513
+    }
     }
 
     pyproject_dict = project_info["templates"]["pyproject"]
