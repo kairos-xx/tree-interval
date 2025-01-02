@@ -75,7 +75,8 @@ def demonstrate_positions() -> None:
     pos4 = Position(30, 70)
     print(
         "Absolute positions:",
-        f"absolute_start={pos4.absolute_start}, absolute_end={pos4.absolute_end}",
+        f"absolute_start={pos4.absolute_start}, "
+        f"absolute_end={pos4.absolute_end}",
     )
 
     print("Position format:", pos4.position_as("position"))
@@ -320,11 +321,13 @@ def demonstrate_frame_analyzer() -> None:
             next_attr = current_node.next_attribute
             print(
                 "Top Statement: " +
-                f"{top_stmt.info['type'] if top_stmt and top_stmt.info else None}"
+                f"{(top_stmt.info['type'] if top_stmt and top_stmt.info 
+                   else None)}"
             )
             print(
                 "Next Attribute: " +
-                f"{next_attr.info['type'] if next_attr and next_attr.info else None}"
+                f"{(next_attr.info['type'] if next_attr and next_attr.info 
+                   else None)}"
             )
 
     def build_tree() -> None:
@@ -341,7 +344,7 @@ def demonstrate_frame_analyzer() -> None:
                 node.rich_style = RichStyle(color="grey70", bold=False)
                 node.style = LeafStyle(color="#888888", bold=False)
 
-                # Check if this is the current node by matching position and info
+                # Check if this is current node by position and info match
                 if (node.start == current_node.start
                         and node.end == current_node.end
                         and str(node.info) == str(current_node.info)):
@@ -574,7 +577,8 @@ def demonstrate_leaf_navigation() -> None:
     print(f"Child 1.2's previous sibling: {prev_info}")
 
     print(
-        f"Parent 1's next sibling: {parent1.next.info if parent1.next else None}"
+        f"Parent 1's next sibling: "
+        f"{parent1.next.info if parent1.next else None}"
     )
 
 
