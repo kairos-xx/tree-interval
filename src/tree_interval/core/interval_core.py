@@ -28,16 +28,18 @@ from inspect import getframeinfo, getsource
 from json import dumps, loads
 from textwrap import dedent
 from types import FrameType
-from typing import (TYPE_CHECKING,
-                    Any,
-                    Callable,
-                    Dict,
-                    Generic,
-                    List,
-                    NamedTuple,
-                    Optional,
-                    TypeVar,
-                    Union)
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    Dict,
+    Generic,
+    List,
+    NamedTuple,
+    Optional,
+    TypeVar,
+    Union,
+)
 
 from .ast_types import AST_TYPES
 

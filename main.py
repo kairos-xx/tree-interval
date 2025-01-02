@@ -20,13 +20,15 @@ from inspect import currentframe, stack
 
 from rich.style import Style as RichStyle
 
-from src.tree_interval import (FrameAnalyzer,
-                               Leaf,
-                               LeafStyle,
-                               Position,
-                               Tree,
-                               TreeVisualizer,
-                               VisualizationConfig)
+from src.tree_interval import (
+    FrameAnalyzer,
+    Leaf,
+    LeafStyle,
+    Position,
+    Tree,
+    TreeVisualizer,
+    VisualizationConfig,
+)
 from src.tree_interval.core.future import Future
 from src.tree_interval.core.interval_core import PartStatement, Statement
 from src.tree_interval.rich_printer import RichPrintConfig, RichTreePrinter
@@ -57,20 +59,23 @@ def demonstrate_positions() -> None:
     pos2 = Position(10, 50)
     pos2.lineno = 1
     pos2.end_lineno = 5
-    print("Position with lines:",
-          f"lineno={pos2.lineno}, end_lineno={pos2.end_lineno}")
+    print(
+        "Position with lines:",
+        f"lineno={pos2.lineno}, end_lineno={pos2.end_lineno}",
+    )
 
     pos3 = Position(60, 90)
     pos3.col_offset = 4
     pos3.end_col_offset = 8
     print(
         "Position with columns:",
-        f"col_offset={pos3.col_offset}, end_col_offset={pos3.end_col_offset}")
+        f"col_offset={pos3.col_offset}, end_col_offset={pos3.end_col_offset}",
+    )
 
     pos4 = Position(30, 70)
     print(
         "Absolute positions:",
-        f"absolute_start={pos4.absolute_start}, absolute_end={pos4.absolute_end}"
+        f"absolute_start={pos4.absolute_start}, absolute_end={pos4.absolute_end}",
     )
 
     print("Position format:", pos4.position_as("position"))
@@ -393,24 +398,30 @@ def demonstrate_basic_rich_printing() -> None:
     print_header("Basic Rich Printing", CYAN)
     tree = Tree("Basic Example")
 
-    root = Leaf(Position(0, 100),
-                info={
-                    "type": "Module",
-                    "name": "example"
-                },
-                rich_style=RichStyle(color="red", bold=True))
-    child1 = Leaf(Position(10, 40),
-                  info={
-                      "type": "Function",
-                      "name": "hello"
-                  },
-                  rich_style=RichStyle(color="green"))
-    child2 = Leaf(Position(50, 90),
-                  info={
-                      "type": "Class",
-                      "name": "MyClass"
-                  },
-                  rich_style=RichStyle(color="blue", bold=True))
+    root = Leaf(
+        Position(0, 100),
+        info={
+            "type": "Module",
+            "name": "example"
+        },
+        rich_style=RichStyle(color="red", bold=True),
+    )
+    child1 = Leaf(
+        Position(10, 40),
+        info={
+            "type": "Function",
+            "name": "hello"
+        },
+        rich_style=RichStyle(color="green"),
+    )
+    child2 = Leaf(
+        Position(50, 90),
+        info={
+            "type": "Class",
+            "name": "MyClass"
+        },
+        rich_style=RichStyle(color="blue", bold=True),
+    )
 
     tree.root = root
     tree.add_leaf(child1)
@@ -694,7 +705,8 @@ def demonstrate_future_usage() -> None:
     print(f"Database host: {config.database.host}")  # pyright: ignore
     print(f"Database port: {config.database.port}")  # pyright: ignore
     print(
-        f"Username: {config.database.credentials.username}")  # pyright: ignore
+        f"Username: {config.database.credentials.username}"  # pyright: ignore
+    )
 
     # This will raise an informative error
     try:

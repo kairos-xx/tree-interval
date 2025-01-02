@@ -4,7 +4,6 @@ from tree_interval.core.future import Future
 
 
 class _Nested:
-
     def __init__(self) -> None:
         self.__dict__ = {}
 

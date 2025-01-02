@@ -14,7 +14,6 @@ def test_frame_analyzer_initialization():
 
 
 def test_build_tree():
-
     def sample_func():
         frame = stack()[0].frame
         analyzer = FrameAnalyzer(frame)
@@ -26,7 +25,6 @@ def test_build_tree():
 
 
 def test_find_current_node():
-
     def another_func():
         frame = stack()[0].frame
         analyzer = FrameAnalyzer(frame)
@@ -68,7 +66,6 @@ def test_frame_analyzer_empty_source():
 
 
 def test_frame_analyzer_invalid_frame():
-
     def nested_func():
         frame = stack()[0].frame
         analyzer = FrameAnalyzer(frame)
@@ -79,7 +76,6 @@ def test_frame_analyzer_invalid_frame():
 
 
 def test_frame_analyzer_no_matching_position():
-
     def nested_func():
         frame = stack()[0].frame
         analyzer = FrameAnalyzer(frame)
@@ -91,7 +87,6 @@ def test_frame_analyzer_no_matching_position():
 
 
 def test_no_matching_nodes():
-
     def dummy_func():
         frame = stack()[0].frame
         analyzer = FrameAnalyzer(frame)
@@ -102,7 +97,6 @@ def test_no_matching_nodes():
 
 
 def test_build_tree_empty():
-
     def dummy_func():
         frame = stack()[0].frame
         analyzer = FrameAnalyzer(frame)
@@ -114,7 +108,6 @@ def test_build_tree_empty():
 
 
 def test_frame_analyzer_no_ast_node():
-
     def dummy_func():
         frame = stack()[0].frame
         analyzer = FrameAnalyzer(frame)
@@ -130,7 +123,6 @@ def test_frame_analyzer_no_ast_node():
 
 
 def test_frame_analyzer_invalid_ast_node():
-
     def dummy_func():
         frame = stack()[0].frame
         analyzer = FrameAnalyzer(frame)

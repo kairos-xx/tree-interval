@@ -35,14 +35,19 @@ def create_zip() -> None:
 
     # Create ZIP with filtered contents
     with ZipFile(
-            f"{zip_path}/" + f"{project_name}_" +
-            f'{datetime.now().strftime("%Y%m%d_%H%M%S")}' + ".zip",
-            "w",
+        f"{zip_path}/"
+        + f"{project_name}_"
+        + f'{datetime.now().strftime("%Y%m%d_%H%M%S")}'
+        + ".zip",
+        "w",
     ) as zip_file:
         for root, dirs, files in walk("."):
             dirs[:] = [
-                d for d in dirs if d not in get_exclude_dirs()
-                and not d.startswith(".") and not d.startswith("__")
+                d
+                for d in dirs
+                if d not in get_exclude_dirs()
+                and not d.startswith(".")
+                and not d.startswith("__")
             ]
             for file in files:
                 zip_file.write(path.join(root, file))

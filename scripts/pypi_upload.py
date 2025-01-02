@@ -75,15 +75,22 @@ def update_version_in_files(
             )
         )
 
-    # Update __init__.py
-    # with open("src/tree_interval/__init__.py", "r") as f:
-    #     content = f.read()
-    # with open("src/tree_interval/__init__.py", "w") as f:
-    #     match_string = "__version__ = "
-    #     f.write("\n".join(
-    #         (line.split(match_string, 1)[0] + match_string +
-    #          f'"{new_version}"\n' if match_string in line else line)
-    #         for line in content.splitlines()))
+    with open("src/tree_interval/__init__.py", "r") as f:
+        content = f.read()
+    with open("src/tree_interval/__init__.py", "w") as f:
+        match_string = "__version__ = "
+        f.write(
+            "\n".join(
+                (
+                    line.split(match_string, 1)[0]
+                    + match_string
+                    + f'"{new_version}"\n'
+                    if match_string in line
+                    else line
+                )
+                for line in content.splitlines()
+            )
+        )
 
 
 def check_token() -> str:
@@ -112,7 +119,7 @@ def create_pypirc(token: str) -> None:
     pypirc_content = f"""
     [distutils]
     index-servers = pypi
-    
+
     [pypi]
     username = __token__
     password = {token}

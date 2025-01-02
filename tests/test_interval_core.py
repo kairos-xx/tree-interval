@@ -1,10 +1,12 @@
 import pytest
 
 from tree_interval import Leaf, Position
-from tree_interval.core.interval_core import (NestedAttributes,
-                                              PartStatement,
-                                              Statement,
-                                              Tree)
+from tree_interval.core.interval_core import (
+    NestedAttributes,
+    PartStatement,
+    Statement,
+    Tree,
+)
 
 
 def test_leaf_statement_property():
@@ -331,7 +333,6 @@ def test_frame_complex_source():
     """Test frame handling with complex source"""
 
     class MockFrame:
-
         def __init__(self):
             self.f_code = type("", (), {"co_firstlineno": 1})
             self.positions = type(

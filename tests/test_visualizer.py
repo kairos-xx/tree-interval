@@ -1,10 +1,12 @@
 import pytest
 
-from tree_interval import (Leaf,
-                           Position,
-                           Tree,
-                           TreeVisualizer,
-                           VisualizationConfig)
+from tree_interval import (
+    Leaf,
+    Position,
+    Tree,
+    TreeVisualizer,
+    VisualizationConfig,
+)
 
 
 def test_visualizer_empty_tree(capsys):
@@ -79,7 +81,6 @@ def test_terminal_width_fallback_attribute_error(monkeypatch):
     from tree_interval.visualizer.config import get_terminal_width
 
     def mock_get_terminal_size():
-
         class MockSize:
             pass
 

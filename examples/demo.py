@@ -28,12 +28,14 @@ from typing import Any
 
 from rich.style import Style as RichStyle
 
-from src.tree_interval import (AstTreeBuilder,
-                               Leaf,
-                               Position,
-                               Tree,
-                               TreeVisualizer,
-                               VisualizationConfig)
+from src.tree_interval import (
+    AstTreeBuilder,
+    Leaf,
+    Position,
+    Tree,
+    TreeVisualizer,
+    VisualizationConfig,
+)
 from src.tree_interval.rich_printer import RichTreePrinter
 from tree_interval.core.future import Future
 from tree_interval.core.interval_core import PartStatement, Statement
