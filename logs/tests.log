@@ -1,0 +1,101 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.10, pytest-8.3.4, pluggy-1.5.0
+rootdir: /home/runner/workspace
+configfile: pyproject.toml
+plugins: cov-4.1.0
+collected 0 items / 9 errors
+
+==================================== ERRORS ====================================
+__________________ ERROR collecting tests/test_ast_builder.py __________________
+ImportError while importing test module '/home/runner/workspace/tests/test_ast_builder.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/nix/store/clx0mcir7qw8zk36zbr4jra789g3knf6-python3-3.11.10/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/test_ast_builder.py:5: in <module>
+    from tree_interval import AstTreeBuilder
+E   ModuleNotFoundError: No module named 'tree_interval'
+___________________ ERROR collecting tests/test_ast_nodes.py ___________________
+ImportError while importing test module '/home/runner/workspace/tests/test_ast_nodes.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/nix/store/clx0mcir7qw8zk36zbr4jra789g3knf6-python3-3.11.10/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/test_ast_nodes.py:5: in <module>
+    from tree_interval import AstTreeBuilder
+E   ModuleNotFoundError: No module named 'tree_interval'
+________________ ERROR collecting tests/test_frame_analyzer.py _________________
+ImportError while importing test module '/home/runner/workspace/tests/test_frame_analyzer.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/nix/store/clx0mcir7qw8zk36zbr4jra789g3knf6-python3-3.11.10/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/test_frame_analyzer.py:5: in <module>
+    from tree_interval import FrameAnalyzer
+E   ModuleNotFoundError: No module named 'tree_interval'
+____________________ ERROR collecting tests/test_future.py _____________________
+ImportError while importing test module '/home/runner/workspace/tests/test_future.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/nix/store/clx0mcir7qw8zk36zbr4jra789g3knf6-python3-3.11.10/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/test_future.py:3: in <module>
+    from tree_interval.core.future import Future
+E   ModuleNotFoundError: No module named 'tree_interval'
+_________________ ERROR collecting tests/test_interval_core.py _________________
+ImportError while importing test module '/home/runner/workspace/tests/test_interval_core.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/nix/store/clx0mcir7qw8zk36zbr4jra789g3knf6-python3-3.11.10/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/test_interval_core.py:3: in <module>
+    from tree_interval import Leaf, Position
+E   ModuleNotFoundError: No module named 'tree_interval'
+_________________ ERROR collecting tests/test_rich_printer.py __________________
+ImportError while importing test module '/home/runner/workspace/tests/test_rich_printer.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/nix/store/clx0mcir7qw8zk36zbr4jra789g3knf6-python3-3.11.10/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+/home/runner/treeinterval/tests/test_rich_printer.py:7: in <module>
+    ???
+E   ModuleNotFoundError: No module named 'tree_interval'
+____________________ ERROR collecting tests/test_styling.py ____________________
+ImportError while importing test module '/home/runner/workspace/tests/test_styling.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/nix/store/clx0mcir7qw8zk36zbr4jra789g3knf6-python3-3.11.10/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+/home/runner/treeinterval/tests/test_styling.py:6: in <module>
+    ???
+E   ModuleNotFoundError: No module named 'tree_interval'
+___________________ ERROR collecting tests/test_tree_core.py ___________________
+ImportError while importing test module '/home/runner/workspace/tests/test_tree_core.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/nix/store/clx0mcir7qw8zk36zbr4jra789g3knf6-python3-3.11.10/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/test_tree_core.py:5: in <module>
+    from tree_interval import Leaf, Position, Tree
+E   ModuleNotFoundError: No module named 'tree_interval'
+__________________ ERROR collecting tests/test_visualizer.py ___________________
+ImportError while importing test module '/home/runner/workspace/tests/test_visualizer.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/nix/store/clx0mcir7qw8zk36zbr4jra789g3knf6-python3-3.11.10/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/test_visualizer.py:3: in <module>
+    from tree_interval import (
+E   ModuleNotFoundError: No module named 'tree_interval'
+=========================== short test summary info ============================
+ERROR tests/test_ast_builder.py
+ERROR tests/test_ast_nodes.py
+ERROR tests/test_frame_analyzer.py
+ERROR tests/test_future.py
+ERROR tests/test_interval_core.py
+ERROR tests/test_rich_printer.py
+ERROR tests/test_styling.py
+ERROR tests/test_tree_core.py
+ERROR tests/test_visualizer.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 9 errors during collection !!!!!!!!!!!!!!!!!!!!
+============================== 9 errors in 0.63s ===============================
