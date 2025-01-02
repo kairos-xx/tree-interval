@@ -29,9 +29,9 @@ from src.tree_interval import (
     TreeVisualizer,
     VisualizationConfig,
 )
+from src.tree_interval.core.future import Future
+from src.tree_interval.core.interval_core import PartStatement, Statement
 from src.tree_interval.rich_printer import RichPrintConfig, RichTreePrinter
-from tree_interval.core.future import Future
-from tree_interval.core.interval_core import PartStatement, Statement
 
 # ANSI Colors
 RED = "\033[91m"

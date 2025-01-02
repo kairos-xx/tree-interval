@@ -7,7 +7,7 @@ import os
 from datetime import datetime
 from typing import Any, Dict
 
-import yaml
+from yaml import dump
 
 
 def load_workflow_config() -> Dict[str, Any]:
@@ -21,19 +21,27 @@ def load_workflow_config() -> Dict[str, Any]:
         "on": ["push", "pull_request"],
         "jobs": {
             "build": {
-                "runs-on": "ubuntu-latest",
+                "runs-on":
+                "ubuntu-latest",
                 "steps": [
-                    {"uses": "actions/checkout@v2"},
+                    {
+                        "uses": "actions/checkout@v2"
+                    },
                     {
                         "name": "Set up Python",
                         "uses": "actions/setup-python@v2",
-                        "with": {"python-version": "3.x"},
+                        "with": {
+                            "python-version": "3.x"
+                        },
                     },
                     {
                         "name": "Install dependencies",
                         "run": "pip install -r requirements.txt",
                     },
-                    {"name": "Run tests", "run": "pytest"},
+                    {
+                        "name": "Run tests",
+                        "run": "pytest"
+                    },
                 ],
             }
         },
@@ -56,7 +64,7 @@ def update_workflows() -> None:
 
     # Write updated workflow file
     with open(workflow_path, "w") as f:
-        yaml.dump(config, f, default_flow_style=False)
+        dump(config, f, default_flow_style=False)
 
     # Log update
     with open("logs/update_worflows.log", "a") as log:
