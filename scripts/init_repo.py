@@ -1,4 +1,3 @@
-
 """Initialize a new Git repository for the Replit project.
 
 This script creates a new Git repository and configures it with the
@@ -7,7 +6,7 @@ current project directory.
 
 import os
 from subprocess import run
-from typing import Optional
+
 
 def init_git_repo() -> None:
     """Initialize a new Git repository for the current project."""
@@ -20,14 +19,14 @@ def init_git_repo() -> None:
 
         # Initialize git repository
         run(["git", "init"], check=True)
-        
+
         # Configure git user if not already set
         try:
             run(["git", "config", "user.name"], check=True)
         except:
             name = input("Enter your name for Git: ")
             run(["git", "config", "user.name", name], check=True)
-            
+
         try:
             run(["git", "config", "user.email"], check=True)
         except:
@@ -36,7 +35,7 @@ def init_git_repo() -> None:
 
         # Add all files
         run(["git", "add", "."], check=True)
-        
+
         # Initial commit
         run(["git", "commit", "-m", "Initial commit"], check=True)
 
@@ -50,6 +49,7 @@ def init_git_repo() -> None:
 
     except Exception as e:
         print(f"Error initializing repository: {str(e)}")
+
 
 if __name__ == "__main__":
     init_git_repo()

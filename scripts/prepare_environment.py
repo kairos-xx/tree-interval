@@ -4,6 +4,8 @@ Updates GitHub Actions workflow files with new configurations.
 """
 
 from importlib import import_module
+from json import dumps as json_dumps
+from os import environ, getenv
 from subprocess import CalledProcessError, run
 from textwrap import dedent
 from typing import Tuple
@@ -412,29 +414,38 @@ def update_workflows() -> None:
     pyproject_dict["project"]["description"] = project_info["description"]
     pyproject_dict["project"]["urls"] = project_info["urls"]
     requirements_text = "\n".join(project_info["requirements"])
-    nix_text = project_info["template"]["nix"].replace(
+    nix_text = project_info["templates"]["nix"].replace(
         "@@@", "\n".join(project_info["nix_packages"]))
-
-    missing_packages = check_packages(required_packages)
-    if missing_packages:
-        print("\nInstalling missing packages...")
-        install_missing_packages(missing_packages)
-    else:
-        print("\nAll required packages are installed!")
-
+   
+    author= getenv("REPL_OWNER_ID","299513")
     replit_dict = project_info["templates"]["replit"]
+    for v in replit_dict["workflows"]["workflow"]:
+        v["author"] = int(author)
     replit_dict["run"][1] = replit_dict["deployment"][1] = replit_dict[
         "entrypoint"] = project_info["entrypoint"]
 
-    with open(project_info["paths"]["pyproject"], "w") as f:
-        toml_dump(pyproject_dict, f)
-    with open(project_info["paths"]["requirements"], "w") as f:
-        f.write(requirements_text)
+    def create():
+        missing_packages = check_packages(required_packages)
+        if missing_packages:
+            print("\nInstalling missing packages...")
+            install_missing_packages(missing_packages)
+        else:
+            print("\nAll required packages are installed!")
+    
+        with open(project_info["paths"]["pyproject"], "w") as f:
+            toml_dump(pyproject_dict, f)
+        with open(project_info["paths"]["requirements"], "w") as f:
+            f.write(requirements_text)
+    
+        with open(project_info["paths"]["nix"], "w") as f:
+            f.write(dedent(nix_text))
 
-    with open(project_info["paths"]["nix"], "w") as f:
-        f.write(dedent(nix_text))
+        open(project_info["paths"]["readme"], 'a+').close()
 
-    open(project_info["paths"]["readme"], 'a+').close()
+    j=json_dumps(dict(environ),indent=3,default=str,sort_keys=True)
+    print(j)
+  
+    print(getenv("REPL_SLUG", ""))
 
 
 if __name__ == "__main__":
