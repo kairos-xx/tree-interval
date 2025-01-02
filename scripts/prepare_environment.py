@@ -454,7 +454,7 @@ def update_workflows() -> None:
                                     "tee @@logs@@/pyright.log 2>&1 && " +
                                     "pflake8 --exclude */. --exclude ./build | "
                                     + "tee @@logs@@/flake8.log 2>&1 && " +
-                                    "ruff check ./dev ./src ./examples ./tests ./scripts | "
+                                    "ruff check . ./dev ./src ./examples ./tests ./scripts | "
                                     + "tee @@logs@@/ruff.log 2>&1",
                                 },
                             ],
