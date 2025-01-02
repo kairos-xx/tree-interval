@@ -65,23 +65,16 @@ def update_workflows() -> None:
                     "build-backend": "setuptools.build_meta",
                 },
                 "project": {
-                    "name":
-                    "tree-",
-                    "version":
-                    "",
-                    "description":
-                    "",
-                    "readme":
-                    "README.md",
+                    "name": "tree-",
+                    "version": "",
+                    "description": "",
+                    "readme": "README.md",
                     "authors": [{
                         "name": "Joao Lopes",
                         "email": "joaoslopes@gmail.com"
                     }],
-                    "license": {
-                        "file": "LICENSE"
-                    },
-                    "requires-python":
-                    ">=3.11",
+                    "license": {"file": "LICENSE"},
+                    "requires-python": ">=3.11",
                     "classifiers": [
                         "Development Status :: 5 - Production/Stable",
                         "Intended Audience :: Developers",
@@ -89,7 +82,8 @@ def update_workflows() -> None:
                         "License :: OSI Approved :: MIT License",
                         "Programming Language :: Python :: 3",
                         "Programming Language :: Python :: 3.11",
-                        "Topic :: Software Development :: Libraries :: Python Modules",
+                        "Topic :: Software Development :: Libraries :: "
+                        "Python Modules",
                         "Topic :: Software Development :: Code Generators",
                         "Topic :: Software Development :: Debuggers",
                         "Operating System :: OS Independent",
@@ -97,10 +91,12 @@ def update_workflows() -> None:
                         "Typing :: Typed",
                     ],
                     "urls": {
-                        "Homepage":
-                        "https://github.com/kairos-xx/tree-interval",
-                        "Repository":
-                        "https://github.com/kairos-xx/tree-interval.git",
+                        "Homepage": (
+                            "https://github.com/kairos-xx/tree-interval"
+                        ),
+                        "Repository": (
+                            "https://github.com/kairos-xx/tree-interval.git"
+                        ),
                     },
                 },
                 "tool": {
