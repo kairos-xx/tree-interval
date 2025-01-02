@@ -7,7 +7,6 @@ from importlib import import_module
 from json import dumps as json_dumps
 from os import environ, getenv, mkdir
 from os.path import exists
-from pathlib import Path
 from subprocess import CalledProcessError, run
 from textwrap import dedent
 from typing import List, Tuple
@@ -723,6 +722,30 @@ def run_all() -> None:
 
             if __name__ == "__main__":
                 create_zip()
+            ''',
+            "license":
+            '''
+            MIT License
+
+            Copyright (c) 2024 @@@
+
+            Permission is hereby granted, free of charge, to any person obtaining a copy
+            of this software and associated documentation files (the "Software"), to deal
+            in the Software without restriction, including without limitation the rights
+            to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+            copies of the Software, and to permit persons to whom the Software is
+            furnished to do so, subject to the following conditions:
+
+            The above copyright notice and this permission notice shall be included in all
+            copies or substantial portions of the Software.
+
+            THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+            IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+            FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+            AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+            LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+            OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+            SOFTWARE.
             '''
         },
         "classifiers": {
@@ -1028,10 +1051,12 @@ def run_all() -> None:
                 "replit": ".replit",
                 "nix": "replit.nix",
                 "readme": "README.md",
+                "license": "LICENSE",
                 "pypi_upload": "scripts/pypi_upload.py",
                 "create_zip": "scripts/create_zip.py",
                 "create_zip_folder": "zip",
                 "logs_folder": "logs",
+                "entrypoint": "main.py",
             },
             "classifiers": {
                 "development_status": 1,
@@ -1045,9 +1070,6 @@ def run_all() -> None:
             "0.1.1",
             "description":
             "",
-            "descriptors": [
-                "",
-            ],
             "user_config": {
                 "user_name": "kairos-xx",
                 "user_email": "joaoslopes@gmail.com",
@@ -1061,8 +1083,6 @@ def run_all() -> None:
                 "pytest>=7.0.0", "pytest", "replit==4.1.0", "black", "flake8",
                 "build", "requests", "toml", "pyyaml", "isort", "zipfile"
             ],
-            "entrypoint":
-            "main.py",
             "nix_packages": [
                 "pkgs.libyaml",
                 "pkgs.nano",
@@ -1076,32 +1096,13 @@ def run_all() -> None:
         },
     }
 
-    a=get(str(info.replit_id_url),allow_redirects=True)
-    
-
-    
-   
-    project_name = a.url.split("/")[-1]
-    replit_owner_id = getenv("REPL_OWNER_ID", "299513")
-    github_token = getenv(
-        "GITHUB_TOKEN",
-        "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ghp" +
-        "_jMChfQ9izNyKLdJd9M46VTTOfZDTGV2r2CfY",
-    )
-    
-    
-    print(project_name)
-    homedir = Path.home()
-    homedir = str(homedir).replace("\\", "/")
-
-    try:
-        __sid__ = open(f"{homedir}/repl-cli/connect.sid", "r").read().strip()
-    except:
-        __sid__ = None
-        
-    print(__sid__,get(f"https://replit.com/data/repls/@kairos").content,homedir)
-
     setup = project_info["setup"]
+    missing_packages = check_packages(setup["required_packages"])
+    print(f"Installing missing packages... {','.join(missing_packages)}")
+    if missing_packages:
+        install_missing_packages(missing_packages)
+    print("\nAll required packages are installed!")
+
     user_config = setup["user_config"]
     paths = setup["paths"]
     project_info_urls = setup["urls"]
@@ -1114,6 +1115,8 @@ def run_all() -> None:
     create_zip_path = paths["create_zip"]
     create_zip_folder_path = paths["create_zip_folder"]
     logs_folder_path = paths["logs_folder"]
+    license_path = paths["license"]
+    entrypoint_path = paths["entrypoint"]
     templates = project_info["templates"]
     replit_dict = templates["replit"]
     pyproject_dict = templates["pyproject"]
@@ -1122,10 +1125,21 @@ def run_all() -> None:
     classifiers = project_info["classifiers"]
     topics = classifiers["topics"]
     development_status = classifiers["development_status"]
+    project_name = get(str(info.replit_id_url),
+                       allow_redirects=True,
+                       timeout=5).url.split("/")[-1]
+    replit_owner_id = getenv("REPL_OWNER_ID", "299513")
+    github_token = getenv(
+        "GITHUB_TOKEN",
+        "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ghp" +
+        "_jMChfQ9izNyKLdJd9M46VTTOfZDTGV2r2CfY",
+    )
 
     project_info_urls["Homepage"] += f"{user_name}/{project_name}"
     project_info_urls["Repository"] += f"{user_name}/{project_name}.git"
-    pyproject_dict["name"] = project_name
+    pyproject_dict_project["name"] = project_name
+    pyproject_dict_project["readme"] = paths["readme"]
+    pyproject_dict_project["license"]["file"] = license_path
     pyproject_dict_project["authors"][0]["name"] = name
     pyproject_dict_project["authors"][0]["email"] = user_email
     pyproject_dict_project["version"] = setup["version"]
@@ -1133,7 +1147,6 @@ def run_all() -> None:
     pyproject_dict_project["urls"] = setup["urls"]
     pyproject_dict_project_classifiers.insert(
         0, development_status[setup_classifiers["development_status"]])
-
     for v in setup_classifiers["topics"]:
         topic = next(iter(get_close_matches(v, topics, len(topics), 0)), None)
         if topic:
@@ -1145,18 +1158,12 @@ def run_all() -> None:
                 "@@pypi_upload@@", pypi_upload_path).replace(
                     "@@create_zip@@",
                     create_zip_path).replace("@@logs@@", logs_folder_path)
-    entry_point = setup["entrypoint"]
-    replit_dict["run"][1] += entry_point
-    replit_dict["deployment"]["run"][1] += entry_point
-    replit_dict["entrypoint"] += entry_point
 
+    replit_dict["run"][1] += entrypoint_path
+    replit_dict["deployment"]["run"][1] += entrypoint_path
+    replit_dict["entrypoint"] += entrypoint_path
 
     def create():
-        missing_packages = check_packages(setup["required_packages"])
-        print(f"Installing missing packages... {','.join(missing_packages)}")
-        if missing_packages:
-            install_missing_packages(missing_packages)
-        print("\nAll required packages are installed!")
 
         with open(pyproject_path, "w") as f:
             toml_dump(pyproject_dict, f)
@@ -1179,6 +1186,8 @@ def run_all() -> None:
                 dedent(templates["create_zip"].replace(
                     "@@@", project_name).replace("###",
                                                  create_zip_folder_path)))
+        with open(license_path, "w") as f:
+            f.write(dedent(templates["license"].replace("@@@", name)))
 
         mkdir(logs_folder_path)
         open(paths["readme"], "a+").close()
@@ -1187,5 +1196,4 @@ def run_all() -> None:
 
 
 if __name__ == "__main__":
-    #print(open("scripts/pypi_upload.py").read())
     run_all()
