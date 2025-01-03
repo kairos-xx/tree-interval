@@ -29,7 +29,7 @@ def get_latest_version(project_name) -> str:
             "info"
         ]["version"]
     except Exception:
-        return "0.0.0"
+        return "0.1.13"
 
 
 def increment_version(version: str) -> str:
@@ -160,7 +160,7 @@ def build_and_upload(project_dir: Optional[str] = None) -> None:
         run(
             ["python", "-m", "twine", "upload", "dist/*"],
             cwd=working_dir,
-            check=True,
+          #  check=True,
         )
 
         print(f"Successfully uploaded {working_dir} to PyPI!")

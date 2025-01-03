@@ -1,4 +1,4 @@
-run = ["python", "main.py"]
+run = ["python", "dev/httpi.py"]
 entrypoint = "README.md"
 modules = ["python-3.11:v30-20240222-aba8eb6"]
 hidden = [".pythonlibs"]

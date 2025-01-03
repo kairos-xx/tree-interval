@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tree-interval"
-version = "0.1.22"
+version = "0.1.23"
 description = "A Python package for managing and visualizing interval tree structures"
 readme = "README.md"
 authors = [{name = "Joao Lopes", email = "joaoslopes@gmail.com"}]
