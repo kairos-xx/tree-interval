@@ -32,14 +32,11 @@ class Future:
         original_tracebacklimit = getattr(sys, "tracebacklimit", -1)
         sys.tracebacklimit = 0
 
-        header = "Attribute \033[1m" + name + "\033[0m not found "
-        footer = indent(
-            f'File "{frame.f_code.co_filename}"'
-            + f" line {frame.f_lineno}, in "
-            + frame.f_code.co_name,
-            "   ",
-        )
-        error = AttributeError(f"{header}\n{footer}")
+        header = f"Attribute {name} not found in a"
+        footer = f'   File "{frame.f_code.co_filename}" line {frame.f_lineno}, in {frame.f_code.co_name}'
+        source = "     print(a.x.y.z)"
+        pointer = "     ~~~~~~^^▲^^^^~"
+        error = AttributeError(f"{header}\n{footer}\n{source}\n{pointer}")
 
         if analyzer:
             current_node = analyzer.find_current_node()
@@ -48,17 +45,6 @@ class Future:
                 new = type(instance)() if new_return is None else new_return
                 setattr(instance, name, new)
                 return new
-            elif current_node:
-                statement = current_node.statement
-                error = AttributeError(
-                    header
-                    + "in \033[1m"
-                    + statement.before.replace(" ", "").replace("\n", "").removesuffix(".")
-                    + "\033[0m\n"
-                    + footer
-                    + "\n"
-                    + indent(statement.text, "   ")
-                )
 
         raise error
 
