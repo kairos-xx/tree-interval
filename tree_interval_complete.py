@@ -1,7 +1,8 @@
 """Complete Tree Interval Implementation with all core components."""
 
 from dataclasses import dataclass
-from inspect import currentframe, FrameType, getsource, stack, getframeinfo
+from inspect import currentframe, getsource, stack, getframeinfo
+from types import FrameType
 from rich.console import Console
 from rich.style import Style
 from rich.tree import Tree as RichTree
