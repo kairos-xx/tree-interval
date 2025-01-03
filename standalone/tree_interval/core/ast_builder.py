@@ -1,4 +1,3 @@
-
 import ast
 from typing import Any, Optional, Union
 
@@ -48,17 +47,17 @@ class ASTBuilder:
     def _get_node_info(node: ast.AST) -> dict[str, Any]:
         """Extract relevant information from AST node."""
         info: dict[str, Any] = {"type": node.__class__.__name__}
-        
+
         # Add name if present
         if hasattr(node, "name"):
             info["name"] = node.name
         elif hasattr(node, "id"):
             info["name"] = node.id
-        
+
         # Add value for literals
         if hasattr(node, "value"):
             info["value"] = node.value
-            
+
         return info
 
     @staticmethod

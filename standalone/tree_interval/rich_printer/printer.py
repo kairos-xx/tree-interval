@@ -1,4 +1,3 @@
-
 """Rich-based Tree Visualization Implementation."""
 
 from typing import Optional
@@ -9,6 +8,7 @@ from rich.tree import Tree as RichTree
 
 from tree_interval.core.interval_core import Leaf, Tree
 from tree_interval.rich_printer.config import RichPrintConfig
+
 
 class RichTreePrinter:
     """Prints tree structures using Rich library."""
@@ -37,18 +37,15 @@ class RichTreePrinter:
 
     def _get_node_style(self, node: Leaf, is_root: bool = False) -> Style:
         """Get the style for a node."""
-        style = (
-            self.config.root_style
-            if is_root
-            else (
-                self.config.leaf_style
-                if not node.children
-                else self.config.node_style
-            )
-        )
+        style = (self.config.root_style if is_root else
+                 (self.config.leaf_style
+                  if not node.children else self.config.node_style))
         return style or self.config.node_style
 
-    def _format_node(self, node: Leaf, is_root: bool = False, level: int = 0) -> str:
+    def _format_node(self,
+                     node: Leaf,
+                     is_root: bool = False,
+                     level: int = 0) -> str:
         """Format a node for Rich tree display."""
         style = self._get_node_style(node, is_root)
         parts = []
@@ -62,15 +59,12 @@ class RichTreePrinter:
         if self.config.show_info and node.info:
             terminal_width = self.config.terminal_size
             current_width = (sum(len(p) for p in parts) + len(parts) * 1) + (
-                (level + 1) * 4
-            )
+                (level + 1) * 4)
 
             if isinstance(node.info, dict):
-                info_str = (
-                    "Info("
-                    + ", ".join(f"{k}={repr(v)}" for k, v in node.info.items())
-                    + ")"
-                )
+                info_str = ("Info(" +
+                            ", ".join(f"{k}={repr(v)}"
+                                      for k, v in node.info.items()) + ")")
             else:
                 info_str = str(node.info)
 
@@ -83,7 +77,10 @@ class RichTreePrinter:
 
         return style.render(" ".join(parts))
 
-    def _add_children(self, node: Leaf, rich_node: RichTree, level: int = 0) -> None:
+    def _add_children(self,
+                      node: Leaf,
+                      rich_node: RichTree,
+                      level: int = 0) -> None:
         """Recursively add children to Rich tree."""
         for child in node.children:
             child_node = rich_node.add(
