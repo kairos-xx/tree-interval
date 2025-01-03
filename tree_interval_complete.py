@@ -376,19 +376,15 @@ class Leaf:
     def top_statement(self) -> Optional['Leaf']:
         """Get the topmost statement node containing this node."""
         if not self.parent:
-            return self if self.info and self.info.get("type") in AST_TYPES else None
-        
-        current = self
-        while current.parent:
-            parent = current.parent
-            if parent.info and parent.info.get("type") in AST_TYPES:
-                if parent.info.get("type") != "FunctionDef":  # Skip function definitions
-                    return parent
-            current = parent
-        return None
+            return self if self.info and isinstance(self.info, dict) and self.info.get("type") in AST_TYPES else None
 
         current = self
         while current.parent:
+            parent = current.parent
+            if parent.info and isinstance(parent.info, dict) and parent.info.get("type") in AST_TYPES:
+                return parent
+            current = parent
+        return None
             parent = current.parent
             if parent.info and parent.info.get("type") in AST_TYPES:
                 return parent
