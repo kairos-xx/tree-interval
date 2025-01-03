@@ -26,7 +26,7 @@ class Future:
                 frame = None
                 analyzer = None
         else:
-            frame = frame if isinstance(frame, Frame) else None
+            frame = frame if isinstance(frame, FrameType) else None
             analyzer = None if frame is None else FrameAnalyzer(frame)
 
         original_tracebacklimit = getattr(sys, "tracebacklimit", -1)
