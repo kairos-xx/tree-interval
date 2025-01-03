@@ -757,6 +757,7 @@ class Future:
 
         # Analyze current execution frame
         current_node = FrameAnalyzer(frame).find_current_node()
+        print(current_node.top_statement.is_set)
         
         if current_node:
             # Check if we're in an attribute setting operation
