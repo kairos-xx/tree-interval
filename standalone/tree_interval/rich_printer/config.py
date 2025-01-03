@@ -1,8 +1,8 @@
-
 """Rich Tree Printer Configuration Module."""
 
 from dataclasses import dataclass
 from rich.style import Style
+
 
 def get_terminal_width() -> int:
     """Get the width of the terminal window."""
@@ -11,6 +11,7 @@ def get_terminal_width() -> int:
         return get_terminal_size().columns
     except Exception:
         return 80  # Default fallback width
+
 
 @dataclass
 class RichPrintConfig:
