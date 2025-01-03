@@ -761,7 +761,9 @@ class Future:
         
         if current_node:
             # Check if we're in an attribute setting operation
-            if getattr(current_node.top_statement, "is_set", False):
+            top_stmt = current_node.top_statement
+            is_set = top_stmt and top_stmt.info and AST_TYPES.get(top_stmt.info.get("type", ""), {}).get("is_set", False)
+            if is_set:
                 sys.tracebacklimit = original_tracebacklimit
                 # Create and set new attribute if in setting context
                 new = type(instance)() if new_return is None else new_return
