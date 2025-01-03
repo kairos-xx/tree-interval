@@ -52,17 +52,15 @@ class FrameAnalyzer:
             return None
         # If the current node is not found yet then we search for it
         if self.current_node is None:
-            # Find all nodes at the current line number
-            matching_nodes = []
-            for node in self.tree.flatten():
-                if hasattr(node, 'position') and node.position:
-                    # Normalize line numbers using frame's first line
-                    matching_nodes.append(
-                        (node,
-                         abs(node.position.start - self.frame_position.start) +
-                         abs(node.position.end - self.frame_position.end)))
-
-            if matching_nodes:
+            if matching_nodes := [
+                (
+                    node,
+                    abs(node.position.start - self.frame_position.start)
+                    + abs(node.position.end - self.frame_position.end),
+                )
+                for node in self.tree.flatten()
+                if hasattr(node, 'position') and node.position
+            ]:
                 self.current_node = min(matching_nodes, key=lambda x: x[1])[0]
         return self.current_node
 
