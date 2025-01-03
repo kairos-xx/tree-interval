@@ -688,8 +688,8 @@ from typing import Any
 
 
 class Future:
-    """Handles dynamic attribute creation and access."""
-
+    """Handles dynamic attribute creation and access with AST analysis."""
+    
     def __new__(
         cls,
         name: str,
@@ -700,20 +700,42 @@ class Future:
         if not isinstance(frame, FrameType):
             frame = stack()[frame + 1 if isinstance(frame, int) else 2].frame
 
+        original_tracebacklimit = getattr(sys, "tracebacklimit", -1)
         sys.tracebacklimit = 0
-        header = f"Attribute {name} not found"
+
+        header = "Attribute \033[1m" + name + "\033[0m not found "
         footer = indent(
             f'File "{frame.f_code.co_filename}" '
             f"line {frame.f_lineno}, in {frame.f_code.co_name}",
             "   ",
         )
-
         new = AttributeError(f"{header}\n{footer}")
 
-        # Create and set new attribute if in setting context
-        new = type(instance)() if new_return is None else new_return
-        setattr(instance, name, new)
-        return new
+        # Analyze current execution frame
+        current_node = FrameAnalyzer(frame).find_current_node()
+        
+        if current_node:
+            # Check if we're in an attribute setting operation
+            if getattr(current_node.top_statement, "is_set", False):
+                sys.tracebacklimit = original_tracebacklimit
+                # Create and set new attribute if in setting context
+                new = type(instance)() if new_return is None else new_return
+                setattr(instance, name, new)
+                return new
+            else:
+                # Build detailed error for attribute access in get context
+                statement = current_node.statement
+                new = AttributeError(
+                    header
+                    + "in \033[1m"
+                    + statement.before.replace(" ", "").replace("\n", "").removesuffix(".")
+                    + "\033[0m\n"
+                    + footer
+                    + "\n"
+                    + indent(statement.text, "   ")
+                )
+        
+        raise new
 
 
 class Nested:
