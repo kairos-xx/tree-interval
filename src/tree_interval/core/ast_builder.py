@@ -178,8 +178,7 @@ class AstTreeBuilder:
 
         nodes_with_positions = []
         for node in walk(ast_tree):
-            position = self._get_node_position(node)
-            if position:
+            if position := self._get_node_position(node):
                 leaf = Leaf(
                     position,
                     info={
