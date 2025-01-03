@@ -341,6 +341,36 @@ class Leaf:
         return result
         
     @property
+    def statement(self) -> Statement:
+        """Get statement information for this node using AST traversal."""
+        top = self.top_statement
+        next_attr = self
+        while True:
+            next_attr_candidate = getattr(next_attr, "next_attribute", None)
+            if next_attr_candidate is not None:
+                next_attr = next_attr_candidate
+            else:
+                break
+
+        # Handle current attribute
+        value = getattr(self.ast_node, "cleaned_value", "")
+
+        # Find remaining attributes in chain for 'after' part
+        top_source = getattr(top, "info", {}).get("source", "")
+        top_start = (top.end if top else 0) or 0
+        top_part = PartStatement(
+            before=top_source[: (self.start or 0) - top_start],
+            after=top_source[((next_attr.end if next_attr else 0) or 0) - top_start:],
+        )
+        source = self.info.get("source", "") if self.info else ""
+        return Statement(
+            top=top_part,
+            before=source.removesuffix(value),
+            self=value,
+            after=getattr(next_attr, "info", {}).get("source", "").removeprefix(source),
+        )
+
+    @property
     def top_statement(self) -> Optional['Leaf']:
         """Get the topmost statement node containing this node."""
         if not self.parent:
