@@ -639,6 +639,10 @@ class FrameAnalyzer:
             self.find_current_node()
         return self.tree
 
+from inspect import stack
+from typing import Any
+
+
 class Future:
     """Handles dynamic attribute creation and access."""
     
@@ -667,20 +671,24 @@ class Future:
         setattr(instance, name, new)
         return new
 
-def create_example_tree() -> Tree:
-    """Create an example tree structure."""
-    tree = Tree("Example")
-    root = Leaf(Position(0, 100), "Root")
-    child1 = Leaf(Position(10, 50), "Child 1")
-    child2 = Leaf(Position(60, 90), "Child 2")
+class Nested:
+    def __init__(self) -> None:
+        self.__dict__: dict[str, "Nested"] = {}
 
-    tree.root = root
-    root.add_child(child1)
-    root.add_child(child2)
-    return tree
+    def __getattr__(self, name: str) -> Any:
+        return Future(
+            name,
+            frame=stack()[1].frame,
+            instance=self,
+            new_return=type(self)(),
+        )
+
+
+def frame_function():
+    a = Nested()
+    a.b.c.d = 3
+    print(a.b.c.f.g)
+
 
 if __name__ == "__main__":
-    # Create and visualize example tree
-    tree = create_example_tree()
-    config = VisualizationConfig(show_info=True, show_size=True)
-    tree.visualize(config)
+    frame_function()
