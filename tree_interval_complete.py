@@ -753,46 +753,31 @@ class Future:
         frame: Optional[Union[int, FrameType]] = None,
         new_return: Optional[Any] = None,
     ) -> Any:
-        if not isinstance(frame, FrameType):
-            frame = stack()[frame + 1 if isinstance(frame, int) else 2].frame
+        """Dynamic attribute creation and access handler."""
+        if isinstance(frame, int):
+            frame = sys._getframe(frame)
+        elif frame is None:
+            frame = currentframe()
 
-        original_tracebacklimit = getattr(sys, "tracebacklimit", -1)
-        sys.tracebacklimit = 0
+        if frame is None:
+            return new_return if new_return is not None else None
 
-        header = "Attribute \033[1m" + name + "\033[0m not found "
-        footer = indent(
-            f'File "{frame.f_code.co_filename}" '
-            f"line {frame.f_lineno}, in {frame.f_code.co_name}",
-            "   ",
-        )
-        new = AttributeError(f"{header}\n{footer}")
-
-        # Analyze current execution frame
         current_node = FrameAnalyzer(frame).find_current_node()
 
         if current_node and current_node.top_statement:
-            top_stmt = current_node.top_statement
             # Use the is_set property to check if we're in a setting operation
-            print(f"top_statement ast node: {top_stmt.ast_node}")
-            if hasattr(top_stmt, 'ast_node') and top_stmt.ast_node:
-                print(f"top_statement ast unparse: \n{ast.unparse(top_stmt.ast_node)}")
-            print(f"\ntop_statement is_set: {top_stmt.is_set}")
+            print(
+                f"top_statement ast node: {current_node.top_statement.ast_node}\n"
+            )
+            print(f"top_statement ast unparse: \n{ast.unparse(current_node.top_statement.ast_node)}")
+            print(f"\ntop_statement is_set: {current_node.top_statement.is_set}")
             if current_node.top_statement.is_set:
-                sys.tracebacklimit = original_tracebacklimit
                 # Create and set new attribute if in setting context
-                new = type(instance)() if new_return is None else new_return
-                setattr(instance, name, new)
-                return new
-            else:
-                # Build detailed error for attribute access in get context
-                statement = current_node.statement
-                new = AttributeError(header + "in \033[1m" +
-                                     statement.before.replace(" ", "").replace(
-                                         "\n", "").removesuffix(".") +
-                                     "\033[0m\n" + footer + "\n" +
-                                     indent(statement.text, "   "))
+                setattr(instance, name, new_return)
+                return new_return
 
-        raise new
+        # Get attribute or return new_return if not found
+        return getattr(instance, name, new_return)
 
 
 class Nested:
