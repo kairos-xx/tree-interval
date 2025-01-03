@@ -339,6 +339,20 @@ class Leaf:
         for child in self.children:
             result.extend(child.flatten())
         return result
+        
+    @property
+    def top_statement(self) -> Optional['Leaf']:
+        """Get the topmost statement node containing this node."""
+        if not self.parent:
+            return self if self.info and self.info.get("type") in AST_TYPES else None
+            
+        current = self
+        while current.parent:
+            parent = current.parent
+            if parent.info and parent.info.get("type") in AST_TYPES:
+                return parent
+            current = parent
+        return None
 
     def _as_dict(self) -> Dict[str, Any]:
         """Convert to dictionary representation."""
