@@ -384,6 +384,16 @@ class Leaf:
             current = parent
         return None
 
+    @property
+    def is_set(self) -> bool:
+        """Check if this node represents a set operation based on AST type."""
+        if not self.info or not isinstance(self.info, dict):
+            return False
+        node_type = self.info.get("type")
+        if not node_type:
+            return False
+        return AST_TYPES.get(node_type, {}).get("is_set", False)
+
     def _as_dict(self) -> Dict[str, Any]:
         """Convert to dictionary representation."""
         return {
