@@ -253,7 +253,11 @@ class Leaf:
         child.parent = self
         self.children.append(child)
 
-    def find_best_match(self, start: int, end: int) -> Optional['Leaf']:
+    def find_best_match(
+            self,
+            start: int,
+            end: int) -> Optional['Leaf']:
+        """Find best matching node for range."""
         if self.start is None or self.end is None:
             return None
 
@@ -568,6 +572,7 @@ class AstTreeBuilder:
     def __init__(self, source: Union[FrameType, str]):
         self.source = getsource(source) if isinstance(source,
                                                       FrameType) else source
+        self.cleaned_value_key = "cleaned_value"
 
     def build(self) -> Optional[Tree]:
         if not self.source:
@@ -576,27 +581,58 @@ class AstTreeBuilder:
         tree = ast.parse(dedent(self.source))
         return self._build_tree_from_ast(tree)
 
+    def _get_node_position(self, node: ast.AST) -> Optional[Position]:
+        if hasattr(node, 'lineno'):
+            position = Position(node.lineno,
+                                getattr(node, 'end_lineno', node.lineno))
+            position.col_offset = getattr(node, 'col_offset', None)
+            position.end_col_offset = getattr(node, 'end_col_offset', None)
+            return position
+        return None
+
+    def _get_node_value(self, node: ast.AST) -> str:
+        if isinstance(node, ast.Assign):
+            if node.targets and isinstance(node.targets[0], ast.Name):
+                return node.targets[0].id
+        elif isinstance(node, ast.Name):
+            return node.id
+        return ""
+
     def _build_tree_from_ast(self, ast_tree: ast.AST) -> Optional[Tree]:
-        tree = Tree(self.source)
+        """Build a hierarchical tree structure from an AST."""
+        if not self.source:
+            raise ValueError("No source code available")
+
+        result_tree = Tree[str](self.source)
         root_pos = Position(0, len(self.source))
-        tree.root = Leaf(root_pos, {"type": "Module", "name": "Module"})
+        result_tree.root = Leaf(
+            root_pos,
+            info={"type": "Module", "name": "Module", "source": self.source},
+        )
 
-        for node in ast.walk(ast_tree):
-            if hasattr(node, 'lineno'):
-                position = Position(node.lineno,
-                                    getattr(node, 'end_lineno', node.lineno))
-                position.col_offset = getattr(node, 'col_offset', None)
-                position.end_col_offset = getattr(node, 'end_col_offset', None)
+        from ast import walk
+        from tree_interval.core.utils import get_source_segment
 
-                info = {"type": node.__class__.__name__}
-                if hasattr(node, 'name'):
-                    info["name"] = node.name
-
-                leaf = Leaf(position, info)
+        for node in walk(ast_tree):
+            position = self._get_node_position(node)
+            if position:
+                leaf = Leaf(
+                    position,
+                    info={
+                        "type": node.__class__.__name__,
+                        "name": getattr(node, "name", node.__class__.__name__),
+                        "source": get_source_segment(
+                            dedent(self.source), node
+                        ),
+                    },
+                )
+                setattr(
+                    node, self.cleaned_value_key, self._get_node_value(node)
+                )
                 leaf.ast_node = node
-                tree.add_leaf(leaf)
+                result_tree.add_leaf(leaf)
 
-        return tree
+        return result_tree
 
 
 class AstAnalyzer:
