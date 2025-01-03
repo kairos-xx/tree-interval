@@ -1,3 +1,4 @@
+
 """Complete Tree Interval Implementation with all core components."""
 
 from dataclasses import dataclass
@@ -39,6 +40,17 @@ class VisualizationConfig:
     show_size: bool = True
     show_children_count: bool = False
     position_format: str = "default"
+    root_style: Optional[Style] = None
+    node_style: Optional[Style] = None
+    leaf_style: Optional[Style] = None
+
+@dataclass
+class RichPrintConfig:
+    """Configuration for rich printing."""
+    show_info: bool = True
+    show_size: bool = True
+    show_position: bool = False
+    show_children_count: bool = False
     root_style: Optional[Style] = None
     node_style: Optional[Style] = None
     leaf_style: Optional[Style] = None
@@ -110,6 +122,38 @@ class Position:
                 
         self.parent: Optional['Leaf'] = None
         self.children: List['Leaf'] = []
+
+    @property
+    def lineno(self) -> Optional[int]:
+        return self._lineno
+
+    @lineno.setter
+    def lineno(self, value: Optional[int]) -> None:
+        self._lineno = value
+
+    @property
+    def end_lineno(self) -> Optional[int]:
+        return self._end_lineno
+
+    @end_lineno.setter
+    def end_lineno(self, value: Optional[int]) -> None:
+        self._end_lineno = value
+
+    @property
+    def col_offset(self) -> Optional[int]:
+        return self._col_offset
+
+    @col_offset.setter
+    def col_offset(self, value: Optional[int]) -> None:
+        self._col_offset = value
+
+    @property
+    def end_col_offset(self) -> Optional[int]:
+        return self._end_col_offset
+
+    @end_col_offset.setter
+    def end_col_offset(self, value: Optional[int]) -> None:
+        self._end_col_offset = value
 
     def position_as(self, position_format: str = "default") -> str:
         if position_format == "position":
@@ -191,6 +235,103 @@ class Leaf:
 
         return best_match
 
+    def find_parent(self, predicate: Callable[['Leaf'], bool]) -> Optional['Leaf']:
+        """Find parent node matching predicate."""
+        current = self.parent
+        while current:
+            if predicate(current):
+                return current
+            current = current.parent
+        return None
+
+    def find_child(self, predicate: Callable[['Leaf'], bool]) -> Optional['Leaf']:
+        """Find child node matching predicate."""
+        for child in self.children:
+            if predicate(child):
+                return child
+            result = child.find_child(predicate)
+            if result:
+                return result
+        return None
+
+    def find_sibling(self, predicate: Callable[['Leaf'], bool]) -> Optional['Leaf']:
+        """Find sibling node matching predicate."""
+        if not self.parent:
+            return None
+        for sibling in self.parent.children:
+            if sibling != self and predicate(sibling):
+                return sibling
+        return None
+
+    def find_common_ancestor(self, other: 'Leaf') -> Optional['Leaf']:
+        """Find common ancestor with another node."""
+        if not other:
+            return None
+        
+        ancestors = set()
+        current = self
+        while current:
+            ancestors.add(current)
+            current = current.parent
+
+        current = other
+        while current:
+            if current in ancestors:
+                return current
+            current = current.parent
+        return None
+
+    def find_first_multi_child_ancestor(self) -> Optional['Leaf']:
+        """Find first ancestor with multiple children."""
+        current = self.parent
+        while current:
+            if len(current.children) > 1:
+                return current
+            current = current.parent
+        return None
+
+    def flatten(self) -> List['Leaf']:
+        """Get flattened list of all descendant nodes."""
+        result = [self]
+        for child in self.children:
+            result.extend(child.flatten())
+        return result
+
+    def _as_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary representation."""
+        return {
+            'position': {
+                'start': self.start,
+                'end': self.end,
+                'lineno': self.position.lineno,
+                'end_lineno': self.position.end_lineno,
+                'col_offset': self.position.col_offset,
+                'end_col_offset': self.position.end_col_offset,
+                'selected': self.position.selected
+            },
+            'info': self._info,
+            'children': [child._as_dict() for child in self.children]
+        }
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'Leaf':
+        """Create from dictionary representation."""
+        pos = Position(
+            data['position']['start'],
+            data['position']['end']
+        )
+        pos.lineno = data['position']['lineno']
+        pos.end_lineno = data['position']['end_lineno']
+        pos.col_offset = data['position']['col_offset']
+        pos.end_col_offset = data['position']['end_col_offset']
+        pos.selected = data['position']['selected']
+
+        leaf = cls(pos, data['info'])
+        for child_data in data['children']:
+            child = cls.from_dict(child_data)
+            leaf.add_child(child)
+        return leaf
+
 class Tree(Generic[T]):
     """Generic tree structure for position-aware hierarchical data."""
     
@@ -248,7 +389,7 @@ class Tree(Generic[T]):
             "children": [self._node_to_dict(child) for child in node.children],
         }
 
-    def visualize(self, config: Optional[VisualizationConfig] = None) -> None:
+    def visualize(self, config: Optional[VisualizationConfig] = None, root: Optional[Leaf] = None) -> None:
         if not config:
             config = VisualizationConfig()
 
@@ -257,7 +398,7 @@ class Tree(Generic[T]):
 
         console = Console()
         rich_tree = RichTree(f"[bold]{self.source}[/bold]")
-        self._build_rich_tree(self.root, rich_tree, config)
+        self._build_rich_tree(root or self.root, rich_tree, config)
         console.print(rich_tree)
 
     def _build_rich_tree(self, node: Leaf, rich_tree: RichTree, 
@@ -279,33 +420,48 @@ class Tree(Generic[T]):
             branch = rich_tree.add(label, style=style)
             self._build_rich_tree(child, branch, config)
 
-class Future:
-    """Handles dynamic attribute creation and access."""
+class RichTreePrinter:
+    """Rich tree visualization printer."""
     
-    def __new__(
-        cls,
-        name: str,
-        instance: object,
-        frame: Optional[Union[int, FrameType]] = None,
-        new_return: Optional[Any] = None,
-    ) -> Any:
-        if not isinstance(frame, FrameType):
-            frame = stack()[frame + 1 if isinstance(frame, int) else 2].frame
+    def __init__(self, config: Optional[RichPrintConfig] = None):
+        self.config = config or RichPrintConfig()
+        self.console = Console()
 
-        sys.tracebacklimit = 0
-        header = f"Attribute {name} not found"
-        footer = indent(
-            f'File "{frame.f_code.co_filename}" '
-            f"line {frame.f_lineno}, in {frame.f_code.co_name}",
-            "   ",
+    def print_tree(self, tree: Tree, root: Optional[Leaf] = None) -> None:
+        if not tree.root:
+            return
+
+        rich_tree = RichTree(
+            f"[bold]{tree.source}[/bold]",
+            style=self.config.root_style
         )
+        start_node = root if root else tree.root
+        self._build_rich_tree(start_node, rich_tree)
+        self.console.print(rich_tree)
 
-        new = AttributeError(f"{header}\n{footer}")
-        
-        # Create and set new attribute if in setting context
-        new = type(instance)() if new_return is None else new_return
-        setattr(instance, name, new)
-        return new
+    def _build_rich_tree(self, node: Leaf, rich_tree: RichTree) -> None:
+        for child in node.children:
+            label_parts = []
+            
+            if self.config.show_info and child.info:
+                label_parts.append(str(child.info))
+            
+            if self.config.show_size:
+                label_parts.append(f"({child.size})")
+            
+            if self.config.show_position:
+                label_parts.append(f"[{child.start}:{child.end}]")
+
+            if self.config.show_children_count:
+                label_parts.append(f"{{{len(child.children)}}}")
+                
+            label = " ".join(label_parts)
+            style = (child.rich_style or self.config.node_style
+                    if len(child.children) > 0
+                    else child.rich_style or self.config.leaf_style)
+                    
+            branch = rich_tree.add(label, style=style)
+            self._build_rich_tree(child, branch)
 
 class AstTreeBuilder:
     """Builds tree structures from Python Abstract Syntax Trees."""
@@ -327,58 +483,27 @@ class AstTreeBuilder:
 
         for node in ast.walk(ast_tree):
             if hasattr(node, 'lineno'):
-                position = Position(node.lineno, getattr(node, 'end_lineno', node.lineno))
+                position = Position(
+                    node.lineno,
+                    getattr(node, 'end_lineno', node.lineno)
+                )
+                position.col_offset = getattr(node, 'col_offset', None)
+                position.end_col_offset = getattr(node, 'end_col_offset', None)
+                
                 info = {"type": node.__class__.__name__}
                 if hasattr(node, 'name'):
                     info["name"] = node.name
+                
                 leaf = Leaf(position, info)
+                leaf.ast_node = node
                 tree.add_leaf(leaf)
 
         return tree
-
-class FrameAnalyzer:
-    """Analyzes Python stack frames and builds tree representations."""
-    
-    def __init__(self, frame: Optional[FrameType]):
-        self.frame = frame
-        self.frame_position = Position(frame) if frame else Position(0, 0)
-        self.ast_builder = AstTreeBuilder(frame) if frame else None
-        self.tree = None
-        self.current_node = None
-
-    def find_current_node(self) -> Optional[Leaf]:
-        if not self.tree:
-            self.build_tree()
-        
-        if not self.tree or not self.tree.root:
-            return None
-
-        if self.current_node is None:
-            matching_nodes = []
-            for node in self.tree.flatten():
-                if node.start is not None and node.end is not None:
-                    distance = (abs(node.start - (self.frame_position.start or 0)) + 
-                              abs(node.end - (self.frame_position.end or 0)))
-                    matching_nodes.append((node, distance))
-
-            if matching_nodes:
-                self.current_node = min(matching_nodes, key=lambda x: x[1])[0]
-
-        return self.current_node
-
-    def build_tree(self) -> Optional[Tree]:
-        if self.ast_builder:
-            self.tree = self.ast_builder.build()
-            if not self.tree:
-                return None
-            self.find_current_node()
-        return self.tree
 
 class AstAnalyzer:
     """Analyzer for Python Abstract Syntax Trees."""
     
     def __init__(self, tree: Tree) -> None:
-        """Initialize AST analyzer with a tree."""
         self.tree = tree
         self.ast_cache: Dict[int, ast.AST] = {}
 
@@ -476,23 +601,86 @@ class AstAnalyzer:
                 accesses.append(child.attr)
         return accesses
 
+class FrameAnalyzer:
+    """Analyzes Python stack frames and builds tree representations."""
+    
+    def __init__(self, frame: Optional[FrameType]):
+        self.frame = frame
+        self.frame_position = Position(frame) if frame else Position(0, 0)
+        self.ast_builder = AstTreeBuilder(frame) if frame else None
+        self.tree = None
+        self.current_node = None
+
+    def find_current_node(self) -> Optional[Leaf]:
+        if not self.tree:
+            self.build_tree()
+        
+        if not self.tree or not self.tree.root:
+            return None
+
+        if self.current_node is None:
+            matching_nodes = []
+            for node in self.tree.flatten():
+                if node.start is not None and node.end is not None:
+                    distance = (abs(node.start - (self.frame_position.start or 0)) + 
+                              abs(node.end - (self.frame_position.end or 0)))
+                    matching_nodes.append((node, distance))
+
+            if matching_nodes:
+                self.current_node = min(matching_nodes, key=lambda x: x[1])[0]
+
+        return self.current_node
+
+    def build_tree(self) -> Optional[Tree]:
+        if self.ast_builder:
+            self.tree = self.ast_builder.build()
+            if not self.tree:
+                return None
+            self.find_current_node()
+        return self.tree
+
+class Future:
+    """Handles dynamic attribute creation and access."""
+    
+    def __new__(
+        cls,
+        name: str,
+        instance: object,
+        frame: Optional[Union[int, FrameType]] = None,
+        new_return: Optional[Any] = None,
+    ) -> Any:
+        if not isinstance(frame, FrameType):
+            frame = stack()[frame + 1 if isinstance(frame, int) else 2].frame
+
+        sys.tracebacklimit = 0
+        header = f"Attribute {name} not found"
+        footer = indent(
+            f'File "{frame.f_code.co_filename}" '
+            f"line {frame.f_lineno}, in {frame.f_code.co_name}",
+            "   ",
+        )
+
+        new = AttributeError(f"{header}\n{footer}")
+        
+        # Create and set new attribute if in setting context
+        new = type(instance)() if new_return is None else new_return
+        setattr(instance, name, new)
+        return new
+
 def create_example_tree() -> Tree:
-    # Create a tree
+    """Create an example tree structure."""
     tree = Tree("Example")
     root = Leaf(Position(0, 100), "Root")
     child1 = Leaf(Position(10, 50), "Child 1")
     child2 = Leaf(Position(60, 90), "Child 2")
 
-    # Build tree structure
     tree.root = root
     root.add_child(child1)
     root.add_child(child2)
     return tree
 
-# Example usage
 if __name__ == "__main__":
-    # Create a tree
+    # Create and visualize example tree
     tree = create_example_tree()
-    # Visualize
     config = VisualizationConfig(show_info=True, show_size=True)
     tree.visualize(config)
