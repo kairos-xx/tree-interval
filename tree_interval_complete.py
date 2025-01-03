@@ -611,7 +611,34 @@ class AstTreeBuilder:
         )
 
         from ast import walk
-        from tree_interval.core.utils import get_source_segment
+
+        def get_source_segment(source: str, node: ast.AST) -> str:
+            """Get source segment for an AST node."""
+            if not hasattr(node, 'lineno'):
+                return ""
+            try:
+                lines = source.splitlines(keepends=True)
+                start = node.lineno - 1
+                end = getattr(node, 'end_lineno', start + 1) - 1
+                if start >= len(lines):
+                    return ""
+                if end >= len(lines):
+                    end = len(lines) - 1
+                if hasattr(node, 'col_offset'):
+                    start_col = node.col_offset
+                else:
+                    start_col = 0
+                if hasattr(node, 'end_col_offset'):
+                    end_col = node.end_col_offset
+                else:
+                    end_col = len(lines[end])
+                if start == end:
+                    return lines[start][start_col:end_col]
+                first = lines[start][start_col:]
+                last = lines[end][:end_col]
+                return first + ''.join(lines[start + 1:end]) + last
+            except (AttributeError, IndexError):
+                return ""
 
         for node in walk(ast_tree):
             position = self._get_node_position(node)
