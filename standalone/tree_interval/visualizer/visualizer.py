@@ -1,117 +1,65 @@
-"""Tree Visualization Core Module."""
 
-from typing import Any, Optional
+"""Tree visualization implementation."""
 
+from typing import Optional
+
+from rich.tree import Tree as RichTree
+from rich.console import Console
+
+from tree_interval.core.interval_core import Leaf, Tree
 from tree_interval.visualizer.config import VisualizationConfig
-
-DEFAULT_CONFIG = VisualizationConfig()
 
 
 class TreeVisualizer:
-    """Main class for visualizing tree structures."""
-
-    BLUE = "\033[94m"
-    GREEN = "\033[92m"
-    YELLOW = "\033[93m"
-    RESET = "\033[0m"
+    """Visualizer for tree structures."""
 
     @staticmethod
-    def visualize(
-        tree: Any,
-        config: Optional[VisualizationConfig] = None,
-        root: Optional[Any] = None,
-    ) -> None:
-        """Visualize a tree structure with customizable formatting options."""
-        if config is None:
-            config = DEFAULT_CONFIG
+    def visualize(tree: Tree, config: Optional[VisualizationConfig] = None, root: Optional[Leaf] = None) -> None:
+        """Visualize tree structure.
 
-        display_root = root if root is not None else tree.root
-        if not display_root:
-            print("Empty tree")
+        Args:
+            tree: Tree to visualize
+            config: Visualization configuration
+            root: Optional root node to start visualization from
+        """
+        if not config:
+            config = VisualizationConfig()
+
+        if not tree.root:
             return
 
-        def format_position(node: Any) -> str:
-            if config.position_format == "position":
-                return (
-                    f"Position(start={node.start}, end={node.end}, "
-                    f"lineno={node.lineno}, end_lineno={node.end_lineno}, "
-                    f"col_offset={node.col_offset}, "
-                    f"end_col_offset={node.end_col_offset}, "
-                    f"size={node.size})"
-                )
-            elif config.position_format == "tuple":
-                return f"({node.start}, {node.end})"
-            return f"({node.start}, {node.end})"
+        console = Console()
+        rich_tree = RichTree(f"[bold]{tree.source}[/bold]")
+        
+        start_node = root if root else tree.root
+        TreeVisualizer._build_rich_tree(start_node, rich_tree, config)
+        
+        console.print(rich_tree)
 
-        def format_node_info(node: Any, level: int = 0, info_len: int = 0) -> str:
-            parts: list[str] = []
-            terminal_width = config.terminal_size
-            available_width = terminal_width - info_len + ((level + 1) * 4) + 4
+    @staticmethod
+    def _build_rich_tree(node: Leaf, rich_tree: RichTree, config: VisualizationConfig) -> None:
+        """Build rich tree recursively.
+
+        Args:
+            node: Current node
+            rich_tree: Rich tree to build
+            config: Visualization configuration
+        """
+        for child in node.children:
+            label_parts = []
+            
+            if config.show_info and hasattr(child, 'info'):
+                label_parts.append(str(child.info))
+            
             if config.show_size:
-                parts.append(f"size={node.size}")
-
-            if config.show_info and node.info:
-                if isinstance(node.info, dict):
-                    info_str = (
-                        "Info("
-                        + ", ".join(f"{k}={repr(v)}" for k, v in node.info.items())
-                        + ")"
-                    )
-                else:
-                    info_str = repr(node.info)
-
-                info_str = f"info={info_str}"
-
-                current_length = len(" ".join(parts))
-                remaining_width = available_width - current_length - 1
-                if len(info_str) > remaining_width:
-                    parts.append("info=...")
-                else:
-                    parts.append(info_str)
-
+                label_parts.append(f"({child.size})")
+            
             if config.show_children_count:
-                parts.append(f"children={len(node.children)}")
-
-            return " ".join(parts)
-
-        def _print_node(node: Any, prefix: str = "", is_last: bool = True, level: int = 0) -> None:
-            position_str = format_position(node)
-
-            prefix_spaces = "" if level < 2 else prefix
-            connector = "" if level == 0 else ("└── " if is_last else "├── ")
-
-            if hasattr(node, "style") and node.style:
-                color = node.style.color.lstrip("#")
-                style_prefix = (
-                    f"\033[38;2;{int(color[:2], 16)};"
-                    + f"{int(color[2:4], 16)};"
-                    + f"{int(color[4:], 16)}m"
-                )
-                if node.style.bold:
-                    style_prefix = "\033[1m" + style_prefix
-            else:
-                style_prefix = (
-                    TreeVisualizer.BLUE
-                    if level == 0
-                    else (
-                        TreeVisualizer.GREEN
-                        if node.children
-                        else TreeVisualizer.YELLOW
-                    )
-                )
-            style_suffix = TreeVisualizer.RESET
-            info_len = len(
-                f"{prefix_spaces}{connector}{style_prefix}{position_str} "
-                + f"{style_suffix}"
-            )
-            info_str = format_node_info(node, level, info_len)
-            print(
-                f"{prefix_spaces}{connector}{style_prefix}{position_str} "
-                + f"{info_str}{style_suffix}"
-            )
-            children = node.children
-            for i, child in enumerate(children):
-                new_prefix = prefix + ("    " if is_last else "│   ")
-                _print_node(child, new_prefix, i == len(children) - 1, level + 1)
-
-        _print_node(display_root)
+                label_parts.append(f"[{len(child.children)}]")
+            
+            label = " ".join(label_parts)
+            
+            style = child.rich_style if hasattr(child, 'rich_style') else None
+            branch = rich_tree.add(label, style=style)
+            
+            TreeVisualizer._build_rich_tree(child, branch, config)

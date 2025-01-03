@@ -1,22 +1,30 @@
-"""Tree Visualization Configuration Module."""
+
+"""Configuration for tree visualization."""
 
 from dataclasses import dataclass
+from typing import Optional
 
-
-def get_terminal_width() -> int:
-    """Get the width of the terminal window."""
-    try:
-        from shutil import get_terminal_size
-        return get_terminal_size().columns
-    except Exception:
-        return 80  # Default fallback width
+from rich.style import Style
 
 
 @dataclass
 class VisualizationConfig:
-    """Configuration for tree visualization."""
-    terminal_size: int = get_terminal_width()
+    """Configuration for tree visualization.
+
+    Attributes:
+        show_info: Show node info
+        show_size: Show node size
+        show_children_count: Show number of children
+        position_format: Format for position display
+        root_style: Style for root node
+        node_style: Style for regular nodes
+        leaf_style: Style for leaf nodes
+    """
+
     show_info: bool = True
     show_size: bool = True
     show_children_count: bool = False
-    position_format: str = "range"  # 'range', 'position', or 'tuple'
+    position_format: str = "default"
+    root_style: Optional[Style] = None
+    node_style: Optional[Style] = None
+    leaf_style: Optional[Style] = None
