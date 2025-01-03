@@ -80,7 +80,7 @@ def frame_function():
     a = Nested()
     a.b.c.d = 3
     print(a.b.c.d)  # Should print 3
-    print(a.x.y.z)  # Should raise detailed AttributeError
+    print(a.x.y.z)  # Should raise detailed AttributeError with clear context
 
 
 if __name__ == "__main__":
