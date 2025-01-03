@@ -339,7 +339,7 @@ class Leaf:
         for child in self.children:
             result.extend(child.flatten())
         return result
-        
+
     @property
     def statement(self) -> Statement:
         """Get statement information for this node using AST traversal."""
@@ -359,23 +359,26 @@ class Leaf:
         top_source = getattr(top, "info", {}).get("source", "")
         top_start = (top.end if top else 0) or 0
         top_part = PartStatement(
-            before=top_source[: (self.start or 0) - top_start],
-            after=top_source[((next_attr.end if next_attr else 0) or 0) - top_start:],
+            before=top_source[:(self.start or 0) - top_start],
+            after=top_source[((next_attr.end if next_attr else 0) or 0) -
+                             top_start:],
         )
         source = self.info.get("source", "") if self.info else ""
         return Statement(
             top=top_part,
             before=source.removesuffix(value),
             self=value,
-            after=getattr(next_attr, "info", {}).get("source", "").removeprefix(source),
+            after=getattr(next_attr, "info", {}).get("source",
+                                                     "").removeprefix(source),
         )
 
     @property
     def top_statement(self) -> Optional['Leaf']:
         """Get the topmost statement node containing this node."""
         if not self.parent:
-            return self if self.info and self.info.get("type") in AST_TYPES else None
-            
+            return self if self.info and self.info.get(
+                "type") in AST_TYPES else None
+
         current = self
         while current.parent:
             parent = current.parent
@@ -743,7 +746,7 @@ from typing import Any
 
 class Future:
     """Handles dynamic attribute creation and access with AST analysis."""
-    
+
     def __new__(
         cls,
         name: str,
@@ -767,9 +770,14 @@ class Future:
 
         # Analyze current execution frame
         current_node = FrameAnalyzer(frame).find_current_node()
-        
+
         if current_node and current_node.top_statement:
             # Use the is_set property to check if we're in a setting operation
+            print(
+                f"top_statement ast node: {current_node.top_statement.ast_node}\n"
+            )
+            print(f"top_statement ast unparse: \n{ast.unparse(current_node.top_statement.ast_node)}")
+            print(f"\ntop_statement is_set: {current_node.top_statement.is_set}")
             if current_node.top_statement.is_set:
                 sys.tracebacklimit = original_tracebacklimit
                 # Create and set new attribute if in setting context
@@ -779,16 +787,12 @@ class Future:
             else:
                 # Build detailed error for attribute access in get context
                 statement = current_node.statement
-                new = AttributeError(
-                    header
-                    + "in \033[1m"
-                    + statement.before.replace(" ", "").replace("\n", "").removesuffix(".")
-                    + "\033[0m\n"
-                    + footer
-                    + "\n"
-                    + indent(statement.text, "   ")
-                )
-        
+                new = AttributeError(header + "in \033[1m" +
+                                     statement.before.replace(" ", "").replace(
+                                         "\n", "").removesuffix(".") +
+                                     "\033[0m\n" + footer + "\n" +
+                                     indent(statement.text, "   "))
+
         raise new
 
 
