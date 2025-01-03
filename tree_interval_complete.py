@@ -757,12 +757,10 @@ class Future:
 
         # Analyze current execution frame
         current_node = FrameAnalyzer(frame).find_current_node()
-        print(current_node.top_statement.is_set)
         
-        if current_node:
-            # Check if we're in an attribute setting operation
-            top_stmt = current_node.top_statement
-            is_set = top_stmt and top_stmt.info and AST_TYPES.get(top_stmt.info.get("type", ""), {}).get("is_set", False)
+        if current_node and current_node.top_statement:
+            # Use the is_set property to check if we're in a setting operation
+            if current_node.top_statement.is_set:
             if is_set:
                 sys.tracebacklimit = original_tracebacklimit
                 # Create and set new attribute if in setting context
