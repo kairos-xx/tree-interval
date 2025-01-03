@@ -809,16 +809,17 @@ from typing import Any
 class Future:
     """Handles dynamic attribute creation and access with AST analysis."""
 
-    def __init__(self, name: str, instance: object, frame: Optional[FrameType] = None):
+    def __init__(self, name: str, instance: object, frame: Optional[FrameType] = None, new_return: Optional[Any] = None):
         self.name = name
         self.instance = instance
         self.frame = frame if frame else currentframe()
+        self._new_return = new_return
         
     def __getattr__(self, name: str) -> Any:
-        return Future(name, type(self.instance)(), self.frame)
+        return Future(name, type(self.instance)(), self.frame, type(self.instance)())
         
     def __setattr__(self, name: str, value: Any) -> None:
-        if name in ('name', 'instance', 'frame'):
+        if name in ('name', 'instance', 'frame', '_new_return'):
             super().__setattr__(name, value)
             return
             
