@@ -809,38 +809,20 @@ from typing import Any
 class Future:
     """Handles dynamic attribute creation and access with AST analysis."""
 
-    def __new__(
-        cls,
-        name: str,
-        instance: object,
-        frame: Optional[Union[int, FrameType]] = None,
-        new_return: Optional[Any] = None,
-    ) -> Any:
-        """Dynamic attribute creation and access handler."""
-        if isinstance(frame, int):
-            frame = sys._getframe(frame)
-        elif frame is None:
-            frame = currentframe()
-
-        if frame is None:
-            return new_return if new_return is not None else None
-
-        current_node = FrameAnalyzer(frame).find_current_node()
-
-        if current_node and current_node.top_statement:
-            # Use the is_set property to check if we're in a setting operation
-            print(
-                f"top_statement ast node: {current_node.top_statement.ast_node}\n"
-            )
-            print(f"top_statement ast unparse: \n{ast.unparse(current_node.top_statement.ast_node)}")
-            print(f"\ntop_statement is_set: {current_node.top_statement.is_set}")
-            if current_node.top_statement.is_set:
-                # Create and set new attribute if in setting context
-                setattr(instance, name, new_return)
-                return new_return
-
-        # Get attribute or return new_return if not found
-        return getattr(instance, name, new_return)
+    def __init__(self, name: str, instance: object, frame: Optional[FrameType] = None):
+        self.name = name
+        self.instance = instance
+        self.frame = frame if frame else currentframe()
+        
+    def __getattr__(self, name: str) -> Any:
+        return Future(name, type(self.instance)(), self.frame)
+        
+    def __setattr__(self, name: str, value: Any) -> None:
+        if name in ('name', 'instance', 'frame'):
+            super().__setattr__(name, value)
+            return
+            
+        setattr(self.instance, self.name, value)
 
 
 class Nested:
