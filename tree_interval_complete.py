@@ -1,4 +1,3 @@
-
 """Complete Tree Interval Implementation with all core components."""
 
 from dataclasses import dataclass
@@ -17,21 +16,55 @@ T = TypeVar('T')
 
 # AST Types mapping
 AST_TYPES = {
-    "Module": {"description": "Root node for entire file", "statement": True, "is_set": False},
-    "Import": {"description": "Import statement", "statement": True, "is_set": False},
-    "ImportFrom": {"description": "From import statement", "statement": True, "is_set": False},
-    "FunctionDef": {"description": "Function definition", "statement": True, "is_set": False},
-    "ClassDef": {"description": "Class definition", "statement": True, "is_set": False},
-    "Assign": {"description": "Assignment operation", "statement": True, "is_set": True},
-    "Name": {"description": "Variable or function name", "statement": False, "is_set": False},
-    "Attribute": {"description": "Attribute access", "statement": False, "is_set": False},
+    "Module": {
+        "description": "Root node for entire file",
+        "statement": True,
+        "is_set": False
+    },
+    "Import": {
+        "description": "Import statement",
+        "statement": True,
+        "is_set": False
+    },
+    "ImportFrom": {
+        "description": "From import statement",
+        "statement": True,
+        "is_set": False
+    },
+    "FunctionDef": {
+        "description": "Function definition",
+        "statement": True,
+        "is_set": False
+    },
+    "ClassDef": {
+        "description": "Class definition",
+        "statement": True,
+        "is_set": False
+    },
+    "Assign": {
+        "description": "Assignment operation",
+        "statement": True,
+        "is_set": True
+    },
+    "Name": {
+        "description": "Variable or function name",
+        "statement": False,
+        "is_set": False
+    },
+    "Attribute": {
+        "description": "Attribute access",
+        "statement": False,
+        "is_set": False
+    },
 }
+
 
 @dataclass
 class LeafStyle:
     """Style configuration for leaf nodes."""
     color: str
     bold: bool = False
+
 
 @dataclass
 class VisualizationConfig:
@@ -44,6 +77,7 @@ class VisualizationConfig:
     node_style: Optional[Style] = None
     leaf_style: Optional[Style] = None
 
+
 @dataclass
 class RichPrintConfig:
     """Configuration for rich printing."""
@@ -55,11 +89,13 @@ class RichPrintConfig:
     node_style: Optional[Style] = None
     leaf_style: Optional[Style] = None
 
+
 @dataclass
 class PartStatement:
     """Represents a statement part with before and after text."""
     before: str
     after: str
+
 
 @dataclass
 class Statement:
@@ -72,35 +108,37 @@ class Statement:
     chain_marker: str = "^"
     current_marker: str = "▲"
 
-    def as_text(self, top_marker=None, chain_marker=None, current_marker=None) -> str:
+    def as_text(self,
+                top_marker=None,
+                chain_marker=None,
+                current_marker=None) -> str:
         top_marker = top_marker or self.top_marker
         chain_marker = chain_marker or self.chain_marker
         current_marker = current_marker or self.current_marker
-        
-        text = (self.top.before + self.before + self.self + 
-               self.after + self.top.after)
-        markers = (len(self.top.before) * top_marker + 
-                  len(self.before) * chain_marker +
-                  len(self.self) * current_marker + 
-                  len(self.after) * chain_marker +
-                  len(self.top.after) * top_marker)
+
+        text = (self.top.before + self.before + self.self + self.after +
+                self.top.after)
+        markers = (len(self.top.before) * top_marker +
+                   len(self.before) * chain_marker +
+                   len(self.self) * current_marker +
+                   len(self.after) * chain_marker +
+                   len(self.top.after) * top_marker)
         return f"{text}\n{markers}"
 
     @property
     def text(self) -> str:
         return self.as_text()
 
+
 class Position:
     """Represents a code position with line/column tracking."""
-    
-    def __init__(
-        self,
-        start: Optional[Union[int, FrameType]] = None,
-        end: Optional[int] = None,
-        source: Optional[str] = None,
-        info: Optional[Any] = None,
-        selected: bool = False
-    ):
+
+    def __init__(self,
+                 start: Optional[Union[int, FrameType]] = None,
+                 end: Optional[int] = None,
+                 source: Optional[str] = None,
+                 info: Optional[Any] = None,
+                 selected: bool = False):
         self.start = start if isinstance(start, (int, type(None))) else 0
         self.end = end
         self.info = info
@@ -109,7 +147,7 @@ class Position:
         self._end_lineno: Optional[int] = None
         self._col_offset: Optional[int] = None
         self._end_col_offset: Optional[int] = None
-        
+
         if isinstance(start, FrameType):
             frame = start
             source = getsource(frame)
@@ -119,7 +157,7 @@ class Position:
                 self._end_lineno = frame_info.positions.end_lineno
                 self._col_offset = frame_info.positions.col_offset
                 self._end_col_offset = frame_info.positions.end_col_offset
-                
+
         self.parent: Optional['Leaf'] = None
         self.children: List['Leaf'] = []
 
@@ -158,16 +196,17 @@ class Position:
     def position_as(self, position_format: str = "default") -> str:
         if position_format == "position":
             return (f"Position(start={self.start}, end={self.end}, "
-                   f"lineno={self._lineno}, end_lineno={self._end_lineno}, "
-                   f"col_offset={self._col_offset}, "
-                   f"end_col_offset={self._end_col_offset})")
+                    f"lineno={self._lineno}, end_lineno={self._end_lineno}, "
+                    f"col_offset={self._col_offset}, "
+                    f"end_col_offset={self._end_col_offset})")
         elif position_format == "tuple":
             return f"({self.start}, {self.end})"
         return f"Position(start={self.start}, end={self.end})"
 
+
 class Leaf:
     """A node in the tree structure containing position and information data."""
-    
+
     def __init__(
         self,
         position: Union[Position, tuple, int, None],
@@ -183,7 +222,7 @@ class Leaf:
             info = position[2] if len(position) > 2 else info
         else:
             self.position = Position(position, end)
-            
+
         self._info = info
         self.style = style
         self.rich_style = rich_style
@@ -235,7 +274,8 @@ class Leaf:
 
         return best_match
 
-    def find_parent(self, predicate: Callable[['Leaf'], bool]) -> Optional['Leaf']:
+    def find_parent(self, predicate: Callable[['Leaf'],
+                                              bool]) -> Optional['Leaf']:
         """Find parent node matching predicate."""
         current = self.parent
         while current:
@@ -244,7 +284,8 @@ class Leaf:
             current = current.parent
         return None
 
-    def find_child(self, predicate: Callable[['Leaf'], bool]) -> Optional['Leaf']:
+    def find_child(self, predicate: Callable[['Leaf'],
+                                             bool]) -> Optional['Leaf']:
         """Find child node matching predicate."""
         for child in self.children:
             if predicate(child):
@@ -254,7 +295,8 @@ class Leaf:
                 return result
         return None
 
-    def find_sibling(self, predicate: Callable[['Leaf'], bool]) -> Optional['Leaf']:
+    def find_sibling(self, predicate: Callable[['Leaf'],
+                                               bool]) -> Optional['Leaf']:
         """Find sibling node matching predicate."""
         if not self.parent:
             return None
@@ -267,7 +309,7 @@ class Leaf:
         """Find common ancestor with another node."""
         if not other:
             return None
-        
+
         ancestors = set()
         current = self
         while current:
@@ -316,10 +358,7 @@ class Leaf:
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'Leaf':
         """Create from dictionary representation."""
-        pos = Position(
-            data['position']['start'],
-            data['position']['end']
-        )
+        pos = Position(data['position']['start'], data['position']['end'])
         pos.lineno = data['position']['lineno']
         pos.end_lineno = data['position']['end_lineno']
         pos.col_offset = data['position']['col_offset']
@@ -332,9 +371,10 @@ class Leaf:
             leaf.add_child(child)
         return leaf
 
+
 class Tree(Generic[T]):
     """Generic tree structure for position-aware hierarchical data."""
-    
+
     def __init__(self, source: T):
         self.source = source
         self.root: Optional[Leaf] = None
@@ -389,7 +429,9 @@ class Tree(Generic[T]):
             "children": [self._node_to_dict(child) for child in node.children],
         }
 
-    def visualize(self, config: Optional[VisualizationConfig] = None, root: Optional[Leaf] = None) -> None:
+    def visualize(self,
+                  config: Optional[VisualizationConfig] = None,
+                  root: Optional[Leaf] = None) -> None:
         if not config:
             config = VisualizationConfig()
 
@@ -401,28 +443,29 @@ class Tree(Generic[T]):
         self._build_rich_tree(root or self.root, rich_tree, config)
         console.print(rich_tree)
 
-    def _build_rich_tree(self, node: Leaf, rich_tree: RichTree, 
-                        config: VisualizationConfig) -> None:
+    def _build_rich_tree(self, node: Leaf, rich_tree: RichTree,
+                         config: VisualizationConfig) -> None:
         for child in node.children:
             label_parts = []
-            
+
             if config.show_info and hasattr(child, 'info'):
                 label_parts.append(str(child.info))
-            
+
             if config.show_size:
                 label_parts.append(f"({child.size})")
-            
+
             if config.show_children_count:
                 label_parts.append(f"[{len(child.children)}]")
-            
+
             label = " ".join(label_parts)
             style = child.rich_style if hasattr(child, 'rich_style') else None
             branch = rich_tree.add(label, style=style)
             self._build_rich_tree(child, branch, config)
 
+
 class RichTreePrinter:
     """Rich tree visualization printer."""
-    
+
     def __init__(self, config: Optional[RichPrintConfig] = None):
         self.config = config or RichPrintConfig()
         self.console = Console()
@@ -431,10 +474,8 @@ class RichTreePrinter:
         if not tree.root:
             return
 
-        rich_tree = RichTree(
-            f"[bold]{tree.source}[/bold]",
-            style=self.config.root_style
-        )
+        rich_tree = RichTree(f"[bold]{tree.source}[/bold]",
+                             style=self.config.root_style)
         start_node = root if root else tree.root
         self._build_rich_tree(start_node, rich_tree)
         self.console.print(rich_tree)
@@ -442,37 +483,39 @@ class RichTreePrinter:
     def _build_rich_tree(self, node: Leaf, rich_tree: RichTree) -> None:
         for child in node.children:
             label_parts = []
-            
+
             if self.config.show_info and child.info:
                 label_parts.append(str(child.info))
-            
+
             if self.config.show_size:
                 label_parts.append(f"({child.size})")
-            
+
             if self.config.show_position:
                 label_parts.append(f"[{child.start}:{child.end}]")
 
             if self.config.show_children_count:
                 label_parts.append(f"{{{len(child.children)}}}")
-                
+
             label = " ".join(label_parts)
             style = (child.rich_style or self.config.node_style
-                    if len(child.children) > 0
-                    else child.rich_style or self.config.leaf_style)
-                    
+                     if len(child.children) > 0 else child.rich_style
+                     or self.config.leaf_style)
+
             branch = rich_tree.add(label, style=style)
             self._build_rich_tree(child, branch)
 
+
 class AstTreeBuilder:
     """Builds tree structures from Python Abstract Syntax Trees."""
-    
+
     def __init__(self, source: Union[FrameType, str]):
-        self.source = getsource(source) if isinstance(source, FrameType) else source
+        self.source = getsource(source) if isinstance(source,
+                                                      FrameType) else source
 
     def build(self) -> Optional[Tree]:
         if not self.source:
             return None
-        
+
         tree = ast.parse(dedent(self.source))
         return self._build_tree_from_ast(tree)
 
@@ -483,26 +526,25 @@ class AstTreeBuilder:
 
         for node in ast.walk(ast_tree):
             if hasattr(node, 'lineno'):
-                position = Position(
-                    node.lineno,
-                    getattr(node, 'end_lineno', node.lineno)
-                )
+                position = Position(node.lineno,
+                                    getattr(node, 'end_lineno', node.lineno))
                 position.col_offset = getattr(node, 'col_offset', None)
                 position.end_col_offset = getattr(node, 'end_col_offset', None)
-                
+
                 info = {"type": node.__class__.__name__}
                 if hasattr(node, 'name'):
                     info["name"] = node.name
-                
+
                 leaf = Leaf(position, info)
                 leaf.ast_node = node
                 tree.add_leaf(leaf)
 
         return tree
 
+
 class AstAnalyzer:
     """Analyzer for Python Abstract Syntax Trees."""
-    
+
     def __init__(self, tree: Tree) -> None:
         self.tree = tree
         self.ast_cache: Dict[int, ast.AST] = {}
@@ -517,7 +559,8 @@ class AstAnalyzer:
         """Find all assignment nodes."""
         return [
             leaf for leaf in self.tree.flatten()
-            if isinstance(self.get_ast_node(leaf), (ast.Assign, ast.AnnAssign, ast.AugAssign))
+            if isinstance(self.get_ast_node(leaf), (ast.Assign, ast.AnnAssign,
+                                                    ast.AugAssign))
         ]
 
     def find_functions(self) -> List[Leaf]:
@@ -550,13 +593,8 @@ class AstAnalyzer:
 
     def analyze_complexity(self, leaf: Leaf) -> Dict[str, int]:
         """Analyze code complexity metrics."""
-        complexity = {
-            'lines': 0,
-            'branches': 0,
-            'returns': 0,
-            'calls': 0
-        }
-        
+        complexity = {'lines': 0, 'branches': 0, 'returns': 0, 'calls': 0}
+
         node = self.get_ast_node(leaf)
         if not node:
             return complexity
@@ -569,8 +607,10 @@ class AstAnalyzer:
             elif isinstance(child, ast.Call):
                 complexity['calls'] += 1
 
-        if hasattr(leaf.position, 'lineno') and hasattr(leaf.position, 'end_lineno'):
-            complexity['lines'] = leaf.position.end_lineno - leaf.position.lineno + 1
+        if hasattr(leaf.position, 'lineno') and hasattr(
+                leaf.position, 'end_lineno'):
+            complexity[
+                'lines'] = leaf.position.end_lineno - leaf.position.lineno + 1
 
         return complexity
 
@@ -601,9 +641,10 @@ class AstAnalyzer:
                 accesses.append(child.attr)
         return accesses
 
+
 class FrameAnalyzer:
     """Analyzes Python stack frames and builds tree representations."""
-    
+
     def __init__(self, frame: Optional[FrameType]):
         self.frame = frame
         self.frame_position = Position(frame) if frame else Position(0, 0)
@@ -614,7 +655,7 @@ class FrameAnalyzer:
     def find_current_node(self) -> Optional[Leaf]:
         if not self.tree:
             self.build_tree()
-        
+
         if not self.tree or not self.tree.root:
             return None
 
@@ -622,8 +663,9 @@ class FrameAnalyzer:
             matching_nodes = []
             for node in self.tree.flatten():
                 if node.start is not None and node.end is not None:
-                    distance = (abs(node.start - (self.frame_position.start or 0)) + 
-                              abs(node.end - (self.frame_position.end or 0)))
+                    distance = (abs(node.start -
+                                    (self.frame_position.start or 0)) +
+                                abs(node.end - (self.frame_position.end or 0)))
                     matching_nodes.append((node, distance))
 
             if matching_nodes:
@@ -639,13 +681,14 @@ class FrameAnalyzer:
             self.find_current_node()
         return self.tree
 
+
 from inspect import stack
 from typing import Any
 
 
 class Future:
     """Handles dynamic attribute creation and access."""
-    
+
     def __new__(
         cls,
         name: str,
@@ -665,13 +708,15 @@ class Future:
         )
 
         new = AttributeError(f"{header}\n{footer}")
-        
+
         # Create and set new attribute if in setting context
         new = type(instance)() if new_return is None else new_return
         setattr(instance, name, new)
         return new
 
+
 class Nested:
+
     def __init__(self) -> None:
         self.__dict__: dict[str, "Nested"] = {}
 

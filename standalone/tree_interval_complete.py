@@ -1,4 +1,3 @@
-
 """Complete Tree Interval Implementation."""
 
 from dataclasses import dataclass
@@ -12,6 +11,7 @@ import json
 import sys
 
 T = TypeVar('T')
+
 
 @dataclass
 class Position:
@@ -38,7 +38,7 @@ class Position:
     def end_lineno(self) -> Optional[int]:
         return self._end_lineno
 
-    @end_lineno.setter 
+    @end_lineno.setter
     def end_lineno(self, value: Optional[int]) -> None:
         self._end_lineno = value
 
@@ -58,13 +58,15 @@ class Position:
     def end_col_offset(self, value: Optional[int]) -> None:
         self._end_col_offset = value
 
+
 @dataclass
 class LeafStyle:
     """Style configuration for tree nodes."""
     color: str
     bold: bool = False
 
-@dataclass 
+
+@dataclass
 class VisualizationConfig:
     """Configuration for tree visualization."""
     show_info: bool = True
@@ -74,6 +76,7 @@ class VisualizationConfig:
     root_style: Optional[Style] = None
     node_style: Optional[Style] = None
     leaf_style: Optional[Style] = None
+
 
 class Tree(Generic[T]):
     """Tree structure with position-aware nodes."""
@@ -87,7 +90,7 @@ class Tree(Generic[T]):
         if not self.root:
             self.root = leaf
             return
-        
+
         if leaf.start is None or leaf.end is None:
             return
 
@@ -101,7 +104,9 @@ class Tree(Generic[T]):
             return None
         return self.root.find_best_match(start, end)
 
-    def visualize(self, config: Optional[VisualizationConfig] = None, root: Optional['Leaf'] = None) -> None:
+    def visualize(self,
+                  config: Optional[VisualizationConfig] = None,
+                  root: Optional['Leaf'] = None) -> None:
         """Visualize tree structure."""
         TreeVisualizer.visualize(self, config, root)
 
@@ -125,6 +130,7 @@ class Tree(Generic[T]):
         if data:
             tree.root = Leaf.from_dict(data)
         return tree
+
 
 class Leaf:
     """Node in tree structure."""
@@ -167,11 +173,10 @@ class Leaf:
         self.children.append(child)
 
     def find_best_match(
-        self,
-        start: int,
-        end: int,
-        best_match_distance: Optional[float] = None
-    ) -> Optional['Leaf']:
+            self,
+            start: int,
+            end: int,
+            best_match_distance: Optional[float] = None) -> Optional['Leaf']:
         """Find best matching node for range."""
         if self.start is None or self.end is None:
             return None
@@ -228,11 +233,14 @@ class Leaf:
             leaf.add_child(child)
         return leaf
 
+
 class TreeVisualizer:
     """Tree visualization."""
 
     @staticmethod
-    def visualize(tree: Tree, config: Optional[VisualizationConfig] = None, root: Optional[Leaf] = None) -> None:
+    def visualize(tree: Tree,
+                  config: Optional[VisualizationConfig] = None,
+                  root: Optional[Leaf] = None) -> None:
         """Visualize tree structure."""
         if not config:
             config = VisualizationConfig()
@@ -242,37 +250,39 @@ class TreeVisualizer:
 
         console = Console()
         rich_tree = RichTree(f"[bold]{tree.source}[/bold]")
-        
+
         start_node = root if root else tree.root
         TreeVisualizer._build_rich_tree(start_node, rich_tree, config)
-        
+
         console.print(rich_tree)
 
     @staticmethod
-    def _build_rich_tree(node: Leaf, rich_tree: RichTree, config: VisualizationConfig) -> None:
+    def _build_rich_tree(node: Leaf, rich_tree: RichTree,
+                         config: VisualizationConfig) -> None:
         """Build rich tree recursively."""
         for child in node.children:
             label_parts = []
-            
+
             if config.show_info and hasattr(child, 'info'):
                 label_parts.append(str(child.info))
-            
+
             if config.show_size:
                 label_parts.append(f"({child.size})")
-            
+
             if config.show_children_count:
                 label_parts.append(f"[{len(child.children)}]")
-            
+
             label = " ".join(label_parts)
-            
+
             style = child.rich_style if hasattr(child, 'rich_style') else None
             branch = rich_tree.add(label, style=style)
-            
+
             TreeVisualizer._build_rich_tree(child, branch, config)
+
 
 class Future:
     """Dynamic attribute handling."""
-    
+
     def __new__(
         cls,
         name: str,
@@ -291,6 +301,7 @@ class Future:
 
         return getattr(instance, name, new_return)
 
+
 def create_example_tree() -> Tree:
     """Create example tree structure."""
     tree = Tree("Example")
@@ -305,6 +316,7 @@ def create_example_tree() -> Tree:
     child1.add_child(grandchild)
 
     return tree
+
 
 if __name__ == "__main__":
     # Example usage

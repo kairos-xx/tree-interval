@@ -1,4 +1,4 @@
-run = ["python", "dev/httpi.py"]
+run = ["python", "tree_interval_complete.py"]
 entrypoint = "README.md"
 modules = ["python-3.11:v30-20240222-aba8eb6"]
 hidden = [".pythonlibs"]
