@@ -1,8 +1,6 @@
 
 <div align="center">
-  <a href="https://github.com/kairos-xx/tree-interval">
-    <img src="resources/icon_raster.png" alt="Tree Interval Logo" width="150"/>
-  </a>
+  <img src="resources/icon_raster.png" alt="Tree Interval Logo" width="150"/>
   <h1>Tree Interval</h1>
   <p><em>A powerful Python package for managing, analyzing, and visualizing tree structures with rich interval-based node positioning</em></p>
   

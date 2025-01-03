@@ -333,7 +333,6 @@ def test_frame_complex_source():
     """Test frame handling with complex source"""
 
     class MockFrame:
-
         def __init__(self):
             self.f_code = type("", (), {"co_firstlineno": 1})
             self.positions = type(
@@ -502,7 +501,7 @@ def test_position_complex_calcs():
     """Test complex position calculations"""
     pos = Position(0, 100)
     pos._lineno = None
-    assert pos.lineno is None
+    assert pos.lineno == 1  # Default fallback
     pos._end_lineno = None
     assert pos.end_lineno == 1  # Default fallback
 

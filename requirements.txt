@@ -8,3 +8,6 @@ flake8
 build
 requests
 toml
+pyyaml
+coverage==7.3.2
+pytest-cov==4.1.0

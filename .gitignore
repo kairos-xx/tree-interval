@@ -1,3 +1,4 @@
+
 /.*
 !/.gitignore
 /__pycache__/
@@ -5,4 +6,5 @@
 /zip/
 /attached_assets/
 /logs/
+/dev/
 generated-icon.*

@@ -1,20 +1,30 @@
-import os
+"""Get git author information.
 
-import requests
+Retrieves the git author name and email from git config.
+"""
+
+from subprocess import check_output
+from typing import Tuple
 
 
-def get_repl_author():
-    repl_id = os.environ.get("REPL_ID")
-    if not repl_id:
-        return None
+def get_git_author() -> Tuple[str, str]:
+    """Get git author name and email.
 
-    url = f"https://replit.com/data/repls/{repl_id}"
-    response = requests.get(url)
-    if response.status_code == 200:
-        return response.json().get("user", {}).get("id")
-    return None
+    Returns:
+        Tuple[str, str]: Author name and email
+
+    Raises:
+        subprocess.CalledProcessError: If git command fails
+    """
+    # Get author name
+    name = check_output(["git", "config", "user.name"]).decode().strip()
+
+    # Get author email
+    email = check_output(["git", "config", "user.email"]).decode().strip()
+
+    return name, email
 
 
 if __name__ == "__main__":
-    author_id = get_repl_author()
-    print(f"Repl author ID: {author_id}")
+    author_name, author_email = get_git_author()
+    print(f"Author: {author_name} <{author_email}>")

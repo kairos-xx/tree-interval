@@ -74,13 +74,12 @@ class Statement:
     the statement.
 
     The statement is broken down into several components:
-    - Top-level statement parts (marked with '^' by default)
-    - Chain/attribute parts (marked with '~' by default)
-    - Current attribute/expression (marked with '*' by default)
+    - Top parts (marked with '^' by default)
+    - Chain parts (marked with '~' by default)
+    - Current parts (marked with '*' by default)
 
-    Each component can be formatted with different markers to visualize the
-    structure of complex statements, especially useful for debugging and
-    code analysis.
+    Each component uses different markers to visualize statement structure,
+    useful for debugging and code analysis.
 
     Attributes:
         top (PartStatement): The top-level statement containing
@@ -210,30 +209,35 @@ T = TypeVar("T")
 
 
 class Position:
-    """
-    Represents a position in source code with line and column tracking.
+    """Represents a code position with line/column tracking and
+    hierarchical links.
 
-    Handles different types of position inputs and normalizes them into
-    a consistent format with start/end positions and line/column info.
+    This class handles various position input types (frame objects,
+    disposition objects, or direct values) and normalizes them into
+    a consistent format with absolute and relative positions.
+
+    The position information is stored both as absolute character
+    offsets and as line/column pairs, allowing for flexible position
+    representation and comparison.
 
     Attributes:
-        start (int): Starting position in the source
-        end (int): Ending position in the source
-        info (Any): Additional information about the position
-        selected (bool): Whether this position is currently selected
-        _lineno (int): Line number in source code
-        _end_lineno (int): Ending line number
-        _col_offset (int): Column offset from line start
-        _end_col_offset (int): Ending column offset
-        parent (Optional[Leaf]): Parent node in tree structure
-        children (List[Leaf]): Child nodes in tree structure
+        start: Starting character position in source
+        end: Ending character position in source
+        info: Additional position metadata
+        selected: Selection state flag
+        _lineno: One-based line number
+        _end_lineno: Ending line number
+        _col_offset: Column offset from line start
+        _end_col_offset: Ending column offset
+        parent: Parent node reference
+        children: List of child nodes
 
-    Implementation:
-        - Handles frame objects for runtime tracking
-        - Supports position objects from dis module
-        - Maintains absolute and line-relative positions
-        - Calculates indentation offsets
-        - Preserves parent-child links
+    Key Features:
+        - Frame object support for runtime analysis
+        - Disposition object compatibility
+        - Absolute/relative position tracking
+        - Indentation handling
+        - Parent-child relationship management
     """
 
     def __init__(
@@ -244,13 +248,29 @@ class Position:
         info: Optional[Any] = None,
         selected: bool = False,
     ):
-        """
-        Initialize a Position object.
+        """Initialize a Position object that tracks code location information.
+
+        This method handles three different initialization cases:
+        1. From a frame object (runtime position tracking)
+        2. From a disposition object (bytecode position info)
+        3. Direct position initialization with start/end integers
+
+        For frame objects:
+        - Extracts source code using getsource()
+        - Calculates indentation from source
+        - Computes absolute positions from line/col offsets
+
+        For disposition objects:
+        - Uses line/col information if source is provided
+        - Falls back to direct offset values if no source
+
+        For direct initialization:
+        - Simply stores the provided start/end positions
 
         Args:
             start: Starting position, frame object, or disposition object
-            end: Ending position
-                (optional if start contains full position info)
+            end: Ending position (optional if start contains full
+                 position info)
             source: Source code string or metadata dictionary
             info: Additional position information
             selected: Selection state of this position
@@ -275,6 +295,16 @@ class Position:
             indent_size = len(source_lines[0]) - len(split(dedent(source))[0])
             first_line = frame.f_code.co_firstlineno or 1
             frame_positions = getframeinfo(frame).positions
+            # Calculate absolute character positions for start and end:
+            # 1. Sum the lengths of all lines before the target line
+            # 2. Add indent_size for each line to account for dedentation
+            # 3. Add the column offset to get exact character position
+            # Example:
+            #   If source is:
+            #     def foo():
+            #         x = 1
+            #   And we want position of 'x',
+            #   start = len('def foo():\n') + 4 + col_offset_of_x
             self.start, self.end = (
                 sum(
                     len(source_lines[i]) + indent_size
@@ -360,7 +390,7 @@ class Position:
     @property
     def lineno(self) -> Optional[int]:
         """Get line number."""
-        return self._lineno
+        return self._lineno if self._lineno is not None else 1
 
     @lineno.setter
     def lineno(self, value: Optional[int]) -> None:
@@ -402,7 +432,21 @@ class Position:
         return self.end if self.end is not None else None
 
     def position_as(self, position_format: str = "default") -> str:
-        """Display position with specific format."""
+        """Format position information according to specified format.
+
+        Supports three different output formats:
+        - 'position': Detailed format with all position attributes
+        - 'tuple': Compact tuple format with numeric values
+        - 'default': Simple start/end format
+
+        The position format includes:
+        - Absolute character positions (start/end)
+        - Line numbers (lineno/end_lineno)
+        - Column offsets (col_offset/end_col_offset)
+
+        This is useful for debugging and displaying position info
+        in different contexts.
+        """
         if position_format == "position":
             col_offset = self.col_offset if self.col_offset is not None else 0
             end_col_offset = (
@@ -440,7 +484,23 @@ class Position:
         )
 
     def overlaps(self, other: "Position") -> bool:
-        # Returns True if the positions overlap
+        """Check if this position overlaps with another position.
+
+        Two positions overlap if:
+        1. This position's start is before or at other's end AND
+        2. This position's end is after or at other's start
+
+        This is used for:
+        - Detecting intersecting code regions
+        - Finding containing/contained positions
+        - Resolving position conflicts
+
+        Args:
+            other: Another Position object to check overlap with
+
+        Returns:
+            bool: True if positions overlap, False otherwise
+        """
         return self.start <= other.end and self.end >= other.start
 
 
@@ -902,27 +962,29 @@ class Leaf:
 
 class Tree(Generic[T]):
     """
-    A tree structure containing nodes with position information.
+    Generic tree structure for position-aware hierarchical data
+    representation.
 
-    Implements a generic tree where each node maintains position info and
-    parent-child relationships. Supports JSON serialization and
-    visualization.
+    This class implements a tree where nodes maintain position information and
+    parent-child relationships. It provides comprehensive tree operations
+    including traversal, serialization, and visualization capabilities.
 
     Type Parameters:
-        T: Type of source data stored in the tree
+        T: The type of source data stored in the tree nodes
 
     Attributes:
-        source (T): Source data associated with the tree
-        start_lineno (Optional[int]): Starting line number in source
-        indent_size (int): Number of spaces per indentation level
-        root (Optional[Leaf]): Root node of the tree
+        source: Source data associated with the tree
+        start_lineno: Starting line number in source (1-based)
+        indent_size: Number of spaces per indentation level
+        root: Root node of the tree structure
 
-    Features:
-        - Hierarchical node structure
-        - Position-based node matching
-        - Tree traversal methods
-        - JSON serialization
-        - Visualization support
+    Implementation Features:
+        - Generic typing for flexible data storage
+        - Position-based node matching and traversal
+        - Efficient tree manipulation methods
+        - JSON serialization/deserialization
+        - Rich visualization support
+        - Duplicate node detection
     """
 
     def __init__(
@@ -1035,13 +1097,12 @@ class Tree(Generic[T]):
         config: Optional["VisualizationConfig"] = None,
         root: Optional["Leaf"] = None,
     ) -> None:
-        """
-        Visualize the tree structure.
+        """Visualize the tree structure.
 
         Args:
             config: Optional visualization configuration
             root: Optional root node to start visualization from. If provided,
-                 visualization will start from this node instead of tree.root
+                visualization will start from this node instead of tree.root
 
         Example:
             # Visualize full tree

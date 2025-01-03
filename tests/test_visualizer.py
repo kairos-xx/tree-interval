@@ -81,7 +81,6 @@ def test_terminal_width_fallback_attribute_error(monkeypatch):
     from tree_interval.visualizer.config import get_terminal_width
 
     def mock_get_terminal_size():
-
         class MockSize:
             pass
 

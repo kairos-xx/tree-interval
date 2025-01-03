@@ -1,50 +1,56 @@
-import os
-import zipfile
+"""Create a ZIP archive of the project.
+
+This script creates a timestamped ZIP archive of the project files,
+excluding specified directories and files.
+"""
+
 from datetime import datetime
+from os import makedirs, path, walk
 from typing import List
-
-CUSTOM_IGNORE = [
-    "__pycache__", "attached_assets", ".pytest_cache", ".ruff_cache", "zip"
-]
+from zipfile import ZipFile
 
 
-def get_files_to_zip() -> List[str]:
-    """Get list of files to zip, excluding ignored patterns."""
-    files = []
-    for root, dirs, filenames in os.walk("."):
-        # Skip directories that start with '.' or are in CUSTOM_IGNORE
-        dirs[:] = [
-            d for d in dirs if not d.startswith(".") and d not in CUSTOM_IGNORE
-        ]
+def get_exclude_dirs() -> List[str]:
+    """Get list of directories to exclude from ZIP.
 
-        # Filter filenames
-        for filename in filenames:
-            filepath = os.path.join(root, filename)
-            # Skip if the file matches any ignore pattern
-            if (not any(ignore in filepath for ignore in CUSTOM_IGNORE)
-                    and filename not in CUSTOM_IGNORE):
-                files.append(filepath)
-
-    return files
+    Returns:
+        List[str]: Directories to exclude
+    """
+    return ["build", "dist", "zip", "venv", "logs"]
 
 
 def create_zip() -> None:
-    """Create a zip file with all non-ignored files."""
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    output_folder = "./zip"
-    output_filename = f"tree_interval_{timestamp}.zip"
-    files = get_files_to_zip()
+    """Create ZIP archive of project files.
 
-    try:
-        with zipfile.ZipFile(f"{output_folder}/{output_filename}", "w",
-                             zipfile.ZIP_DEFLATED) as zipf:
+    Creates a timestamped ZIP file in the zip directory,
+    excluding specified directories and files.
+    """
+    # Get current timestamp for filename
+    zip_path = "zip"
+    project_name = "tree_interval"
+
+    # Ensure zip directory exists
+    if not path.exists(zip_path):
+        makedirs(zip_path)
+
+    # Create ZIP with filtered contents
+    with ZipFile(
+        f"{zip_path}/"
+        + f"{project_name}_"
+        + f'{datetime.now().strftime("%Y%m%d_%H%M%S")}'
+        + ".zip",
+        "w",
+    ) as zip_file:
+        for root, dirs, files in walk("."):
+            dirs[:] = [
+                d
+                for d in dirs
+                if d not in get_exclude_dirs()
+                and not d.startswith(".")
+                and not d.startswith("__")
+            ]
             for file in files:
-                zipf.write(file)
-        print(f"Zip file created successfully: {output_filename}")
-        print(f"Total files included: {len(files)}")
-
-    except Exception as e:
-        print(f"Error creating zip file: {e}")
+                zip_file.write(path.join(root, file))
 
 
 if __name__ == "__main__":
