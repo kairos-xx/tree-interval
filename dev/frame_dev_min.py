@@ -18,10 +18,10 @@ class Nested:
         )
 
 
-def xpto():
+def frame_function():
     a = Nested()
     a.b.c.d = 3
     print(a.b.c.f.g)
 
 
-xpto()
+frame_function()
