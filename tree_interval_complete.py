@@ -1,5 +1,5 @@
 
-from inspect import Frame, currentframe, stack
+from inspect import currentframe, stack
 from types import FrameType
 from typing import Any, Optional, Union
 from textwrap import indent
