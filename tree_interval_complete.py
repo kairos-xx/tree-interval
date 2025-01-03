@@ -385,11 +385,6 @@ class Leaf:
                 return parent
             current = parent
         return None
-            parent = current.parent
-            if parent.info and parent.info.get("type") in AST_TYPES:
-                return parent
-            current = parent
-        return None
 
     @property
     def is_set(self) -> bool:
