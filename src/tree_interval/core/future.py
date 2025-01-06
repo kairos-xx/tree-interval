@@ -1,37 +1,33 @@
-"""
-The module provides the `Future` class which facilitates dynamic attribute
-creation and access within nested object structures. It includes the ability to
-analyze the call stack and current execution frame, enabling context-aware
-handling for setting or getting operations. The class raises descriptive errors
-for invalid accesses and manages nested attribute chains accordingly.
+
+"""Future attribute access handler.
+
+Provides dynamic attribute handling with runtime introspection.
 """
 
-import sys
-from inspect import isframe, stack
+from ast import AST
+from contextlib import suppress 
+from inspect import currentframe, stack
 from textwrap import indent
 from types import FrameType
 from typing import Any, Optional, Union
 
 from .frame_analyzer import FrameAnalyzer
 
+def is_set_operation(node: Optional[AST]) -> bool:
+    """Check if AST node represents a set operation.
+
+    Args:
+        node: AST node to check
+
+    Returns:
+        bool: True if node is a set operation
+    """
+    if not node:
+        return False
+    return node.__class__.__name__ == "Assign"
 
 class Future:
-    """
-    Handles dynamic attribute creation and access in nested object structures.
-    This class provides context-aware attribute handling by analyzing
-    the call stack and current execution frame to determine whether an
-    attribute access is part of a setting operation
-    (creating new attributes) or a getting operation (which may
-    raise appropriate errors).
-    Example:
-        class Nested:
-            def __getattr__(self, name):
-                return Future(name, frame=1, instance=self)
-        obj = Nested()
-        obj.a.b.c = 42  # Creates nested structure
-        print(obj.a.b.c)  # Prints 42
-        print(obj.x.y)  # Raises AttributeError with context
-    """
+    """Dynamic attribute handler with runtime introspection."""
 
     def __new__(
         cls,
@@ -40,91 +36,46 @@ class Future:
         frame: Optional[Union[int, FrameType]] = None,
         new_return: Optional[Any] = None,
     ) -> Any:
-        """Dynamic attribute creation and access handler.
-        This method implements the core logic for dynamic attribute
-        handling by:
-        1. Analyzing call stack context to determine operation type
-        2. Creating new attributes in assignment context
-        3. Raising descriptive errors in access context
-        4. Managing nested attribute chains
-        The context analysis includes:
-        - Frame inspection for operation type
-        - AST analysis for statement structure
-        - Position tracking for error reporting
+        """Create or access dynamic attributes.
+
         Args:
-            name: Name of the attribute being accessed
-            instance: Object instance where attribute belongs
-            frame: Call frame or stack level for context
-            new_return: Value to use for new attributes
+            name: Attribute name
+            instance: Object instance
+            frame: Call frame or stack level
+            new_return: Value for new attributes
+
         Returns:
-            Any: Created attribute value in setting context
+            Created attribute or error
+
         Raises:
-            AttributeError: When attribute doesn't exist in get context
-        Example:
-            >>> obj.nonexistent = 42  # Creates new attribute
-            >>> print(obj.nonexistent)  # Prints 42
-            >>> print(obj.missing)  # Raises AttributeError
+            AttributeError: For invalid access
         """
-        """Create or handle attribute access in a dynamic object structure.
-        This method provides the core functionality for dynamic attribute
-        handling, determining whether to create new attributes or raise
-        appropriate errors.
-        Args:
-            name: The attribute name being accessed or created
-            instance: The object instance where the attribute belongs
-            frame: Optional frame object or stack level for context analysis
-            new_return: Optional value to use when creating new attributes
-        Returns:
-            Any: Created attribute value if in a setting context
-        Raises:
-            AttributeError: When attribute doesn't exist in a get context
-        """
-        # Get caller's frame if not provided for context analysis
-        if not isframe(frame):
-            frame = stack()[(frame + 1) if isinstance(frame, int) else 2].frame
-        # Suppress traceback for cleaner error messages
-        original_tracebacklimit = getattr(sys, "tracebacklimit", -1)
-        sys.tracebacklimit = 0
-        # Prepare error message components with formatting
-        header = "Attribute \033[1m" + name + "\033[0m not found "
-        footer = indent(
-            f'File "{frame.f_code.co_filename}"'
-            + f"line {frame.f_lineno}, in "
-            + frame.f_code.co_name,
-            "   ",
-        )
-        new = AttributeError(f"{header}\n{footer}")
-        # Analyze current execution frame to determine context
-        current_node = FrameAnalyzer(frame).find_current_node()
-        if current_node:
-            # Check if we're in an attribute setting operation
-            if getattr(current_node.top_statement, "is_set", False):
-                sys.tracebacklimit = original_tracebacklimit
-                # Create and set new attribute if in setting context
-                if new_return is not None:
-                    new = new_return
-                elif instance is not None:
-                    new = type(instance)
-                else:
-                    new = None
-                if callable(new):
-                    new = new()
-                if instance is not None:
-                    setattr(instance, name, new)
-                return new
+        if not frame:
+            frame = currentframe().f_back
+        elif isinstance(frame, int):
+            frame = stack()[frame + 1].frame
+
+        # Check context
+        analyzer = FrameAnalyzer(frame)
+        current_node = analyzer.find_current_node()
+
+        if current_node and current_node.ast_node:
+            if is_set_operation(current_node.ast_node):
+                # Create new attribute
+                value = new_return() if callable(new_return) else new_return
+                if instance:
+                    setattr(instance, name, value)
+                return value
+            
+            # Error on invalid access
+            statement = getattr(current_node, "statement", None)
+            if statement:
+                msg = (f"Attribute '{name}' not found in:\n"
+                      f"{indent(statement.text, '  ')}")
             else:
-                # Build detailed error for attribute access in get context
-                statement = current_node.statement
-                new = AttributeError(
-                    header
-                    + "in \033[1m"
-                    + statement.before.replace(" ", "")
-                    .replace("\n", "")
-                    .removesuffix(".")
-                    + "\033[0m\n"
-                    + footer
-                    + "\n"
-                    + indent(statement.text, "   ")
-                )
-        # Raise error for invalid attribute access
-        raise new
+                msg = f"Attribute '{name}' not found"
+            
+            raise AttributeError(msg)
+
+        return None
+
