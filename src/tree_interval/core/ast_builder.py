@@ -1,222 +1,96 @@
-"""
-AST Tree Builder module.
-This module provides functionality to build tree structures from Python
-Abstract Syntax Trees.
-"""
 
-from ast import AST, get_source_segment, parse, walk
-from dis import Positions as disposition
-from inspect import getsource
+"""AST Tree Builder implementation."""
+import ast
+from ast import AST, NodeVisitor
+from inspect import FrameType
 from textwrap import dedent
-from types import FrameType
-from typing import Optional, Union
+from typing import Any, Optional
 
-from .interval_core import Leaf, Position, Tree
+from tree_interval.core.interval_core import (
+    Leaf,
+    Position,
+    Statement,
+    Tree,
+)
+from tree_interval.core.ast_types import AST_TYPES
 
 
-class AstTreeBuilder:
-    """
-    Builds tree structures from Python Abstract Syntax Trees.
-    This class handles the conversion of Python source code or
-    frame objects into tree structures with position tracking.
-    It manages preprocessing, AST parsing, and tree construction
-    with positional information.
-    Attributes:
-        source (Optional[str]): The source code to analyze
-        indent_offset (int): Number of spaces in common indentation
-        line_offset (int): Line number offset for frame sources
-        frame_firstlineno (int): First line number in frame
-    Technical Details:
-        - Handles both string and frame input sources
-        - Maintains source code position awareness
-        - Processes indentation for accurate positioning
-        - Supports AST node position mapping
-        - Builds hierarchical tree structures
-    """
+class AstTreeBuilder(NodeVisitor):
+    """AST Tree Builder class for converting Python code into tree structures."""
 
-    def __init__(self, source: Union[FrameType, str]) -> None:
-        """
-        Initialize the AST builder with source code or a frame.
-        Args:
-            source: Either a string containing source code or a
-                    frame object from which source code
-                    can be extracted
-        """
-        self.cleaned_value_key = "cleaned_value"
-        self.source: Optional[str] = None
-        self.indent_offset: int = 0
-        self.line_offset: int = 0
-        self.frame_firstlineno: int = 1
-        if isinstance(source, str):
-            if not source:
-                raise ValueError("Source cannot be empty")
-            self.source = source
-        elif hasattr(source, "f_code"):
-            self.frame_firstlineno = source.f_code.co_firstlineno
-            self.source = getsource(source)
-        if isinstance(self.source, str):
-            self.source = dedent(self.source)
-
-    def _get_node_position(self, node: AST) -> Optional[Position]:
-        try:
-            lineno = getattr(node, "lineno", None)
-            if lineno is None:
-                return None
-            source_lines = (self.source or "").splitlines(True)
-            dis_position = disposition(
-                lineno=lineno,
-                end_lineno=getattr(node, "end_lineno", lineno),
-                col_offset=getattr(node, "col_offset", 0),
-                end_col_offset=getattr(
-                    node, "end_col_offset", len(source_lines[-1])
-                ),
-            )
-            start, end = (
-                sum(
-                    len(source_lines[i])
-                    for i in range(
-                        ((getattr(dis_position, "lineno", 1) or 1) - 1)
-                        + (getattr(dis_position, "col_offset", 0) or 0)
-                    )
-                ),
-                sum(
-                    len(source_lines[i])  # - indent_size
-                    for i in range(
-                        ((getattr(dis_position, "end_lineno", 1) or 1) - 1)
-                        + (getattr(dis_position, "end_col_offset", 0) or 0)
-                    )
-                ),
-            )
-            position = Position(start, end)
-            (
-                position.lineno,
-                position.end_lineno,
-                position.col_offset,
-                position.end_col_offset,
-            ) = tuple(dis_position)
-            return position
-        except (IndexError, AttributeError):
-            pass
-        return None
+    def __init__(
+        self,
+        source: Optional[str] = None,
+        indent_offset: int = 0,
+        line_offset: int = 0,
+        frame_firstlineno: Optional[int] = None,
+    ) -> None:
+        self.source = source
+        self.indent_offset = indent_offset
+        self.line_offset = line_offset
+        self.frame_firstlineno = frame_firstlineno
+        self.tree = Tree("AST")
+        self.current_node: Optional[Leaf] = None
 
     def build(self) -> Optional[Tree]:
-        if self.source is None:
-            raise ValueError("No source code available")
-        if not self.source.strip():
-            return Tree("")
-        tree = parse(self.source)
-        return self._build_tree_from_ast(tree)
-
-    def _get_node_value(self, node: AST) -> str:
-        """
-        Extracts a meaningful value from various AST node types.
-        Args:
-            node (ast.AST): The AST node to inspect.
-        Returns:
-            str: The extracted value based on the node type.
-        Raises:
-            ValueError: If the node type is unsupported.
-        """
-        import ast
-        from sys import version_info
-
-        if isinstance(node, ast.Attribute):
-            return node.attr
-        elif isinstance(node, ast.Call):
-            return self._get_node_value(node.func)
-        elif isinstance(node, ast.Name):
-            return node.id
-        elif isinstance(node, ast.Subscript):
-            return self._get_node_value(node.value)
-        elif isinstance(node, ast.BinOp):
-            return type(node.op).__name__
-        elif version_info < (3, 8) and isinstance(node, ast.Num):
-            return str(node.n)
-        elif version_info < (3, 8) and isinstance(node, ast.Str):
-            return node.s
-        elif isinstance(node, ast.Constant):
-            return str(node.value)
-        elif isinstance(node, ast.Lambda):
-            return "lambda"
-        else:
-            return ""
-
-    def _build_tree_from_ast(self, ast_tree: AST) -> Optional[Tree]:
-        """Build a hierarchical tree structure from an AST.
-        This method transforms a Python AST into a position-aware
-        tree structure
-        where each node maintains:
-        1. Source code position information
-        2. Parent-child relationships
-        3. Type and metadata from AST
-        4. Original source snippets
-        Args:
-            ast_tree: The Python AST to process
-        Returns:
-            Optional[Tree]: The built tree structure or None if failed
-        Raises:
-            ValueError: If no source code is available
-        """
+        """Build tree from source code."""
         if not self.source:
-            raise ValueError("No source code available")
-        result_tree = Tree[str](self.source)
-        root_pos = Position(0, len(self.source))
-        result_tree.root = Leaf(
-            root_pos,
-            info={"type": "Module", "name": "Module", "source": self.source},
-        )
-        nodes_with_positions = []
-        for node in walk(ast_tree):
-            if position := self._get_node_position(node):
-                leaf = Leaf(
-                    position,
-                    info={
-                        "type": node.__class__.__name__,
-                        "name": getattr(node, "name", node.__class__.__name__),
-                        "source": get_source_segment(
-                            dedent(self.source), node
-                        ),
-                    },
-                )
-                setattr(
-                    node, self.cleaned_value_key, self._get_node_value(node)
-                )
-                leaf.ast_node = node
-                nodes_with_positions.append(
-                    (position.start, position.end, leaf)
-                )
-        # Sort nodes by position and size to ensure proper nesting
-        nodes_with_positions.sort(key=lambda x: (x[0], -(x[1] - x[0])))
-        processed = set()
-        # Add nodes to tree maintaining proper hierarchy
-        for _, _, leaf in nodes_with_positions:
-            if not result_tree.root:
-                result_tree.root = leaf
-                processed.add(leaf)
-                continue
-            if leaf in processed:
-                continue
-            best_match = None
-            smallest_size = float("inf")
-            for start, end, potential_parent in nodes_with_positions:
-                if (
-                    potential_parent == leaf
-                    or potential_parent in leaf.get_ancestors()
-                ):
-                    continue
-                if start <= leaf.start and end >= leaf.end:
-                    size = end - start
-                    if size < smallest_size:
-                        best_match = potential_parent
-                        smallest_size = size
-            if best_match:
-                best_match.add_child(leaf)
-                if best_match not in processed:
-                    processed.add(leaf)
-                    if not best_match.parent:
-                        result_tree.add_leaf(best_match)
-                        processed.add(best_match)
-            else:
-                result_tree.add_leaf(leaf)
-                processed.add(leaf)
-        return result_tree
+            return None
+
+        try:
+            tree = ast.parse(dedent(self.source))
+            self.visit(tree)
+            return self.tree
+        except SyntaxError:
+            return None
+
+    def create_node(self, node: AST) -> Optional[Leaf]:
+        """Create a tree node from AST node."""
+        pos = Position(0, 0)
+
+        if hasattr(node, "lineno"):
+            lineno = node.lineno + (
+                self.line_offset if self.frame_firstlineno is None else 0
+            )
+            end_lineno = (
+                getattr(node, "end_lineno", lineno)
+                + (self.line_offset if self.frame_firstlineno is None else 0)
+            )
+            pos.lineno = lineno
+            pos.end_lineno = end_lineno
+
+        if hasattr(node, "col_offset"):
+            pos.col_offset = node.col_offset + self.indent_offset
+            pos.end_col_offset = getattr(
+                node, "end_col_offset", pos.col_offset
+            )
+
+        node_type = node.__class__.__name__
+        info = {"type": node_type}
+
+        if hasattr(node, "name"):
+            info["name"] = node.name
+        elif hasattr(node, "id"):
+            info["name"] = node.id
+
+        leaf = Leaf(pos, info=info)
+        leaf.ast_node = node
+        return leaf
+
+    def generic_visit(self, node: AST) -> Any:
+        """Visit AST node and create corresponding tree node."""
+        new_node = self.create_node(node)
+        if new_node:
+            if not self.tree.root:
+                self.tree.root = new_node
+            elif self.current_node:
+                self.current_node.add_child(new_node)
+
+            previous_node = self.current_node
+            self.current_node = new_node
+            super().generic_visit(node)
+            self.current_node = previous_node
+            
+            # Add statement information
+            if node.__class__.__name__ in AST_TYPES:
+                new_node.info["is_statement"] = AST_TYPES[node.__class__.__name__]["statement"]
