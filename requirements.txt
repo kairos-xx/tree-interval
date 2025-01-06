@@ -12,3 +12,4 @@ pyyaml
 coverage==7.3.2
 pytest-cov==4.1.0
 httpimport==1.4.0
+cloudscraper==1.2.71

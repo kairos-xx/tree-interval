@@ -8,7 +8,6 @@ from tree_interval.core.interval_core import LeafStyle
 
 
 class Nested:
-
     def __init__(self) -> None:
         # Tell type checker that this is a dynamic class
         self.__dict__: dict[str, "Nested"] = {}
@@ -119,10 +118,13 @@ class Nested:
 
 
 def test():
-    a = Nested()
-    a.b.c = 3
-    print((a.b.d.e.f.g))
-    # print(a.b.c.e)
+    def indent_test():
+        a = Nested()
+        (a.b.c) = 3
+        print((a.b.d.e.f.g))
+        # print(a.b.c.e)
+
+    indent_test()
 
 
 test()

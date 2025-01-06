@@ -1,6 +1,5 @@
 """
 AST Tree Builder module.
-
 This module provides functionality to build tree structures from Python
 Abstract Syntax Trees.
 """
@@ -18,18 +17,15 @@ from .interval_core import Leaf, Position, Tree
 class AstTreeBuilder:
     """
     Builds tree structures from Python Abstract Syntax Trees.
-
     This class handles the conversion of Python source code or
     frame objects into tree structures with position tracking.
     It manages preprocessing, AST parsing, and tree construction
     with positional information.
-
     Attributes:
         source (Optional[str]): The source code to analyze
         indent_offset (int): Number of spaces in common indentation
         line_offset (int): Line number offset for frame sources
         frame_firstlineno (int): First line number in frame
-
     Technical Details:
         - Handles both string and frame input sources
         - Maintains source code position awareness
@@ -41,7 +37,6 @@ class AstTreeBuilder:
     def __init__(self, source: Union[FrameType, str]) -> None:
         """
         Initialize the AST builder with source code or a frame.
-
         Args:
             source: Either a string containing source code or a
                     frame object from which source code
@@ -52,7 +47,6 @@ class AstTreeBuilder:
         self.indent_offset: int = 0
         self.line_offset: int = 0
         self.frame_firstlineno: int = 1
-
         if isinstance(source, str):
             if not source:
                 raise ValueError("Source cannot be empty")
@@ -60,6 +54,8 @@ class AstTreeBuilder:
         elif hasattr(source, "f_code"):
             self.frame_firstlineno = source.f_code.co_firstlineno
             self.source = getsource(source)
+        if isinstance(self.source, str):
+            self.source = dedent(self.source)
 
     def _get_node_position(self, node: AST) -> Optional[Position]:
         try:
@@ -75,31 +71,29 @@ class AstTreeBuilder:
                     node, "end_col_offset", len(source_lines[-1])
                 ),
             )
-            position = Position(
-                *(
-                    sum(
-                        len(source_lines[i])
-                        for i in range(
-                            (getattr(dis_position, "lineno", 1) or 1) - 1
-                        )
+            start, end = (
+                sum(
+                    len(source_lines[i])
+                    for i in range(
+                        ((getattr(dis_position, "lineno", 1) or 1) - 1)
+                        + (getattr(dis_position, "col_offset", 0) or 0)
                     )
-                    + (getattr(dis_position, "col_offset", 0) or 0),
-                    sum(
-                        len(source_lines[i])
-                        for i in range(
-                            (getattr(dis_position, "end_lineno", 1) or 1) - 1
-                        )
+                ),
+                sum(
+                    len(source_lines[i])  # - indent_size
+                    for i in range(
+                        ((getattr(dis_position, "end_lineno", 1) or 1) - 1)
+                        + (getattr(dis_position, "end_col_offset", 0) or 0)
                     )
-                    + (getattr(dis_position, "end_col_offset", 0) or 0),
-                )
+                ),
             )
+            position = Position(start, end)
             (
                 position.lineno,
                 position.end_lineno,
                 position.col_offset,
                 position.end_col_offset,
             ) = tuple(dis_position)
-
             return position
         except (IndexError, AttributeError):
             pass
@@ -110,25 +104,16 @@ class AstTreeBuilder:
             raise ValueError("No source code available")
         if not self.source.strip():
             return Tree("")
-        tree = parse(dedent(self.source))
+        tree = parse(self.source)
         return self._build_tree_from_ast(tree)
-
-    def build_from_frame(self) -> Optional[Tree]:
-        if not self.source:
-            return None
-        ast_tree = parse(dedent(self.source))
-        return self._build_tree_from_ast(ast_tree)
 
     def _get_node_value(self, node: AST) -> str:
         """
         Extracts a meaningful value from various AST node types.
-
         Args:
             node (ast.AST): The AST node to inspect.
-
         Returns:
             str: The extracted value based on the node type.
-
         Raises:
             ValueError: If the node type is unsupported.
         """
@@ -158,7 +143,6 @@ class AstTreeBuilder:
 
     def _build_tree_from_ast(self, ast_tree: AST) -> Optional[Tree]:
         """Build a hierarchical tree structure from an AST.
-
         This method transforms a Python AST into a position-aware
         tree structure
         where each node maintains:
@@ -166,30 +150,24 @@ class AstTreeBuilder:
         2. Parent-child relationships
         3. Type and metadata from AST
         4. Original source snippets
-
         Args:
             ast_tree: The Python AST to process
-
         Returns:
             Optional[Tree]: The built tree structure or None if failed
-
         Raises:
             ValueError: If no source code is available
         """
         if not self.source:
             raise ValueError("No source code available")
-
         result_tree = Tree[str](self.source)
         root_pos = Position(0, len(self.source))
         result_tree.root = Leaf(
             root_pos,
             info={"type": "Module", "name": "Module", "source": self.source},
         )
-
         nodes_with_positions = []
         for node in walk(ast_tree):
-            position = self._get_node_position(node)
-            if position:
+            if position := self._get_node_position(node):
                 leaf = Leaf(
                     position,
                     info={
@@ -207,11 +185,9 @@ class AstTreeBuilder:
                 nodes_with_positions.append(
                     (position.start, position.end, leaf)
                 )
-
         # Sort nodes by position and size to ensure proper nesting
         nodes_with_positions.sort(key=lambda x: (x[0], -(x[1] - x[0])))
         processed = set()
-
         # Add nodes to tree maintaining proper hierarchy
         for _, _, leaf in nodes_with_positions:
             if not result_tree.root:
@@ -220,23 +196,19 @@ class AstTreeBuilder:
                 continue
             if leaf in processed:
                 continue
-
             best_match = None
             smallest_size = float("inf")
-
             for start, end, potential_parent in nodes_with_positions:
                 if (
                     potential_parent == leaf
                     or potential_parent in leaf.get_ancestors()
                 ):
                     continue
-
                 if start <= leaf.start and end >= leaf.end:
                     size = end - start
                     if size < smallest_size:
                         best_match = potential_parent
                         smallest_size = size
-
             if best_match:
                 best_match.add_child(leaf)
                 if best_match not in processed:
@@ -247,5 +219,4 @@ class AstTreeBuilder:
             else:
                 result_tree.add_leaf(leaf)
                 processed.add(leaf)
-
         return result_tree

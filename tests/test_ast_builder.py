@@ -175,18 +175,18 @@ def test_lambda_node_value():
     assert lambda_node is not None
 
 
-def test_build_from_frame_no_source():
+def test_build_no_source():
     builder = AstTreeBuilder("test")
     builder.source = None
-    result = builder.build_from_frame()
-    assert result is None
+    with pytest.raises(ValueError, match="No source code available"):
+        builder.build()
 
 
 def test_get_node_position_missing_lineno():
-    import ast
+    from ast import Load, Name
 
     builder = AstTreeBuilder("x = 1")
-    node = ast.Name(id="x", ctx=ast.Load())
+    node = Name(id="x", ctx=Load())
     # Node without lineno should return None
     assert builder._get_node_position(node) is None
 
@@ -194,9 +194,9 @@ def test_get_node_position_missing_lineno():
 def test_node_with_invalid_source():
     builder = AstTreeBuilder("x = 1")
     builder.source = ""  # Invalid source
-    import ast
+    from ast import Load, Name
 
-    node = ast.Name(id="x", ctx=ast.Load())
+    node = Name(id="x", ctx=Load())
     node.lineno = 1
     node.col_offset = 0
     node.end_lineno = 1
@@ -208,18 +208,18 @@ def test_node_with_invalid_source():
 def test_build_tree_from_ast_empty_source():
     builder = AstTreeBuilder(" ")
     builder.source = None
-    import ast
+    from ast import parse
 
     with pytest.raises(ValueError, match="No source code available"):
-        builder._build_tree_from_ast(ast.parse(""))
+        builder._build_tree_from_ast(parse(""))
 
 
 def test_get_node_position_with_empty_lines():
     """Test node position handling with empty lines in source."""
-    import ast
+    from ast import Load, Name
 
     builder = AstTreeBuilder("x = 1\n\ny = 2")
-    node = ast.Name(id="y", ctx=ast.Load())
+    node = Name(id="y", ctx=Load())
     node.lineno = 3
     node.col_offset = 0
     node.end_lineno = 3
@@ -266,10 +266,10 @@ def outer():
 
 def test_node_position_empty_source_lines():
     """Test position calculation with empty source lines."""
-    import ast
+    from ast import Load, Name
 
     builder = AstTreeBuilder("\n\nx = 1")
-    node = ast.Name(id="x", ctx=ast.Load())
+    node = Name(id="x", ctx=Load())
     node.lineno = 3
     node.col_offset = 0
     node.end_lineno = 3
@@ -322,19 +322,19 @@ def test_build_tree_duplicate_leaf():
 
 def test_node_value_extraction_edge_cases():
     """Test _get_node_value method with various node types."""
-    import ast
+    from ast import AST, Constant
 
     builder = AstTreeBuilder("x = 1")
 
     # Test unsupported node type
-    class CustomNode(ast.AST):
+    class CustomNode(AST):
         pass
 
     custom_node = CustomNode()
     assert builder._get_node_value(custom_node) == ""
 
     # Test constant node
-    constant_node = ast.Constant(value=42)
+    constant_node = Constant(value=42)
     assert builder._get_node_value(constant_node) == "42"
 
 

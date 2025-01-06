@@ -108,11 +108,9 @@ def demonstrate_tree_styling() -> None:
     func1.style = LeafStyle(color="#34D399")  # Green
     func1.selected = True  # Highlight this node
 
-    func2 = Leaf(Position(55, 85),
-                 info={
-                     "type": "Function",
-                     "name": "getData"
-                 })
+    func2 = Leaf(
+        Position(55, 85), info={"type": "Function", "name": "getData"}
+    )
     func2.rich_style = RichStyle(color="#34D399")  # Green
     func2.style = LeafStyle(color="#34D399")  # Green
 
@@ -176,16 +174,20 @@ def demonstrate_find_nodes() -> None:
     tree.add_leaf(child2)
     child1.add_child(grandchild)
 
-    found_parent = grandchild.find_parent(lambda n: isinstance(
-        n.info, dict) and n.info.get("type") == "FunctionDef")
+    found_parent = grandchild.find_parent(
+        lambda n: isinstance(n.info, dict)
+        and n.info.get("type") == "FunctionDef"
+    )
     print("Found parent:", found_parent.info if found_parent else None)
 
-    found_child = root.find_child(lambda n: isinstance(n.info, dict) and n.info
-                                  .get("type") == "ClassDef")
+    found_child = root.find_child(
+        lambda n: isinstance(n.info, dict) and n.info.get("type") == "ClassDef"
+    )
     print("Found child:", found_child.info if found_child else None)
 
-    found_sibling = child1.find_sibling(lambda n: isinstance(n.info, dict) and
-                                        n.info.get("type") == "ClassDef")
+    found_sibling = child1.find_sibling(
+        lambda n: isinstance(n.info, dict) and n.info.get("type") == "ClassDef"
+    )
     print("Found sibling:", found_sibling.info if found_sibling else None)
 
 
@@ -250,15 +252,20 @@ def demonstrate_tree_operations() -> None:
     print("\nNode Finding:")
     best_match = tree.find_best_match(20, 30)
     print(
-        f"Best match for (20, 30): {best_match.info if best_match else None}")
+        f"Best match for (20, 30): {best_match.info if best_match else None}"
+    )
 
     common_ancestor = grandchild1.find_common_ancestor(grandchild2)
-    print("Common ancestor of grandchildren:" +
-          f" {common_ancestor.info if common_ancestor else None}")
+    print(
+        "Common ancestor of grandchildren:"
+        + f" {common_ancestor.info if common_ancestor else None}"
+    )
 
     multi_child = grandchild1.find_first_multi_child_ancestor()
-    print("First multi-child ancestor:" +
-          f" {multi_child.info if multi_child else None}")
+    print(
+        "First multi-child ancestor:"
+        + f" {multi_child.info if multi_child else None}"
+    )
 
     print("\nTree Traversal:")
     flat_list = tree.flatten()
@@ -269,15 +276,16 @@ def demonstrate_tree_operations() -> None:
     tree.visualize()
 
     print("\n2. Position format:")
-    TreeVisualizer.visualize(tree,
-                             VisualizationConfig(position_format="position"))
+    TreeVisualizer.visualize(
+        tree, VisualizationConfig(position_format="position")
+    )
 
     print("\n3. Tuple format with children count:")
     TreeVisualizer.visualize(
         tree,
-        VisualizationConfig(position_format="tuple",
-                            show_children_count=True,
-                            show_size=False),
+        VisualizationConfig(
+            position_format="tuple", show_children_count=True, show_size=False
+        ),
     )
 
     print(f"\n{CYAN}=== JSON Operations ==={RESET}")
@@ -319,10 +327,14 @@ def demonstrate_frame_analyzer() -> None:
         if current_node:
             top_stmt = current_node.top_statement
             next_attr = current_node.next_attribute
-            next_attr = next_attr.info[
-                'type'] if next_attr and next_attr.info else None
-            top_stmt = top_stmt.info[
-                'type'] if top_stmt and top_stmt.info else None
+            next_attr = (
+                next_attr.info["type"]
+                if next_attr and next_attr.info
+                else None
+            )
+            top_stmt = (
+                top_stmt.info["type"] if top_stmt and top_stmt.info else None
+            )
             print(("Top Statement: " + f"{top_stmt}"))
             print(("Next Attribute: " + f"{next_attr}"))
 
@@ -341,9 +353,11 @@ def demonstrate_frame_analyzer() -> None:
                 node.style = LeafStyle(color="#888888", bold=False)
 
                 # Check if this is current node by position and info match
-                if (node.start == current_node.start
-                        and node.end == current_node.end
-                        and str(node.info) == str(current_node.info)):
+                if (
+                    node.start == current_node.start
+                    and node.end == current_node.end
+                    and str(node.info) == str(current_node.info)
+                ):
                     node.rich_style = RichStyle(color="green", bold=True)
                     node.style = LeafStyle(color="#ff0000", bold=True)
                     node.selected = True
@@ -388,8 +402,9 @@ def demonstrate_line_positions() -> None:
     tree.visualize()
 
     print("\nDetailed position view:")
-    TreeVisualizer.visualize(tree,
-                             VisualizationConfig(position_format="position"))
+    TreeVisualizer.visualize(
+        tree, VisualizationConfig(position_format="position")
+    )
 
 
 def demonstrate_basic_rich_printing() -> None:
@@ -399,26 +414,17 @@ def demonstrate_basic_rich_printing() -> None:
 
     root = Leaf(
         Position(0, 100),
-        info={
-            "type": "Module",
-            "name": "example"
-        },
+        info={"type": "Module", "name": "example"},
         rich_style=RichStyle(color="red", bold=True),
     )
     child1 = Leaf(
         Position(10, 40),
-        info={
-            "type": "Function",
-            "name": "hello"
-        },
+        info={"type": "Function", "name": "hello"},
         rich_style=RichStyle(color="green"),
     )
     child2 = Leaf(
         Position(50, 90),
-        info={
-            "type": "Class",
-            "name": "MyClass"
-        },
+        info={"type": "Class", "name": "MyClass"},
         rich_style=RichStyle(color="blue", bold=True),
     )
 
@@ -460,11 +466,9 @@ def demonstrate_ast_rich_printing() -> None:
     tree = Tree("AST Example")
 
     root = Leaf(Position(0, 100), info={"type": "Module"})
-    func_def = Leaf(Position(10, 90),
-                    info={
-                        "type": "FunctionDef",
-                        "name": "example"
-                    })
+    func_def = Leaf(
+        Position(10, 90), info={"type": "FunctionDef", "name": "example"}
+    )
     args = Leaf(Position(20, 30), info={"type": "Arguments"})
     body = Leaf(Position(40, 80), info={"type": "Body"})
 
@@ -505,16 +509,12 @@ def demonstrate_find_method() -> None:
     print_header("Find Method Example", GREEN)
 
     root = Leaf(Position(0, 100), info={"type": "Module", "name": "main"})
-    child1 = Leaf(Position(10, 40),
-                  info={
-                      "type": "FunctionDef",
-                      "name": "hello"
-                  })
-    child2 = Leaf(Position(50, 90),
-                  info={
-                      "type": "ClassDef",
-                      "name": "MyClass"
-                  })
+    child1 = Leaf(
+        Position(10, 40), info={"type": "FunctionDef", "name": "hello"}
+    )
+    child2 = Leaf(
+        Position(50, 90), info={"type": "ClassDef", "name": "MyClass"}
+    )
     grandchild = Leaf(Position(20, 30), info={"type": "Return"})
 
     root.add_child(child1)
@@ -527,15 +527,18 @@ def demonstrate_find_method() -> None:
     grandchild._as_dict()
 
     found = root.find(
-        lambda n: isinstance(n.info, dict) and n.info.get("name") == "hello")
+        lambda n: isinstance(n.info, dict) and n.info.get("name") == "hello"
+    )
     print(f"Found function: {found.info if found else None}")
 
-    found = child1.find(lambda n: isinstance(n.info, dict) and n.info.get(
-        "type") == "ClassDef")
+    found = child1.find(
+        lambda n: isinstance(n.info, dict) and n.info.get("type") == "ClassDef"
+    )
     print(f"Found class: {found.info if found else None}")
 
     found = grandchild.find(
-        lambda n: isinstance(n.info, dict) and n.info.get("type") == "Module")
+        lambda n: isinstance(n.info, dict) and n.info.get("type") == "Module"
+    )
     print(f"Found module: {found.info if found else None}")
 
 
@@ -572,8 +575,10 @@ def demonstrate_leaf_navigation() -> None:
     prev_info = prev_node.info if prev_node else None
     print(f"Child 1.2's previous sibling: {prev_info}")
 
-    print(f"Parent 1's next sibling: "
-          f"{parent1.next.info if parent1.next else None}")
+    print(
+        f"Parent 1's next sibling: "
+        f"{parent1.next.info if parent1.next else None}"
+    )
 
 
 def demonstrate_node_navigation() -> None:
@@ -597,15 +602,22 @@ def demonstrate_node_navigation() -> None:
     function_def.add_child(param1)
     function_def.add_child(param2)
 
-    print("First method's parent: " +
-          f"{method1.parent.info if method1.parent else None}")
-    print("First method's next sibling: " +
-          f"{method1.next.info if method1.next else None}")
-    print("Second method's previous sibling: " +
-          f"{method2.previous.info if method2.previous else None}")
     print(
-        "Function's first parameter:" +
-        f" {function_def.children[0].info if function_def.children else None}")
+        "First method's parent: "
+        + f"{method1.parent.info if method1.parent else None}"
+    )
+    print(
+        "First method's next sibling: "
+        + f"{method1.next.info if method1.next else None}"
+    )
+    print(
+        "Second method's previous sibling: "
+        + f"{method2.previous.info if method2.previous else None}"
+    )
+    print(
+        "Function's first parameter:"
+        + f"{function_def.children[0].info if function_def.children else None}"
+    )
 
 
 def demonstrate_custom_root_visualization() -> None:
@@ -643,11 +655,9 @@ def demonstrate_custom_styling() -> None:
     root = Leaf(Position(0, 100), info={"type": "Component", "name": "App"})
     root.style = LeafStyle(color="#FF6B6B", bold=True)  # Coral red
 
-    router = Leaf(Position(10, 40),
-                  info={
-                      "type": "Router",
-                      "name": "MainRouter"
-                  })
+    router = Leaf(
+        Position(10, 40), info={"type": "Router", "name": "MainRouter"}
+    )
     router.style = LeafStyle(color="#4ECDC4", bold=True)  # Turquoise
 
     view1 = Leaf(Position(15, 25), info={"type": "View", "name": "HomeView"})
@@ -656,11 +666,9 @@ def demonstrate_custom_styling() -> None:
     view2 = Leaf(Position(30, 40), info={"type": "View", "name": "AboutView"})
     view2.style = LeafStyle(color="#45B7D1", bold=False)  # Light blue
 
-    service = Leaf(Position(50, 90),
-                   info={
-                       "type": "Service",
-                       "name": "DataService"
-                   })
+    service = Leaf(
+        Position(50, 90), info={"type": "Service", "name": "DataService"}
+    )
     service.style = LeafStyle(color="#96CEB4", bold=True)  # Sage green
 
     # Build tree structure
@@ -684,7 +692,6 @@ def demonstrate_future_usage() -> None:
     print_header("Future Usage Demo", CYAN)
 
     class DynamicConfig:
-
         def __init__(self) -> None:
             self.__dict__: dict[str, "DynamicConfig"] = {}
 

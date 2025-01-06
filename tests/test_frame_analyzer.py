@@ -62,7 +62,7 @@ def test_frame_analyzer_empty_source():
     if analyzer.ast_builder:
         analyzer.ast_builder.source = ""
     result = analyzer.build_tree()
-    assert result is None
+    assert isinstance(result, Tree)
 
 
 def test_frame_analyzer_invalid_frame():
@@ -102,7 +102,8 @@ def test_build_tree_empty():
         analyzer = FrameAnalyzer(frame)
         if analyzer.ast_builder:
             analyzer.ast_builder.source = None
-        return analyzer.build_tree()
+        with pytest.raises(ValueError, match="No source code available"):
+            return analyzer.build_tree()
 
     assert dummy_func() is None
 

@@ -291,10 +291,12 @@ class Position:
                 return source.splitlines(True)
 
             source = getsource(frame)
-            source_lines = split(source)
-            indent_size = len(source_lines[0]) - len(split(dedent(source))[0])
+            source_lines = source.splitlines(True)
+            source_lines_dedented = dedent(source).splitlines(True)
+            indent_size = len(source_lines[0]) - len(source_lines_dedented[0])
             first_line = frame.f_code.co_firstlineno or 1
             frame_positions = getframeinfo(frame).positions
+
             # Calculate absolute character positions for start and end:
             # 1. Sum the lengths of all lines before the target line
             # 2. Add indent_size for each line to account for dedentation
@@ -307,21 +309,23 @@ class Position:
             #   start = len('def foo():\n') + 4 + col_offset_of_x
             self.start, self.end = (
                 sum(
-                    len(source_lines[i]) + indent_size
+                    len(source_lines_dedented[i])
                     for i in range(
                         (getattr(frame_positions, "lineno", 1) or 1)
                         - (first_line or 1)
                     )
                 )
-                + (getattr(frame_positions, "col_offset", 0) or 0),
+                + (getattr(frame_positions, "col_offset", 0) or 0)
+                - indent_size,
                 sum(
-                    len(source_lines[i]) + indent_size
+                    len(source_lines_dedented[i])  # - indent_size
                     for i in range(
                         (getattr(frame_positions, "end_lineno", 1) or 1)
                         - (first_line or 1)
                     )
                 )
-                + (getattr(frame_positions, "end_col_offset", 0) or 0),
+                + (getattr(frame_positions, "end_col_offset", 0) or 0)
+                - indent_size,
             )
             source_lines = split(source[self.start : self.end])
             self._lineno = 1
@@ -518,7 +522,6 @@ class Leaf:
         style: Optional[Any] = None,
         rich_style: Optional[Any] = None,
     ):
-
         if position is None:
             position = Position(0, 0)
 
@@ -730,7 +733,6 @@ class Leaf:
         distance = calc_distance(self)
 
         if distance < best_match_distance:
-
             best_match_distance = distance
         best_match = self
         for child in self.children:

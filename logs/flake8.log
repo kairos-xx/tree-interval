@@ -1,1 +1,2 @@
-build/./lib/tree_interval/visualizer/visualizer.py:189:34: W292 no newline at end of file
+dev/./frame_dev_med.py:88:1: E302 expected 2 blank lines, found 1
+dev/./frame_dev_med.py:92:1: E305 expected 2 blank lines after class or function definition, found 0

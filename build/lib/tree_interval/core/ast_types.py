@@ -55,12 +55,12 @@ AST_TYPES = {
     "AnnAssign": {
         "description": "Annotated assignment",
         "statement": True,
-        "is_set": True,
+        "is_set": False,
     },
     "AugAssign": {
         "description": "Augmented assignment (+=, -=, |=, etc)",
         "statement": True,
-        "is_set": True,
+        "is_set": False,
     },
     "Name": {
         "description": "Variable or function name",

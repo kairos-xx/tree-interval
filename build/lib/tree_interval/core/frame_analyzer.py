@@ -7,9 +7,9 @@ with static code analysis.
 """
 
 from ast import AST
-from inspect import isframe
+from inspect import isframe, stack
 from types import FrameType
-from typing import Optional, cast
+from typing import Optional, Union, cast
 
 from .ast_builder import AstTreeBuilder
 from .interval_core import Leaf, Position, Tree
@@ -27,14 +27,18 @@ class FrameAnalyzer:
         current_node: The currently identified AST node within the tree.
     """
 
-    def __init__(self, frame: Optional[FrameType]):
+    def __init__(self, frame: Optional[Union[FrameType, int]]):
         """Initializes FrameAnalyzer with a given frame."""
         self.frame = frame
         # Initialize position and builder
+
+        if isinstance(frame, int):
+            frame = stack()[frame + 1].frame
         self.frame_position = (
-            Position(0, 0) if (frame is None) else Position(self.frame)
+            Position(0, 0) if (frame is None) else Position(frame)
         )
         if isframe(frame):
+            self.frame = frame
             # Initialize AST builder
             self.ast_builder = AstTreeBuilder(frame)
         else:
@@ -79,7 +83,7 @@ class FrameAnalyzer:
             not hasattr(self, "tree") or self.tree is None
         ) and self.ast_builder is not None:
             # Use builder to construct the tree
-            self.tree = self.ast_builder.build_from_frame()
+            self.tree = self.ast_builder.build()
             # Return None if construction fails
             if not self.tree:
                 return None

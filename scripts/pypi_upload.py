@@ -24,6 +24,8 @@ def get_latest_version(project_name) -> str:
         str: Latest version number in format 'x.y.z' or
              '0.0.0' if not found
     """
+    print(f"Fetching latest version for {project_name}...")
+    print(f"Url: https://pypi.org/pypi/{project_name}/json")
     try:
         return get(f"https://pypi.org/pypi/{project_name}/json").json()[
             "info"
@@ -160,7 +162,7 @@ def build_and_upload(project_dir: Optional[str] = None) -> None:
         run(
             ["python", "-m", "twine", "upload", "dist/*"],
             cwd=working_dir,
-          #  check=True,
+            #  check=True,
         )
 
         print(f"Successfully uploaded {working_dir} to PyPI!")
@@ -174,6 +176,8 @@ def main() -> None:
     """Main execution function for PyPI package upload."""
     print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     project_name = get(str(info.replit_id_url)).url.split("/")[-1]
+    print(str(info.replit_id_url))
+    print(get(str(info.replit_id_url)).url)
     pyproject_path = "pyproject.toml"
 
     # Install required packages

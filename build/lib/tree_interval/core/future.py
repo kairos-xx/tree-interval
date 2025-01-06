@@ -31,7 +31,7 @@ class Future:
     def __new__(
         cls,
         name: str,
-        instance: object,
+        instance: Optional[object] = None,
         frame: Optional[Union[int, FrameType]] = None,
         new_return: Optional[Any] = None,
     ) -> Any:
@@ -91,7 +91,6 @@ class Future:
         # Suppress traceback for cleaner error messages
         original_tracebacklimit = getattr(sys, "tracebacklimit", -1)
         sys.tracebacklimit = 0
-
         # Prepare error message components with formatting
         header = "Attribute \033[1m" + name + "\033[0m not found "
         footer = indent(
@@ -101,7 +100,6 @@ class Future:
             "   ",
         )
         new = AttributeError(f"{header}\n{footer}")
-
         # Analyze current execution frame to determine context
         current_node = FrameAnalyzer(frame).find_current_node()
         if current_node:
@@ -109,8 +107,16 @@ class Future:
             if getattr(current_node.top_statement, "is_set", False):
                 sys.tracebacklimit = original_tracebacklimit
                 # Create and set new attribute if in setting context
-                new = type(instance)() if new_return is None else new_return
-                setattr(instance, name, new)
+                if new_return is not None:
+                    new = new_return
+                elif instance is not None:
+                    new = type(instance)
+                else:
+                    new = None
+                if callable(new):
+                    new = new()
+                if instance is not None:
+                    setattr(instance, name, new)
                 return new
             else:
                 # Build detailed error for attribute access in get context

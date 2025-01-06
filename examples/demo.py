@@ -408,7 +408,6 @@ def demonstrate_future():
     print("\n=== Future Examples ===")
 
     class Nested:
-
         def __init__(self) -> None:
             self.__dict__: dict[str, "Nested"] = {}
 

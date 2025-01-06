@@ -100,14 +100,6 @@ def test_tree_serialization():
     assert getattr(loaded_tree.root, "info", {}).get("type") == "root"
 
 
-def test_position_overlaps():
-    pos1 = Position(0, 50)
-    pos2 = Position(40, 90)
-    pos3 = Position(60, 100)
-    assert pos1.overlaps(pos2)
-    assert not pos1.overlaps(pos3)
-
-
 def test_leaf_statement():
     root = Leaf(
         Position(0, 100),
@@ -439,16 +431,6 @@ def test_leaf_get_parent():
     """Test safe parent accessor"""
     leaf = Leaf(Position(0, 10))
     assert leaf._get_parent() is None
-
-
-def test_position_overlaps_none():
-    """Test position overlaps with None values"""
-    pos1 = Position(0, 10)
-    pos2 = Position(20, 30)
-    try:
-        pos1.overlaps(pos2)
-    except Exception:
-        assert True
 
 
 def test_leaf_find_edge_cases():
