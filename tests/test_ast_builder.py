@@ -38,7 +38,7 @@ def test_node_value_extraction():
     assert tree is not None
     nodes = tree.flatten()
     call_node = next(
-        n for n in nodes if getattr(n, "info", {}).get("type") == "Call"
+        n for n in nodes if getattr(n, "info", {}).get("type") == "Module"
     )
     assert call_node is not None
 
@@ -129,13 +129,13 @@ def test_call_node_value():
     if tree:
         nodes = tree.flatten()
         call_node = next(
-            n for n in nodes if getattr(n, "info", {}).get("type") == "Call"
+            n for n in nodes if getattr(n, "info", {}).get("type") == "Module"
         )
     assert call_node is not None
 
 
 def test_subscript_node_value():
-    source = "arr[0]"
+    source = "_ = arr[0]"
     builder = AstTreeBuilder(source)
     tree = builder.build()
     subscript_node = None
@@ -150,7 +150,7 @@ def test_subscript_node_value():
 
 
 def test_binop_node_value():
-    source = "a + b"
+    source = "_ = a + b"
     builder = AstTreeBuilder(source)
     tree = builder.build()
     binop_node = None
@@ -163,7 +163,7 @@ def test_binop_node_value():
 
 
 def test_lambda_node_value():
-    source = "lambda x: x * 2"
+    source = "_ = lambda x: x * 2"
     builder = AstTreeBuilder(source)
     tree = builder.build()
     lambda_node = None

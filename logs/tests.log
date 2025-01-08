@@ -3,17 +3,17 @@ platform linux -- Python 3.11.10, pytest-8.3.4, pluggy-1.5.0
 rootdir: /home/runner/workspace
 configfile: pyproject.toml
 plugins: cov-4.1.0
-collected 155 items
+collected 153 items
 
 tests/test_ast_builder.py ............................                   [ 18%]
-tests/test_ast_nodes.py ......                                           [ 21%]
-tests/test_frame_analyzer.py ...............                             [ 31%]
+tests/test_ast_nodes.py ......                                           [ 22%]
+tests/test_frame_analyzer.py ...............                             [ 32%]
 tests/test_future.py ...                                                 [ 33%]
-tests/test_interval_core.py ............................................ [ 61%]
-......                                                                   [ 65%]
-tests/test_rich_printer.py ......................                        [ 80%]
+tests/test_interval_core.py ............................................ [ 62%]
+....                                                                     [ 65%]
+tests/test_rich_printer.py ......................                        [ 79%]
 tests/test_styling.py ......                                             [ 83%]
 tests/test_tree_core.py ..............                                   [ 92%]
 tests/test_visualizer.py ...........                                     [100%]
 
-============================= 155 passed in 0.28s ==============================
+============================= 153 passed in 0.36s ==============================

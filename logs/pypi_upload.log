@@ -40,49 +40,49 @@ reading manifest file 'src/tree_interval.egg-info/SOURCES.txt'
 adding license file 'LICENSE'
 writing manifest file 'src/tree_interval.egg-info/SOURCES.txt'
 running check
-creating tree_interval-0.1.25
-creating tree_interval-0.1.25/src/tree_interval
-creating tree_interval-0.1.25/src/tree_interval.egg-info
-creating tree_interval-0.1.25/src/tree_interval/core
-creating tree_interval-0.1.25/src/tree_interval/rich_printer
-creating tree_interval-0.1.25/src/tree_interval/visualizer
-creating tree_interval-0.1.25/tests
-copying files to tree_interval-0.1.25...
-copying LICENSE -> tree_interval-0.1.25
-copying README.md -> tree_interval-0.1.25
-copying pyproject.toml -> tree_interval-0.1.25
-copying setup.py -> tree_interval-0.1.25
-copying src/tree_interval/__init__.py -> tree_interval-0.1.25/src/tree_interval
-copying src/tree_interval.egg-info/PKG-INFO -> tree_interval-0.1.25/src/tree_interval.egg-info
-copying src/tree_interval.egg-info/SOURCES.txt -> tree_interval-0.1.25/src/tree_interval.egg-info
-copying src/tree_interval.egg-info/dependency_links.txt -> tree_interval-0.1.25/src/tree_interval.egg-info
-copying src/tree_interval.egg-info/top_level.txt -> tree_interval-0.1.25/src/tree_interval.egg-info
-copying src/tree_interval/core/__init__.py -> tree_interval-0.1.25/src/tree_interval/core
-copying src/tree_interval/core/ast_builder.py -> tree_interval-0.1.25/src/tree_interval/core
-copying src/tree_interval/core/ast_types.py -> tree_interval-0.1.25/src/tree_interval/core
-copying src/tree_interval/core/frame_analyzer.py -> tree_interval-0.1.25/src/tree_interval/core
-copying src/tree_interval/core/future.py -> tree_interval-0.1.25/src/tree_interval/core
-copying src/tree_interval/core/interval_core.py -> tree_interval-0.1.25/src/tree_interval/core
-copying src/tree_interval/rich_printer/__init__.py -> tree_interval-0.1.25/src/tree_interval/rich_printer
-copying src/tree_interval/rich_printer/config.py -> tree_interval-0.1.25/src/tree_interval/rich_printer
-copying src/tree_interval/rich_printer/printer.py -> tree_interval-0.1.25/src/tree_interval/rich_printer
-copying src/tree_interval/visualizer/__init__.py -> tree_interval-0.1.25/src/tree_interval/visualizer
-copying src/tree_interval/visualizer/config.py -> tree_interval-0.1.25/src/tree_interval/visualizer
-copying src/tree_interval/visualizer/visualizer.py -> tree_interval-0.1.25/src/tree_interval/visualizer
-copying tests/test_ast_builder.py -> tree_interval-0.1.25/tests
-copying tests/test_ast_nodes.py -> tree_interval-0.1.25/tests
-copying tests/test_frame_analyzer.py -> tree_interval-0.1.25/tests
-copying tests/test_future.py -> tree_interval-0.1.25/tests
-copying tests/test_interval_core.py -> tree_interval-0.1.25/tests
-copying tests/test_rich_printer.py -> tree_interval-0.1.25/tests
-copying tests/test_styling.py -> tree_interval-0.1.25/tests
-copying tests/test_tree_core.py -> tree_interval-0.1.25/tests
-copying tests/test_visualizer.py -> tree_interval-0.1.25/tests
-copying src/tree_interval.egg-info/SOURCES.txt -> tree_interval-0.1.25/src/tree_interval.egg-info
-Writing tree_interval-0.1.25/setup.cfg
+creating tree_interval-0.1.26
+creating tree_interval-0.1.26/src/tree_interval
+creating tree_interval-0.1.26/src/tree_interval.egg-info
+creating tree_interval-0.1.26/src/tree_interval/core
+creating tree_interval-0.1.26/src/tree_interval/rich_printer
+creating tree_interval-0.1.26/src/tree_interval/visualizer
+creating tree_interval-0.1.26/tests
+copying files to tree_interval-0.1.26...
+copying LICENSE -> tree_interval-0.1.26
+copying README.md -> tree_interval-0.1.26
+copying pyproject.toml -> tree_interval-0.1.26
+copying setup.py -> tree_interval-0.1.26
+copying src/tree_interval/__init__.py -> tree_interval-0.1.26/src/tree_interval
+copying src/tree_interval.egg-info/PKG-INFO -> tree_interval-0.1.26/src/tree_interval.egg-info
+copying src/tree_interval.egg-info/SOURCES.txt -> tree_interval-0.1.26/src/tree_interval.egg-info
+copying src/tree_interval.egg-info/dependency_links.txt -> tree_interval-0.1.26/src/tree_interval.egg-info
+copying src/tree_interval.egg-info/top_level.txt -> tree_interval-0.1.26/src/tree_interval.egg-info
+copying src/tree_interval/core/__init__.py -> tree_interval-0.1.26/src/tree_interval/core
+copying src/tree_interval/core/ast_builder.py -> tree_interval-0.1.26/src/tree_interval/core
+copying src/tree_interval/core/ast_types.py -> tree_interval-0.1.26/src/tree_interval/core
+copying src/tree_interval/core/frame_analyzer.py -> tree_interval-0.1.26/src/tree_interval/core
+copying src/tree_interval/core/future.py -> tree_interval-0.1.26/src/tree_interval/core
+copying src/tree_interval/core/interval_core.py -> tree_interval-0.1.26/src/tree_interval/core
+copying src/tree_interval/rich_printer/__init__.py -> tree_interval-0.1.26/src/tree_interval/rich_printer
+copying src/tree_interval/rich_printer/config.py -> tree_interval-0.1.26/src/tree_interval/rich_printer
+copying src/tree_interval/rich_printer/printer.py -> tree_interval-0.1.26/src/tree_interval/rich_printer
+copying src/tree_interval/visualizer/__init__.py -> tree_interval-0.1.26/src/tree_interval/visualizer
+copying src/tree_interval/visualizer/config.py -> tree_interval-0.1.26/src/tree_interval/visualizer
+copying src/tree_interval/visualizer/visualizer.py -> tree_interval-0.1.26/src/tree_interval/visualizer
+copying tests/test_ast_builder.py -> tree_interval-0.1.26/tests
+copying tests/test_ast_nodes.py -> tree_interval-0.1.26/tests
+copying tests/test_frame_analyzer.py -> tree_interval-0.1.26/tests
+copying tests/test_future.py -> tree_interval-0.1.26/tests
+copying tests/test_interval_core.py -> tree_interval-0.1.26/tests
+copying tests/test_rich_printer.py -> tree_interval-0.1.26/tests
+copying tests/test_styling.py -> tree_interval-0.1.26/tests
+copying tests/test_tree_core.py -> tree_interval-0.1.26/tests
+copying tests/test_visualizer.py -> tree_interval-0.1.26/tests
+copying src/tree_interval.egg-info/SOURCES.txt -> tree_interval-0.1.26/src/tree_interval.egg-info
+Writing tree_interval-0.1.26/setup.cfg
 creating dist
 Creating tar archive
-removing 'tree_interval-0.1.25' (and everything under it)
+removing 'tree_interval-0.1.26' (and everything under it)
 running bdist_wheel
 running build
 running build_py
@@ -92,17 +92,17 @@ creating build/lib/tree_interval/rich_printer
 copying src/tree_interval/rich_printer/__init__.py -> build/lib/tree_interval/rich_printer
 copying src/tree_interval/rich_printer/config.py -> build/lib/tree_interval/rich_printer
 copying src/tree_interval/rich_printer/printer.py -> build/lib/tree_interval/rich_printer
-creating build/lib/tree_interval/core
-copying src/tree_interval/core/__init__.py -> build/lib/tree_interval/core
-copying src/tree_interval/core/interval_core.py -> build/lib/tree_interval/core
-copying src/tree_interval/core/ast_builder.py -> build/lib/tree_interval/core
-copying src/tree_interval/core/frame_analyzer.py -> build/lib/tree_interval/core
-copying src/tree_interval/core/future.py -> build/lib/tree_interval/core
-copying src/tree_interval/core/ast_types.py -> build/lib/tree_interval/core
 creating build/lib/tree_interval/visualizer
 copying src/tree_interval/visualizer/__init__.py -> build/lib/tree_interval/visualizer
 copying src/tree_interval/visualizer/config.py -> build/lib/tree_interval/visualizer
 copying src/tree_interval/visualizer/visualizer.py -> build/lib/tree_interval/visualizer
+creating build/lib/tree_interval/core
+copying src/tree_interval/core/ast_types.py -> build/lib/tree_interval/core
+copying src/tree_interval/core/__init__.py -> build/lib/tree_interval/core
+copying src/tree_interval/core/frame_analyzer.py -> build/lib/tree_interval/core
+copying src/tree_interval/core/ast_builder.py -> build/lib/tree_interval/core
+copying src/tree_interval/core/future.py -> build/lib/tree_interval/core
+copying src/tree_interval/core/interval_core.py -> build/lib/tree_interval/core
 installing to build/bdist.linux-x86_64/wheel
 running install
 running install_lib
@@ -113,22 +113,22 @@ creating build/bdist.linux-x86_64/wheel/tree_interval/rich_printer
 copying build/lib/tree_interval/rich_printer/__init__.py -> build/bdist.linux-x86_64/wheel/./tree_interval/rich_printer
 copying build/lib/tree_interval/rich_printer/config.py -> build/bdist.linux-x86_64/wheel/./tree_interval/rich_printer
 copying build/lib/tree_interval/rich_printer/printer.py -> build/bdist.linux-x86_64/wheel/./tree_interval/rich_printer
-creating build/bdist.linux-x86_64/wheel/tree_interval/core
-copying build/lib/tree_interval/core/__init__.py -> build/bdist.linux-x86_64/wheel/./tree_interval/core
-copying build/lib/tree_interval/core/interval_core.py -> build/bdist.linux-x86_64/wheel/./tree_interval/core
-copying build/lib/tree_interval/core/ast_builder.py -> build/bdist.linux-x86_64/wheel/./tree_interval/core
-copying build/lib/tree_interval/core/frame_analyzer.py -> build/bdist.linux-x86_64/wheel/./tree_interval/core
-copying build/lib/tree_interval/core/future.py -> build/bdist.linux-x86_64/wheel/./tree_interval/core
-copying build/lib/tree_interval/core/ast_types.py -> build/bdist.linux-x86_64/wheel/./tree_interval/core
 creating build/bdist.linux-x86_64/wheel/tree_interval/visualizer
 copying build/lib/tree_interval/visualizer/__init__.py -> build/bdist.linux-x86_64/wheel/./tree_interval/visualizer
 copying build/lib/tree_interval/visualizer/config.py -> build/bdist.linux-x86_64/wheel/./tree_interval/visualizer
 copying build/lib/tree_interval/visualizer/visualizer.py -> build/bdist.linux-x86_64/wheel/./tree_interval/visualizer
+creating build/bdist.linux-x86_64/wheel/tree_interval/core
+copying build/lib/tree_interval/core/ast_types.py -> build/bdist.linux-x86_64/wheel/./tree_interval/core
+copying build/lib/tree_interval/core/__init__.py -> build/bdist.linux-x86_64/wheel/./tree_interval/core
+copying build/lib/tree_interval/core/frame_analyzer.py -> build/bdist.linux-x86_64/wheel/./tree_interval/core
+copying build/lib/tree_interval/core/ast_builder.py -> build/bdist.linux-x86_64/wheel/./tree_interval/core
+copying build/lib/tree_interval/core/future.py -> build/bdist.linux-x86_64/wheel/./tree_interval/core
+copying build/lib/tree_interval/core/interval_core.py -> build/bdist.linux-x86_64/wheel/./tree_interval/core
 running install_egg_info
-Copying src/tree_interval.egg-info to build/bdist.linux-x86_64/wheel/./tree_interval-0.1.25-py3.11.egg-info
+Copying src/tree_interval.egg-info to build/bdist.linux-x86_64/wheel/./tree_interval-0.1.26-py3.11.egg-info
 running install_scripts
-creating build/bdist.linux-x86_64/wheel/tree_interval-0.1.25.dist-info/WHEEL
-creating 'dist/tree_interval-0.1.25-py3-none-any.whl' and adding 'build/bdist.linux-x86_64/wheel' to it
+creating build/bdist.linux-x86_64/wheel/tree_interval-0.1.26.dist-info/WHEEL
+creating 'dist/tree_interval-0.1.26-py3-none-any.whl' and adding 'build/bdist.linux-x86_64/wheel' to it
 adding 'tree_interval/__init__.py'
 adding 'tree_interval/core/__init__.py'
 adding 'tree_interval/core/ast_builder.py'
@@ -142,21 +142,27 @@ adding 'tree_interval/rich_printer/printer.py'
 adding 'tree_interval/visualizer/__init__.py'
 adding 'tree_interval/visualizer/config.py'
 adding 'tree_interval/visualizer/visualizer.py'
-adding 'tree_interval-0.1.25.dist-info/LICENSE'
-adding 'tree_interval-0.1.25.dist-info/METADATA'
-adding 'tree_interval-0.1.25.dist-info/WHEEL'
-adding 'tree_interval-0.1.25.dist-info/top_level.txt'
-adding 'tree_interval-0.1.25.dist-info/RECORD'
+adding 'tree_interval-0.1.26.dist-info/LICENSE'
+adding 'tree_interval-0.1.26.dist-info/METADATA'
+adding 'tree_interval-0.1.26.dist-info/WHEEL'
+adding 'tree_interval-0.1.26.dist-info/top_level.txt'
+adding 'tree_interval-0.1.26.dist-info/RECORD'
 removing build/bdist.linux-x86_64/wheel
 Uploading distributions to https://upload.pypi.org/legacy/
-Uploading tree_interval-0.1.25-py3-none-any.whl
-[?25l[2K[35m  0%[0m [38;5;237m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m0.0/36.7 kB[0m • [36m--:--[0m • [31m?[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.7/36.7 kB[0m • [33m00:00[0m • [31m63.1 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.7/36.7 kB[0m • [33m00:00[0m • [31m63.1 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.7/36.7 kB[0m • [33m00:00[0m • [31m63.1 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.7/36.7 kB[0m • [33m00:00[0m • [31m63.1 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.7/36.7 kB[0m • [33m00:00[0m • [31m63.1 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.7/36.7 kB[0m • [33m00:00[0m • [31m63.1 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.7/36.7 kB[0m • [33m00:00[0m • [31m63.1 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.7/36.7 kB[0m • [33m00:00[0m • [31m63.1 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.7/36.7 kB[0m • [33m00:00[0m • [31m63.1 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.7/36.7 kB[0m • [33m00:00[0m • [31m63.1 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.7/36.7 kB[0m • [33m00:00[0m • [31m63.1 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.7/36.7 kB[0m • [33m00:00[0m • [31m63.1 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.7/36.7 kB[0m • [33m00:00[0m • [31m63.1 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.7/36.7 kB[0m • [33m00:00[0m • [31m63.1 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.7/36.7 kB[0m • [33m00:00[0m • [31m63.1 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.7/36.7 kB[0m • [33m00:00[0m • [31m63.1 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.7/36.7 kB[0m • [33m00:00[0m • [31m63.1 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.7/36.7 kB[0m • [33m00:00[0m • [31m63.1 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.7/36.7 kB[0m • [33m00:00[0m • [31m63.1 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.7/36.7 kB[0m • [33m00:00[0m • [31m63.1 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.7/36.7 kB[0m • [33m00:00[0m • [31m63.1 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.7/36.7 kB[0m • [33m00:00[0m • [31m63.1 MB/s[0m
-[?25hUploading tree_interval-0.1.25.tar.gz
-[?25l[2K[35m  0%[0m [38;5;237m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m0.0/44.1 kB[0m • [36m--:--[0m • [31m?[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m44.1/44.1 kB[0m • [33m00:00[0m • [31m12.6 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m44.1/44.1 kB[0m • [33m00:00[0m • [31m12.6 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m44.1/44.1 kB[0m • [33m00:00[0m • [31m12.6 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m44.1/44.1 kB[0m • [33m00:00[0m • [31m12.6 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m44.1/44.1 kB[0m • [33m00:00[0m • [31m12.6 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m44.1/44.1 kB[0m • [33m00:00[0m • [31m12.6 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m44.1/44.1 kB[0m • [33m00:00[0m • [31m12.6 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m44.1/44.1 kB[0m • [33m00:00[0m • [31m12.6 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m44.1/44.1 kB[0m • [33m00:00[0m • [31m12.6 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m44.1/44.1 kB[0m • [33m00:00[0m • [31m12.6 MB/s[0m
-[?25h
-[32mView at:[0m
-https://pypi.org/project/tree-interval/0.1.25/
-2025-01-05 22:02:18
+Uploading tree_interval-0.1.26-py3-none-any.whl
+[?25l[2K[35m  0%[0m [38;5;237m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m0.0/36.9 kB[0m • [36m--:--[0m • [31m?[0m[2K[35m  0%[0m [38;5;237m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m0.0/36.9 kB[0m • [36m--:--[0m • [31m?[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.9/36.9 kB[0m • [33m00:00[0m • [31m64.1 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.9/36.9 kB[0m • [33m00:00[0m • [31m64.1 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.9/36.9 kB[0m • [33m00:00[0m • [31m64.1 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.9/36.9 kB[0m • [33m00:00[0m • [31m64.1 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.9/36.9 kB[0m • [33m00:00[0m • [31m64.1 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.9/36.9 kB[0m • [33m00:00[0m • [31m64.1 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.9/36.9 kB[0m • [33m00:00[0m • [31m64.1 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.9/36.9 kB[0m • [33m00:00[0m • [31m64.1 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.9/36.9 kB[0m • [33m00:00[0m • [31m64.1 MB/s[0m[2K[35m100%[0m [38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━[0m [32m36.9/36.9 kB[0m • [33m00:00[0m • [31m64.1 MB/s[0m
+[?25h[33mWARNING [0m Error during upload. Retry with the --verbose      
+         option for more details.                           
+[31mERROR   [0m HTTPError: 400 Bad Request from                    
+         https://upload.pypi.org/legacy/                    
+         File already exists                                
+         ('tree_interval-0.1.26-py3-none-any.whl', with     
+         blake2_256 hash                                    
+         '106e8fd0f9da1e88276182955cb705bf1b8edaea732c2ad210
+         b25cd6d21b3c43'). See                              
+         https://pypi.org/help/#file-name-reuse for more    
+         information.                                       
+2025-01-08 00:58:34
 https://replit.com/replid/1046dcf2-4c46-4f2b-bbde-3fc85854e959
 https://replit.com/@kairos/treeinterval
 Fetching latest version for treeinterval...

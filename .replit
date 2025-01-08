@@ -1,4 +1,4 @@
-run = ["python", "dev/frame_dev_med.py"]
+run = ["python", "dev/frame_dev_min.py"]
 entrypoint = "README.md"
 modules = ["python-3.11:v30-20240222-aba8eb6"]
 hidden = [".pythonlibs"]

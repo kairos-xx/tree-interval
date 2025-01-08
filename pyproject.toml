@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tree-interval"
-version = "0.1.25"
+version = "0.1.26"
 description = "A Python package for managing and visualizing interval tree structures"
 readme = "README.md"
 authors = [{name = "Joao Lopes", email = "joaoslopes@gmail.com"}]
@@ -32,7 +32,8 @@ Repository = "https://github.com/kairos-xx/tree-interval.git"
 [tool.ruff]
 [tool.ruff.lint]
 select = ['E', 'W', 'F', 'I', 'B', 'C4', 'ARG', 'SIM']
-ignore = ['W291', 'W292', 'W293', 'E203','E701']
+max-line-length = 79
+ignore = ['W291', 'W292', 'W293', 'E203','E701','W504']
 exclude = [
     ".*",
     "__pycache__",
@@ -41,4 +42,4 @@ exclude = [
 
 [tool.flake8]
 max-line-length = 79
-ignore = ['E203', 'E701', "W503"]
+ignore = ['E203', 'E701', "W503", "W504"]

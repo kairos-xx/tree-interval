@@ -12,6 +12,8 @@ from textwrap import indent
 from types import FrameType
 from typing import Any, Optional, Union
 
+from tree_interval.core.interval_core import Position
+
 from .frame_analyzer import FrameAnalyzer
 
 
@@ -80,6 +82,8 @@ class Future:
             AttributeError: When attribute doesn't exist in a get context
         """
         # Get caller's frame if not provided for context analysis
+        if frame is None:
+            frame = 1
         if not isframe(frame):
             frame = stack()[(frame + 1) if isinstance(frame, int) else 2].frame
         # Suppress traceback for cleaner error messages
@@ -88,9 +92,8 @@ class Future:
         # Prepare error message components with formatting
         header = "Attribute \033[1m" + name + "\033[0m not found "
         footer = indent(
-            f'File "{frame.f_code.co_filename}"'
-            + f"line {frame.f_lineno}, in "
-            + frame.f_code.co_name,
+            (f'File "{frame.f_code.co_filename}"' +
+             f'line {frame.f_lineno}, in {frame.f_code.co_name}'),
             "   ",
         )
         new = AttributeError(f"{header}\n{footer}")
@@ -98,15 +101,20 @@ class Future:
         current_node = FrameAnalyzer(frame).find_current_node()
         if current_node:
             # Check if we're in an attribute setting operation
-            if getattr(current_node.top_statement, "is_set", False):
+            if getattr(
+                    current_node.top_statement, "is_set", False) and Position(
+                        getattr(
+                            getattr(current_node.top_statement, "ast_node",
+                                    None), "targets",
+                            [None])[0]).start == current_node.position.start:
                 sys.tracebacklimit = original_tracebacklimit
                 # Create and set new attribute if in setting context
+                new = None
                 if new_return is not None:
                     new = new_return
                 elif instance is not None:
                     new = type(instance)
-                else:
-                    new = None
+
                 if callable(new):
                     new = new()
                 if instance is not None:
@@ -115,16 +123,10 @@ class Future:
             else:
                 # Build detailed error for attribute access in get context
                 statement = current_node.statement
-                new = AttributeError(
-                    header
-                    + "in \033[1m"
-                    + statement.before.replace(" ", "")
-                    .replace("\n", "")
-                    .removesuffix(".")
-                    + "\033[0m\n"
-                    + footer
-                    + "\n"
-                    + indent(statement.text, "   ")
-                )
+                new = AttributeError(header + "in \033[1m" +
+                                     statement.before.replace(" ", "").replace(
+                                         "\n", "").removesuffix(".") +
+                                     "\033[0m\n" + footer + "\n" +
+                                     indent(statement.text, "   "))
         # Raise error for invalid attribute access
         raise new

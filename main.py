@@ -713,7 +713,6 @@ def demonstrate_future_usage() -> None:
         f"Username: {config.database.credentials.username}"  # pyright: ignore
     )
 
-    # This will raise an informative error
     try:
         print(config.missing.attribute)  # pyright: ignore
     except AttributeError as e:

@@ -97,4 +97,4 @@ Created nested attribute: root.a.b.c = 42
 Caught expected error: Attribute [1mx[0m not found in [1mroot[0m
    File "/home/runner/workspace/examples/demo.py"line 426, in demonstrate_future
    print(root.x.y.z)
-   ~~~~~~^^^^^▲^^^^~
+   ~~~~~~^^^^^▲^^~~~

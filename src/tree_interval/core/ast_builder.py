@@ -4,7 +4,7 @@ This module provides functionality to build tree structures from Python
 Abstract Syntax Trees.
 """
 
-from ast import AST, get_source_segment, parse, walk
+from ast import AST, get_source_segment, iter_child_nodes, parse, walk
 from dis import Positions as disposition
 from inspect import getsource
 from textwrap import dedent
@@ -67,25 +67,22 @@ class AstTreeBuilder:
                 lineno=lineno,
                 end_lineno=getattr(node, "end_lineno", lineno),
                 col_offset=getattr(node, "col_offset", 0),
-                end_col_offset=getattr(
-                    node, "end_col_offset", len(source_lines[-1])
-                ),
+                end_col_offset=getattr(node, "end_col_offset",
+                                       len(source_lines[-1])),
             )
             start, end = (
-                sum(
-                    len(source_lines[i])
-                    for i in range(
-                        ((getattr(dis_position, "lineno", 1) or 1) - 1)
-                        + (getattr(dis_position, "col_offset", 0) or 0)
-                    )
-                ),
-                sum(
-                    len(source_lines[i])  # - indent_size
-                    for i in range(
-                        ((getattr(dis_position, "end_lineno", 1) or 1) - 1)
-                        + (getattr(dis_position, "end_col_offset", 0) or 0)
-                    )
-                ),
+                (
+                    sum(
+                        len(source_lines[i])  # - indent_size
+                        for i in range(
+                            (getattr(dis_position, "lineno", 1) or 1) - 1)) +
+                    (getattr(dis_position, "col_offset", 0) or 0)),
+                (
+                    sum(
+                        len(source_lines[i])  # - indent_size
+                        for i in range(
+                            (getattr(dis_position, "end_lineno", 1) or 1) - 1))
+                    + (getattr(dis_position, "end_col_offset", 0) or 0)),
             )
             position = Position(start, end)
             (
@@ -105,6 +102,7 @@ class AstTreeBuilder:
         if not self.source.strip():
             return Tree("")
         tree = parse(self.source)
+
         return self._build_tree_from_ast(tree)
 
     def _get_node_value(self, node: AST) -> str:
@@ -163,28 +161,41 @@ class AstTreeBuilder:
         root_pos = Position(0, len(self.source))
         result_tree.root = Leaf(
             root_pos,
-            info={"type": "Module", "name": "Module", "source": self.source},
+            info={
+                "type": "Module",
+                "name": "Module",
+                "source": self.source
+            },
         )
+        root = next(iter(getattr(ast_tree, "body", [None])), None)
+        if root is not None:
+            root.__dict__["source"] = dedent(self.source)
+
         nodes_with_positions = []
         for node in walk(ast_tree):
+
+            for v in iter_child_nodes(node):
+                v.__dict__.update({
+                    "parent":
+                    node,
+                    "root":
+                    next(iter(getattr(ast_tree, "body", [None])), None)
+                })
             if position := self._get_node_position(node):
                 leaf = Leaf(
                     position,
                     info={
                         "type": node.__class__.__name__,
                         "name": getattr(node, "name", node.__class__.__name__),
-                        "source": get_source_segment(
-                            dedent(self.source), node
-                        ),
+                        "source": get_source_segment(dedent(self.source),
+                                                     node),
                     },
                 )
-                setattr(
-                    node, self.cleaned_value_key, self._get_node_value(node)
-                )
+                setattr(node, self.cleaned_value_key,
+                        self._get_node_value(node))
                 leaf.ast_node = node
                 nodes_with_positions.append(
-                    (position.start, position.end, leaf)
-                )
+                    (position.start, position.end, leaf))
         # Sort nodes by position and size to ensure proper nesting
         nodes_with_positions.sort(key=lambda x: (x[0], -(x[1] - x[0])))
         processed = set()
@@ -196,13 +207,12 @@ class AstTreeBuilder:
                 continue
             if leaf in processed:
                 continue
+
             best_match = None
             smallest_size = float("inf")
             for start, end, potential_parent in nodes_with_positions:
-                if (
-                    potential_parent == leaf
-                    or potential_parent in leaf.get_ancestors()
-                ):
+                if (potential_parent == leaf
+                        or potential_parent in leaf.get_ancestors()):
                     continue
                 if start <= leaf.start and end >= leaf.end:
                     size = end - start
@@ -219,4 +229,7 @@ class AstTreeBuilder:
             else:
                 result_tree.add_leaf(leaf)
                 processed.add(leaf)
+            if not result_tree.root.children:
+                result_tree.root.add_child(leaf)
+
         return result_tree
