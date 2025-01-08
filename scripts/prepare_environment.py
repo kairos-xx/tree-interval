@@ -141,17 +141,6 @@ def setup_github_repo(
         print(f"Error setting up repository: {str(e)}")
 
 
-def get_latest_version(name: str) -> str:
-    """Fetch the latest version from PyPI.
-    
-    Returns:
-        str: Latest version number or empty string if not found
-    """
-    try:
-        return get(f"https://pypi.org/pypi/{name}/json").json()["info"]["version"]
-    except Exception:
-        return ""
-
 def run_all() -> None:
     """Execute all environment setup tasks.
 
@@ -1757,7 +1746,7 @@ def run_all() -> None:
                     "Debuggers",
                 ],
             },
-            "version": get_latest_version(project_name) or "0.1.1",  # Project version
+            "version": "0.1.1",  # Initial project version
             "description": "",  # Project description
             # User and maintainer information
             "user_config": {
